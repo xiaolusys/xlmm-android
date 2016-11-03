@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <com.jimei.xiaolumeimei.widget.ninepicimagview.MultiImageView
+    <com.jimei.library.widget.ninepicimagview.MultiImageView
         android:id="@+id/multiImagView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

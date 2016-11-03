@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
@@ -35,14 +37,10 @@ import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.schedulers.Schedulers;
 
 public class OrderGoodsListAdapter extends BaseAdapter {
     public final String[] NUM = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
@@ -334,7 +332,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     private void receive_goods(int id) {
         TradeModel.getInstance()
                 .receiveGoods(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<UserBean>() {
                     @Override
                     public void onNext(UserBean userBean) {

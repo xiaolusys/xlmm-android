@@ -5,14 +5,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.ui.fragment.v2.OrderListFragment;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,8 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class AllOrdersActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+public class AllOrdersActivity extends BaseSwipeBackCompatActivity{
     String TAG = "AllOrdersActivity";
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
@@ -57,11 +55,6 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity
         fragments.add(OrderListFragment.newInstance(XlmmConst.ALL_ORDER, "所有订单"));
         fragments.add(OrderListFragment.newInstance(XlmmConst.WAIT_PAY, "待付款"));
         fragments.add(OrderListFragment.newInstance(XlmmConst.WAIT_SEND, "待收货"));
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     public void swith_fragment() {

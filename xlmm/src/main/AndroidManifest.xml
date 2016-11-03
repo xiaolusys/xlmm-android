@@ -48,7 +48,7 @@
             android:name="UMENG_CHANNEL"
             android:value="${CHANNEL_NAME}"/>
         <meta-data
-            android:name="com.jimei.xiaolumeimei.widget.glidemoudle.GlideConfig"
+            android:name="com.jimei.library.widget.glidemoudle.GlideConfig"
             android:value="GlideModule"/>
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
@@ -210,12 +210,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.xiaolumama.BoutiqueWebviewActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.xiaolumama.MamaRuleActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MamaLunTanActivity"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
@@ -228,24 +222,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.main.ComplainWebActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
-            <intent-filter>
-                <data android:scheme="tencent1105166296"/>
 
+            <intent-filter>
+                <data android:scheme="tencent100371282"/>
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+
+            <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -301,16 +294,7 @@
             android:name=".ui.activity.xiaolumama.MamaLivenessActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.MamaFansActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.xiaolumama.FansWebViewActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MMShareCodeWebViewActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.user.CustomProblemActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.SettingActivity"
@@ -458,7 +442,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="app"
-                    android:path="/v1/product_detail"
+                    android:path="/v1/products/modellist"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
             <intent-filter>
@@ -474,13 +458,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="app"
-                    android:path="/v1/products/modellist"
+                    android:path="/v1/products"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.xiaolumama.TeamExplainActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.GoodWeekActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -513,7 +494,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.mminfo.MamaActivity"
+            android:name=".ui.activity.xiaolumama.MamaActivity"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -551,6 +532,12 @@
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
             android:exported="true"/>
+        <service
+            android:name="com.xiaomi.push.service.XMJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":pushservice"/>
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
             android:enabled="true"/>

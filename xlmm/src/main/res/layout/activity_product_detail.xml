@@ -14,12 +14,12 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <com.jimei.xiaolumeimei.widget.PullUpToLoadMore
+            <com.jimei.library.widget.PullUpToLoadMore
                 android:id="@+id/pull_to_load"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.jimei.xiaolumeimei.widget.MyScrollView
+                <com.jimei.library.widget.MyScrollView
                     android:id="@+id/sv_first"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -32,7 +32,8 @@
                         <android.support.v4.view.ViewPager
                             android:id="@+id/view_pager"
                             android:layout_width="match_parent"
-                            android:layout_height="480dp"/>
+                            android:layout_height="480dp"
+                            android:transitionName="wisdom"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -51,17 +52,13 @@
 
                                 <TextView
                                     android:id="@+id/name"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:ellipsize="end"
                                     android:singleLine="true"
                                     android:textColor="@color/text_color_4A"
                                     android:textSize="16sp"/>
-
-                                <View
-                                    android:layout_width="0dp"
-                                    android:layout_height="1dp"
-                                    android:layout_weight="1"/>
 
                                 <LinearLayout
                                     android:id="@+id/collect_layout"
@@ -148,7 +145,7 @@
                                     android:layout_height="1dp"
                                     android:layout_weight="1"/>
 
-                                <com.jimei.xiaolumeimei.widget.CountDownView
+                                <com.jimei.library.widget.CountDownView
                                     android:id="@+id/count_view"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -201,9 +198,9 @@
 
                     </FrameLayout>
 
-                </com.jimei.xiaolumeimei.widget.MyScrollView>
+                </com.jimei.library.widget.MyScrollView>
 
-                <com.jimei.xiaolumeimei.widget.MyScrollView
+                <com.jimei.library.widget.MyScrollView
                     android:id="@+id/sv_second"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -229,9 +226,9 @@
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
 
-                </com.jimei.xiaolumeimei.widget.MyScrollView>
+                </com.jimei.library.widget.MyScrollView>
 
-            </com.jimei.xiaolumeimei.widget.PullUpToLoadMore>
+            </com.jimei.library.widget.PullUpToLoadMore>
 
             <TextView
                 android:id="@+id/tv_title"

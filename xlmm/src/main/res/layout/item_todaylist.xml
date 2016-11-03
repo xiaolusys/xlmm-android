@@ -16,6 +16,7 @@
             android:layout_height="450px"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"/>
+
         <include layout="@layout/item_sale_status"/>
     </RelativeLayout>
 
@@ -30,6 +31,8 @@
             android:id="@+id/product_list_name"
             android:layout_width="wrap_content"
             android:layout_height="36px"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text=""
             android:textColor="#4a4a4a"
             android:textSize="28px"/>

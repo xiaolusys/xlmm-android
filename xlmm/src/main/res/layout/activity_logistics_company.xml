@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="物流公司" />
@@ -35,7 +35,7 @@
             android:textSize="30.0dip"
             android:visibility="invisible" />
 
-        <com.jimei.xiaolumeimei.widget.SideBar
+        <com.jimei.library.widget.SideBar
             android:id="@+id/sideBar"
             android:layout_width="25dp"
             android:layout_height="wrap_content"

@@ -6,8 +6,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -20,7 +20,7 @@ public class MamaLunTanActivity extends CommonWebViewActivity {
             setActlink("http://forum.xiaolumeimei.com/accounts/xlmm/login/");
         }
         super.initViews();
-        webviewTitle.setText("小鹿论坛");
+        titleView.setName("小鹿论坛");
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {

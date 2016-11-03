@@ -9,7 +9,7 @@
         android:orientation="vertical"
         tools:context=".ui.activity.product.ProductListActivity">
 
-        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        <com.jimei.library.widget.XlmmTitleView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
@@ -74,7 +74,9 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
                     .execute(new FileCallBack(XlmmConst.XLMM_DIR + "main/", mList.get(position).getName() + dateStr + ".png") {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            JUtils.Log(e.getMessage());
+                            if (e != null && e.getMessage() != null) {
+                                JUtils.Log(e.getMessage());
+                            }
                         }
 
                         @Override

@@ -3,14 +3,14 @@ package com.jimei.xiaolumeimei.base;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jimei.xiaolumeimei.utils.TUtil;
-import com.jimei.xiaolumeimei.widget.loading.VaryViewHelperController;
-import com.jude.utils.JUtils;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.utils.TUtil;
+import com.jimei.library.widget.loading.VaryViewHelperController;
 
 /**
  * Created by itxuye on 2016/6/24.
  */
-public abstract class BasePresenterActivity<T extends BasePresenter, E extends BaseModel>
+public abstract class BasePresenterActivity<T extends BasePresenter, E>
         extends BaseActivity implements BaseView {
     public T mPresenter;
     public E mModel;
@@ -52,8 +52,6 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E extends B
                 throw new IllegalStateException("no ViewHelperController");
             }
             mVaryViewHelperController.showNetworkError(view -> getDataCallBack());
-        } else {
-            JUtils.Toast("数据加载有误,请下拉刷新!");
         }
     }
 

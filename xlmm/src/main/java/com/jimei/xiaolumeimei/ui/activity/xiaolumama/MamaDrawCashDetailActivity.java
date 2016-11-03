@@ -6,16 +6,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.model.UserNewModel;
-import com.jude.utils.JUtils;
+import com.jimei.xiaolumeimei.model.UserModel;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tv_money_draw)
@@ -46,12 +45,11 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
-        addSubscription(UserNewModel.getInstance()
-                .budGetdetailBean("1")
-                .subscribeOn(Schedulers.io())
+        addSubscription(UserModel.getInstance()
+                .budGetDetailBean("1")
                 .subscribe(budgetDetailBean -> {
                     if (budgetDetailBean.getResults().size() > 0) {
-                        BudgetdetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
+                        BudgetDetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
                         String str = ((int) entity.getBudegetDetailCash()) + "";
                         drawMoneyTv.setText(str);
                         dateTv.setText(entity.getBudgetDate());
@@ -77,7 +75,6 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                 }, e -> JUtils.Log(e.getMessage())));
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
-                .subscribeOn(Schedulers.io())
                 .subscribe(mamaFortune -> {
                     String moneyText = mamaFortune.getMamaFortune().getCashValue() + "";
                     String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";

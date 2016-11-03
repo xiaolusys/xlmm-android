@@ -6,15 +6,13 @@ import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -142,7 +140,6 @@ public class LoginUtils {
                     .getUserAccount("android", mRegId,
                             Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
                                     Settings.Secure.ANDROID_ID))
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<UserAccountBean>() {
                         @Override
                         public void onNext(UserAccountBean user) {

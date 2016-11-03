@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jimei.library.rx.RxCountDown;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.CircleImageView;
+import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -18,10 +21,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.widget.CircleImageView;
-import com.jimei.xiaolumeimei.widget.ClearEditText;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
@@ -30,7 +30,6 @@ import butterknife.Bind;
 import okhttp3.Call;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/05.
@@ -94,7 +93,6 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
         } else {
             subscribe = UserModel.getInstance()
                     .getUserInfo()
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<UserInfoBean>() {
                         @Override
                         public void onNext(UserInfoBean user) {
@@ -151,7 +149,6 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
 
                         subscribe = UserModel.getInstance()
                                 .getCodeBean(mobile, "bind")
-                                .subscribeOn(Schedulers.io())
                                 .subscribe(new ServiceResponse<CodeBean>() {
                                     @Override
                                     public void onNext(CodeBean codeBean) {
@@ -213,7 +210,6 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
         JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
         subscribe = UserModel.getInstance()
                 .verify_code(username, "bind", valid_code)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CodeBean>() {
                     @Override
                     public void onNext(CodeBean codeBean) {

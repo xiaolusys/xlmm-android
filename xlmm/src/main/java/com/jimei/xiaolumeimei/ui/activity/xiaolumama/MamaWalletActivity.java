@@ -9,17 +9,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
+import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.ui.mminfo.MMInfoModel;
-import com.jimei.xiaolumeimei.utils.RxUtils;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.ll_small)
@@ -51,7 +49,6 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
     protected void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getCashoutPolicy()
-                .subscribeOn(Schedulers.io())
                 .subscribe(this::initCashoutPolicy, Throwable::printStackTrace));
     }
 
@@ -62,7 +59,6 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
         MobclickAgent.onResume(this);
         addSubscription(MMInfoModel.getInstance()
                 .getMamaFortune()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(mamaFortune -> {
                     mCash = mamaFortune.getMamaFortune().getCashValue();
                     moneyTv.setText(mCash + "");

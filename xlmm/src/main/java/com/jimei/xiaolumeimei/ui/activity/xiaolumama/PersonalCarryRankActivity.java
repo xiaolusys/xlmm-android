@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.RankFragmentPagerAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
@@ -11,14 +12,12 @@ import com.jimei.xiaolumeimei.databinding.ActivityPersonalcarryrankBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.v2.RankFragment;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
 import retrofit2.Response;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 2016/7/27.
@@ -65,7 +64,6 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
         showIndeterminateProgressDialog(false);
         MamaInfoModel.getInstance()
                 .getPersonalSelfCarryRankBean()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<Response<PersonalCarryRankBean>>() {
                     @Override
                     public void onNext(Response<PersonalCarryRankBean> personalCarryRankBeanResponse) {

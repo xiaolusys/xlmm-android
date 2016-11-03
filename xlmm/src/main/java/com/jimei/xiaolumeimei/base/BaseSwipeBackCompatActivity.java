@@ -4,18 +4,27 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityBase;
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackActivityHelper;
-import com.jimei.xiaolumeimei.widget.swipeback.SwipeBackLayout;
-import com.jimei.xiaolumeimei.widget.swipeback.Utils;
+import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
+import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
+import com.jimei.library.widget.swipeback.SwipeBackLayout;
+import com.jimei.library.widget.swipeback.Utils;
 
-public abstract class BaseSwipeBackCompatActivity extends BaseAppCompatActivity
+
+public abstract class BaseSwipeBackCompatActivity extends BaseActivity
         implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getContentViewLayoutID() != 0) {
+            setContentView(getContentViewLayoutID());
+        } else {
+            throw new IllegalArgumentException("You must return a right contentView layout resource Id");
+        }
+        initViews();
+        initData();
+        setListener();
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
     }

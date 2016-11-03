@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.AppBarOverlay"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                style="@style/AppTheme.AppBarOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="申请退货" />
+        app:xlmm_title="申请退货"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="30px"
-                    android:src="@drawable/icon_return_goods" />
+                    android:src="@drawable/icon_return_goods"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -51,34 +51,34 @@
                         android:layout_height="wrap_content"
                         android:text="退货退款"
                         android:textColor="@color/text_color_62"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="提交审核成功后,请尽快填写退货物流信息,一边及时退款"
+                        android:text="提交审核成功后,请尽快填写退货物流信息,以便及时退款"
                         android:textColor="@color/text_color_9B"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="30px" />
+                android:layout_height="30px"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
-            <include layout="@layout/one_order_item" />
+            <include layout="@layout/one_order_item"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="30px" />
+                android:layout_height="30px"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -94,12 +94,12 @@
                     android:layout_height="wrap_content"
                     android:text="申请数量："
                     android:textColor="@color/text_color_62"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/delete"
@@ -108,7 +108,7 @@
                     android:background="@drawable/img_dec"
                     android:gravity="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <TextView
                     android:id="@+id/tx_refund_num"
@@ -117,7 +117,7 @@
                     android:gravity="center"
                     android:text="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/add"
@@ -126,10 +126,10 @@
                     android:background="@drawable/img_inc"
                     android:gravity="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
             </LinearLayout>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -148,7 +148,7 @@
                     android:gravity="center"
                     android:text="可退金额："
                     android:textColor="@color/text_color_62"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tx_refundfee"
@@ -160,16 +160,16 @@
                     android:gravity="center"
                     android:text="￥120"
                     android:textColor="@color/colorAccent"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="30px" />
+                android:layout_height="30px"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <EditText
                 android:id="@+id/et_refund_reason"
@@ -183,11 +183,11 @@
                 android:paddingRight="13dp"
                 android:text="退款原因"
                 android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
-            <com.jimei.xiaolumeimei.widget.ClearEditText
+            <com.jimei.library.widget.ClearEditText
                 android:id="@+id/et_refund_info"
                 android:layout_width="match_parent"
                 android:layout_height="200px"
@@ -202,9 +202,9 @@
                 android:paddingTop="10dp"
                 android:textColorHint="@color/text_color_B4"
                 android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
 
-            <include layout="@layout/common_gap" />
+            <include layout="@layout/common_gap"/>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -220,7 +220,7 @@
                         android:id="@+id/imgbtn_camera_pic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_camera" />
+                        android:src="@drawable/icon_camera"/>
 
                     <RelativeLayout
                         android:id="@+id/rl_proof_pic1"
@@ -230,7 +230,7 @@
                         android:layout_toRightOf="@+id/imgbtn_camera_pic"
                         android:visibility="invisible">
 
-                        <include layout="@layout/proof_pic" />
+                        <include layout="@layout/proof_pic"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -241,7 +241,7 @@
                         android:layout_toRightOf="@+id/rl_proof_pic1"
                         android:visibility="invisible">
 
-                        <include layout="@layout/proof_pic" />
+                        <include layout="@layout/proof_pic"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -252,7 +252,7 @@
                         android:layout_toRightOf="@+id/rl_proof_pic2"
                         android:visibility="invisible">
 
-                        <include layout="@layout/proof_pic" />
+                        <include layout="@layout/proof_pic"/>
                     </RelativeLayout>
 
                 </RelativeLayout>
@@ -260,7 +260,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="100dp"/>
 
         </LinearLayout>
     </ScrollView>
@@ -280,7 +280,7 @@
             android:background="@color/colorAccent"
             android:text="提交申请"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
     </LinearLayout>
 

@@ -8,12 +8,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.XiaoMiPushContent;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -63,12 +63,15 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
     @Override
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
         Log.i(TAG, "onReceivePassThroughMessage is called. " + message.toString());
-
+        String log = context.getString(R.string.recv_passthrough_message, message.getContent());
         if (!TextUtils.isEmpty(message.getTopic())) {
             mTopic = message.getTopic();
         } else if (!TextUtils.isEmpty(message.getAlias())) {
             mAlias = message.getAlias();
         }
+        Message msg = Message.obtain();
+        msg.obj = log;
+        XlmmApp.getHandler().sendMessage(msg);
     }
 
     @Override
@@ -84,15 +87,17 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
                         message.getContent(), XiaoMiPushContent.class);
                 JUtils.Log(TAG, "target url " + miPushContent.getTargetUrl());
             } catch (Exception e) {
+                JumpUtils.jumpWithNewTask(context, "com.jimei.xlmm://app/v1/products/promote_today");
                 e.printStackTrace();
-
             }
         }
-
         if ((miPushContent != null)
                 && (miPushContent.getTargetUrl() != null)
                 && (!miPushContent.getTargetUrl().isEmpty())) {
-            JumpUtils.push_jump_proc(context, miPushContent.getTargetUrl());
+            JumpUtils.jumpWithNewTask(context, miPushContent.getTargetUrl());
+        } else if (miPushContent != null && (miPushContent.getUrl() != null)
+                && (!miPushContent.getUrl().isEmpty())) {
+            JumpUtils.jumpWithNewTask(context, "com.jimei.xlmm://app/v1/products/promote_today");
         }
     }
 
@@ -238,7 +243,10 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
 
         @Override
         public void handleMessage(Message msg) {
-
+            String s = (String) msg.obj;
+            if (!TextUtils.isEmpty(s)) {
+                JUtils.Log(s);
+            }
         }
     }
 }

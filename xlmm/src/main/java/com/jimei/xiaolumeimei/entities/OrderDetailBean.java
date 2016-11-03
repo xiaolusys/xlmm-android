@@ -47,6 +47,7 @@ public class OrderDetailBean implements Serializable {
     private int buyer_id;
     private String channel;
     private double payment;
+    private double pay_cash;
     private double post_fee;
     private double total_fee;
     private double discount_fee;
@@ -327,6 +328,14 @@ public class OrderDetailBean implements Serializable {
 
     public void setCan_change_address(boolean can_change_address) {
         this.can_change_address = can_change_address;
+    }
+
+    public double getPay_cash() {
+        return pay_cash;
+    }
+
+    public void setPay_cash(double pay_cash) {
+        this.pay_cash = pay_cash;
     }
 
     public static class LogisticsCompanyBean {

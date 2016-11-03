@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="短信验证码登录" />
 
     <include layout="@layout/common_gap" />
 
-    <com.jimei.xiaolumeimei.widget.ClearEditText
+    <com.jimei.library.widget.ClearEditText
         android:id="@+id/register_name"
         android:textCursorDrawable="@drawable/color_cursor"
         style="@style/EditTextStyle"

@@ -12,21 +12,20 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllOrderAdapter;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 
 public class OrderListFragment extends Fragment implements View.OnClickListener, AbsListView.OnScrollListener {
@@ -107,7 +106,6 @@ public class OrderListFragment extends Fragment implements View.OnClickListener,
     private void loadMoreData(String pageStr) {
         subscribe = TradeModel.getInstance()
                 .getOrderList(type, pageStr)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                     @Override
                     public void onNext(AllOrdersBean allOrdersBean) {

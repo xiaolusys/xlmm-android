@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean.ResultsEntity.OrdersEntity;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
-import com.jimei.xiaolumeimei.widget.RoundCornerImageView;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class OrderListAdapter extends BaseAdapter {
         OrdersEntity entity = mList.get(position);
         ViewUtils.loadImgToImgView(context, holder.img, entity.getPic_path());
         holder.name.setText(entity.getTitle());
-        holder.price.setText("¥" + entity.getTotal_fee());
+        holder.price.setText("¥" + (entity.getTotal_fee()/entity.getNum()));
         holder.num.setText("x" + entity.getNum());
         holder.size.setText(entity.getSku_name());
         return convertView;

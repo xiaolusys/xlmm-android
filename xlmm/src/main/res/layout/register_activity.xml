@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         android:paddingLeft="10sp"
         android:paddingRight="10sp">
 
-        <com.jimei.xiaolumeimei.widget.ClearEditText
+        <com.jimei.library.widget.ClearEditText
             android:id="@+id/register_name"
             style="@style/EditTextStyle"
             android:textCursorDrawable="@drawable/color_cursor"

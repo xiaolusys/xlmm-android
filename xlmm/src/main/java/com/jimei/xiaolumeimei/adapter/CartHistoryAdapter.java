@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -25,7 +25,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wisdom on 16/9/3.
@@ -68,7 +67,6 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
             mActivity.addSubscription(CartsModel.getInstance()
                     .rebuy(cartsInfoBean.getItem_id(),
                             cartsInfoBean.getSku_id(), cartsInfoBean.getId() + "")
-                    .subscribeOn(Schedulers.io())
                     .subscribe(new ServiceResponse<CartsHisBean>() {
                         @Override
                         public void onNext(CartsHisBean cartsHisBean) {

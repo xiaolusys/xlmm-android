@@ -6,7 +6,7 @@
     android:background="@color/ECECEC"
     android:orientation="vertical">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="个人信息" />
@@ -50,7 +50,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.jimei.xiaolumeimei.widget.CircleImageView
+                <com.jimei.library.widget.CircleImageView
                     android:id="@+id/user_img"
                     android:layout_width="120px"
                     android:layout_height="120px"
@@ -71,32 +71,32 @@
             android:background="#CCCCCC" />
     </LinearLayout>
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/nick_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/bind_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/edit_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/edit_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.jimei.xiaolumeimei.widget.MyPreferenceView
+    <com.jimei.library.widget.MyPreferenceView
         android:id="@+id/login_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

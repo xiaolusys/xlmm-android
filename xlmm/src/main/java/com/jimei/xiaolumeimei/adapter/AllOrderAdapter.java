@@ -10,10 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jimei.library.widget.NestedListView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
-import com.jimei.xiaolumeimei.widget.NestedListView;
 
 import java.util.ArrayList;
 import java.util.List;

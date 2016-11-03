@@ -18,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.event.MaMaInfoEmptyEvent;
@@ -27,7 +29,6 @@ import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.pingplusplus.android.PaymentActivity;
 import com.umeng.analytics.MobclickAgent;
 
@@ -38,7 +39,6 @@ import java.io.IOException;
 import butterknife.Bind;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye on 16/7/19.
@@ -112,7 +112,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     protected void initData() {
         MamaInfoModel.getInstance()
                 .getRegisterProInfo()
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<MaMaReNewBean>() {
                     @Override
                     public void onNext(MaMaReNewBean maMaReNewBean) {
@@ -180,7 +179,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         MamaInfoModel.getInstance()
                 .mamaRegisterPay(product_id, sku_id, payment, channel, num, post_fee, discount_fee, uuid,
                         total_fee, wallet_renew_deposit)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<Response<ResponseBody>>() {
                     @Override
                     public void onNext(Response<ResponseBody> responseBodyResponse) {
@@ -216,7 +214,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         showIndeterminateProgressDialog(false);
         MamaInfoModel.getInstance()
                 .exchangeDeposit(exchange_type)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<Response<ResultBean>>() {
                     @Override
                     public void onNext(Response<ResultBean> responseBodyResponse) {
@@ -254,7 +251,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         switch (v.getId()) {
             case R.id.tv_rule:
                 JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/static/tiaokuan.html", -1,
-                        MamaRuleActivity.class);
+                        CommonWebViewActivity.class,"小鹿妈妈服务条款",false);
                 break;
             case R.id.commit:
                 //new MyDialog(this).show();

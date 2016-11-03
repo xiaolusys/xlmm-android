@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletDetailActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 
 public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.UserWalletVH> {
 
-    private List<BudgetdetailBean.ResultsEntity> mList;
+    private List<BudgetDetailBean.ResultsEntity> mList;
     private Context mContext;
 
     public UserWalletAdapter(Context context) {
@@ -30,13 +30,13 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
         mList = new ArrayList<>();
     }
 
-    public void updateWithClear(List<BudgetdetailBean.ResultsEntity> list) {
+    public void updateWithClear(List<BudgetDetailBean.ResultsEntity> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<BudgetdetailBean.ResultsEntity> list) {
+    public void update(List<BudgetDetailBean.ResultsEntity> list) {
         mList.addAll(list);
         notifyDataSetChanged();
     }
@@ -51,7 +51,7 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
 
     @Override
     public void onBindViewHolder(UserWalletVH holder, int position) {
-        BudgetdetailBean.ResultsEntity resultsEntity = mList.get(position);
+        BudgetDetailBean.ResultsEntity resultsEntity = mList.get(position);
         holder.tvTime.setText(resultsEntity.getBudgetDate());
         holder.tvDesc.setText(resultsEntity.getDesc());
         if (0 == resultsEntity.getStatus()) {
@@ -70,7 +70,7 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
     }
 
     private void bindOnClickListener(View itemView, int position) {
-        BudgetdetailBean.ResultsEntity entity = mList.get(position);
+        BudgetDetailBean.ResultsEntity entity = mList.get(position);
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, WalletDetailActivity.class);
             Bundle bundle = new Bundle();

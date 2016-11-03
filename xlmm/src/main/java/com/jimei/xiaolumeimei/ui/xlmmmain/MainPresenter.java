@@ -2,13 +2,12 @@ package com.jimei.xiaolumeimei.ui.xlmmmain;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.utils.RxUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 
 import java.util.Date;
 
@@ -129,6 +128,7 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
+                        ((MainActivity) mView).hideIndeterminateProgressDialog();
                     }
 
                     @Override
@@ -136,8 +136,9 @@ public class MainPresenter extends MainContract.Presenter {
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                        mView.showNetworkError();
+                        JUtils.Toast("数据加载有误,请下拉刷新!");
                         JUtils.Log("MainPresenter", "    " + e.getClass().getName());
+                        ((MainActivity) mView).hideIndeterminateProgressDialog();
                     }
                 }));
     }
@@ -159,7 +160,6 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getAddressVersionAndUrl() {
         mRxManager.add(mModel.getAddressVersionAndUrl()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(addressDownloadResultBean -> {
 
                     if (null != addressDownloadResultBean) {
@@ -171,7 +171,6 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getCategoryDown() {
         mRxManager.add(mModel.getCategoryDown()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(categoryDownBean -> {
                     if (categoryDownBean != null) {
                         mView.downCategoryFile(categoryDownBean);
@@ -198,7 +197,6 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getTopic() {
         mRxManager.add(mModel.getTopic()
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000))
                 .subscribe(userTopic -> {
                     mView.setTopic(userTopic);
                 }, Throwable::printStackTrace));

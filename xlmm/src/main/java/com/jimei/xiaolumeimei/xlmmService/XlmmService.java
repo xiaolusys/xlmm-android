@@ -6,11 +6,9 @@ import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.entities.AllowanceBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
-import com.jimei.xiaolumeimei.entities.BindInfoBean;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.BudgetdetailBean;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
@@ -19,7 +17,6 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
-import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
@@ -34,7 +31,6 @@ import com.jimei.xiaolumeimei.entities.IsGetcoupon;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
-import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
@@ -123,8 +119,7 @@ public interface XlmmService {
     //获取购物车信息
     @GET("/rest/v2/carts")
     Observable<List<CartsInfoBean>> getCartsList(
-            @Query("type") int type
-    );
+            @Query("type") int type);
 
     //获取历史购物车信息
     @GET("/rest/v2/carts/show_carts_history")
@@ -133,22 +128,19 @@ public interface XlmmService {
     //获取购物信息列表
     @GET("/rest/v1/carts/carts_payinfo")
     Observable<CartsPayinfoBean> getCartsPayInfoList(
-            @Query("cart_ids") String cart_ids
-    );
+            @Query("cart_ids") String cart_ids);
 
     //获取购物信息列表
     @GET("/rest/v2/carts/carts_payinfo")
     Observable<CartsPayinfoBean> getCartsPayInfoListV2(
             @Query("cart_ids") String cart_ids,
-            @Query("device") String app
-    );
+            @Query("device") String app);
 
     //获取购物信息列表
     @GET("/rest/v1/carts/carts_payinfo")
     Observable<CartsPayinfoBean> getCartsPayInfoList(
             @Query("cart_ids") String cart_ids,
-            @Query("coupon_id") String coupon_id
-    );
+            @Query("coupon_id") String coupon_id);
 
     //重新购买商品
     @FormUrlEncoded
@@ -156,8 +148,7 @@ public interface XlmmService {
     Observable<CartsHisBean> rebuy(
             @Field("item_id") String item_id,
             @Field("sku_id") String sku_id,
-            @Field("cart_id") String cart_id
-    );
+            @Field("cart_id") String cart_id);
 
     @FormUrlEncoded
     @POST("/rest/v2/trades/shoppingcart_create")
@@ -171,8 +162,7 @@ public interface XlmmService {
             @Field("total_fee") String total_fee,
             @Field("uuid") String uuid,
             @Field("pay_extras") String pay_extras,
-            @Field("logistics_company_id") String code
-    );
+            @Field("logistics_company_id") String code);
 
 
     @FormUrlEncoded
@@ -188,23 +178,20 @@ public interface XlmmService {
             @Field("uuid") String uuid,
             @Field("pay_extras") String pay_extras,
             @Field("logistics_company_id") String code,
-            @Field("order_type") String type
-    );
+            @Field("order_type") String type);
 
     //立即支付订单接口
     @FormUrlEncoded
     @POST("/rest/v2/trades/{pk}/charge")
     Observable<PayInfoBean> orderPayWithChannel(
             @Path("pk") int order_id,
-            @Field("channel") String channel
-    );
+            @Field("channel") String channel);
 
     //获得订单数据
     @GET("/rest/v2/trades/{pk}")
     Observable<OrderDetailBean> getOrderDetail(
             @Path("pk") int order_id,
-            @Query("device") String device
-    );
+            @Query("device") String device);
 
     //获取所有待支付订单
     @GET("/rest/v2/trades/waitpay")
@@ -231,8 +218,7 @@ public interface XlmmService {
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
-            @Field("default") String defaulta
-    );
+            @Field("default") String defaulta);
 
     //修改地址
     @FormUrlEncoded
@@ -245,8 +231,7 @@ public interface XlmmService {
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
-            @Field("default") String defaulta
-    );
+            @Field("default") String defaulta);
 
     //修改地址
     @FormUrlEncoded
@@ -260,8 +245,7 @@ public interface XlmmService {
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
             @Field("logistic_company_code") String logistic_company_code,
-            @Field("referal_trade_id") String referal_trade_id
-    );
+            @Field("referal_trade_id") String referal_trade_id);
 
 
     //获取地址列表
@@ -271,8 +255,7 @@ public interface XlmmService {
     //删除某一个地址
     @POST("/rest/v1/address/{id}/delete_address")
     Observable<AddressResultBean> delete_address(
-            @Path("id") String id
-    );
+            @Path("id") String id);
 
     //获取用户信息
     @GET("/rest/v1/users/profile")
@@ -287,20 +270,10 @@ public interface XlmmService {
             @Field("com_title") String com_title);
 
     //设置用户昵称
-    @PATCH("/rest/v1/users" + "/{id}")
+    @PATCH("/rest/v1/users/{id}")
     Observable<UserBean> setNickname(
             @Path("id") int id,
             @Body NicknameBean nickname);
-
-    //修改用户密码
-    @FormUrlEncoded
-    @POST("/rest/v1/register/change_user_pwd")
-    Observable<UserBean> changePassword(
-            @Field("username") String username,
-            @Field("valid_code") String valid_code,
-            @Field("password1") String password1,
-            @Field("password2") String password2
-    );
 
     @POST("/rest/v1/users/customer_logout")
     Observable<LogOutBean> customer_logout();
@@ -309,11 +282,6 @@ public interface XlmmService {
     @GET("/rest/v1/integral")
     Observable<MembershipPointBean> getMembershipPointBean();
 
-
-    //获取用户信息
-    @GET("/rest/v1/users/profile")
-    Observable<UserInfoBean> getProfile();
-
     //获取用户信息
     @GET("/rest/v1/users/profile")
     Observable<Response<UserInfoBean>> getUserLoginInfo();
@@ -321,38 +289,38 @@ public interface XlmmService {
     //获取用户积分记录信息
     @GET("/rest/v1/integrallog")
     Observable<PointLogBean> getPointLogBean(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     //获取优惠券
     @GET("/rest/v1/usercoupons/get_user_coupons")
     Observable<ArrayList<CouponEntity>> getCouponList(
-            @Query("status") int status
-    );
+            @Query("status") int status);
+
+    //获取优惠券
+    @GET("/rest/v1/usercoupons/get_user_coupons")
+    Observable<ArrayList<CouponEntity>> getCouponList(
+            @Query("status") int status,
+            @Query("coupon_type") int coupon_type);
 
     //购物车选择优惠券
     @GET("/rest/v1/usercoupons/coupon_able")
     Observable<CouponSelectEntity> getCouponSelectEntity(
-            @Query("cart_ids") String cart_ids
-    );
+            @Query("cart_ids") String cart_ids);
 
     //购物车增加一件
     @POST("/rest/v2/carts/{id}/plus_product_carts")
     Observable<Response<CodeBean>> plus_product_carts(
-            @Path("id") String id
-    );
+            @Path("id") String id);
 
     //购物车删除一件
     @POST("/rest/v2/carts/{id}/minus_product_carts")
     Observable<Response<CodeBean>> minus_product_carts(
-            @Path("id") String id
-    );
+            @Path("id") String id);
 
     //删除一列
     @POST("/rest/v2/carts/{id}/delete_carts")
     Observable<Response<CodeBean>> delete_carts(
-            @Path("id") String id
-    );
+            @Path("id") String id);
 
     //确认签收
     @POST("/rest/v1/order/{id}/confirm_sign")
@@ -380,8 +348,7 @@ public interface XlmmService {
             @Field("sum_price") double sum_price,
             @Field("description") String description,
             @Field("proof_pic") String proof_pic,
-            @Field("refund_channel") String refund_channel
-    );
+            @Field("refund_channel") String refund_channel);
 
     //创建退款单接口
     @FormUrlEncoded
@@ -392,8 +359,7 @@ public interface XlmmService {
             @Field("num") int num,
             @Field("sum_price") double sum_price,
             @Field("description") String description,
-            @Field("proof_pic") String proof_pic
-    );
+            @Field("proof_pic") String proof_pic);
 
     //添加退款物流信息
     @FormUrlEncoded
@@ -402,16 +368,13 @@ public interface XlmmService {
             @Field("id") int goods_id,
             @Field("modify") int type,
             @Field("company") String company,
-            @Field("sid") String sid
-    );
+            @Field("sid") String sid);
 
     @GET("/rest/v2/carts/show_carts_num")
-    Observable<CartsNumResultBean> show_carts_num(
-    );
+    Observable<CartsNumResultBean> show_carts_num();
 
     @GET("/rest/v1/refunds/qiniu_token")
-    Observable<QiniuTokenBean> getQiniuToken(
-    );
+    Observable<QiniuTokenBean> getQiniuToken();
 
     @FormUrlEncoded
     @POST("/rest/v2/weixinapplogin")
@@ -427,28 +390,24 @@ public interface XlmmService {
 
     @GET("/rest/v1/pmt/cashout")
     Observable<WithdrawCashHisBean> getWithdrawCashHis(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     //获取粉丝列表
     @GET("/rest/v2/mama/fans")
     Observable<MamaFansBean> getMamaFans(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     //妈妈余额兑换现金消费券
     @GET("/rest/v1/pmt/cashout/exchange_coupon")
     Observable<DrawCouponBean> drawCoupon(
             @Query("template_id") String template_id,
-            @Query("exchange_num") String exchange_num
-    );
+            @Query("exchange_num") String exchange_num);
 
     //获取访客列表
     @GET("/rest/v2/mama/visitor")
     Observable<MMVisitorsBean> getMamaVisitor(
             @Query("recent") int recent,
-            @Query("page") int page
-    );
+            @Query("page") int page);
 
     //创建提款单信息
     @FormUrlEncoded
@@ -468,70 +427,22 @@ public interface XlmmService {
     Observable<ResponseResultBean> cancel_withdraw_cash(
             @Field("id") String id);
 
-    //选品默认列表
-    @GET("/rest/v2/products/my_choice_pro")
-    Observable<MMChooselistBean> getMMChooseList(
-            @Query("page") String page,
-            @Query("page_size") String pagesize
-    );
-
-    //选品默认列表排序
-    @GET("/rest/v2/products/my_choice_pro")
-    Observable<MMChooselistBean> getMMChooseSortList(
-            @Query("sort_field") String sort_field,
-            @Query("page") String page,
-            @Query("page_size") String pagesize
-    );
-
-    //选品女装或者童装列表
-    @GET("/rest/v2/products/my_choice_pro")
-    Observable<MMChooselistBean> getMMChooseLadyOrChildList(
-
-            @Query("category") String category,
-            @Query("page") String page,
-            @Query("page_size") String pagesize
-    );
-
-    //选品排序列表
-    @GET("/rest/v2/products/my_choice_pro")
-    Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
-            @Query("sort_field") String sort_field,
-            @Query("category") String category,
-            @Query("page") String page,
-            @Query("page_size") String pagesize
-    );
-
-
     @GET("/rest/v1/users/need_set_info")
-    Observable<NeedSetInfoBean> need_set_info(
-    );
-
-    @FormUrlEncoded
-    @POST("/rest/v1/users/bang_mobile")
-    Observable<BindInfoBean> bang_mobile(
-            @Field("username") String username,
-            @Field("password1") String password1,
-            @Field("password2") String password2,
-            @Field("valid_code") String valid_code
-    );
-
-    @GET("/rest/v1/pmt/carrylog/get_clk_list")
-    Observable<AllowanceBean> getAllowance(
-            @Query("page") String page
-    );
+    Observable<NeedSetInfoBean> need_set_info();
 
     //活动内容分享
     @GET("/rest/v1/activitys/{id}/get_share_params")
-    Observable<ActivityBean> get_party_share_content(@Path("id") String id);
+    Observable<ActivityBean> get_party_share_content(
+            @Path("id") String id);
 
     //品牌
     @GET("/rest/v1/activitys/{id}")
-    Observable<BrandListBean> getBrandList(@Path("id") String id);
+    Observable<BrandListBean> getBrandList(
+            @Path("id") String id);
 
     @GET("/rest/v1/share/model")
     Observable<ShareModelBean> getShareModel(
-            @Query("model_id") int model_id
-    );
+            @Query("model_id") int model_id);
 
     //get push useraccount
     @FormUrlEncoded
@@ -539,26 +450,22 @@ public interface XlmmService {
     Observable<UserAccountBean> getUserAccount(
             @Field("platform") String platform,
             @Field("regid") String regid,
-            @Field("device_id") String device_id
-    );
+            @Field("device_id") String device_id);
 
     @GET("/rest/v1/users/get_budget_detail")
-    Observable<BudgetdetailBean> budGetdetailBean(
-            @Query("page") String page
-    );
+    Observable<BudgetDetailBean> budGetDetailBean(
+            @Query("page") String page);
 
     @GET("/rest/v1/pmt/ninepic")
     Observable<List<NinePicBean>> getNinePic();
 
     @GET("/rest/v1/pmt/ninepic")
     Observable<List<NinePicBean>> getNinePic(
-            @Query("sale_category") int sale_category
-    );
+            @Query("sale_category") int sale_category);
 
     @GET("/rest/v1/pmt/ninepic")
     Observable<List<NinePicBean>> getNinePic(
-            @Query("ordering") String ordering
-    );
+            @Query("ordering") String ordering);
 
     @GET("/rest/v1/users/get_wxpub_authinfo")
     Observable<WxPubAuthInfo> getWxPubAuthInfo();
@@ -568,8 +475,7 @@ public interface XlmmService {
     @POST("/rest/v1/users/budget_cash_out")
     Observable<UserWithdrawResult> user_withdraw_cash(
             @Field("cashout_amount") String amount,
-            @Field("verify_code") String verify_code
-    );
+            @Field("verify_code") String verify_code);
 
     @POST("/rest/v2/request_cashout_verify_code")
     Observable<ResultEntity> getVerifyCode();
@@ -578,8 +484,7 @@ public interface XlmmService {
     @POST("/rest/v1/pmt/cashout/noaudit_cashout")
     Observable<ResultEntity> getNoauditCashout(
             @Field("amount") double amount,
-            @Field("verify_code") String verify_code
-    );
+            @Field("verify_code") String verify_code);
 
     @GET("/rest/v1/pmt/cushop/customer_shop")
     Observable<MMShoppingBean> getShareShopping();
@@ -593,60 +498,50 @@ public interface XlmmService {
 
     @GET("/rest/v2/mama/carry")
     Observable<CarryLogListBean> getMamaAllCarryLogs(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     @GET("/rest/v2/mama/ordercarry")
     Observable<OderCarryBean> getMamaAllOderCarryLogs(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     @GET("/rest/v2/mama/ordercarry")
     Observable<OderCarryBean> getMamaAllOderCarryLogs(
             @Query("carry_type") String carry_type,
-            @Query("page") String page
-    );
+            @Query("page") int page);
 
     @GET("/rest/v2/mama/awardcarry")
     Observable<AwardCarryBean> getMamaAllAwardCarryLogs(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     @GET("/rest/v2/mama/clickcarry")
     Observable<ClickcarryBean> getMamaAllClickCarryLogs(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     @GET("/rest/v1/activitys")
-    Observable<List<PostActivityBean>> getPostActivity(
-    );
+    Observable<List<PostActivityBean>> getPostActivity();
 
     @GET("/rest/v1/address/get_logistic_companys")
     Observable<List<LogisticCompany>> getLogisticCompany(
-            @Query("referal_trade_id") int referal_trade_id
-    );
+            @Query("referal_trade_id") int referal_trade_id);
 
     @FormUrlEncoded
     @POST("/rest/v1/address/{address_id}/change_company_code")
     Observable<ResultBean> changeLogisticCompany(
             @Path("address_id") int address_id,
             @Field("referal_trade_id") String referal_trade_id,
-            @Field("logistic_company_code") String logistic_company_code
-    );
+            @Field("logistic_company_code") String logistic_company_code);
 
     @FormUrlEncoded
     @POST("/rest/v1/usercoupons")
     Observable<ResponseBody> getUsercoupons(
-            @Field("template_id") String template_id
-    );
+            @Field("template_id") String template_id);
 
     //发送验证码
     @FormUrlEncoded
     @POST("/rest/v2/send_code")
     Observable<CodeBean> send_code(
             @Field("mobile") String mobile,
-            @Field("action") String action
-    );
+            @Field("action") String action);
 
     //验证码验证
     @FormUrlEncoded
@@ -664,8 +559,7 @@ public interface XlmmService {
             @Field("mobile") String mobile,
             @Field("password1") String password1,
             @Field("password2") String password2,
-            @Field("verify_code") String code
-    );
+            @Field("verify_code") String code);
 
     //用户账号密码
     @FormUrlEncoded
@@ -680,16 +574,14 @@ public interface XlmmService {
     @GET("/rest/v1/wuliu/get_wuliu_by_packetid")
     Observable<LogisticsBean> get_logistics_by_packagetid(
             @Query("packetid") String packetid,
-            @Query("company_code") String company_code
-    );
+            @Query("company_code") String company_code);
 
     //获取退货物流信息
     @GET("/rest/v1/rtnwuliu/get_wuliu_by_packetid")
     Observable<LogisticsBean> getRefundLogistic(
             @Query("rid") int rid,
             @Query("packetid") String packetid,
-            @Query("company_name") String company_name
-    );
+            @Query("company_name") String company_name);
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
@@ -697,21 +589,18 @@ public interface XlmmService {
     @FormUrlEncoded
     @POST("/rest/v1/users/open_debug_for_app")
     Observable<CodeBean> openDebug(
-            @Field("debug_secret") String debug_secret
-    );
+            @Field("debug_secret") String debug_secret);
 
 
     //获得未来粉丝列表
     @GET("/rest/v2/potential_fans")
     Observable<PotentialFans> getPotentialFans(
-            @Query("page") String page
-    );
+            @Query("page") String page);
 
     @FormUrlEncoded
     @POST("/rest/v2/sharecoupon/create_order_share")
     Observable<RedBagBean> getRedBag(
-            @Field("uniq_id") String uniq_id
-    );
+            @Field("uniq_id") String uniq_id);
 
     @GET("rest/v1/usercoupons/get_register_gift_coupon")
     Observable<Response<GetCouponbean>> getCouPon();
@@ -721,18 +610,13 @@ public interface XlmmService {
 
     @GET("/rest/v1/mmwebviewconfig")
     Observable<MamaUrl> getMamaUrl(
-            @Query("version") String version
-    );
+            @Query("version") String version);
 
     @GET("/rest/v1/districts/latest_version")
-    Observable<AddressDownloadResultBean> getAddressVersionAndUrl(
-
-    );
+    Observable<AddressDownloadResultBean> getAddressVersionAndUrl();
 
     @GET("/rest/v1/pmt/xlmm/get_register_pro_info")
-    Observable<MaMaReNewBean> getRegisterProInfo(
-
-    );
+    Observable<MaMaReNewBean> getRegisterProInfo();
 
     @GET("/sale/apprelease/newversion")
     Observable<VersionBean> getVersion();
@@ -749,31 +633,26 @@ public interface XlmmService {
             @Field("discount_fee") String discount_fee,
             @Field("uuid") String uuid,
             @Field("total_fee") String total_fee,
-            @Field("wallet_renew_deposit") String wallet_renew_deposit
-    );
+            @Field("wallet_renew_deposit") String wallet_renew_deposit);
 
     @FormUrlEncoded
     @POST("/rest/v1/pmt/cashout/exchange_deposit")
     Observable<Response<ResultBean>> exchangeDeposit(
-            @Field("exchange_type") String exchange_type
-    );
+            @Field("exchange_type") String exchange_type);
 
     @GET("/rest/v1/favorites")
     Observable<CollectionAllBean> getCollection(
             @Query("page") int page,
-            @Query("shelf_status") String shelf_status
-    );
+            @Query("shelf_status") String shelf_status);
 
     @FormUrlEncoded
     @POST("/rest/v1/favorites")
     Observable<CollectionResultBean> addCollection(
-            @Field("model_id") int model_id
-    );
+            @Field("model_id") int model_id);
 
     @HTTP(method = "DELETE", path = "/rest/v1/favorites", hasBody = true)
     Observable<CollectionResultBean> deleteCollection(
-            @Body CollectionDeleteBody deleteBody
-    );
+            @Body CollectionDeleteBody deleteBody);
 
     @GET("/rest/v2/mama/rank/carry_total_rank")
     Observable<List<PersonalCarryRankBean>> getPersonalCarryRankBean();
@@ -794,16 +673,13 @@ public interface XlmmService {
 
     @GET("/rest/v2/mama/rank/{id}/get_team_members")
     Observable<Response<List<PersonalCarryRankBean>>> getTeamMembers(
-            @Path("id") String id
-    );
+            @Path("id") String id);
 
     @GET("/rest/v2/mama/teamrank/self_rank")
-    Observable<Response<PersonalCarryRankBean>> getTeamSelfRank(
-    );
+    Observable<Response<PersonalCarryRankBean>> getTeamSelfRank();
 
     @GET("/rest/v2/mama/message/self_list")
-    Observable<Response<MamaSelfListBean>> getMaMaselfList(
-    );
+    Observable<MamaSelfListBean> getMaMaselfList();
 
     @GET("/rest/v2/categorys/latest_version")
     Observable<CategoryDownBean> getCategoryDown();
@@ -813,24 +689,21 @@ public interface XlmmService {
     Observable<List<CategoryBean>> getCategory();
 
     @GET("/rest/v2/modelproducts")
-    Observable<CategoryProductListBean> getCategoryProductList(
+    Observable<ProductListBean> getCategoryProductList(
             @Query("cid") String cid,
             @Query("page") int page,
-            @Query("order_by") String order_by
-    );
+            @Query("order_by") String order_by);
 
     @GET("/rest/v2/modelproducts/{id}")
     Observable<ProductDetailBean> getProductDetail(
-            @Path("id") int id
-    );
+            @Path("id") int id);
 
     @FormUrlEncoded
     @POST("/rest/v2/carts")
     Observable<ResultEntity> addToCart(
             @Field("item_id") int item_id,
             @Field("sku_id") int sku_id,
-            @Field("num") int num
-    );
+            @Field("num") int num);
 
     @FormUrlEncoded
     @POST("/rest/v2/carts")
@@ -838,23 +711,19 @@ public interface XlmmService {
             @Field("item_id") int item_id,
             @Field("sku_id") int sku_id,
             @Field("num") int num,
-            @Field("type") int type
-    );
+            @Field("type") int type);
 
     @GET("/rest/v2/modelproducts/today")
     Observable<ProductListBean> getTodayProducts(
-            @Query("page") int page
-    );
+            @Query("page") int page);
 
     @GET("/rest/v2/modelproducts/yesterday")
     Observable<ProductListBean> getYesterdayProducts(
-            @Query("page") int page
-    );
+            @Query("page") int page);
 
     @GET("/rest/v2/modelproducts/tomorrow")
     Observable<ProductListBean> getTomorrowProducts(
-            @Query("page") int page
-    );
+            @Query("page") int page);
 
     @GET("/rest/v1/push/topic")
     Observable<UserTopic> getTopic();
@@ -867,34 +736,29 @@ public interface XlmmService {
 
     @GET("/rest/v2/teambuy/{tid}/team_info")
     Observable<TeamBuyBean> getTeamBuyBean(
-            @Path("tid") String tid
-    );
+            @Path("tid") String tid);
 
     @GET("/rest/v2/modelproducts/product_choice")
     Observable<ChooseListBean> getChooseList(
-            @Query("page") int page
-    );
+            @Query("page") int page);
 
     @GET("/rest/v2/modelproducts/product_choice")
     Observable<ChooseListBean> getChooseListBySort(
             @Query("page") int page,
             @Query("sort_field") String sort_field,
-            @Query("reverse") int reverse
-    );
+            @Query("reverse") int reverse);
 
     @GET("/rest/v2/modelproducts/product_choice")
     Observable<ChooseListBean> getChooseListByCid(
             @Query("page") int page,
-            @Query("cid") String cid
-    );
+            @Query("cid") String cid);
 
     @GET("/rest/v2/modelproducts/product_choice")
     Observable<ChooseListBean> getChooseList(
             @Query("page") int page,
             @Query("sort_field") String sort_field,
             @Query("cid") String cid,
-            @Query("reverse") int reverse
-    );
+            @Query("reverse") int reverse);
 
     @GET("/rest/v2/cashout_policy")
     Observable<CashoutPolicy> getCashoutPolicy();
@@ -911,6 +775,5 @@ public interface XlmmService {
     @PATCH("/rest/v1/pmt/ninepic/{id}")
     Observable<SaveTimeBean> saveTime(
             @Path("id") int id,
-            @Field("save_times") int save_times
-    );
+            @Field("save_times") int save_times);
 }

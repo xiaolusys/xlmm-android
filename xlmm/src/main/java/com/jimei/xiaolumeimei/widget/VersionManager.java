@@ -12,8 +12,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jude.utils.JUtils;
 
 import java.io.File;
 

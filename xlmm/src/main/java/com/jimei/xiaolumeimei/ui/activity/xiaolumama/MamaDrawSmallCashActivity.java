@@ -11,19 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.model.UserNewModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 
 public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, TextWatcher {
@@ -55,9 +54,8 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
 
     @Override
     protected void initData() {
-        addSubscription(UserNewModel.getInstance()
-                .getProfile()
-                .subscribeOn(Schedulers.io())
+        addSubscription(MMInfoModel.getInstance()
+                .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userNewBean) {
@@ -107,7 +105,6 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                 mCountDownTimer.start();
                 addSubscription(UserModel.getInstance()
                         .getVerifyCode()
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResultEntity>() {
                             @Override
                             public void onNext(ResultEntity resultEntity) {
@@ -126,9 +123,9 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                 } else if (codeEt.getText().length() < 6) {
                     JUtils.Toast("验证码有误");
                 } else {
+                    drawCashBtn.setClickable(false);
                     addSubscription(MamaInfoModel.getInstance()
                             .getNoauditCashout(drawMoney, codeEt.getText().toString())
-                            .subscribeOn(Schedulers.io())
                             .subscribe(resultEntity -> {
                                 JUtils.Toast(resultEntity.getInfo());
                                 if (resultEntity.getCode() == 0) {
@@ -139,7 +136,10 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                                     startActivity(intent);
                                     finish();
                                 }
-                            },Throwable::printStackTrace));
+                            }, e -> {
+                                e.printStackTrace();
+                                drawCashBtn.setClickable(true);
+                            }));
                 }
                 break;
         }

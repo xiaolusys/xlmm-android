@@ -9,14 +9,17 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.glidemoudle.CropCircleTransformation;
 import com.jimei.xiaolumeimei.BR;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseRevHolder;
 import com.jimei.xiaolumeimei.databinding.ItemCarryPersonalBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
-import com.jimei.xiaolumeimei.widget.glidemoudle.CropCircleTransformation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,82 +28,85 @@ import java.util.List;
  */
 public class TeamCarryRankAdapter extends RecyclerView.Adapter<BaseRevHolder> {
 
-  private static final int ITEM_VIEW_TYPE_FIRST = 1;
-  private static final int ITEM_VIEW_TYPE_SECOND = 2;
-  private static final int ITEM_VIEW_TYPE_THIRD = 3;
-  private static final int ITEM_VIEW_TYPE_FOUR = 4;
+    private static final int ITEM_VIEW_TYPE_FIRST = 1;
+    private static final int ITEM_VIEW_TYPE_SECOND = 2;
+    private static final int ITEM_VIEW_TYPE_THIRD = 3;
+    private static final int ITEM_VIEW_TYPE_FOUR = 4;
 
-  private final LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
-  private List<PersonalCarryRankBean> mPersonalCarryRankBeanList;
-  private Context mContext;
+    private List<PersonalCarryRankBean> mPersonalCarryRankBeanList;
+    private Context mContext;
 
-  public TeamCarryRankAdapter(Context context) {
-    this.mContext = context;
-    mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    mPersonalCarryRankBeanList = new ArrayList<>();
-  }
-
-  @Override public int getItemViewType(int position) {
-    PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
-    if (personalCarryRankBean.getRank() == 1) {
-      return ITEM_VIEW_TYPE_FIRST;
-    } else if (personalCarryRankBean.getRank() == 2) {
-      return ITEM_VIEW_TYPE_SECOND;
-    } else if (personalCarryRankBean.getRank() == 3) {
-      return ITEM_VIEW_TYPE_THIRD;
-    } else {
-      return ITEM_VIEW_TYPE_FOUR;
+    public TeamCarryRankAdapter(Context context) {
+        this.mContext = context;
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPersonalCarryRankBeanList = new ArrayList<>();
     }
-  }
 
-  @Override public BaseRevHolder<ItemCarryPersonalBinding> onCreateViewHolder(ViewGroup parent,
-      int viewType) {
-    ViewDataBinding binding;
-    if (viewType == ITEM_VIEW_TYPE_FIRST) {
-      binding = getViewDataBinding(parent, R.layout.item_carry_team_first);
-    } else if (viewType == ITEM_VIEW_TYPE_SECOND) {
-      binding = getViewDataBinding(parent, R.layout.item_carry_team_second);
-    } else if (viewType == ITEM_VIEW_TYPE_THIRD) {
-      binding = getViewDataBinding(parent, R.layout.item_carry_team_thrid);
-    } else {
-      binding = getViewDataBinding(parent, R.layout.item_carry_team);
+    @Override
+    public int getItemViewType(int position) {
+        PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
+        if (personalCarryRankBean.getRank() == 1) {
+            return ITEM_VIEW_TYPE_FIRST;
+        } else if (personalCarryRankBean.getRank() == 2) {
+            return ITEM_VIEW_TYPE_SECOND;
+        } else if (personalCarryRankBean.getRank() == 3) {
+            return ITEM_VIEW_TYPE_THIRD;
+        } else {
+            return ITEM_VIEW_TYPE_FOUR;
+        }
     }
-    return new BaseRevHolder(binding);
-  }
 
-  private ViewDataBinding getViewDataBinding(ViewGroup parent, int id) {
-    ViewDataBinding binding;
-    binding = DataBindingUtil.inflate(mLayoutInflater, id, parent, false);
-    return binding;
-  }
-
-  @Override public void onBindViewHolder(BaseRevHolder holder, int position) {
-    final PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
-    holder.getBinding().setVariable(BR.item, personalCarryRankBean);
-    holder.getBinding().executePendingBindings();
-  }
-
-  @BindingAdapter({"imageUrl"})
-  public static void loadImage(ImageView view, String url) {
-    if (TextUtils.isEmpty(url)) {
-      Glide.with(view.getContext())
-          .load(R.mipmap.ic_launcher)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .bitmapTransform(new CropCircleTransformation(view.getContext()))
-          .into(view);
-    } else {
-      com.jimei.xiaolumeimei.utils.ViewUtils.loadImgToImgViewWithTransformCircle(view.getContext(),
-          view, url);
+    @Override
+    public BaseRevHolder<ItemCarryPersonalBinding> onCreateViewHolder(ViewGroup parent,
+                                                                      int viewType) {
+        ViewDataBinding binding;
+        if (viewType == ITEM_VIEW_TYPE_FIRST) {
+            binding = getViewDataBinding(parent, R.layout.item_carry_team_first);
+        } else if (viewType == ITEM_VIEW_TYPE_SECOND) {
+            binding = getViewDataBinding(parent, R.layout.item_carry_team_second);
+        } else if (viewType == ITEM_VIEW_TYPE_THIRD) {
+            binding = getViewDataBinding(parent, R.layout.item_carry_team_thrid);
+        } else {
+            binding = getViewDataBinding(parent, R.layout.item_carry_team);
+        }
+        return new BaseRevHolder(binding);
     }
-  }
 
-  public void addAll(List<PersonalCarryRankBean> personalCarryRankBeanList) {
-    mPersonalCarryRankBeanList.addAll(personalCarryRankBeanList);
-    notifyDataSetChanged();
-  }
+    private ViewDataBinding getViewDataBinding(ViewGroup parent, int id) {
+        ViewDataBinding binding;
+        binding = DataBindingUtil.inflate(mLayoutInflater, id, parent, false);
+        return binding;
+    }
 
-  @Override public int getItemCount() {
-    return mPersonalCarryRankBeanList.size();
-  }
+    @Override
+    public void onBindViewHolder(BaseRevHolder holder, int position) {
+        final PersonalCarryRankBean personalCarryRankBean = mPersonalCarryRankBeanList.get(position);
+        holder.getBinding().setVariable(BR.item, personalCarryRankBean);
+        holder.getBinding().executePendingBindings();
+    }
+
+    @BindingAdapter({"imageUrl"})
+    public static void loadImage(ImageView view, String url) {
+        if (TextUtils.isEmpty(url)) {
+            Glide.with(view.getContext())
+                    .load(R.mipmap.ic_launcher)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .bitmapTransform(new CropCircleTransformation(view.getContext()))
+                    .into(view);
+        } else {
+            ViewUtils.loadImgToImgViewWithTransformCircle(view.getContext(), view, url);
+        }
+    }
+
+    public void addAll(List<PersonalCarryRankBean> personalCarryRankBeanList) {
+        mPersonalCarryRankBeanList.addAll(personalCarryRankBeanList);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mPersonalCarryRankBeanList.size();
+    }
 }

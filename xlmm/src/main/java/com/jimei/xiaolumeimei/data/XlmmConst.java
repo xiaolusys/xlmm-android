@@ -31,6 +31,7 @@ public class XlmmConst {
     public static final int UNUSED_COUPON = 0;
     public static final int PAST_COUPON = 1;
     public static final int USED_COUPON = 2;
+    public static final int GOOD_COUPON = 3;
 
     //订单类型
     public static final int ALL_ORDER = 0;

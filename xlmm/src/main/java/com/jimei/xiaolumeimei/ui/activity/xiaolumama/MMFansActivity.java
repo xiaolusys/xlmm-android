@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseFragment;
+import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.base.BaseWebViewFragment;
+import com.jimei.xiaolumeimei.base.BaseWebViewLazyFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.MMPotentialFansFragment;
 import com.umeng.analytics.MobclickAgent;
@@ -28,7 +28,7 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
-    List<BaseFragment> fragments = new ArrayList<>();
+    List<BaseLazyFragment> fragments = new ArrayList<>();
 
     @Override
     protected int getContentViewLayoutID() {
@@ -39,23 +39,12 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
     protected void initViews() {
         fragments.add(MMFansFragment.newInstance("我的粉丝"));
         fragments.add(MMPotentialFansFragment.newInstance("潜在粉丝"));
-        fragments.add(BaseWebViewFragment.newInstance("关于粉丝"));
-
+        fragments.add(BaseWebViewLazyFragment.newInstance("关于粉丝"));
 
         List<String> titles = new ArrayList<>();
         titles.add("我的粉丝");
         titles.add("潜在粉丝");
         titles.add("关于粉丝");
-
-
-        TabLayout.Tab[] tabs = new TabLayout.Tab[3];
-        tabs[0] = tabLayout.newTab().setText(titles.get(0));
-        tabs[1] = tabLayout.newTab().setText(titles.get(1));
-        tabs[2] = tabLayout.newTab().setText(titles.get(2));
-
-        tabLayout.addTab(tabs[0]);
-        tabLayout.addTab(tabs[1]);
-        tabLayout.addTab(tabs[2]);
 
         MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager(), titles);
         viewPager.setAdapter(mAdapter);

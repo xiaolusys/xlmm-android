@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="133px">
 
-        <com.jimei.xiaolumeimei.widget.CircleImageView
+        <com.jimei.library.widget.CircleImageView
             android:id="@+id/imgUser"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -22,7 +22,7 @@
             android:clickable="true"
             android:src="@drawable/img_head" />
 
-        <com.jimei.xiaolumeimei.widget.CircleImageView
+        <com.jimei.library.widget.CircleImageView
             android:id="@+id/login_flag"
             android:layout_width="8dp"
             android:layout_height="8dp"

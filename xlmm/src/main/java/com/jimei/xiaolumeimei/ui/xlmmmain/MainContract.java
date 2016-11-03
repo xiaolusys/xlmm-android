@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.xlmmmain;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import com.jimei.xiaolumeimei.base.BaseModel;
 import com.jimei.xiaolumeimei.base.BasePresenter;
 import com.jimei.xiaolumeimei.base.BaseView;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
@@ -21,7 +20,7 @@ import rx.Observable;
  * Created by itxuye on 2016/7/4.
  */
 public interface MainContract {
-    interface Model extends BaseModel {
+    interface Model {
 
         Observable<Response<UserInfoBean>> getProfile();
 

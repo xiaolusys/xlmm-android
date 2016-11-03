@@ -2,9 +2,9 @@ package com.jimei.xiaolumeimei.okhttp3;
 
 import android.os.Environment;
 
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.entities.FilePara;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jude.utils.JUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.File;

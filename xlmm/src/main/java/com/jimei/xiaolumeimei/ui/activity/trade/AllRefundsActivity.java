@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllRefundsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -19,14 +20,12 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class AllRefundsActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -56,6 +55,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
         ListView all_refunds_listview = (ListView) findViewById(R.id.all_refunds_listview);
         mAllRefundsAdapter = new AllRefundsListAdapter(this);
 
+        assert all_refunds_listview != null;
         all_refunds_listview.setAdapter(mAllRefundsAdapter);
         all_refunds_listview.setOnItemClickListener((parent, view, position, id) -> {
             Log.d(TAG, "onItemClick " + position + " " + id);
@@ -102,7 +102,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
         mAllRefundsAdapter.clear();
         Subscription subscription = TradeModel.getInstance()
                 .getRefundsBean("1")
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AllRefundsBean>() {
                     @Override
                     public void onNext(AllRefundsBean allRefundsBean) {
@@ -149,7 +148,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     private void loadMoreData(String page, Context context) {
         Subscription subscription2 = TradeModel.getInstance()
                 .getRefundsBean(page)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<AllRefundsBean>() {
                     @Override
                     public void onNext(AllRefundsBean allOrdersBean) {

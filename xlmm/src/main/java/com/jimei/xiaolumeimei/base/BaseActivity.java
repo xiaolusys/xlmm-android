@@ -2,13 +2,14 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 
+import com.jimei.library.utils.StatusBarUtil;
+import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.utils.StatusBarUtil;
-import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 import butterknife.ButterKnife;
@@ -65,10 +66,11 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         }
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        if (null != extras) {
+        Uri uri = getIntent().getData();
+        if (extras != null) {
             getBundleExtras(extras);
-        } else {
-            getIntentUrl();
+        } else if (uri != null) {
+            getIntentUrl(uri);
         }
         mContext = this;
         TAG_LOG = this.getClass().getSimpleName();
@@ -81,7 +83,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         mScreenWidth = displayMetrics.widthPixels;
     }
 
-    public void getIntentUrl() {
+    public void getIntentUrl(Uri uri) {
 
     }
 

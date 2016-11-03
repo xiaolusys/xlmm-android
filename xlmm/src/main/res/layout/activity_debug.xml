@@ -1,117 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="调试模式"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        app:xlmm_title="调试模式"/>
 
     <RadioGroup
         android:id="@+id/rg"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <RadioButton
             android:id="@+id/staging"
-            android:text="staging.xiaolumeimei.com"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="staging.xiaolumm.com"/>
+
         <RadioButton
             android:id="@+id/m"
-            android:text="m.xiaolumeimei.com"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="m.xiaolumeimei.com"/>
+
         <RadioButton
             android:id="@+id/xiuqing"
-            android:text="192.168.1.11:9000"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="192.168.1.11:9000"/>
+
         <RadioButton
             android:id="@+id/huang"
-            android:text="192.168.1.56:8000"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="192.168.1.56:8000"/>
+
         <RadioButton
             android:id="@+id/lin"
-            android:text="192.168.1.31:9000"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="192.168.1.31:9000"/>
+
         <RadioButton
             android:id="@+id/lei"
-            android:text="192.168.1.50:8000"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <RadioButton
-            android:id="@+id/enjun"
-            android:text="192.168.1.57:8000"
+            android:layout_height="wrap_content"
             android:buttonTint="@color/colorAccent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:text="192.168.1.50:8000"/>
 
         <RadioButton
             android:id="@+id/shawn"
-            android:text="192.168.1.74:7070"
-            android:buttonTint="@color/colorAccent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="192.168.1.74:7070"/>
+
+        <RadioButton
+            android:id="@+id/bo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:text="warden.xiaolumm.com"/>
 
     </RadioGroup>
 
 
-        <EditText
-            android:id="@+id/edit_debug"
-            android:layout_width="match_parent"
-            android:layout_height="100px"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:layout_marginTop="8dp"
-            android:hint="输入地址" />
-
-
-
+    <EditText
+        android:id="@+id/edit_debug"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="输入地址"
+        android:textCursorDrawable="@drawable/color_cursor"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="输入地址类似:192.168.1.1:9000" />
+        android:text="输入地址类似:192.168.1.1:9000"/>
 
 
     <EditText
         android:id="@+id/edit_pass"
         android:layout_width="match_parent"
-        android:layout_height="100px"
-        android:textCursorDrawable="@drawable/color_cursor"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="输入密码" />
+        android:hint="输入密码"
+        android:textCursorDrawable="@drawable/color_cursor"/>
 
     <Button
         android:id="@+id/bt_debug"
@@ -119,7 +103,6 @@
         android:layout_height="100px"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:text="确定" />
-
+        android:text="确定"/>
 
 </LinearLayout>

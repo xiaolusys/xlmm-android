@@ -1,9 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -14,19 +11,20 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -77,7 +75,6 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
             if (!text.equals("")) {
                 Subscription subscribe = UserModel.getInstance()
                         .complain(com_type, text)
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<AddressResultBean>() {
                             @Override
                             public void onNext(AddressResultBean responseBody) {
@@ -92,11 +89,6 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
                 JUtils.Toast("请输入有效的建议内容");
             }
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -132,15 +124,8 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_complain:
-                Intent intent = new Intent(this, ComplainWebActivity.class);
-                Bundle bundle = new Bundle();
-                SharedPreferences sharedPreferences = getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                bundle.putString("cookies", sharedPreferences.getString("cookiesString", ""));
-                bundle.putString("domain", sharedPreferences.getString("cookiesDomain", ""));
-                bundle.putString("Cookie", sharedPreferences.getString("Cookie", ""));
-                bundle.putString("actlink", XlmmApi.getAppUrl() + "/mall/complaint/history");
-                intent.putExtras(bundle);
-                startActivity(intent);
+                String link = XlmmApi.getAppUrl() + "/mall/complaint/history";
+                JumpUtils.jumpToWebViewWithCookies(this, link,-1, CommonWebViewActivity.class,"历史记录",false);
                 break;
             default:
                 break;

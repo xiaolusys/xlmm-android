@@ -10,24 +10,19 @@ import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
-import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBinding> implements View.OnClickListener {
 
@@ -55,10 +50,8 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            type = extras.getString("type");
-            title = extras.getString("title");
-        }
+        type = extras.getString("type");
+        title = extras.getString("title");
     }
 
     @Override
@@ -67,20 +60,21 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     }
 
     @Override
-    protected void initViews() {
-        Uri uri = getIntent().getData();
-        if (uri != null) {
-            if (uri.getPath().contains("childlist")) {
-                type = XlmmConst.TYPE_CHILD;
-                title = "萌娃专区";
-            } else if (uri.getPath().contains("ladylist")) {
-                type = XlmmConst.TYPE_LADY;
-                title = "女装专区";
-            }else if (uri.getPath().contains("category")){
-                type = uri.getQueryParameter("cid");
-                title = uri.getQueryParameter("title");
-            }
+    public void getIntentUrl(Uri uri) {
+        if (uri.getPath().contains("childlist")) {
+            type = XlmmConst.TYPE_CHILD;
+            title = "萌娃专区";
+        } else if (uri.getPath().contains("ladylist")) {
+            type = XlmmConst.TYPE_LADY;
+            title = "女装专区";
+        } else if (uri.getPath().contains("category")) {
+            type = uri.getQueryParameter("cid");
+            title = uri.getQueryParameter("title");
         }
+    }
+
+    @Override
+    protected void initViews() {
         b.title.setName(title);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         b.xrv.setLayoutManager(manager);
@@ -88,7 +82,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         b.xrv.setPullRefreshEnabled(false);
-        mProductListAdapter = new ProductListAdapter(new ArrayList<>(), this);
+        mProductListAdapter = new ProductListAdapter(this);
         b.xrv.setAdapter(mProductListAdapter);
         b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -133,35 +127,27 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
             mProductListAdapter.clear();
             page = 1;
         }
-        Subscription subscribe = ProductModel.getInstance()
+        addSubscription(ProductModel.getInstance()
                 .getCategoryProductList(cid, page, order_by)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<CategoryProductListBean>() {
-                    @Override
-                    public void onNext(CategoryProductListBean categoryProductListBean) {
-                        List<CategoryProductListBean.ResultsBean> results = categoryProductListBean.getResults();
-                        if (results != null && results.size() > 0) {
-                            mProductListAdapter.update(results);
-                        } else {
-                            b.emptyLayout.setVisibility(View.VISIBLE);
+                .subscribe(bean -> {
+                            List<ProductListBean.ResultsBean> results = bean.getResults();
+                            if (results != null && results.size() > 0) {
+                                mProductListAdapter.update(results);
+                            } else {
+                                b.emptyLayout.setVisibility(View.VISIBLE);
+                            }
+                            next = bean.getNext();
+                            if (next != null && !"".equals(next)) {
+                                page++;
+                            }
+                            hideIndeterminateProgressDialog();
+                            b.xrv.loadMoreComplete();
+                        }, e -> {
+                            hideIndeterminateProgressDialog();
+                            b.xrv.loadMoreComplete();
+                            JUtils.Toast("数据加载有误!");
                         }
-                        next = categoryProductListBean.getNext();
-                        if (next != null && !"".equals(next)) {
-                            page++;
-                        }
-                        hideIndeterminateProgressDialog();
-                        b.xrv.post(b.xrv::loadMoreComplete);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        hideIndeterminateProgressDialog();
-                        b.xrv.post(b.xrv::loadMoreComplete);
-                        JUtils.Toast("数据加载有误!");
-                    }
-                });
-        addSubscription(subscribe);
+                ));
     }
 
     @Override
@@ -194,14 +180,14 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 }

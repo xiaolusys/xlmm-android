@@ -4,11 +4,11 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.adapter.CategoryListAdapter;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.utils.FileUtils;
-import com.jude.utils.JUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

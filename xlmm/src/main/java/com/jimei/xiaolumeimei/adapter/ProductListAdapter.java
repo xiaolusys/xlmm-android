@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.CategoryProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -27,20 +30,20 @@ import butterknife.ButterKnife;
  */
 public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter.ViewHolder> {
 
-    private List<CategoryProductListBean.ResultsBean> data;
+    private List<ProductListBean.ResultsBean> data;
     private Activity context;
 
-    public ProductListAdapter(List<CategoryProductListBean.ResultsBean> data, Activity context) {
-        this.data = data;
+    public ProductListAdapter(Activity context) {
+        data = new ArrayList<>();
         this.context = context;
     }
 
-    public void update(List<CategoryProductListBean.ResultsBean> list) {
+    public void update(List<ProductListBean.ResultsBean> list) {
         data.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void updateWithClear(List<CategoryProductListBean.ResultsBean> list) {
+    public void updateWithClear(List<ProductListBean.ResultsBean> list) {
         data.clear();
         data.addAll(list);
         notifyDataSetChanged();
@@ -59,7 +62,7 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CategoryProductListBean.ResultsBean resultsBean = data.get(position);
+        ProductListBean.ResultsBean resultsBean = data.get(position);
         String sale_state = resultsBean.getSale_state();
         if ("will".equals(sale_state)) {
             holder.saleStatus.setText("即将开售");
@@ -73,7 +76,6 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
         } else {
             holder.saleStatus.setVisibility(View.GONE);
         }
-
         ViewUtils.loadImgToImgViewWithPlaceholder(context, holder.image, resultsBean.getHead_img());
         holder.name.setText(resultsBean.getName());
         holder.agentPrice.setText("¥" + resultsBean.getLowest_agent_price());
@@ -85,7 +87,12 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
             Bundle bundle = new Bundle();
             bundle.putInt("model_id", modelId);
             intent.putExtras(bundle);
-            context.startActivity(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, holder.image, "wisdom");
+                context.startActivity(intent, options.toBundle());
+            } else {
+                context.startActivity(intent);
+            }
         });
     }
 

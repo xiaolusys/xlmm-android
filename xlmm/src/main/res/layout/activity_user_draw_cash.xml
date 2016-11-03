@@ -13,7 +13,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.jimei.xiaolumeimei.widget.XlmmTitleView
+        <com.jimei.library.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:xlmm_title="提现"/>
@@ -57,7 +57,7 @@
                 android:textColor="@color/text_color_62"
                 android:textSize="14sp"/>
 
-            <com.jimei.xiaolumeimei.widget.SmoothCheckBox
+            <com.jimei.library.widget.SmoothCheckBox
                 android:id="@+id/scb"
                 android:layout_width="40px"
                 android:layout_height="40px"

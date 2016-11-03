@@ -13,13 +13,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHisAdapter.ViewHolder> {
     private static final String TAG = "WithdrawCashHisAdapter";
@@ -80,7 +79,6 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
             holder.btn_cancel.setOnClickListener(v -> {
                 Subscription subscribe = MamaInfoModel.getInstance()
                         .cancel_withdraw_cash(record.getId() + "")
-                        .subscribeOn(Schedulers.io())
                         .subscribe(new ServiceResponse<ResponseResultBean>() {
                             @Override
                             public void onNext(ResponseResultBean resp) {

@@ -11,22 +11,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment;
-import com.jimei.xiaolumeimei.utils.ViewUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by wisdom on 16/7/28.
@@ -69,7 +68,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         holder.salePrice.setText("/¥" + modelproductBean.getLowest_std_sale_price());
         holder.flag.setOnClickListener(v -> ProductModel.getInstance()
                 .deleteCollection(modelproductBean.getId())
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CollectionResultBean>() {
                     @Override
                     public void onNext(CollectionResultBean collectionResultBean) {

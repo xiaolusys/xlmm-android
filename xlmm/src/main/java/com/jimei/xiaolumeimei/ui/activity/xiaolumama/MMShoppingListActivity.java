@@ -4,24 +4,22 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/18.
@@ -35,7 +33,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     XRecyclerView shoppinglistXry;
     @Bind(R.id.scrollable_layout)
     ScrollableLayout scrollableLayout;
-    private int page = 2;
+    private int page = 1;
     private ShoppingListAdapter adapter;
     private String order;
 
@@ -43,35 +41,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     protected void initData() {
         tvCount.setText(order);
         showIndeterminateProgressDialog(false);
-        Subscription subscribe = MMProductModel.getInstance()
-                .getMamaAllOderCarryLogs("direct", "1")
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ServiceResponse<OderCarryBean>() {
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        hideIndeterminateProgressDialog();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(OderCarryBean shoppingListBean) {
-                        super.onNext(shoppingListBean);
-                        if (shoppingListBean != null) {
-                            adapter.update(shoppingListBean.getResults());
-                            if (null == shoppingListBean.getNext()) {
-                                shoppinglistXry.setLoadingMoreEnabled(false);
-                            }
-                        }
-                    }
-                });
-        addSubscription(subscribe);
+        loadMoreData();
     }
 
     @Override
@@ -106,42 +76,31 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
 
             @Override
             public void onLoadMore() {
-                loadMoreData(page + "");
-                page++;
+                loadMoreData();
             }
         });
         scrollableLayout.getHelper().setCurrentScrollableContainer(this);
     }
 
-    private void loadMoreData(String page) {
-        Subscription subscribe = MMProductModel.getInstance()
-                .getMamaAllOderCarryLogs("direct", page)
-                .subscribeOn(Schedulers.io())
+    private void loadMoreData() {
+        addSubscription(MMProductModel.getInstance()
+                .getMamaAllOderCarryLogs(page)
                 .subscribe(new ServiceResponse<OderCarryBean>() {
                     @Override
                     public void onNext(OderCarryBean shoppingListBean) {
                         if (shoppingListBean != null) {
                             adapter.update(shoppingListBean.getResults());
-                            if (null != shoppingListBean.getNext()) {
+                            if (shoppingListBean.getNext() != null) {
+                                page++;
                             } else {
-                                Toast.makeText(MMShoppingListActivity.this, "没有更多了", Toast.LENGTH_SHORT)
-                                        .show();
-                                shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
+                                JUtils.Toast("没有更多了");
+                                shoppinglistXry.setLoadingMoreEnabled(false);
                             }
                         }
+                        shoppinglistXry.loadMoreComplete();
+                        hideIndeterminateProgressDialog();
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        try {
-                            shoppinglistXry.post(shoppinglistXry::loadMoreComplete);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override

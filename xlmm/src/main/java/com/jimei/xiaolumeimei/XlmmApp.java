@@ -7,10 +7,10 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.receiver.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-import com.jude.utils.JUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 
@@ -41,11 +41,11 @@ public class XlmmApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-//            Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
+//        Thread.setDefaultUncaughtExceptionHandler(new MyUnCaughtExceptionHandler());
         mContext = getApplicationContext();
         Stetho.initializeWithDefaults(this);
         JUtils.initialize(this);
-        JUtils.setDebug(false, "xlmm");
+        JUtils.setDebug(true, "xlmm");
         AutoLayoutConifg.getInstance().useDeviceSize();
         //初始化push推送服务
         if (shouldInit()) {

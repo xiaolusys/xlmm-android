@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity">
 
-    <com.jimei.xiaolumeimei.widget.XlmmTitleView
+    <com.jimei.library.widget.XlmmTitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
 
             <include layout="@layout/common_gap" />
 
-            <com.jimei.xiaolumeimei.widget.ClearEditText
+            <com.jimei.library.widget.ClearEditText
                 android:id="@+id/et_refund_info"
                 android:layout_width="match_parent"
                 android:layout_height="200px"

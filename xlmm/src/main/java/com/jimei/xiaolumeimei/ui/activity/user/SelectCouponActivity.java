@@ -8,11 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.fragment.coupon.SelectCouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.schedulers.Schedulers;
 
 public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
@@ -31,19 +28,24 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     ViewPager viewPager;
     String selected_couponid;
     String cart_ids;
-    List<BaseFragment> fragments = new ArrayList<>();
+    private int goodNum;
+    private boolean couponFlag;
+    List<SelectCouponFragment> fragments = new ArrayList<>();
 
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
         UserModel.getInstance()
                 .getCouponSelectEntity(cart_ids)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<CouponSelectEntity>() {
                     @Override
                     public void onNext(CouponSelectEntity couponSelectEntity) {
                         SelectCouponAdapter mAdapter = new SelectCouponAdapter(getSupportFragmentManager());
-                        fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon()));
+                        if (couponFlag && goodNum > 1) {
+                            fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon(), goodNum));
+                        } else {
+                            fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon()));
+                        }
                         fragments.add(SelectCouponFragment.newInstance(1, "不可用优惠券", "", couponSelectEntity.getDisable_coupon()));
                         viewPager.setAdapter(mAdapter);
                         viewPager.setOffscreenPageLimit(2);
@@ -64,6 +66,8 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     protected void getBundleExtras(Bundle extras) {
         selected_couponid = extras.getString("coupon_id", "");
         cart_ids = extras.getString("cart_ids", "");
+        goodNum = extras.getInt("goodNum", 1);
+        couponFlag = extras.getBoolean("couponFlag", false);
     }
 
     @Override
@@ -98,14 +102,14 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(ActivityWebViewActivity.class.getSimpleName());
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 }

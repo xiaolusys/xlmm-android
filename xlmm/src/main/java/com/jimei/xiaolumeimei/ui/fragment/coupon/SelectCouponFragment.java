@@ -4,37 +4,30 @@ package com.jimei.xiaolumeimei.ui.fragment.coupon;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CouponListAdapter;
-import com.jimei.xiaolumeimei.base.BaseFragment;
+import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
-import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity.SelectCouponAdapter;
-import com.jimei.xiaolumeimei.widget.loadingdialog.XlmmLoadingDialog;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.util.ArrayList;
 
-import rx.schedulers.Schedulers;
+import butterknife.Bind;
 
-public class SelectCouponFragment extends BaseFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class SelectCouponFragment extends BaseLazyFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private static final String TYPE = "type";
 
-    private ListView listView;
-    private View emptyView;
+    @Bind(R.id.lv)
+    ListView listView;
+    @Bind(R.id.empty_ll)
+    View emptyView;
     ArrayList<CouponEntity> couponEntities;
-    private Button button;
-
-    public SelectCouponFragment() {
-    }
+    @Bind(R.id.btn)
+    Button button;
 
     public static SelectCouponFragment newInstance(int type, String title, String id, ArrayList<CouponEntity> list) {
         SelectCouponFragment fragment = new SelectCouponFragment();
@@ -43,19 +36,33 @@ public class SelectCouponFragment extends BaseFragment implements AdapterView.On
         args.putString("id", id);
         args.putString("title", title);
         args.putSerializable("list", list);
+        args.putInt("size", list.size());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SelectCouponFragment newInstance(int type, String title, String id, ArrayList<CouponEntity> list, int goodNum) {
+        SelectCouponFragment fragment = new SelectCouponFragment();
+        Bundle args = new Bundle();
+        args.putInt(TYPE, type);
+        args.putString("id", id);
+        args.putString("title", title);
+        args.putSerializable("list", list);
+        args.putInt("goodNum", goodNum);
+        args.putInt("size", list.size());
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void initData() {
         if (getArguments() != null) {
             int type = getArguments().getInt(TYPE);
             String selectId = getArguments().getString("id", "");
             couponEntities = new ArrayList<>();
             couponEntities.addAll((ArrayList<CouponEntity>) getArguments().getSerializable("list"));
             CouponListAdapter adapter = new CouponListAdapter(getContext());
+            adapter.setClickable(false);
             listView.setAdapter(adapter);
             adapter.update(couponEntities, 0, selectId);
             if (couponEntities.size() > 0) {
@@ -74,40 +81,27 @@ public class SelectCouponFragment extends BaseFragment implements AdapterView.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_coupon, container, false);
-        listView = ((ListView) view.findViewById(R.id.lv));
-        emptyView = view.findViewById(R.id.empty_ll);
-        button = ((Button) view.findViewById(R.id.btn));
-        return view;
-    }
-
-    @Override
-    protected View initViews(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return null;
-    }
-
-    @Override
-    protected void initData() {
+    protected void initViews() {
 
     }
 
     @Override
-    protected void setDefaultFragmentTitle(String title) {
-
+    protected int getContentViewId() {
+        return R.layout.fragment_coupon;
     }
-
 
     @Override
     public View getScrollableView() {
         return listView;
     }
 
-    @Override
     public String getTitle() {
-        String title;
-        title = getArguments().getString("title") + "(" + couponEntities.size() + ")";
+        String title = "";
+        if (getArguments() != null) {
+            String str = getArguments().getString("title");
+            int size = getArguments().getInt("size");
+            title = str + "(" + size + ")";
+        }
         return title;
     }
 
@@ -117,6 +111,19 @@ public class SelectCouponFragment extends BaseFragment implements AdapterView.On
         String coupon_id = resultsEntity.getId() + "";
         double coupon_value = resultsEntity.getCoupon_value();
         Intent intent = new Intent();
+        if (getArguments() != null) {
+            int goodNum = getArguments().getInt("goodNum", 1);
+            if (goodNum > 1 && couponEntities.size() >= goodNum) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("").append(couponEntities.get(0).getId());
+                for (int i = 1; i < goodNum; i++) {
+                    sb.append("/").append(couponEntities.get(i).getId());
+                }
+                coupon_id = sb.toString();
+                coupon_value = goodNum * resultsEntity.getCoupon_value();
+                intent.putExtra("coupon_num", goodNum);
+            }
+        }
         intent.putExtra("coupon_id", coupon_id);
         intent.putExtra("coupon_price", coupon_value);
         getActivity().setResult(Activity.RESULT_OK, intent);

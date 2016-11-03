@@ -1,11 +1,9 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
-import com.jimei.xiaolumeimei.base.RxSchedulers;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
-import com.jimei.xiaolumeimei.entities.MMChooselistBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
@@ -24,6 +22,7 @@ import rx.Observable;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class MMProductModel {
+
     private static MMProductModel ourInstance = new MMProductModel();
 
     private MMProductModel() {
@@ -33,46 +32,28 @@ public class MMProductModel {
         return ourInstance;
     }
 
-    //选品女装或者童装列表排序
-    public Observable<MMChooselistBean> getMMChooseLadyOrChildSortListSort(
-            String sort_field, String category, String page, String pagesize) {
-        if ((sort_field == null) || (sort_field.isEmpty())) {
-            if ((category == null) || (category.isEmpty())) {
-                return XlmmRetrofitClient.getService()
-                        .getMMChooseList(page, pagesize)
-                        .compose(new DefaultTransform<>());
-            } else {
-                return XlmmRetrofitClient.getService()
-                        .getMMChooseLadyOrChildList(category, page, pagesize)
-                        .compose(new DefaultTransform<>());
-            }
-        } else {
-            if ((category == null) || (category.isEmpty())) {
-                return XlmmRetrofitClient.getService()
-                        .getMMChooseSortList(sort_field, page, pagesize)
-                        .compose(new DefaultTransform<>());
-            } else {
-                return XlmmRetrofitClient.getService()
-                        .getMMChooseLadyOrChildSortListSort(sort_field, category, page, pagesize)
-                        .compose(new DefaultTransform<>());
-            }
-        }
-    }
-
     public Observable<List<NinePicBean>> getNinePic(int sale_category) {
         if (sale_category == -1) {
-            return XlmmRetrofitClient.getService().getNinePic().compose(new DefaultTransform<>());
+            return XlmmRetrofitClient.getService()
+                    .getNinePic()
+                    .compose(new DefaultTransform<>());
         } else {
-            return XlmmRetrofitClient.getService().getNinePic(sale_category).compose(new DefaultTransform<>());
+            return XlmmRetrofitClient.getService()
+                    .getNinePic(sale_category)
+                    .compose(new DefaultTransform<>());
         }
     }
 
     public Observable<List<NinePicBean>> getNinePicByOrdering() {
-        return XlmmRetrofitClient.getService().getNinePic("-save_times").compose(new DefaultTransform<>());
+        return XlmmRetrofitClient.getService()
+                .getNinePic("-save_times")
+                .compose(new DefaultTransform<>());
     }
 
     public Observable<MMShoppingBean> getShareShopping() {
-        return XlmmRetrofitClient.getService().getShareShopping();
+        return XlmmRetrofitClient.getService()
+                .getShareShopping()
+                .compose(new DefaultTransform<>());
     }
 
     //得到全部历史收益
@@ -88,10 +69,9 @@ public class MMProductModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<OderCarryBean> getMamaAllOderCarryLogs(String carry_type,
-                                                             String page) {
+    public Observable<OderCarryBean> getMamaAllOderCarryLogs( int page) {
         return XlmmRetrofitClient.getService()
-                .getMamaAllOderCarryLogs(carry_type, page)
+                .getMamaAllOderCarryLogs("direct", page)
                 .compose(new DefaultTransform<>());
     }
 
@@ -116,13 +96,13 @@ public class MMProductModel {
     public Observable<PortalBean> getPortalBean() {
         return XlmmRetrofitClient.getService()
                 .getPortalBean()
-                .compose(RxSchedulers.io_main());
+                .compose(new DefaultTransform<>());
     }
 
     public Observable<SaveTimeBean> saveTime(int id, int save_times) {
         return XlmmRetrofitClient.getService()
                 .saveTime(id, save_times)
-                .compose(RxSchedulers.io_main());
+                .compose(new DefaultTransform<>());
     }
 
 }

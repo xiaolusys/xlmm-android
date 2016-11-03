@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.fragment.v2;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,22 +15,21 @@ import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.CountDownView;
+import com.jimei.library.widget.SpaceItemDecoration;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.ProductListBeanAdapter;
+import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.widget.CountDownView;
-import com.jimei.xiaolumeimei.widget.SpaceItemDecoration;
-import com.jimei.xiaolumeimei.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
@@ -43,7 +44,8 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private int type;
     private int page = 1;
     private String next;
-    private ProductListBeanAdapter adapter;
+    private Activity mActivity;
+    private ProductListAdapter adapter;
     private CompositeSubscription mCompositeSubscription;
     private boolean mIsHidden = true;
     private static final String FRAGMENT_STORE = "STORE";
@@ -51,6 +53,11 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private boolean isInitView = false;
     private boolean isFirstLoad = true;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
 
     public static ProductListFragment newInstance(int type, String title) {
         Bundle args = new Bundle();
@@ -150,7 +157,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.addHeaderView(head);
-        adapter = new ProductListBeanAdapter(getContext(), this);
+        adapter = new ProductListAdapter(mActivity);
         xRecyclerView.setAdapter(adapter);
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -190,7 +197,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
     private void loadMore(int num) {
         addSubscription(ProductModel.getInstance()
                 .getProductListBean(num, type)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ProductListBean>() {
                     @Override
                     public void onNext(ProductListBean productListBean) {
@@ -217,7 +223,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         page = 1;
         ProductModel.getInstance()
                 .getProductListBean(page, type)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ProductListBean>() {
                     @Override
                     public void onNext(ProductListBean productListBean) {

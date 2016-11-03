@@ -25,21 +25,25 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.jimei.library.utils.CameraUtils;
+import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
+import com.jimei.xiaolumeimei.entities.JumpBean;
+import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
-import com.jimei.xiaolumeimei.utils.CameraUtils;
-import com.jimei.xiaolumeimei.utils.FileUtils;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jude.utils.JUtils;
 import com.mob.tools.utils.UIHandler;
+import com.pingplusplus.android.Pingpp;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
@@ -60,7 +64,6 @@ import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/16.
@@ -75,6 +78,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
     private ActivityBean partyShareInfo;
     private BaseSwipeBackCompatActivity mContext;
+    private String mTid;
 
     public AndroidJsBridge(BaseSwipeBackCompatActivity context) {
         this.mContext = context;
@@ -87,7 +91,11 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
 
     @JavascriptInterface
-    public void jumpToNativeLocation(String url) {
+    public void jumpToNativeLocation(String json) {
+        Gson gson = new Gson();
+        JumpBean jumpBean = gson.fromJson(json, new TypeToken<JumpBean>() {
+        }.getType());
+        String url = jumpBean.getTarget_url();
         JUtils.Log("CommonWebViewActivity", url);
         jump_ToNativeLocation(url);
         JUtils.Log(url);
@@ -121,7 +129,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     public void getPromotionParams(String uform, String activity_id) {
         Subscription subscribe = ActivityModel.getInstance()
                 .get_party_share_content(activity_id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ActivityBean>() {
                     @Override
                     public void onNext(ActivityBean activityBean) {
@@ -283,7 +290,6 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
 
         Subscription subscribe = ActivityModel.getInstance()
                 .get_party_share_content(id)
-                .subscribeOn(Schedulers.io())
                 .subscribe(new ServiceResponse<ActivityBean>() {
                     @Override
                     public void onNext(ActivityBean activityBean) {
@@ -422,7 +428,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
      * @param containerWidth  截屏宽度，也就放置WebView的宽度
      * @param containerHeight 截屏高度，也就放置WebView的高度
      * @param baseUrl         Base Url
-     * @param context         activity context
+     * @param context         mActivity context
      */
     public Bitmap catchWebScreenshot(final WebView w, final int containerWidth,
                                      final int containerHeight, final String baseUrl, final Context context) {
@@ -588,6 +594,20 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
         }
     }
 
+    @JavascriptInterface
+    public void callNativePurchase(String charge) {
+        try {
+            PayInfoBean payInfoBean = new Gson().fromJson(charge, PayInfoBean.class);
+            if (payInfoBean.getTrade()!=null) {
+                mTid = payInfoBean.getTrade().getTid();
+            }
+            Pingpp.createPayment(mContext, new Gson().toJson(payInfoBean.getCharge()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void shareToSina(CallNativeFuncBean callNativeFuncBean) {
         SinaWeibo.ShareParams sp = new SinaWeibo.ShareParams();
         sp.setText(callNativeFuncBean.getShareDesc());
@@ -711,6 +731,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     @JavascriptInterface
     public String appVersion() {
         return String.valueOf(BuildConfig.VERSION_CODE);
+    }
+
+    public String getTid() {
+        return mTid;
     }
 
     class ShareContentCustom implements ShareContentCustomizeCallback {
