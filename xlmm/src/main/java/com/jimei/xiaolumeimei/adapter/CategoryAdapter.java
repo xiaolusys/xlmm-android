@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -88,15 +89,18 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
                         });
             }
         }
-        holder.item.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProductListActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("type", childsBean.getCid());
-            bundle.putString("title", childsBean.getName());
-            intent.putExtras(bundle);
-            context.startActivity(intent);
-            if (context instanceof CategoryListActivity) {
-                ((CategoryListActivity) context).finish();
+        holder.item.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                Intent intent = new Intent(context, ProductListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", childsBean.getCid());
+                bundle.putString("title", childsBean.getName());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+                if (context instanceof CategoryListActivity) {
+                    ((CategoryListActivity) context).finish();
+                }
             }
         });
     }

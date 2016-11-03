@@ -18,14 +18,13 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Response;
 
 /**
  * Created by wisdom on 16/9/3.
@@ -54,91 +53,95 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         holder.price2.setText("/¥" + (float) (Math.round(cartsInfoBean.getStd_sale_price() * 100)) / 100);
         holder.count.setText(cartsInfoBean.getNum() + "");
         ViewUtils.loadImgToImgView(mActivity, holder.cartImage, cartsInfoBean.getPic_path());
-        holder.cartImage.setOnClickListener(v -> {
-            Intent intent = new Intent(mActivity, ProductDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("model_id", cartsInfoBean.getModel_id());
-            intent.putExtras(bundle);
-            mActivity.startActivity(intent);
-            mActivity.finish();
+        holder.cartImage.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                Intent intent = new Intent(mActivity, ProductDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("model_id", cartsInfoBean.getModel_id());
+                intent.putExtras(bundle);
+                mActivity.startActivity(intent);
+                mActivity.finish();
+            }
         });
-        holder.delete.setOnClickListener(v -> {
-            if (cartsInfoBean.getNum() == 1) {
-                new AlertDialog.Builder(mActivity)
-                        .setTitle("删除商品")
-                        .setMessage("您确定要删除吗？")
-                        .setPositiveButton("确定", (dialog, which) -> {
-                            dialog.dismiss();
-                            mActivity.showIndeterminateProgressDialog(false);
-                            mActivity.addSubscription(CartsModel.getInstance()
-                                    .delete_carts(cartsInfoBean.getId() + "")
-                                    .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                                        @Override
-                                        public void onNext(Response<CodeBean> responseBody) {
-                                            if (responseBody != null) {
-                                                if (responseBody.isSuccessful()) {
-                                                    mActivity.addHistory(cartsInfoBean);
-                                                    mActivity.removeCartList(cartsInfoBean);
+        holder.delete.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                if (cartsInfoBean.getNum() == 1) {
+                    new AlertDialog.Builder(mActivity)
+                            .setTitle("删除商品")
+                            .setMessage("您确定要删除吗？")
+                            .setPositiveButton("确定", (dialog, which) -> {
+                                dialog.dismiss();
+                                mActivity.showIndeterminateProgressDialog(false);
+                                mActivity.addSubscription(CartsModel.getInstance()
+                                        .delete_carts(cartsInfoBean.getId() + "")
+                                        .subscribe(responseBody -> {
+                                                    if (responseBody != null) {
+                                                        if (responseBody.isSuccessful()) {
+                                                            mActivity.addHistory(cartsInfoBean);
+                                                            mActivity.removeCartList(cartsInfoBean);
+                                                        } else {
+                                                            JUtils.Toast(responseBody.body().getInfo());
+                                                        }
+                                                    } else {
+                                                        JUtils.Toast("操作未成功，请重新尝试");
+                                                    }
+                                                    mActivity.hideIndeterminateProgressDialog();
+                                                }, Throwable::printStackTrace
+                                        ));
+                            })
+                            .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                            .show();
+                } else {
+                    mActivity.showIndeterminateProgressDialog(false);
+                    mActivity.addSubscription(CartsModel.getInstance()
+                            .minus_product_carts(cartsInfoBean.getId() + "")
+                            .subscribe(responseBody -> {
+                                        if (responseBody != null && responseBody.isSuccessful()) {
+                                            CodeBean body = responseBody.body();
+                                            if (body != null && body.getCode() == 0) {
+                                                mActivity.setPriceText();
+                                                cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
+                                                holder.count.setText(cartsInfoBean.getNum() + "");
+                                                notifyDataSetChanged();
+                                            } else {
+                                                JUtils.Toast(body != null ? body.getInfo() : "操作失败");
+                                            }
+                                        } else {
+                                            JUtils.Toast("操作未成功，请重新尝试");
+                                        }
+                                        mActivity.hideIndeterminateProgressDialog();
+                                    }, Throwable::printStackTrace
+                            ));
+                }
+            }
+        });
+        holder.add.setOnClickListener(
+                new NoDoubleClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View v) {
+                        mActivity.showIndeterminateProgressDialog(false);
+                        mActivity.addSubscription(CartsModel.getInstance()
+                                .plus_product_carts(cartsInfoBean.getId() + "")
+                                .subscribe(responseBody -> {
+                                            if (null != responseBody) {
+                                                CodeBean body = responseBody.body();
+                                                if (body != null && body.getCode() == 0) {
+                                                    mActivity.setPriceText();
+                                                    cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
+                                                    holder.count.setText(cartsInfoBean.getNum() + "");
+                                                    notifyDataSetChanged();
                                                 } else {
-                                                    JUtils.Toast(responseBody.body().getInfo());
+                                                    JUtils.Toast(body != null ? body.getInfo() : "操作失败");
                                                 }
                                             } else {
                                                 JUtils.Toast("操作未成功，请重新尝试");
                                             }
                                             mActivity.hideIndeterminateProgressDialog();
-                                        }
-                                    }));
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                        .show();
-            } else {
-                mActivity.showIndeterminateProgressDialog(false);
-                mActivity.addSubscription(CartsModel.getInstance()
-                        .minus_product_carts(cartsInfoBean.getId() + "")
-                        .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                            @Override
-                            public void onNext(Response<CodeBean> responseBody) {
-                                if (responseBody != null && responseBody.isSuccessful()) {
-                                    CodeBean body = responseBody.body();
-                                    if (body != null && body.getCode() == 0) {
-                                        mActivity.setPriceText();
-                                        cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
-                                        holder.count.setText(cartsInfoBean.getNum() + "");
-                                        notifyDataSetChanged();
-                                    } else {
-                                        JUtils.Toast(body != null ? body.getInfo() : "操作失败");
-                                    }
-                                } else {
-                                    JUtils.Toast("操作未成功，请重新尝试");
-                                }
-                                mActivity.hideIndeterminateProgressDialog();
-                            }
-                        }));
-            }
-        });
-        holder.add.setOnClickListener(v -> {
-                    mActivity.showIndeterminateProgressDialog(false);
-                    mActivity.addSubscription(CartsModel.getInstance()
-                            .plus_product_carts(cartsInfoBean.getId() + "")
-                            .subscribe(new ServiceResponse<Response<CodeBean>>() {
-                                @Override
-                                public void onNext(Response<CodeBean> responseBody) {
-                                    if (null != responseBody) {
-                                        CodeBean body = responseBody.body();
-                                        if (body != null && body.getCode() == 0) {
-                                            mActivity.setPriceText();
-                                            cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
-                                            holder.count.setText(cartsInfoBean.getNum() + "");
-                                            notifyDataSetChanged();
-                                        } else {
-                                            JUtils.Toast(body != null ? body.getInfo() : "操作失败");
-                                        }
-                                    } else {
-                                        JUtils.Toast("操作未成功，请重新尝试");
-                                    }
-                                    mActivity.hideIndeterminateProgressDialog();
-                                }
-                            }));
+                                        }, Throwable::printStackTrace
+                                ));
+                    }
                 }
         );
     }

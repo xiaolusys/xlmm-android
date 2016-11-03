@@ -14,18 +14,21 @@ import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
+import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Calendar;
 
 public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBinding> implements View.OnClickListener {
     private static final String TITLE = "title";
@@ -39,6 +42,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
     private String hisConfirmedCashOut;
     private int mOrderNum;
     private int mActiveValueNum;
+    private long lastClickTime = 0;
 
     public static MamaThirdFragment newInstance(String title, int id) {
         MamaThirdFragment fragment = new MamaThirdFragment();
@@ -141,58 +145,62 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.ll_wallet:
-                Intent walletIntent = new Intent(mActivity, MamaWalletActivity.class);
-                walletIntent.putExtra("cash", mCashValue);
-                startActivity(walletIntent);
-                break;
-            case R.id.ll_income:
-                Bundle incomeBundle = new Bundle();
-                incomeBundle.putString("carrylogMoney", carryLogMoney);
-                incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                Intent incomeIntent = new Intent(mActivity, MMcarryLogActivity.class);
-                incomeIntent.putExtras(incomeBundle);
-                startActivity(incomeIntent);
-                break;
-            case R.id.ll_visit:
-                Intent visitIntent = new Intent(mActivity, MamaVisitorActivity.class);
-                startActivity(visitIntent);
-                break;
-            case R.id.ll_order:
-                Intent orderIntent = new Intent(mActivity, MMShoppingListActivity.class);
-                orderIntent.putExtra("orderNum", mOrderNum);
-                startActivity(orderIntent);
-                break;
-            case R.id.ll_active:
-                Intent activeIntent = new Intent(mActivity, MamaLivenessActivity.class);
-                activeIntent.putExtra("liveness", mActiveValueNum);
-                startActivity(activeIntent);
-                break;
-            case R.id.ll_fans:
-                if (fansUrl != null && !"".equals(fansUrl)) {
-                    SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                    String cookies = sharedPreferences.getString("cookiesString", "");
-                    String actLink = fansUrl;
-                    String domain = sharedPreferences.getString("cookiesDomain", "");
-                    String sessionId = sharedPreferences.getString("Cookie", "");
-                    EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actLink, -1, sessionId));
-                    startActivity(new Intent(mActivity, MMFansActivity.class));
-                }
-                break;
-            case R.id.ll_personal:
-                startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
-                break;
-            case R.id.ll_team:
-                if (teamUrl != null && !"".equals(teamUrl)) {
-                    Bundle teamBundle = new Bundle();
-                    teamBundle.putString("id", id + "");
-                    teamBundle.putString("url", teamUrl);
-                    Intent teamIntent = new Intent(mActivity, MMTeamActivity.class);
-                    teamIntent.putExtras(teamBundle);
-                    startActivity(teamIntent);
-                }
-                break;
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime > NoDoubleClickListener.MIN_CLICK_DELAY_TIME) {
+            lastClickTime = currentTime;
+            switch (v.getId()) {
+                case R.id.ll_wallet:
+                    Intent walletIntent = new Intent(mActivity, MamaWalletActivity.class);
+                    walletIntent.putExtra("cash", mCashValue);
+                    startActivity(walletIntent);
+                    break;
+                case R.id.ll_income:
+                    Bundle incomeBundle = new Bundle();
+                    incomeBundle.putString("carrylogMoney", carryLogMoney);
+                    incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
+                    Intent incomeIntent = new Intent(mActivity, MMcarryLogActivity.class);
+                    incomeIntent.putExtras(incomeBundle);
+                    startActivity(incomeIntent);
+                    break;
+                case R.id.ll_visit:
+                    Intent visitIntent = new Intent(mActivity, MamaVisitorActivity.class);
+                    startActivity(visitIntent);
+                    break;
+                case R.id.ll_order:
+                    Intent orderIntent = new Intent(mActivity, MMShoppingListActivity.class);
+                    orderIntent.putExtra("orderNum", mOrderNum);
+                    startActivity(orderIntent);
+                    break;
+                case R.id.ll_active:
+                    Intent activeIntent = new Intent(mActivity, MamaLivenessActivity.class);
+                    activeIntent.putExtra("liveness", mActiveValueNum);
+                    startActivity(activeIntent);
+                    break;
+                case R.id.ll_fans:
+                    if (fansUrl != null && !"".equals(fansUrl)) {
+                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+                        String cookies = sharedPreferences.getString("cookiesString", "");
+                        String actLink = fansUrl;
+                        String domain = sharedPreferences.getString("cookiesDomain", "");
+                        String sessionId = sharedPreferences.getString("Cookie", "");
+                        EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actLink, -1, sessionId));
+                        startActivity(new Intent(mActivity, MMFansActivity.class));
+                    }
+                    break;
+                case R.id.ll_personal:
+                    startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
+                    break;
+                case R.id.ll_team:
+                    if (teamUrl != null && !"".equals(teamUrl)) {
+                        Bundle teamBundle = new Bundle();
+                        teamBundle.putString("id", id + "");
+                        teamBundle.putString("url", teamUrl);
+                        Intent teamIntent = new Intent(mActivity, MMTeamActivity.class);
+                        teamIntent.putExtras(teamBundle);
+                        startActivity(teamIntent);
+                    }
+                    break;
+            }
         }
     }
 }

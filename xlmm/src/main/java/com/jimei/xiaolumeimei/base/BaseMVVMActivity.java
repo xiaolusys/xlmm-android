@@ -10,6 +10,7 @@ import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
 import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
 import com.jimei.library.widget.swipeback.SwipeBackLayout;
 import com.jimei.library.widget.swipeback.Utils;
+import com.jimei.xiaolumeimei.R;
 
 
 /**
@@ -21,6 +22,7 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAc
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         super.onCreate(savedInstanceState);
         if (getContentViewLayoutID() != 0) {
             b = DataBindingUtil.setContentView(this, getContentViewLayoutID());
@@ -32,6 +34,12 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAc
         setListener();
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     @Override

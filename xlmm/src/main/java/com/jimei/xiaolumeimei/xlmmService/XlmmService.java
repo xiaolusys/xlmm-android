@@ -63,6 +63,7 @@ import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.SaveTimeBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
+import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -770,6 +771,9 @@ public interface XlmmService {
     Observable<RecentCarryBean> getRecentCarry(
             @Query("from") String from,
             @Query("days") String days);
+
+    @GET("/rest/v1/activitys/startup_diagrams")
+    Observable<StartBean> getStartAds();
 
     @FormUrlEncoded
     @PATCH("/rest/v1/pmt/ninepic/{id}")

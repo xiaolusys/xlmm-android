@@ -2,22 +2,23 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.util.DisplayMetrics;
 
+import com.bumptech.glide.Glide;
+import com.jimei.library.rx.RxCountDown;
+import com.jimei.library.utils.NetUtil;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import rx.Subscription;
 
 /**
  * Created by 优尼世界 on 15/12/29.
@@ -26,26 +27,22 @@ import java.util.TimerTask;
  */
 public class SplashActivity extends AppCompatActivity {
 
+    private Subscription mSubscribe;
+    private int mWidthPixels;
+    private int mHeightPixels;
+    private String mPicture;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         MobclickAgent.setDebugMode(true);
-        Window window = getWindow();
-        //4.4版本及以上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-        //5.0版本及以上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView()
-                    .setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
+        ViewUtils.setWindowStatus(this);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mWidthPixels = displayMetrics.widthPixels;
+        mHeightPixels = displayMetrics.heightPixels;
     }
 
     @Override
@@ -54,14 +51,22 @@ public class SplashActivity extends AppCompatActivity {
         PackageManager pm = getPackageManager();
         boolean permission = (PackageManager.PERMISSION_GRANTED ==
                 pm.checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", getPackageName()));
+        mSubscribe = ActivityModel.getInstance()
+                .getStartAds()
+                .subscribe(startBean -> {
+                    if (startBean != null) {
+                        mPicture = startBean.getPicture();
+                        if (startBean.getPicture() != null && !"".equals(startBean.getPicture())) {
+                            Glide.with(SplashActivity.this).load(startBean.getPicture()).downloadOnly(mWidthPixels, mHeightPixels);
+                        }
+                    }
+                }, Throwable::printStackTrace);
         if (permission) {
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
+            RxCountDown.countdown(2).subscribe(integer -> {
+                if (integer == 0) {
+                    jumpToAds();
                 }
-            }, 2000);
+            }, throwable -> jumpToAds());
         } else {
             new AlertDialog.Builder(this)
                     .setTitle("提示")
@@ -75,6 +80,33 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }).show();
         }
+    }
+
+    private void jumpToAds() {
+        if (NetUtil.isNetworkAvailable(this)) {
+            Intent intent = new Intent(SplashActivity.this, AdvertisementActivity.class);
+            if (mPicture != null && !mPicture.equals("")) {
+                intent.putExtra("link", mPicture);
+            }
+            startActivity(intent);
+        } else {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        }
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mSubscribe != null && mSubscribe.isUnsubscribed()) {
+            mSubscribe.unsubscribe();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void getAppDetailSettingIntent() {

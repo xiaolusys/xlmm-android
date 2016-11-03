@@ -26,69 +26,69 @@ import okhttp3.Cookie;
 
 public class SharedPrefsCookiePersistor implements CookiePersistor {
 
-  private final SharedPreferences cookiePrefs1;
-  private SharedPreferences sharedPreferences;
+    private final SharedPreferences cookiePrefs1;
+    private SharedPreferences sharedPreferences;
 
-  public SharedPrefsCookiePersistor(Context context) {
-    final String SHARED_PREFERENCES_NAME = "CookiePersistence";
-    cookiePrefs1 = context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-    sharedPreferences =
-        context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-  }
-
-  private static String createCookieKey(Cookie cookie) {
-    return (cookie.secure() ? "https" : "http")
-        + "://"
-        + cookie.domain()
-        + cookie.path()
-        + "|"
-        + cookie.name();
-  }
-
-  @Override public List<Cookie> loadAll() {
-    List<Cookie> cookies = new ArrayList<>();
-
-    for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-      String serializedCookie = (String) entry.getValue();
-      Cookie cookie = new SerializableCookie().decode(serializedCookie);
-      cookies.add(cookie);
+    public SharedPrefsCookiePersistor(Context context) {
+        final String SHARED_PREFERENCES_NAME = "CookiePersistence";
+        cookiePrefs1 = context.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        sharedPreferences =
+                context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
-    return cookies;
-  }
 
-  @Override public void saveAll(Collection<Cookie> cookies) {
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    SharedPreferences.Editor editor1 = cookiePrefs1.edit();
-    for (Cookie cookie : cookies) {
-      if (cookie.persistent()) {
-        editor.putString(createCookieKey(cookie),
-            new SerializableCookie().encode(cookie));
-
-        editor1.putString("cookiesString", cookie.name()
-            + "="
-            + cookie.value()
-            + "; domain="
-            + cookie.domain()
-            + "; path="
-            + cookie.path());
-        editor1.putString("cookiesDomain", cookie.domain());
-        editor1.putString("Cookie", cookie.name() + "=" + cookie.value());
-      }
+    private static String createCookieKey(Cookie cookie) {
+        return (cookie.secure() ? "https" : "http")
+                + "://"
+                + cookie.domain()
+                + cookie.path()
+                + "|"
+                + cookie.name();
     }
-    editor.apply();
-    editor1.apply();
-  }
 
-  @Override public void removeAll(Collection<Cookie> cookies) {
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    for (Cookie cookie : cookies) {
-      editor.remove(createCookieKey(cookie));
+    @Override public List<Cookie> loadAll() {
+        List<Cookie> cookies = new ArrayList<>();
+
+        for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
+            String serializedCookie = (String) entry.getValue();
+            Cookie cookie = new SerializableCookie().decode(serializedCookie);
+            cookies.add(cookie);
+        }
+        return cookies;
     }
-    editor.apply();
-  }
 
-  @Override public void clear() {
-    sharedPreferences.edit().clear().apply();
-    cookiePrefs1.edit().clear().apply();
-  }
+    @Override public void saveAll(Collection<Cookie> cookies) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor1 = cookiePrefs1.edit();
+        for (Cookie cookie : cookies) {
+            if (cookie.persistent()) {
+                editor.putString(createCookieKey(cookie),
+                        new SerializableCookie().encode(cookie));
+
+                editor1.putString("cookiesString", cookie.name()
+                        + "="
+                        + cookie.value()
+                        + "; domain="
+                        + cookie.domain()
+                        + "; path="
+                        + cookie.path());
+                editor1.putString("cookiesDomain", cookie.domain());
+                editor1.putString("Cookie", cookie.name() + "=" + cookie.value());
+            }
+        }
+        editor.apply();
+        editor1.apply();
+    }
+
+    @Override public void removeAll(Collection<Cookie> cookies) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        for (Cookie cookie : cookies) {
+            editor.remove(createCookieKey(cookie));
+        }
+        editor.apply();
+    }
+
+    @Override public void clear() {
+        sharedPreferences.edit().clear().apply();
+        cookiePrefs1.edit().clear().apply();
+    }
 }
