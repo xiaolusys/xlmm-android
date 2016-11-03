@@ -12,7 +12,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jimei.library.R;
+
+import java.util.Calendar;
 
 
 /**
@@ -26,6 +29,7 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
     private Context context;
     private Activity activity;
     private Intent intent;
+    private long lastClickTime = 0;
 
     public MyPreferenceView(Context context) {
         super(context);
@@ -53,11 +57,11 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
         View view = LayoutInflater.from(context).inflate(R.layout.preference_list_item, this, true);
         titleText = ((TextView) view.findViewById(R.id.title));
         summaryText = ((TextView) view.findViewById(R.id.summary));
-        imageView = (ImageView)view.findViewById(R.id.img);
+        imageView = (ImageView) view.findViewById(R.id.img);
         setOnClickListener(this);
     }
 
-    public void hideImg(){
+    public void hideImg() {
         imageView.setVisibility(GONE);
     }
 
@@ -71,15 +75,19 @@ public class MyPreferenceView extends LinearLayout implements View.OnClickListen
 
     public void bindActivity(Activity activity, Class clz) {
         this.activity = activity;
-        if (clz!=null){
+        if (clz != null) {
             intent = new Intent(context, clz);
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (intent != null) {
-            activity.startActivity(intent);
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime > 2000L) {
+            lastClickTime = currentTime;
+            if (intent != null) {
+                activity.startActivity(intent);
+            }
         }
     }
 

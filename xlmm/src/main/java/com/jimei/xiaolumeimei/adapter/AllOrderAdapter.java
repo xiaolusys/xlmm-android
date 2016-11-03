@@ -14,6 +14,7 @@ import com.jimei.library.widget.NestedListView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,13 +73,18 @@ public class AllOrderAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        vh.linearLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(context, OrderDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("orderinfo", mList.get(position).getId());
-            intent.putExtras(bundle);
-            context.startActivity(intent);
-        });
+        vh.linearLayout.setOnClickListener(
+                new NoDoubleClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View v) {
+                        Intent intent = new Intent(context, OrderDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("orderinfo", mList.get(position).getId());
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                }
+        );
         OrderListAdapter adapter = new OrderListAdapter(context, mList.get(position).getOrders());
         adapter.setId(mList.get(position).getId());
         vh.listView.setAdapter(adapter);

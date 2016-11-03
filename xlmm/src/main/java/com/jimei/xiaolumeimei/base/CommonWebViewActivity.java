@@ -32,6 +32,7 @@ import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -163,20 +164,16 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             } else {
                 mWebView.getSettings().setLoadsImagesAutomatically(false);
             }
-
             String userAgentString = mWebView.getSettings().getUserAgentString();
-            mWebView.getSettings()
-                    .setUserAgentString(userAgentString
-                            + "; xlmm/"
-                            + BuildConfig.VERSION_NAME
-                            + ";");
+            mWebView.getSettings().setUserAgentString(userAgentString +
+                    "; xlmm/" + BuildConfig.VERSION_NAME + ";");
+            mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+            mWebView.getSettings().setBlockNetworkImage(false);
+            mWebView.getSettings().setBlockNetworkLoads(false);
             mWebView.getSettings().setJavaScriptEnabled(true);
             mAndroidJsBridge = new AndroidJsBridge(this);
             mWebView.addJavascriptInterface(mAndroidJsBridge, "AndroidBridge");
             mWebView.getSettings().setAllowFileAccess(true);
-            //如果访问的页面中有Javascript，则webview必须设置支持Javascript
-            //mWebView.getSettings().setUserAgentString(MyApplication.getUserAgent());
-            //mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setAppCacheEnabled(true);
             mWebView.getSettings().setDomStorageEnabled(true);
@@ -186,7 +183,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                 mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
             }
-
             mWebView.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onProgressChanged(WebView view, int newProgress) {
@@ -194,45 +190,34 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     mProgressBar.setProgress(newProgress);
                     if (newProgress == 100) {
                         mProgressBar.setVisibility(View.GONE);
+                        mWebView.getSettings().setBlockNetworkImage(true);
+                        mWebView.getSettings().setBlockNetworkLoads(true);
                     } else {
                         mProgressBar.setVisibility(View.VISIBLE);
                     }
                 }
 
-                /**
-                 * 覆盖默认的window.alert展示界面，避免title里显示为“：来自file:////”
-                 */
                 public boolean onJsAlert(WebView view, String url, String message,
                                          JsResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-
                     builder.setTitle("提示")
                             .setMessage(message)
                             .setPositiveButton("确定", null);
-
-                    // 不需要绑定按键事件
-                    // 屏蔽keycode等于84之类的按键
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsAlert", "keyCode==" + keyCode + "event=" + event);
                         return true;
                     });
-                    // 禁止响应按back键的事件
                     builder.setCancelable(false);
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                    result.confirm();// 因为没有绑定事件，需要强行confirm,否则页面会变黑显示不了内容。
+                    result.confirm();
                     return true;
-                    // return super.onJsAlert(view, url, message, result);
                 }
 
-                public boolean onJsBeforeUnload(WebView view, String url,
-                                                String message, JsResult result) {
+                public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
                     return super.onJsBeforeUnload(view, url, message, result);
                 }
 
-                /**
-                 * 覆盖默认的window.confirm展示界面，避免title里显示为“：来自file:////”
-                 */
                 public boolean onJsConfirm(WebView view, String url, String message,
                                            final JsResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
@@ -241,24 +226,15 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             .setPositiveButton("确定", (dialog, which) -> result.confirm())
                             .setNeutralButton("取消", (dialog, which) -> result.cancel());
                     builder.setOnCancelListener(dialog -> result.cancel());
-
-                    // 屏蔽keycode等于84之类的按键，避免按键后导致对话框消息而页面无法再弹出对话框的问题
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsConfirm", "keyCode==" + keyCode + "event=" + event);
                         return true;
                     });
-                    // 禁止响应按back键的事件
-                    // builder.setCancelable(false);
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     return true;
-                    // return super.onJsConfirm(view, url, message, result);
                 }
 
-                /**
-                 * 覆盖默认的window.prompt展示界面，避免title里显示为“：来自file:////”
-                 * window.prompt('请输入您的域名地址', '618119.com');
-                 */
                 public boolean onJsPrompt(WebView view, String url, String message,
                                           String defaultValue, final JsPromptResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
@@ -269,18 +245,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     builder.setView(et)
                             .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
                             .setNeutralButton("取消", (dialog, which) -> result.cancel());
-                    // 屏蔽keycode等于84之类的按键，避免按键后导致对话框消息而页面无法再弹出对话框的问题
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsPrompt", "keyCode==" + keyCode + "event=" + event);
                         return true;
                     });
-                    // 禁止响应按back键的事件
-                    // builder.setCancelable(false);
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     return true;
-                    // return super.onJsPrompt(view, url, message, defaultValue,
-                    // result);
                 }
 
                 //扩展浏览器上传文件
@@ -332,17 +303,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
                 public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                     JUtils.Log(TAG, "onReceivedSslError:");
-                    //handler.cancel(); 默认的处理方式，WebView变成空白页
-                    //                        //接受证书
                     handler.proceed();
-                    //handleMessage(Message msg); 其他处理
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
             JUtils.Log(TAG, "set webview err");
         }
-
         syncCookie(this);
     }
 
@@ -371,7 +338,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = intent.getExtras().getString("extra_msg"); // 错误信息
                 if (result.equals("cancel")) {
-                    //wexin alipay already showmsg
                     JUtils.Toast("已取消支付!");
                 } else if (result.equals("success")) {
                     JUtils.Toast("支付成功！");
@@ -428,17 +394,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
         contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
         contentSelectionIntent.setType("image/*");
-
         Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
         chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
         chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
-
         startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (mWebView.canGoBack()) {
                 JUtils.Log(TAG, "onKeyDown webview goback");
@@ -449,7 +412,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             }
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 

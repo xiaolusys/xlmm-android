@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -81,11 +82,11 @@ public class ActivityListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         int screenWidth = JUtils.getScreenWidth();
-        holder.img.setLayoutParams(new LinearLayout.LayoutParams(screenWidth,screenWidth/2));
+        holder.img.setLayoutParams(new LinearLayout.LayoutParams(screenWidth, screenWidth / 2));
         if (bean.getAct_img() != null && !"".equals(bean.getAct_img())) {
             ViewUtils.loadActivityToImgView(mContext, holder.img, bean.getAct_img());
             holder.img.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.img.setVisibility(View.GONE);
         }
         if (bean.isLogin_required() && !LoginUtils.checkLoginState(mContext)) {
@@ -99,11 +100,17 @@ public class ActivityListAdapter extends BaseAdapter {
             intent.putExtras(bundle);
             mContext.startActivity(intent);
         } else {
-            holder.img.setOnClickListener(v ->
-                    JumpUtils.jumpToWebViewWithCookies(mContext,
-                            bean.getAct_link(),
-                            bean.getId(), ActivityWebViewActivity.class,
-                            bean.getTitle()));
+            holder.img.setOnClickListener(
+                    new NoDoubleClickListener() {
+                        @Override
+                        protected void onNoDoubleClick(View v) {
+                            JumpUtils.jumpToWebViewWithCookies(mContext,
+                                    bean.getAct_link(),
+                                    bean.getId(), ActivityWebViewActivity.class,
+                                    bean.getTitle());
+                        }
+                    }
+            );
         }
         return convertView;
     }
