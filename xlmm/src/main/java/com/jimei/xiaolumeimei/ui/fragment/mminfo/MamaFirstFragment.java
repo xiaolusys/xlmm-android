@@ -43,6 +43,7 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,6 +67,7 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     private String hisConfirmedCashOut;
     private BadgeView mBadgeView;
     private int mCurrent_dp_turns_num;
+    private long lastClickTime = 0;
 
     public static MamaFirstFragment newInstance(String title, int id) {
         MamaFirstFragment fragment = new MamaFirstFragment();
@@ -307,73 +309,77 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.ll_renew:
-                Intent renewIntent = new Intent(mActivity, MamaReNewActivity.class);
-                renewIntent.putExtra("mamaCarryValue", mCashValue);
-                startActivity(renewIntent);
-                break;
-            case R.id.ll_rank:
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime > NoDoubleClickListener.MIN_CLICK_DELAY_TIME) {
+            lastClickTime = currentTime;
+            switch (v.getId()) {
+                case R.id.ll_renew:
+                    Intent renewIntent = new Intent(mActivity, MamaReNewActivity.class);
+                    renewIntent.putExtra("mamaCarryValue", mCashValue);
+                    startActivity(renewIntent);
+                    break;
+                case R.id.ll_rank:
 //                startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
-                break;
-            case R.id.ll_share:
-                if (shopLink != null && !"".equals(shopLink)) {
-                    JumpUtils.jumpToWebViewWithCookies(mActivity, shopLink, -1,
-                            MMStoreWebViewActivity.class);
-                }
-                break;
-            case R.id.ll_push:
-                SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                String str = null;
-                try {
-                    str = DateUtils.dateToString(new Date(), DateUtils.yyyyMMDD);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                editor.putString("time", str);
-                editor.putInt("num", mCurrent_dp_turns_num);
-                editor.apply();
-                mBadgeView.setVisibility(View.GONE);
-                startActivity(new Intent(mActivity, DayPushActivity.class));
-                break;
-            case R.id.ll_choose:
-                startActivity(new Intent(mActivity, MamaChooseActivity.class));
-                break;
-            case R.id.ll_shop:
-                if (shareLink != null && !"".equals(shareLink)) {
-                    JumpUtils.jumpToWebViewWithCookies(mActivity, shareLink, 26,
-                            MMShareCodeWebViewActivity.class);
-                }
-                break;
-            case R.id.tv_good_week:
-                startActivity(new Intent(mActivity, GoodWeekActivity.class));
-                break;
-            case R.id.tv_msg:
-                if (msgUrl != null && !"".equals(msgUrl)) {
-                    b.imageNotice.setVisibility(View.GONE);
-                    JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
-                            CommonWebViewActivity.class, "信息通知", false);
-                }
-                break;
-            case R.id.visit_layout:
-                startActivity(new Intent(mActivity, MamaVisitorActivity.class));
-                break;
-            case R.id.order_layout:
-                Intent intent3 = new Intent(mActivity, MMShoppingListActivity.class);
-                Bundle bundle3 = new Bundle();
-                bundle3.putInt("orderNum", orderNum);
-                intent3.putExtras(bundle3);
-                startActivity(intent3);
-                break;
-            case R.id.fund_layout:
-                Bundle incomeBundle = new Bundle();
-                incomeBundle.putString("carrylogMoney", carryLogMoney);
-                incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                Intent incomeIntent = new Intent(mActivity, MMcarryLogActivity.class);
-                incomeIntent.putExtras(incomeBundle);
-                startActivity(incomeIntent);
-                break;
+                    break;
+                case R.id.ll_share:
+                    if (shopLink != null && !"".equals(shopLink)) {
+                        JumpUtils.jumpToWebViewWithCookies(mActivity, shopLink, -1,
+                                MMStoreWebViewActivity.class);
+                    }
+                    break;
+                case R.id.ll_push:
+                    SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    String str = null;
+                    try {
+                        str = DateUtils.dateToString(new Date(), DateUtils.yyyyMMDD);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    editor.putString("time", str);
+                    editor.putInt("num", mCurrent_dp_turns_num);
+                    editor.apply();
+                    mBadgeView.setVisibility(View.GONE);
+                    startActivity(new Intent(mActivity, DayPushActivity.class));
+                    break;
+                case R.id.ll_choose:
+                    startActivity(new Intent(mActivity, MamaChooseActivity.class));
+                    break;
+                case R.id.ll_shop:
+                    if (shareLink != null && !"".equals(shareLink)) {
+                        JumpUtils.jumpToWebViewWithCookies(mActivity, shareLink, 26,
+                                MMShareCodeWebViewActivity.class);
+                    }
+                    break;
+                case R.id.tv_good_week:
+                    startActivity(new Intent(mActivity, GoodWeekActivity.class));
+                    break;
+                case R.id.tv_msg:
+                    if (msgUrl != null && !"".equals(msgUrl)) {
+                        b.imageNotice.setVisibility(View.GONE);
+                        JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
+                                CommonWebViewActivity.class, "信息通知", false);
+                    }
+                    break;
+                case R.id.visit_layout:
+                    startActivity(new Intent(mActivity, MamaVisitorActivity.class));
+                    break;
+                case R.id.order_layout:
+                    Intent intent3 = new Intent(mActivity, MMShoppingListActivity.class);
+                    Bundle bundle3 = new Bundle();
+                    bundle3.putInt("orderNum", orderNum);
+                    intent3.putExtras(bundle3);
+                    startActivity(intent3);
+                    break;
+                case R.id.fund_layout:
+                    Bundle incomeBundle = new Bundle();
+                    incomeBundle.putString("carrylogMoney", carryLogMoney);
+                    incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
+                    Intent incomeIntent = new Intent(mActivity, MMcarryLogActivity.class);
+                    incomeIntent.putExtras(incomeBundle);
+                    startActivity(incomeIntent);
+                    break;
+            }
         }
     }
 

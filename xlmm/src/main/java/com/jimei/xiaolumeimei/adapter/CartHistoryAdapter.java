@@ -17,6 +17,7 @@ import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -53,43 +54,50 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
         holder.price1.setText("¥" + (float) (Math.round(cartsInfoBean.getPrice() * 100)) / 100);
         holder.price2.setText("/¥" + (float) (Math.round(cartsInfoBean.getStd_sale_price() * 100)) / 100);
         ViewUtils.loadImgToImgView(mActivity, holder.cartImage, cartsInfoBean.getPic_path());
-        holder.cartImage.setOnClickListener(v -> {
-            Intent intent = new Intent(mActivity, ProductDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("model_id", cartsInfoBean.getModel_id());
-            intent.putExtras(bundle);
-            mActivity.startActivity(intent);
-            mActivity.finish();
+        holder.cartImage.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                Intent intent = new Intent(mActivity, ProductDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("model_id", cartsInfoBean.getModel_id());
+                intent.putExtras(bundle);
+                mActivity.startActivity(intent);
+                mActivity.finish();
+            }
         });
-        holder.rebuy.setOnClickListener(v -> {
-            MobclickAgent.onEvent(mActivity,"ReAddCartsID");
-            mActivity.showIndeterminateProgressDialog(false);
-            mActivity.addSubscription(CartsModel.getInstance()
-                    .rebuy(cartsInfoBean.getItem_id(),
-                            cartsInfoBean.getSku_id(), cartsInfoBean.getId() + "")
-                    .subscribe(new ServiceResponse<CartsHisBean>() {
-                        @Override
-                        public void onNext(CartsHisBean cartsHisBean) {
-                            mActivity.hideIndeterminateProgressDialog();
-                            if (null != cartsHisBean) {
-                                if (cartsHisBean.getCode() == 0) {
-                                    mActivity.removeHistory(cartsInfoBean);
-                                    mActivity.refreshCartList();
-                                } else {
-                                    JUtils.Toast(cartsHisBean.getInfo());
-                                }
-                            }
-                        }
+        holder.rebuy.setOnClickListener(
+                new NoDoubleClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View v) {
+                        MobclickAgent.onEvent(mActivity, "ReAddCartsID");
+                        mActivity.showIndeterminateProgressDialog(false);
+                        mActivity.addSubscription(CartsModel.getInstance()
+                                .rebuy(cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
+                                        cartsInfoBean.getId() + "")
+                                .subscribe(new ServiceResponse<CartsHisBean>() {
+                                    @Override
+                                    public void onNext(CartsHisBean cartsHisBean) {
+                                        mActivity.hideIndeterminateProgressDialog();
+                                        if (null != cartsHisBean) {
+                                            if (cartsHisBean.getCode() == 0) {
+                                                mActivity.removeHistory(cartsInfoBean);
+                                                mActivity.refreshCartList();
+                                            } else {
+                                                JUtils.Toast(cartsHisBean.getInfo());
+                                            }
+                                        }
+                                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
-                            JUtils.Toast("重新购买失败,商品可能已下架");
-                            mActivity.hideIndeterminateProgressDialog();
-                        }
-                    }));
-        });
-
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        super.onError(e);
+                                        JUtils.Toast("重新购买失败,商品可能已下架");
+                                        mActivity.hideIndeterminateProgressDialog();
+                                    }
+                                }));
+                    }
+                }
+        );
     }
 
     @Override

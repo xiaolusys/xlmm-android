@@ -118,7 +118,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/trades/details"
@@ -130,7 +132,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/refunds"
@@ -202,7 +206,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/webview"
@@ -214,7 +220,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/vip_forum"
@@ -227,9 +235,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
-
             <intent-filter>
                 <data android:scheme="tencent100371282"/>
+
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.BROWSABLE"/>
@@ -239,6 +247,7 @@
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -271,7 +280,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/vip_0day"
@@ -313,7 +324,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/brand"
@@ -361,10 +374,13 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.xlmmmain.MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/promote_today"
@@ -372,7 +388,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/promote_previous"
@@ -384,7 +402,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/usercoupons/method"
@@ -411,7 +431,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/childlist"
@@ -419,7 +441,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/ladylist"
@@ -427,7 +451,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/category"
@@ -439,7 +465,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/modellist"
@@ -447,7 +475,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products/modelist"
@@ -455,7 +485,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/products"
@@ -474,7 +506,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/shopping_cart"
@@ -486,7 +520,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/vip_choice"
@@ -498,7 +534,9 @@
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data
                     android:host="app"
                     android:path="/v1/vip_home"
@@ -519,6 +557,9 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.DayPushActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".ui.activity.main.AdvertisementActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
 
         <service

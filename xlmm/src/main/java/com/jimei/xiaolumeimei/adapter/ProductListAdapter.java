@@ -16,6 +16,7 @@ import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -80,20 +81,25 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
         holder.name.setText(resultsBean.getName());
         holder.agentPrice.setText("¥" + resultsBean.getLowest_agent_price());
         holder.stdSalePrice.setText("/¥" + resultsBean.getLowest_std_sale_price());
-        holder.card.setOnClickListener(v -> {
-            MobclickAgent.onEvent(context, "click_product");
-            int modelId = resultsBean.getId();
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("model_id", modelId);
-            intent.putExtras(bundle);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, holder.image, "wisdom");
-                context.startActivity(intent, options.toBundle());
-            } else {
-                context.startActivity(intent);
-            }
-        });
+        holder.card.setOnClickListener(
+                new NoDoubleClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View v) {
+                        MobclickAgent.onEvent(context, "click_product");
+                        int modelId = resultsBean.getId();
+                        Intent intent = new Intent(context, ProductDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("model_id", modelId);
+                        intent.putExtras(bundle);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, holder.image, "wisdom");
+                            context.startActivity(intent, options.toBundle());
+                        } else {
+                            context.startActivity(intent);
+                        }
+                    }
+                }
+        );
     }
 
     @Override

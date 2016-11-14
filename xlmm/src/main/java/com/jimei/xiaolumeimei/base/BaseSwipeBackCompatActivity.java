@@ -8,6 +8,7 @@ import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
 import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
 import com.jimei.library.widget.swipeback.SwipeBackLayout;
 import com.jimei.library.widget.swipeback.Utils;
+import com.jimei.xiaolumeimei.R;
 
 
 public abstract class BaseSwipeBackCompatActivity extends BaseActivity
@@ -16,6 +17,7 @@ public abstract class BaseSwipeBackCompatActivity extends BaseActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
         super.onCreate(savedInstanceState);
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
@@ -27,6 +29,12 @@ public abstract class BaseSwipeBackCompatActivity extends BaseActivity
         setListener();
         mHelper = new SwipeBackActivityHelper(this);
         mHelper.onActivityCreate();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     @Override

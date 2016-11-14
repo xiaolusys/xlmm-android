@@ -80,6 +80,7 @@ import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
 import com.umeng.analytics.MobclickAgent;
@@ -93,6 +94,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +176,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     private MainCategoryAdapter mMainCategoryAdapter;
     private boolean mamaFlag = false;
     private String mJumpUrl;
+    private long lastClickTime = 0;
 
     @Override
     protected void onStart() {
@@ -266,45 +269,49 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     @Override
     public void onClick(View v) {
-        drawer.closeDrawers();
-        String flag = "main";
-        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-        switch (v.getId()) {
-            case R.id.rv_cart:
-                intent = new Intent(MainActivity.this, CartActivity.class);
-                flag = "cart";
-                break;
-            case R.id.collect:
-                intent = new Intent(MainActivity.this, CollectionActivity.class);
-                flag = "collect";
-                break;
-            case R.id.rl_mmentry:
-                JUtils.Log(TAG, "xiaolu mama entry");
-                intent = new Intent(MainActivity.this, MamaActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("mamaid", mamaid);
-                intent.putExtras(bundle);
-                break;
-            case R.id.ll_money:
-                intent = new Intent(MainActivity.this, WalletActivity.class);
-                flag = "money";
-                break;
-            case R.id.ll_score:
-                flag = "point";
-                intent = new Intent(MainActivity.this, MembershipPointActivity.class);
-                break;
-            case R.id.ll_discount:
-                flag = "coupon";
-                intent = new Intent(MainActivity.this, AllCouponActivity.class);
-                break;
-            case R.id.imgUser:
-                intent = new Intent(MainActivity.this, InformationActivity.class);
-                break;
-        }
-        if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
-            login(flag);
-        } else {
-            startActivity(intent);
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime > NoDoubleClickListener.MIN_CLICK_DELAY_TIME) {
+            lastClickTime = currentTime;
+            drawer.closeDrawers();
+            String flag = "main";
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            switch (v.getId()) {
+                case R.id.rv_cart:
+                    intent = new Intent(MainActivity.this, CartActivity.class);
+                    flag = "cart";
+                    break;
+                case R.id.collect:
+                    intent = new Intent(MainActivity.this, CollectionActivity.class);
+                    flag = "collect";
+                    break;
+                case R.id.rl_mmentry:
+                    JUtils.Log(TAG, "xiaolu mama entry");
+                    intent = new Intent(MainActivity.this, MamaActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("mamaid", mamaid);
+                    intent.putExtras(bundle);
+                    break;
+                case R.id.ll_money:
+                    intent = new Intent(MainActivity.this, WalletActivity.class);
+                    flag = "money";
+                    break;
+                case R.id.ll_score:
+                    flag = "point";
+                    intent = new Intent(MainActivity.this, MembershipPointActivity.class);
+                    break;
+                case R.id.ll_discount:
+                    flag = "coupon";
+                    intent = new Intent(MainActivity.this, AllCouponActivity.class);
+                    break;
+                case R.id.imgUser:
+                    intent = new Intent(MainActivity.this, InformationActivity.class);
+                    break;
+            }
+            if (!(LoginUtils.checkLoginState(getApplicationContext()))) {
+                login(flag);
+            } else {
+                startActivity(intent);
+            }
         }
     }
 
@@ -420,7 +427,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     break;
             }
             scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(vp.getCurrentItem()));
-
             mPresenter.getAddressVersionAndUrl();
             mPresenter.getCategoryDown();
         } catch (Exception e) {

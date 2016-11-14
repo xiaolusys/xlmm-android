@@ -6,6 +6,7 @@ import android.view.View;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.TUtil;
 import com.jimei.library.widget.loading.VaryViewHelperController;
+import com.jimei.xiaolumeimei.R;
 
 /**
  * Created by itxuye on 2016/6/24.
@@ -18,6 +19,7 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         super.onCreate(savedInstanceState);
         if (getContentViewLayoutID() != 0) {
             setContentView(getContentViewLayoutID());
@@ -35,6 +37,12 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E>
         setListener();
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
     protected abstract View getLoadingView();
 
     @Override
@@ -48,6 +56,7 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E>
     @Override
     public void showNetworkError() {
         if (!JUtils.isNetWorkAvilable()) {
+            hideIndeterminateProgressDialog();
             if (mVaryViewHelperController == null) {
                 throw new IllegalStateException("no ViewHelperController");
             }
