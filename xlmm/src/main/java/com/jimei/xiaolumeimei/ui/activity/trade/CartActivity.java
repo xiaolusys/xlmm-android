@@ -199,7 +199,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     }
 
     public void addHistory(CartsInfoBean cartsInfoBean) {
-        cartHisList.add(0,cartsInfoBean);
+        cartHisList.add(0, cartsInfoBean);
         cartHisAdapter.notifyDataSetChanged();
         tvLine.setVisibility(View.VISIBLE);
     }

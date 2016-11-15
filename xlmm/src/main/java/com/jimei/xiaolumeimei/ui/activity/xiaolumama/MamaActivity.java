@@ -11,7 +11,7 @@ import android.webkit.WebView;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
-import com.jimei.xiaolumeimei.base.BaseBindingFragment;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaBinding;
@@ -22,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.event.SetOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
 import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.ui.fragment.mminfo.BoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaSecondFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaThirdFragment;
@@ -45,7 +46,7 @@ import rx.Observable;
 
 public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
-    private List<BaseBindingFragment> fragments = new ArrayList<>();
+    private List<BaseFragment> fragments = new ArrayList<>();
     private boolean isDestroy = false;
     private ExecutorService service;
 
@@ -97,11 +98,12 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
         UdeskSDKManager.getInstance().setUserInfo(this, id, info);
         fragments.add(MamaFirstFragment.newInstance("我要赚钱", mamaId));
+        fragments.add(BoutiqueFragment.newInstance("精品汇", mamaId));
         fragments.add(MamaSecondFragment.newInstance("社交活动", mamaId));
         fragments.add(MamaThirdFragment.newInstance("我的", mamaId));
         MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
-        b.viewPager.setOffscreenPageLimit(2);
+        b.viewPager.setOffscreenPageLimit(3);
         b.tabLayout.setupWithViewPager(b.viewPager);
         b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
@@ -168,15 +170,18 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (fragments.size() == 3) {
-            WebView webView = ((MamaSecondFragment) fragments.get(1)).getWebView();
+        if (fragments.size() == 4) {
+            WebView webView = null;
+            if (b.viewPager.getCurrentItem() == 2) {
+                webView = ((MamaSecondFragment) fragments.get(2)).getWebView();
+            } else if (b.viewPager.getCurrentItem() == 1) {
+                webView = ((BoutiqueFragment) fragments.get(1)).getWebView();
+            }
             if (keyCode == KeyEvent.KEYCODE_BACK && webView != null) {
-                if (b.viewPager.getCurrentItem() == 1 && webView.canGoBack()) {
+                if (webView.canGoBack()) {
                     webView.goBack();
-                } else {
-                    finish();
+                    return true;
                 }
-                return true;
             }
         }
         return super.onKeyDown(keyCode, event);

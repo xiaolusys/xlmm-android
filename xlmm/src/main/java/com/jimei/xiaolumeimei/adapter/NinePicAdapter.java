@@ -168,7 +168,7 @@ public class NinePicAdapter extends BaseAdapter {
                     }
                 } else {
                     if (!str.contains("code")) {
-                        str = str + "?imageMogr2/thumbnail/580/format/jpg";
+                        str = str + "?imageMogr2/thumbnail/640/format/jpg/quality/90";
                     } else {
                         str = picArry.get(i).substring(4);
                     }

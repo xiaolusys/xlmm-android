@@ -1,9 +1,7 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +75,12 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
         } else {
             holder.saleStatus.setVisibility(View.GONE);
         }
-        ViewUtils.loadImgToImgViewWithPlaceholder(context, holder.image, resultsBean.getHead_img());
+        String watermark_op = resultsBean.getWatermark_op();
+        if (watermark_op != null && !"".equals(watermark_op)) {
+            ViewUtils.loadImgToImgViewWithWaterMark(context, holder.image, resultsBean.getHead_img(), watermark_op);
+        } else {
+            ViewUtils.loadImgToImgViewWithPlaceholder(context, holder.image, resultsBean.getHead_img());
+        }
         holder.name.setText(resultsBean.getName());
         holder.agentPrice.setText("¥" + resultsBean.getLowest_agent_price());
         holder.stdSalePrice.setText("/¥" + resultsBean.getLowest_std_sale_price());
@@ -91,12 +94,13 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
                         Bundle bundle = new Bundle();
                         bundle.putInt("model_id", modelId);
                         intent.putExtras(bundle);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, holder.image, "wisdom");
-                            context.startActivity(intent, options.toBundle());
-                        } else {
-                            context.startActivity(intent);
-                        }
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, holder.image, "wisdom");
+//                            context.startActivity(intent, options.toBundle());
+//                        } else {
+//                            context.startActivity(intent);
+//                        }
+                        context.startActivity(intent);
                     }
                 }
         );

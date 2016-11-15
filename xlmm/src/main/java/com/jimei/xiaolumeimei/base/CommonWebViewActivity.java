@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.base;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -164,15 +163,19 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             } else {
                 mWebView.getSettings().setLoadsImagesAutomatically(false);
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
             String userAgentString = mWebView.getSettings().getUserAgentString();
             mWebView.getSettings().setUserAgentString(userAgentString +
                     "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-            mWebView.getSettings().setBlockNetworkImage(false);
-            mWebView.getSettings().setBlockNetworkLoads(false);
+//            mWebView.getSettings().setBlockNetworkImage(false);
+//            mWebView.getSettings().setBlockNetworkLoads(false);
             mWebView.getSettings().setJavaScriptEnabled(true);
             mAndroidJsBridge = new AndroidJsBridge(this);
             mWebView.addJavascriptInterface(mAndroidJsBridge, "AndroidBridge");
+            mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setAppCacheEnabled(true);
@@ -190,8 +193,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     mProgressBar.setProgress(newProgress);
                     if (newProgress == 100) {
                         mProgressBar.setVisibility(View.GONE);
-                        mWebView.getSettings().setBlockNetworkImage(true);
-                        mWebView.getSettings().setBlockNetworkLoads(true);
+//                        mWebView.getSettings().setBlockNetworkImage(true);
+//                        mWebView.getSettings().setBlockNetworkLoads(true);
                     } else {
                         mProgressBar.setVisibility(View.VISIBLE);
                     }
@@ -212,10 +215,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     dialog.show();
                     result.confirm();
                     return true;
-                }
-
-                public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-                    return super.onJsBeforeUnload(view, url, message, result);
                 }
 
                 public boolean onJsConfirm(WebView view, String url, String message,
@@ -333,7 +332,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             }
             mUploadMessageForAndroid5 = null;
         } else if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result");
                 String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = intent.getExtras().getString("extra_msg"); // 错误信息

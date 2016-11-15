@@ -174,6 +174,7 @@ public class MamaUrl {
             private String renew;
             private String fans_explain;
             private String invite;
+            private String boutique;
 
             public String getNotice() {
                 return notice;
@@ -245,6 +246,14 @@ public class MamaUrl {
 
             public void setInvite(String invite) {
                 this.invite = invite;
+            }
+
+            public String getBoutique() {
+                return boutique;
+            }
+
+            public void setBoutique(String boutique) {
+                this.boutique = boutique;
             }
 
             public static class PicturesBean {

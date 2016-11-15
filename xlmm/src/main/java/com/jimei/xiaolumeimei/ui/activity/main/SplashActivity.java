@@ -83,11 +83,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void jumpToAds() {
-        if (NetUtil.isNetworkAvailable(this)) {
+        if (NetUtil.isNetworkAvailable(this) && mPicture != null && !mPicture.equals("")) {
             Intent intent = new Intent(SplashActivity.this, AdvertisementActivity.class);
-            if (mPicture != null && !mPicture.equals("")) {
-                intent.putExtra("link", mPicture);
-            }
+            intent.putExtra("link", mPicture);
             startActivity(intent);
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));

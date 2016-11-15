@@ -21,7 +21,6 @@ import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
 
@@ -123,7 +122,7 @@ public class MamaInfoModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<Response<ResponseBody>> mamaRegisterPay(String product_id, String sku_id,
+    public Observable<Object> mamaRegisterPay(String product_id, String sku_id,
                                                               String payment, String channel, String num,
                                                               String post_fee, String discount_fee, String uuid,
                                                               String total_fee, String wallet_renew_deposit) {

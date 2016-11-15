@@ -175,17 +175,6 @@ public class MamaSecondFragment extends BaseBindingFragment<FragmentMamaSecondBi
         return R.layout.fragment_mama_second;
     }
 
-    @Override
-    public String getTitle() {
-        String title;
-        if (getArguments() != null) {
-            title = getArguments().getString(TITLE);
-        } else {
-            title = "";
-        }
-        return title;
-    }
-
     public WebView getWebView() {
         if (b != null) {
             return b.webView;

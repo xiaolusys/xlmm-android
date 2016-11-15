@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jimei.library.utils.DataClearManager;
 import com.jimei.library.utils.DisplayUtils;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
@@ -46,6 +47,7 @@ import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
 import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
@@ -95,6 +97,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,6 +213,17 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
             mPresenter.isCouPon();
         }
         LoginUtils.deleteIsMamaRenwulist(getApplicationContext());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int i = calendar.get(Calendar.WEEK_OF_YEAR);
+        SharedPreferences preferences = getSharedPreferences("clear_cache", Context.MODE_PRIVATE);
+        int flag = preferences.getInt("flag", -1);
+        if (i != flag) {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putInt("flag",i);
+            edit.apply();
+            DataClearManager.cleanApplicationData(XlmmApp.getInstance());
+        }
     }
 
     @Override

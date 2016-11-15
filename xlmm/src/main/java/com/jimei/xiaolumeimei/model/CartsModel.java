@@ -2,9 +2,9 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;

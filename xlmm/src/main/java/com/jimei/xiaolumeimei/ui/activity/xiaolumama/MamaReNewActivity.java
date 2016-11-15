@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -29,15 +29,12 @@ import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.PaymentActivity;
+import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
-
 import butterknife.Bind;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 /**
@@ -179,22 +176,10 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         MamaInfoModel.getInstance()
                 .mamaRegisterPay(product_id, sku_id, payment, channel, num, post_fee, discount_fee, uuid,
                         total_fee, wallet_renew_deposit)
-                .subscribe(new ServiceResponse<Response<ResponseBody>>() {
+                .subscribe(new ServiceResponse<Object>() {
                     @Override
-                    public void onNext(Response<ResponseBody> responseBodyResponse) {
-                        if (responseBodyResponse.isSuccessful()) {
-                            try {
-                                Intent intent = new Intent();
-                                String packageName = getPackageName();
-                                ComponentName componentName =
-                                        new ComponentName(packageName, packageName + ".wxapi.WXPayEntryActivity");
-                                intent.setComponent(componentName);
-                                intent.putExtra(PaymentActivity.EXTRA_CHARGE, responseBodyResponse.body().string());
-                                startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    public void onNext(Object charge) {
+                        Pingpp.createPayment(MamaReNewActivity.this, new Gson().toJson(charge));
                     }
 
                     @Override
@@ -251,7 +236,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         switch (v.getId()) {
             case R.id.tv_rule:
                 JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/static/tiaokuan.html", -1,
-                        CommonWebViewActivity.class,"小鹿妈妈服务条款",false);
+                        CommonWebViewActivity.class, "小鹿妈妈服务条款", false);
                 break;
             case R.id.commit:
                 //new MyDialog(this).show();
@@ -331,39 +316,28 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
             LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
             TextView tvPay = (TextView) mView.findViewById(R.id.tvPay);
             tvPay.setVisibility(View.INVISIBLE);
-            mView.findViewById(R.id.finish_iv).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MyDialog.this.dismiss();
+            mView.findViewById(R.id.finish_iv).setOnClickListener(v -> MyDialog.this.dismiss());
+
+            alipay_layout.setOnClickListener(v -> {
+                if (radio_188Choose) {
+                    mamaPay(productId + "", skuId188 + "", (payment188 - mamaCarryValue) + "", ALIPAY, "1",
+                            postfee188 + "", discountfee188 + "", uuid, totalfee188 + "", mamaCarryValue + "");
+                } else if (radio_99Choose) {
+                    mamaPay(productId + "", skuId99 + "", (payment99 - mamaCarryValue) + "", ALIPAY, "1",
+                            postfee99 + "", discountfee99 + "", uuid, totalfee99 + "", mamaCarryValue + "");
                 }
+                dismiss();
             });
 
-            alipay_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (radio_188Choose) {
-                        mamaPay(productId + "", skuId188 + "", (payment188 - mamaCarryValue) + "", ALIPAY, "1",
-                                postfee188 + "", discountfee188 + "", uuid, totalfee188 + "", mamaCarryValue + "");
-                    } else if (radio_99Choose) {
-                        mamaPay(productId + "", skuId99 + "", (payment99 - mamaCarryValue) + "", ALIPAY, "1",
-                                postfee99 + "", discountfee99 + "", uuid, totalfee99 + "", mamaCarryValue + "");
-                    }
-                    dismiss();
+            wx_layout.setOnClickListener(v -> {
+                if (radio_188Choose) {
+                    mamaPay(productId + "", skuId188 + "", (payment188 - mamaCarryValue) + "", WX, "1",
+                            postfee188 + "", discountfee188 + "", uuid, totalfee188 + "", mamaCarryValue + "");
+                } else if (radio_99Choose) {
+                    mamaPay(productId + "", skuId99 + "", (payment99 - mamaCarryValue) + "", WX, "1",
+                            postfee99 + "", discountfee99 + "", uuid, totalfee99 + "", mamaCarryValue + "");
                 }
-            });
-
-            wx_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (radio_188Choose) {
-                        mamaPay(productId + "", skuId188 + "", (payment188 - mamaCarryValue) + "", WX, "1",
-                                postfee188 + "", discountfee188 + "", uuid, totalfee188 + "", mamaCarryValue + "");
-                    } else if (radio_99Choose) {
-                        mamaPay(productId + "", skuId99 + "", (payment99 - mamaCarryValue) + "", WX, "1",
-                                postfee99 + "", discountfee99 + "", uuid, totalfee99 + "", mamaCarryValue + "");
-                    }
-                    dismiss();
-                }
+                dismiss();
             });
 
             MyDialog.this.setCanceledOnTouchOutside(true);
@@ -404,7 +378,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         super.onActivityResult(requestCode, resultCode, data);
         //支付页面返回处理
         EventBus.getDefault().postSticky(new UserChangeEvent());
-        if (requestCode == REQUEST_CODE_PAYMENT) {
+        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
             /* 处理返回值

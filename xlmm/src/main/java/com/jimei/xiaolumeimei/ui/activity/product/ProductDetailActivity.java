@@ -315,8 +315,15 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             imageView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
+            String watermark_op = detail_content.getWatermark_op();
+            if (watermark_op != null && !"".equals(watermark_op)) {
+                Glide.with(this).load(head_imgs.get(i) + POST_URL + "/" + watermark_op)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
+                        .placeholder(R.drawable.place_holder).into(imageView);
+            } else {
+                Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
+            }
             list.add(imageView);
         }
         PagerAdapter viewPagerAdapter = new MyPagerAdapter(list);

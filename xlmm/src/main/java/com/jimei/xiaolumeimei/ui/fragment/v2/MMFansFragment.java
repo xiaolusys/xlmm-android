@@ -39,7 +39,7 @@ public class MMFansFragment extends BaseLazyFragment {
     public static MMFansFragment newInstance(String title) {
         MMFansFragment mmFansFragment = new MMFansFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("keyword", title);
+        bundle.putString("title", title);
         mmFansFragment.setArguments(bundle);
         return mmFansFragment;
     }
