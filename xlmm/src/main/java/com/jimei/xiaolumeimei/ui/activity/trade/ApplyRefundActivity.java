@@ -174,8 +174,7 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     AlertDialog dialog = new AlertDialog.Builder(this)
                             .setCancelable(true)
                             .setTitle("小鹿急速退款说明")
-                            .setMessage("小鹿急速退款,该款项将快速返回至小鹿账户,可通过我的零钱查询" +
-                                    ",该退款可以用于购物，也可提现。")
+                            .setMessage("退款立即退到小鹿零钱账户，该退款可以用于重新购买商品或者提现。")
                             .setPositiveButton("同意", (dialog1, which) -> {
                                 dialog1.dismiss();
                                 commit_apply();

@@ -11,18 +11,12 @@ import com.bumptech.glide.Glide;
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
-
-import rx.Subscription;
 
 public class AdvertisementActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView img;
-    private Subscription mSubscribe;
     private TextView text;
     private boolean isDestroy;
-    private String mLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,38 +24,15 @@ public class AdvertisementActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertisement);
         ViewUtils.setWindowStatus(this);
-        if (getIntent().getExtras() != null) {
-            mLink = getIntent().getExtras().getString("link");
-        }
+        String link = getIntent().getExtras().getString("link");
         isDestroy = false;
-        img = (ImageView) findViewById(R.id.img);
+        ImageView img = (ImageView) findViewById(R.id.img);
         text = (TextView) findViewById(R.id.text);
         assert text != null;
         text.setOnClickListener(this);
-        if (mLink == null) {
-            mSubscribe = ActivityModel.getInstance()
-                    .getStartAds()
-                    .subscribe(startBean -> {
-                        if (startBean != null) {
-                            String picture = startBean.getPicture();
-                            if (picture != null && !"".equals(picture)) {
-                                img.setVisibility(View.VISIBLE);
-                                Glide.with(AdvertisementActivity.this).load(picture).into(img);
-                                readyToJump();
-                            } else {
-                                jumpAndFinish();
-                            }
-                        } else {
-                            jumpAndFinish();
-                        }
-                    }, throwable -> {
-                        jumpAndFinish();
-                    });
-        } else {
-            img.setVisibility(View.VISIBLE);
-            Glide.with(this).load(mLink).into(img);
-            readyToJump();
-        }
+        assert img != null;
+        Glide.with(this).load(link).into(img);
+        readyToJump();
     }
 
     private void readyToJump() {
@@ -90,14 +61,6 @@ public class AdvertisementActivity extends AppCompatActivity implements View.OnC
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mSubscribe != null && mSubscribe.isUnsubscribed()) {
-            mSubscribe.unsubscribe();
-        }
     }
 
     private void jumpAndFinish() {

@@ -133,7 +133,7 @@ public class RankFragment extends Fragment implements ScrollableHelper.Scrollabl
 
     public String getTitle() {
         if (getArguments() != null) {
-            return getArguments().getString(TITLE);
+            return getArguments().getString("title");
         }
         return "";
     }

@@ -129,4 +129,11 @@ public abstract class BaseFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    public String getTitle() {
+        if (getArguments() != null) {
+            return getArguments().getString("title");
+        }
+        return "";
+    }
 }

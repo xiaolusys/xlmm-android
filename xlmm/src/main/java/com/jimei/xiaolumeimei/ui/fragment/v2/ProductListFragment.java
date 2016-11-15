@@ -261,14 +261,6 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         return xRecyclerView;
     }
 
-    public String getTitle() {
-        String title = "";
-        if (getArguments() != null) {
-            title = getArguments().getString("title");
-        }
-        return title;
-    }
-
     public void addSubscription(Subscription s) {
         if (this.mCompositeSubscription == null) {
             this.mCompositeSubscription = new CompositeSubscription();
@@ -287,6 +279,13 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
             e.printStackTrace();
         }
         super.onDestroyView();
+    }
+
+    public String getTitle() {
+        if (getArguments() != null) {
+            return getArguments().getString("title");
+        }
+        return "";
     }
 
     public void goToTop() {

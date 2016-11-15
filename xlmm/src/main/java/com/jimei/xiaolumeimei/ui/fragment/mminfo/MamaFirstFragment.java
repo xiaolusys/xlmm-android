@@ -217,14 +217,14 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         }
         List<MamaSelfListBean.ResultsBean> results = bean.getResults();
         List<String> list = new ArrayList<>();
-        if (unread_cnt > 0) {
-            for (int i = 0; i < results.size(); i++) {
-                if (!results.get(i).isRead()) {
-                    list.add(results.get(i).getTitle());
-                }
-            }
-            b.marqueeView.startWithList(list);
+//        if (unread_cnt > 0) {
+        for (int i = 0; i < results.size(); i++) {
+//                if (!results.get(i).isRead()) {
+            list.add(results.get(i).getTitle());
+//                }
         }
+        b.marqueeView.startWithList(list);
+//        }
     }
 
     private void initFortune(MamaFortune mamaFortune) {
@@ -294,17 +294,6 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_mama_first;
-    }
-
-    @Override
-    public String getTitle() {
-        String title;
-        if (getArguments() != null) {
-            title = getArguments().getString(TITLE);
-        } else {
-            title = "";
-        }
-        return title;
     }
 
     @Override

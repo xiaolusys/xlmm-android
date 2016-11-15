@@ -29,9 +29,8 @@ import java.util.List;
 
 
 public class CollectionFragment extends Fragment implements View.OnClickListener {
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "title";
     private static final String ARG_PARAM2 = "param2";
-    private String title;
     private String type;
     private ArrayList<CollectionBean> collectionList;
     private View emptyLayout;
@@ -63,7 +62,6 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
         if (getArguments() != null) {
             page = 1;
             collectionList = new ArrayList<>();
-            title = getArguments().getString(ARG_PARAM1);
             type = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -154,11 +152,9 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
 
     public String getTitle() {
         if (getArguments() != null) {
-            title = getArguments().getString(ARG_PARAM1);
-        } else {
-            title = "";
+            return getArguments().getString("title");
         }
-        return title;
+        return "";
     }
 
     @Override

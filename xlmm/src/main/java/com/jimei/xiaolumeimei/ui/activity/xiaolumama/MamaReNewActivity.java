@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -29,12 +29,10 @@ import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.PaymentActivity;
+import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.io.IOException;
 
 import butterknife.Bind;
 import okhttp3.ResponseBody;
@@ -183,17 +181,14 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                     @Override
                     public void onNext(Response<ResponseBody> responseBodyResponse) {
                         if (responseBodyResponse.isSuccessful()) {
-                            try {
-                                Intent intent = new Intent();
-                                String packageName = getPackageName();
-                                ComponentName componentName =
-                                        new ComponentName(packageName, packageName + ".wxapi.WXPayEntryActivity");
-                                intent.setComponent(componentName);
-                                intent.putExtra(PaymentActivity.EXTRA_CHARGE, responseBodyResponse.body().string());
-                                startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+//                                Intent intent = new Intent();
+//                                String packageName = getPackageName();
+//                                ComponentName componentName =
+//                                        new ComponentName(packageName, packageName + ".wxapi.WXPayEntryActivity");
+//                                intent.setComponent(componentName);
+//                                intent.putExtra(PaymentActivity.EXTRA_CHARGE, responseBodyResponse.body().string());
+//                                startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+                            Pingpp.createPayment(MamaReNewActivity.this, new Gson().toJson(responseBodyResponse.body().toString()));
                         }
                     }
 
@@ -251,7 +246,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         switch (v.getId()) {
             case R.id.tv_rule:
                 JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/static/tiaokuan.html", -1,
-                        CommonWebViewActivity.class,"小鹿妈妈服务条款",false);
+                        CommonWebViewActivity.class, "小鹿妈妈服务条款", false);
                 break;
             case R.id.commit:
                 //new MyDialog(this).show();

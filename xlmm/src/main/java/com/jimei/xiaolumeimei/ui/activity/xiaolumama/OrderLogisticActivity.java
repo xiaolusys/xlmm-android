@@ -21,6 +21,8 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
 
     @Override
     protected void initData() {
+        b.tvCompany.setText(company_code);
+        b.tvOrder.setText(packetid);
         if (packetid != null && company_code != null &&
                 !"".equals(packetid) && !"".equals(company_code)) {
             showIndeterminateProgressDialog(false);
@@ -28,7 +30,7 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
                     .get_logistics_by_packagetid(packetid, company_code)
                     .subscribe(this::fillDataToView,
                             e -> {
-                                JUtils.Toast("更新失败!");
+                                JUtils.Toast("物流查询失败，请到相应官网查询！");
                                 hideIndeterminateProgressDialog();
                             }
                     ));

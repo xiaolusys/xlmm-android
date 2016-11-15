@@ -442,6 +442,54 @@ public final class ViewUtils {
         }
     }
 
+    public static void loadImgToImgViewWithWaterMark(Context context, ImageView img,
+                                                     String picPath, String watermark_op) {
+        if (null == picPath) return;
+        if (picPath.contains("wx.qlogo.cn")
+                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+                || picPath.contains("mmbiz.qlogo.cn")) {
+            Glide.with(context)
+                    .load(picPath)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
+        } else {
+            String head_img;
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+            Matcher m = p.matcher(picPath);
+            if (m.find()) {
+                String group = m.group();
+                String[] temp = picPath.split(group + "/");
+                if (temp.length > 1) {
+                    try {
+                        head_img = "http://"
+                                + group
+                                + "/"
+                                + URLEncoder.encode(temp[1], "utf-8")
+                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80/" + watermark_op;
+                        Glide.with(context)
+                                .load(head_img)
+                                .thumbnail(0.1f)
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .centerCrop()
+                                .placeholder(R.drawable.place_holder)
+                                .into(img);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Glide.with(context)
+                        .load(picPath)
+                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop()
+                        .into(img);
+            }
+        }
+    }
+
     public static void loadImgToImgViewWithPlaceholderFragment(Fragment context, ImageView img,
                                                                String picPath) {
         if (null == picPath) return;

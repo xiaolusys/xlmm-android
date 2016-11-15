@@ -75,7 +75,7 @@ public class TaskRewardFragment extends Fragment {
 
     public String getTitle() {
         if (getArguments() != null) {
-            return getArguments().getString(TITLE);
+            return getArguments().getString("title");
         }
         return "";
     }

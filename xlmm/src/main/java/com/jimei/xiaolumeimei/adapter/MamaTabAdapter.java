@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.jimei.xiaolumeimei.base.BaseBindingFragment;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import java.util.List;
  * Created by wisdom on 16/9/12.
  */
 public class MamaTabAdapter extends FragmentPagerAdapter {
-    private List<BaseBindingFragment> listFragment;
+    private List<BaseFragment> listFragment;
 
-    public MamaTabAdapter(FragmentManager fm, List<BaseBindingFragment> listFragment) {
+    public MamaTabAdapter(FragmentManager fm, List<BaseFragment> listFragment) {
         super(fm);
         this.listFragment = listFragment;
     }

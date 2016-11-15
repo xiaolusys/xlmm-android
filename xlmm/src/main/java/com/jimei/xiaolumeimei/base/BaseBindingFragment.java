@@ -30,7 +30,4 @@ public abstract class BaseBindingFragment<T extends ViewDataBinding> extends Bas
         lazyLoadData();
         return b.getRoot();
     }
-
-    public abstract String getTitle();
-
 }
