@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoEntity;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
@@ -47,8 +47,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
 
     private List<Integer> ids = new ArrayList<>();
-    private List<CartsInfoBean> cartList = new ArrayList<>();
-    private List<CartsInfoBean> cartHisList = new ArrayList<>();
+    private List<CartsInfoEntity> cartList = new ArrayList<>();
+    private List<CartsInfoEntity> cartHisList = new ArrayList<>();
     private CartListAdapter cartListAdapter;
     private CartHistoryAdapter cartHisAdapter;
 
@@ -64,9 +64,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         refreshCartList();
         addSubscription(CartsModel.getInstance()
                 .getCartsHisList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                .subscribe(new ServiceResponse<List<CartsInfoEntity>>() {
                     @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                    public void onNext(List<CartsInfoEntity> cartsInfoBeen) {
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartHisList.addAll(cartsInfoBeen);
                             cartHisAdapter.notifyDataSetChanged();
@@ -140,8 +140,8 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 }));
     }
 
-    public void removeCartList(CartsInfoBean cartsInfoBean) {
-        cartList.remove(cartsInfoBean);
+    public void removeCartList(CartsInfoEntity cartsInfoEntity) {
+        cartList.remove(cartsInfoEntity);
         if (cartList.size() == 0) emptyLayout.setVisibility(View.VISIBLE);
         cartListAdapter.notifyDataSetChanged();
         refreshIds();
@@ -151,9 +151,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         showIndeterminateProgressDialog(false);
         addSubscription(CartsModel.getInstance()
                 .getCartsList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                .subscribe(new ServiceResponse<List<CartsInfoEntity>>() {
                     @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                    public void onNext(List<CartsInfoEntity> cartsInfoBeen) {
                         cartList.clear();
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartList.addAll(cartsInfoBeen);
@@ -176,9 +176,9 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     private void refreshIds() {
         addSubscription(CartsModel.getInstance()
                 .getCartsList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                .subscribe(new ServiceResponse<List<CartsInfoEntity>>() {
                     @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                    public void onNext(List<CartsInfoEntity> cartsInfoBeen) {
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             ids.clear();
                             for (int i = 0; i < cartsInfoBeen.size(); i++) {
@@ -192,14 +192,14 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                 }));
     }
 
-    public void removeHistory(CartsInfoBean cartsInfoBean) {
-        cartHisList.remove(cartsInfoBean);
+    public void removeHistory(CartsInfoEntity cartsInfoEntity) {
+        cartHisList.remove(cartsInfoEntity);
         cartHisAdapter.notifyDataSetChanged();
         if (cartHisList.size() == 0) tvLine.setVisibility(View.GONE);
     }
 
-    public void addHistory(CartsInfoBean cartsInfoBean) {
-        cartHisList.add(0,cartsInfoBean);
+    public void addHistory(CartsInfoEntity cartsInfoEntity) {
+        cartHisList.add(0, cartsInfoEntity);
         cartHisAdapter.notifyDataSetChanged();
         tvLine.setVisibility(View.VISIBLE);
     }

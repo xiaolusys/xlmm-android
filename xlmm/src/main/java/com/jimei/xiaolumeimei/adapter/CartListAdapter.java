@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoEntity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
@@ -30,10 +30,10 @@ import butterknife.ButterKnife;
  * Created by wisdom on 16/9/3.
  */
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
-    private List<CartsInfoBean> mList;
+    private List<CartsInfoEntity> mList;
     private CartActivity mActivity;
 
-    public CartListAdapter(CartActivity mActivity, List<CartsInfoBean> mList) {
+    public CartListAdapter(CartActivity mActivity, List<CartsInfoEntity> mList) {
         this.mList = mList;
         this.mActivity = mActivity;
     }
@@ -46,19 +46,19 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CartsInfoBean cartsInfoBean = mList.get(position);
-        holder.title.setText(cartsInfoBean.getTitle());
-        holder.skuName.setText("尺码:" + cartsInfoBean.getSku_name());
-        holder.price1.setText("¥" + (float) (Math.round(cartsInfoBean.getPrice() * 100)) / 100);
-        holder.price2.setText("/¥" + (float) (Math.round(cartsInfoBean.getStd_sale_price() * 100)) / 100);
-        holder.count.setText(cartsInfoBean.getNum() + "");
-        ViewUtils.loadImgToImgView(mActivity, holder.cartImage, cartsInfoBean.getPic_path());
+        CartsInfoEntity cartsInfoEntity = mList.get(position);
+        holder.title.setText(cartsInfoEntity.getTitle());
+        holder.skuName.setText("尺码:" + cartsInfoEntity.getSku_name());
+        holder.price1.setText("¥" + (float) (Math.round(cartsInfoEntity.getPrice() * 100)) / 100);
+        holder.price2.setText("/¥" + (float) (Math.round(cartsInfoEntity.getStd_sale_price() * 100)) / 100);
+        holder.count.setText(cartsInfoEntity.getNum() + "");
+        ViewUtils.loadImgToImgView(mActivity, holder.cartImage, cartsInfoEntity.getPic_path());
         holder.cartImage.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
                 Intent intent = new Intent(mActivity, ProductDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("model_id", cartsInfoBean.getModel_id());
+                bundle.putInt("model_id", cartsInfoEntity.getModel_id());
                 intent.putExtras(bundle);
                 mActivity.startActivity(intent);
                 mActivity.finish();
@@ -67,7 +67,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         holder.delete.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
-                if (cartsInfoBean.getNum() == 1) {
+                if (cartsInfoEntity.getNum() == 1) {
                     new AlertDialog.Builder(mActivity)
                             .setTitle("删除商品")
                             .setMessage("您确定要删除吗？")
@@ -75,12 +75,12 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                 dialog.dismiss();
                                 mActivity.showIndeterminateProgressDialog(false);
                                 mActivity.addSubscription(CartsModel.getInstance()
-                                        .delete_carts(cartsInfoBean.getId() + "")
+                                        .delete_carts(cartsInfoEntity.getId() + "")
                                         .subscribe(responseBody -> {
                                                     if (responseBody != null) {
                                                         if (responseBody.isSuccessful()) {
-                                                            mActivity.addHistory(cartsInfoBean);
-                                                            mActivity.removeCartList(cartsInfoBean);
+                                                            mActivity.addHistory(cartsInfoEntity);
+                                                            mActivity.removeCartList(cartsInfoEntity);
                                                         } else {
                                                             JUtils.Toast(responseBody.body().getInfo());
                                                         }
@@ -96,14 +96,14 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                 } else {
                     mActivity.showIndeterminateProgressDialog(false);
                     mActivity.addSubscription(CartsModel.getInstance()
-                            .minus_product_carts(cartsInfoBean.getId() + "")
+                            .minus_product_carts(cartsInfoEntity.getId() + "")
                             .subscribe(responseBody -> {
                                         if (responseBody != null && responseBody.isSuccessful()) {
                                             CodeBean body = responseBody.body();
                                             if (body != null && body.getCode() == 0) {
                                                 mActivity.setPriceText();
-                                                cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
-                                                holder.count.setText(cartsInfoBean.getNum() + "");
+                                                cartsInfoEntity.setNum(cartsInfoEntity.getNum() - 1);
+                                                holder.count.setText(cartsInfoEntity.getNum() + "");
                                                 notifyDataSetChanged();
                                             } else {
                                                 JUtils.Toast(body != null ? body.getInfo() : "操作失败");
@@ -123,14 +123,14 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     protected void onNoDoubleClick(View v) {
                         mActivity.showIndeterminateProgressDialog(false);
                         mActivity.addSubscription(CartsModel.getInstance()
-                                .plus_product_carts(cartsInfoBean.getId() + "")
+                                .plus_product_carts(cartsInfoEntity.getId() + "")
                                 .subscribe(responseBody -> {
                                             if (null != responseBody) {
                                                 CodeBean body = responseBody.body();
                                                 if (body != null && body.getCode() == 0) {
                                                     mActivity.setPriceText();
-                                                    cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
-                                                    holder.count.setText(cartsInfoBean.getNum() + "");
+                                                    cartsInfoEntity.setNum(cartsInfoEntity.getNum() + 1);
+                                                    holder.count.setText(cartsInfoEntity.getNum() + "");
                                                     notifyDataSetChanged();
                                                 } else {
                                                     JUtils.Toast(body != null ? body.getInfo() : "操作失败");
