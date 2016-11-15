@@ -40,7 +40,7 @@ public class CarryLogCommissionFragment extends BaseLazyFragment {
     public static CarryLogCommissionFragment newInstance(String title) {
         CarryLogCommissionFragment carryLogAllFragment = new CarryLogCommissionFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("keyword", title);
+        bundle.putString("title", title);
         carryLogAllFragment.setArguments(bundle);
         return carryLogAllFragment;
     }

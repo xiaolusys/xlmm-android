@@ -7,10 +7,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseLazyFragment;
+import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.base.BaseWebViewLazyFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansFragment;
+import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansWebFragment;
 import com.jimei.xiaolumeimei.ui.fragment.v2.MMPotentialFansFragment;
 import com.umeng.analytics.MobclickAgent;
 
@@ -28,7 +29,7 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
-    List<BaseLazyFragment> fragments = new ArrayList<>();
+    List<BaseFragment> fragments = new ArrayList<>();
 
     @Override
     protected int getContentViewLayoutID() {
@@ -39,14 +40,8 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
     protected void initViews() {
         fragments.add(MMFansFragment.newInstance("我的粉丝"));
         fragments.add(MMPotentialFansFragment.newInstance("潜在粉丝"));
-        fragments.add(BaseWebViewLazyFragment.newInstance("关于粉丝"));
-
-        List<String> titles = new ArrayList<>();
-        titles.add("我的粉丝");
-        titles.add("潜在粉丝");
-        titles.add("关于粉丝");
-
-        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager(), titles);
+        fragments.add(MMFansWebFragment.newInstance("关于粉丝"));
+        MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
@@ -68,11 +63,9 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
     }
 
     class MainTabAdapter extends FragmentPagerAdapter {
-        private List<String> listTitle;
 
-        public MainTabAdapter(FragmentManager fm, List<String> listTitle) {
+        public MainTabAdapter(FragmentManager fm) {
             super(fm);
-            this.listTitle = listTitle;
         }
 
         @Override
@@ -87,7 +80,7 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return listTitle.get(position);
+            return fragments.get(position).getTitle();
         }
     }
 }

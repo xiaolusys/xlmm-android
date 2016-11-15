@@ -37,7 +37,7 @@ public class GetCouponFragment extends DialogFragment {
     public static GetCouponFragment newInstance(String title) {
         GetCouponFragment todayFragment = new GetCouponFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("keyword", title);
+        bundle.putString("title", title);
         todayFragment.setArguments(bundle);
         return todayFragment;
     }

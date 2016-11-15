@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/03/30.
@@ -31,7 +33,7 @@ public class FirstFragment extends DialogFragment {
   public static FirstFragment newInstance(String title) {
     FirstFragment todayFragment = new FirstFragment();
     Bundle bundle = new Bundle();
-    bundle.putString("keyword", title);
+    bundle.putString("title", title);
     todayFragment.setArguments(bundle);
     return todayFragment;
   }

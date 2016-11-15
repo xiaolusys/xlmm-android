@@ -39,7 +39,7 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
     public static CarryLogCashbackFragment newInstance(String title) {
         CarryLogCashbackFragment carryLogAllFragment = new CarryLogCashbackFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("keyword", title);
+        bundle.putString("title", title);
         carryLogAllFragment.setArguments(bundle);
         return carryLogAllFragment;
     }

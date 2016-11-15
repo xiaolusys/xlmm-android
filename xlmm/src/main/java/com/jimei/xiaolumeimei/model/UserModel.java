@@ -2,7 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
+import com.jimei.xiaolumeimei.entities.BudgetDetailEntity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
@@ -199,7 +199,7 @@ public class UserModel {
     }
 
     //得到用户信息
-    public Observable<BudgetDetailBean> budGetDetailBean(String page) {
+    public Observable<BudgetDetailEntity> budGetDetailBean(String page) {
         return XlmmRetrofitClient.getService()
                 .budGetDetailBean(page)
                 .compose(new DefaultTransform<>());

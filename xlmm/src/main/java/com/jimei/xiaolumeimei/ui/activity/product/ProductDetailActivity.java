@@ -40,7 +40,7 @@ import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductDetailBinding;
-import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoEntity;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
@@ -315,8 +315,15 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             imageView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
+            String watermark_op = detail_content.getWatermark_op();
+            if (watermark_op != null && !"".equals(watermark_op)) {
+                Glide.with(this).load(head_imgs.get(i) + POST_URL + "/" + watermark_op)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
+                        .placeholder(R.drawable.place_holder).into(imageView);
+            } else {
+                Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
+            }
             list.add(imageView);
         }
         PagerAdapter viewPagerAdapter = new MyPagerAdapter(list);
@@ -403,9 +410,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                                 if (resultEntity.getCode() == 0) {
                                     CartsModel.getInstance()
                                             .getCartsList(3)
-                                            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                                            .subscribe(new ServiceResponse<List<CartsInfoEntity>>() {
                                                 @Override
-                                                public void onNext(List<CartsInfoBean> cartsinfoBeen) {
+                                                public void onNext(List<CartsInfoEntity> cartsinfoBeen) {
                                                     if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
                                                         String ids = cartsinfoBeen.get(0).getId() + "";
                                                         Bundle bundle = new Bundle();

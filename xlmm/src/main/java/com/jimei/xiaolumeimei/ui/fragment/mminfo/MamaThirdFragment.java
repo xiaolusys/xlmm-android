@@ -1,9 +1,7 @@
 package com.jimei.xiaolumeimei.ui.fragment.mminfo;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -133,17 +131,6 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
     }
 
     @Override
-    public String getTitle() {
-        String title;
-        if (getArguments() != null) {
-            title = getArguments().getString(TITLE);
-        } else {
-            title = "";
-        }
-        return title;
-    }
-
-    @Override
     public void onClick(View v) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime > NoDoubleClickListener.MIN_CLICK_DELAY_TIME) {
@@ -178,12 +165,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
                     break;
                 case R.id.ll_fans:
                     if (fansUrl != null && !"".equals(fansUrl)) {
-                        SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-                        String cookies = sharedPreferences.getString("cookiesString", "");
-                        String actLink = fansUrl;
-                        String domain = sharedPreferences.getString("cookiesDomain", "");
-                        String sessionId = sharedPreferences.getString("Cookie", "");
-                        EventBus.getDefault().postSticky(new WebViewEvent(cookies, domain, actLink, -1, sessionId));
+                        EventBus.getDefault().postSticky(new WebViewEvent(fansUrl));
                         startActivity(new Intent(mActivity, MMFansActivity.class));
                     }
                     break;
