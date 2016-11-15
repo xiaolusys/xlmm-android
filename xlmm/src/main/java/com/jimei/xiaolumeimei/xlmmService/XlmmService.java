@@ -624,7 +624,7 @@ public interface XlmmService {
 
     @FormUrlEncoded
     @POST("/rest/v1/pmt/xlmm/mama_register_pay")
-    Observable<Response<ResponseBody>> mamaRegisterPay(
+    Observable<Object> mamaRegisterPay(
             @Field("product_id") String product_id,
             @Field("sku_id") String sku_id,
             @Field("payment") String payment,
