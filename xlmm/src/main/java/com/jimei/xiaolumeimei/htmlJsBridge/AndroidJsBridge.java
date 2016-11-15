@@ -32,7 +32,7 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.entities.JumpBean;
@@ -77,10 +77,10 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     private static final String TAG = "AndroidJsBridge";
 
     private ActivityBean partyShareInfo;
-    private BaseSwipeBackCompatActivity mContext;
+    private BaseActivity mContext;
     private String mTid;
 
-    public AndroidJsBridge(BaseSwipeBackCompatActivity context) {
+    public AndroidJsBridge(BaseActivity context) {
         this.mContext = context;
     }
 
@@ -598,7 +598,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     public void callNativePurchase(String charge) {
         try {
             PayInfoBean payInfoBean = new Gson().fromJson(charge, PayInfoBean.class);
-            if (payInfoBean.getTrade()!=null) {
+            if (payInfoBean.getTrade() != null) {
                 mTid = payInfoBean.getTrade().getTid();
             }
             Pingpp.createPayment(mContext, new Gson().toJson(payInfoBean.getCharge()));

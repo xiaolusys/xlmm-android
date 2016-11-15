@@ -11,15 +11,15 @@
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginTop="-7dp"
-            android:indeterminateDrawable="?attr/colorPrimary"
-            android:max="100"/>
+            android:layout_height="2dp"
+            android:max="100"
+            android:progressDrawable="@drawable/progress_bar_color"/>
 
         <WebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
 
     </LinearLayout>
 
