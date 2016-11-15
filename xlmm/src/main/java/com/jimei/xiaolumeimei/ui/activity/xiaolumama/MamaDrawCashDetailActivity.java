@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.BudgetDetailEntity;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.umeng.analytics.MobclickAgent;
@@ -49,7 +49,7 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                 .budGetDetailBean("1")
                 .subscribe(budgetDetailBean -> {
                     if (budgetDetailBean.getResults().size() > 0) {
-                        BudgetDetailEntity.ResultsEntity entity = budgetDetailBean.getResults().get(0);
+                        BudgetDetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
                         String str = ((int) entity.getBudegetDetailCash()) + "";
                         drawMoneyTv.setText(str);
                         dateTv.setText(entity.getBudgetDate());

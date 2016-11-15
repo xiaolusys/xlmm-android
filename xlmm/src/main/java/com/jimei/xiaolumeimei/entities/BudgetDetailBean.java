@@ -10,7 +10,7 @@ import java.util.List;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class BudgetDetailEntity {
+public class BudgetDetailBean {
 
     /**
      * count : 2

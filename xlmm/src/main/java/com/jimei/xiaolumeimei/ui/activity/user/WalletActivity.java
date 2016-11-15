@@ -19,7 +19,7 @@ import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.BudgetDetailEntity;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -58,16 +58,16 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         MobclickAgent.onResume(this);
         addSubscription(UserModel.getInstance()
                 .budGetDetailBean("1")
-                .subscribe(new ServiceResponse<BudgetDetailEntity>() {
+                .subscribe(new ServiceResponse<BudgetDetailBean>() {
                     @Override
-                    public void onNext(BudgetDetailEntity budgetdetailEntity) {
-                        if ((budgetdetailEntity != null)
-                                && (budgetdetailEntity.getResults() != null)
-                                && (budgetdetailEntity.getResults().size() > 0)) {
+                    public void onNext(BudgetDetailBean budgetdetailBean) {
+                        if ((budgetdetailBean != null)
+                                && (budgetdetailBean.getResults() != null)
+                                && (budgetdetailBean.getResults().size() > 0)) {
                             walletRcv.setVisibility(View.VISIBLE);
                             ll_wallet_empty.setVisibility(View.INVISIBLE);
-                            adapter.updateWithClear(budgetdetailEntity.getResults());
-                            if (budgetdetailEntity.getNext() == null) {
+                            adapter.updateWithClear(budgetdetailBean.getResults());
+                            if (budgetdetailBean.getNext() == null) {
                                 walletRcv.setLoadingMoreEnabled(false);
                             }
                         } else {

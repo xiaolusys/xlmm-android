@@ -5,7 +5,7 @@ package com.jimei.xiaolumeimei.entities;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class CartsInfoEntity {
+public class CartsInfoBean {
 
 
     /**
@@ -194,7 +194,7 @@ public class CartsInfoEntity {
 
     @Override
     public String toString() {
-        return "CartsInfoEntity{" +
+        return "CartsInfoBean{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
                 ", buyer_id=" + buyer_id +

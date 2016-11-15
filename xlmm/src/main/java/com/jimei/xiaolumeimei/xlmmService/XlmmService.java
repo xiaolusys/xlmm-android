@@ -8,10 +8,10 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.entities.BudgetDetailEntity;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
-import com.jimei.xiaolumeimei.entities.CartsInfoEntity;
+import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
@@ -115,16 +115,16 @@ public interface XlmmService {
 
     //获取购物车信息
     @GET("/rest/v2/carts")
-    Observable<List<CartsInfoEntity>> getCartsList();
+    Observable<List<CartsInfoBean>> getCartsList();
 
     //获取购物车信息
     @GET("/rest/v2/carts")
-    Observable<List<CartsInfoEntity>> getCartsList(
+    Observable<List<CartsInfoBean>> getCartsList(
             @Query("type") int type);
 
     //获取历史购物车信息
     @GET("/rest/v2/carts/show_carts_history")
-    Observable<List<CartsInfoEntity>> getCartsHisList();
+    Observable<List<CartsInfoBean>> getCartsHisList();
 
     //获取购物信息列表
     @GET("/rest/v1/carts/carts_payinfo")
@@ -454,7 +454,7 @@ public interface XlmmService {
             @Field("device_id") String device_id);
 
     @GET("/rest/v1/users/get_budget_detail")
-    Observable<BudgetDetailEntity> budGetDetailBean(
+    Observable<BudgetDetailBean> budGetDetailBean(
             @Query("page") String page);
 
     @GET("/rest/v1/pmt/ninepic")

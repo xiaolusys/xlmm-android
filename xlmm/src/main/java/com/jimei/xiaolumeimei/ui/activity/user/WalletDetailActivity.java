@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.BudgetDetailEntity;
+import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
@@ -36,11 +36,11 @@ public class WalletDetailActivity extends BaseSwipeBackCompatActivity {
     View lineView;
     @Bind(R.id.tv_ok)
     TextView okTv;
-    private BudgetDetailEntity.ResultsEntity entity;
+    private BudgetDetailBean.ResultsEntity entity;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        entity = ((BudgetDetailEntity.ResultsEntity) extras.getSerializable("entity"));
+        entity = ((BudgetDetailBean.ResultsEntity) extras.getSerializable("entity"));
     }
 
     @Override

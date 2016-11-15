@@ -2,9 +2,9 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
+import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.CartsInfoEntity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.xlmmService.XlmmRetrofitClient;
@@ -31,20 +31,20 @@ public class CartsModel {
     }
 
     //获取购物车列表信息
-    public Observable<List<CartsInfoEntity>> getCartsList() {
+    public Observable<List<CartsInfoBean>> getCartsList() {
         return XlmmRetrofitClient.getService()
                 .getCartsList()
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<List<CartsInfoEntity>> getCartsList(int type) {
+    public Observable<List<CartsInfoBean>> getCartsList(int type) {
         return XlmmRetrofitClient.getService()
                 .getCartsList(type)
                 .compose(new DefaultTransform<>());
     }
 
     //获取历史购物车列表信息
-    public Observable<List<CartsInfoEntity>> getCartsHisList() {
+    public Observable<List<CartsInfoBean>> getCartsHisList() {
         return XlmmRetrofitClient.getService()
                 .getCartsHisList()
                 .compose(new DefaultTransform<>());
