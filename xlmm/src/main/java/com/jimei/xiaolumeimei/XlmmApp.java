@@ -45,7 +45,7 @@ public class XlmmApp extends MultiDexApplication {
         mContext = getApplicationContext();
         Stetho.initializeWithDefaults(this);
         JUtils.initialize(this);
-        JUtils.setDebug(false, "xlmm");
+        JUtils.setDebug(true, "xlmm");
         AutoLayoutConifg.getInstance().useDeviceSize();
         //初始化push推送服务
         if (shouldInit()) {

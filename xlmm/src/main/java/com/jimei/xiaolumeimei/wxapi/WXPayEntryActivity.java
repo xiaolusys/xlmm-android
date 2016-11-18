@@ -2,10 +2,10 @@ package com.jimei.xiaolumeimei.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.event.PayEvent;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -13,21 +13,19 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by wisdom on 16/11/15.
  */
 public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {
-
     private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wxpay_entry);
-        Bundle extras = getIntent().getExtras();
-        String app_id = extras.getString("app_id");
-        api = WXAPIFactory.createWXAPI(this, null);
-        api.registerApp(app_id);
+        api = WXAPIFactory.createWXAPI(this, XlmmConst.WX_APP_ID);
+        api.handleIntent(getIntent(), this);
     }
 
     @Override
@@ -39,15 +37,33 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
 
     @Override
     public void onReq(BaseReq baseReq) {
-        //...
     }
 
     @Override
-    public void onResp(BaseResp resp) {
-        if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("提示");
-            // TODO: 16/11/15  
+    public void onResp(BaseResp baseResp) {
+        if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+            String pay_result;
+            String error_msg;
+            switch (baseResp.errCode) {
+                case 0:
+                    pay_result = "success";
+                    error_msg = "支付成功!";
+                    break;
+                case -1:
+                    pay_result = "fail";
+                    error_msg = "支付失败!";
+                    break;
+                case -2:
+                    pay_result = "cancel";
+                    error_msg = "取消支付!";
+                    break;
+                default:
+                    pay_result = "error";
+                    error_msg = "支付异常!";
+                    break;
+            }
+            EventBus.getDefault().post(new PayEvent(pay_result, error_msg, ""));
+            finish();
         }
     }
 }

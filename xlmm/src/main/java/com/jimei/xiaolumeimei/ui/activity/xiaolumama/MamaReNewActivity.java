@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,12 +23,11 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.entities.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +40,6 @@ import retrofit2.Response;
  */
 public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final int REQUEST_CODE_PAYMENT = 1;
     private static final String HALF = "half";
     private static final String FULL = "full";
     private static final String ALIPAY = "alipay";
@@ -179,17 +176,13 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 .subscribe(new ServiceResponse<Object>() {
                     @Override
                     public void onNext(Object charge) {
-                        Pingpp.createPayment(MamaReNewActivity.this, new Gson().toJson(charge));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
+//                        Pingpp.createPayment(MamaReNewActivity.this, new Gson().toJson(charge));
+                        PayUtils.createPayment(MamaReNewActivity.this, new Gson().toJson(charge));
+                        hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onCompleted() {
-                        super.onCompleted();
                         hideIndeterminateProgressDialog();
                     }
                 });
@@ -207,7 +200,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                                 ResultBean body = responseBodyResponse.body();
                                 if (body.getCode() == 0) {
                                     JUtils.Toast("支付成功");
-                                    EventBus.getDefault().post(new MaMaInfoEmptyEvent());
                                     finish();
                                 } else {
                                     JUtils.Toast("支付失败");
@@ -285,7 +277,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 })
                 .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                 .show();
-
     }
 
     @Override
@@ -375,33 +366,11 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //支付页面返回处理
         EventBus.getDefault().postSticky(new UserChangeEvent());
-        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                String result = data.getExtras().getString("pay_result");
-            /* 处理返回值
-             * "success" - payment succeed
-             * "fail"    - payment failed
-             * "cancel"  - user canceld
-             * "invalid" - payment plugin not installed
-             *
-             */
-                String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
-                String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-                if (result == null) {
-                    return;
-                }
-
-                if (result.equals("cancel")) {
-                    finish();
-                } else if (result.equals("success")) {
-                    EventBus.getDefault().post(new MaMaInfoEmptyEvent());
-                    finish();
-                } else {
-                    showMsg(result, errorMsg, extraMsg);
-                }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
+            if (resultCode == RESULT_OK) {
+                finish();
             }
         }
     }

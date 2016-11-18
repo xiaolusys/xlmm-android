@@ -90,7 +90,7 @@ public class MamaSecondFragment extends BaseBindingFragment<FragmentMamaSecondBi
                     + "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             b.webView.getSettings().setJavaScriptEnabled(true);
             b.webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
             }
             b.webView.setWebViewClient(new WebViewClient());

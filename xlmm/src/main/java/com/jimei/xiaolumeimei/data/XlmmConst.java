@@ -55,6 +55,9 @@ public class XlmmConst {
     public static final String UDESK_URL = "xiaolumeimei.udesk.cn";
     public static final String UDESK_KEY = "e7bfd4447bf206d17fb536240a9f4fbb";
 
+    //微信
+    public static final String WX_APP_ID = "wx25fcb32689872499";
+
     //排名类别
     public static final int TYPE_PERSON_RANK = 0;
     public static final int TYPE_PERSON_WEEK_RANK = 1;

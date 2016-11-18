@@ -47,10 +47,11 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -333,7 +334,13 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_order_discountfee.setText("-¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
         tx_order_payment.setText("¥" + orderDetailBean.getPay_cash());
-        tx_order_payment2.setText("¥" + (orderDetailBean.getPayment() - orderDetailBean.getPay_cash()));
+        String format = new DecimalFormat("#.00").format(orderDetailBean.getPayment() - orderDetailBean.getPay_cash());
+        if (format.startsWith(".")) {
+            tx_order_payment2.setText("¥0" + format);
+        } else {
+            tx_order_payment2.setText("¥" + format);
+        }
+
         timeText.setText(orderDetailBean.getCreated().replace("T", " "));
         if (orderDetailBean.getLogistics_company() != null) {
             logisticsTv.setText(orderDetailBean.getLogistics_company().getName());
@@ -557,6 +564,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void payNow(String channel) {
+        showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
                 .orderPayWithChannel(order_id, channel)
                 .subscribe(new ServiceResponse<PayInfoBean>() {
@@ -570,12 +578,18 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 //                        intent.putExtra(PaymentActivity.EXTRA_CHARGE,
 //                                new Gson().toJson(payInfoBean.getCharge()));
 //                        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-                        Pingpp.createPayment(OrderDetailActivity.this, new Gson().toJson(payInfoBean.getCharge()));
+                        PayUtils.createPayment(OrderDetailActivity.this, new Gson().toJson(payInfoBean.getCharge()));
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         JUtils.Toast("支付请求失败!");
+                        hideIndeterminateProgressDialog();
                         Log.e(TAG, " error:, " + e.toString());
                         super.onError(e);
                     }
@@ -615,24 +629,29 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //支付页面返回处理
-        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
+        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-                if (result.equals("cancel")) {
-                    //wexin alipay already showmsg
-                    JUtils.Toast("已取消支付!");
-                } else if (result.equals("success")) {
-                    JUtils.Toast("支付成功！");
-                    Intent intent = new Intent(this, RedBagActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("tid", orderDetail.getTid());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    showMsg(result, errorMsg, extraMsg);
+                if (result != null) {
+                    switch (result) {
+                        case "cancel":
+                            JUtils.Toast("已取消支付!");
+                            break;
+                        case "success":
+                            JUtils.Toast("支付成功！");
+                            Intent intent = new Intent(this, RedBagActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("tid", orderDetail.getTid());
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        default:
+                            showMsg(result, errorMsg, extraMsg);
+                            break;
+                    }
                 }
             }
         }

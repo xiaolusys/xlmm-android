@@ -328,7 +328,9 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
                     editor.putString("time", str);
                     editor.putInt("num", mCurrent_dp_turns_num);
                     editor.apply();
-                    mBadgeView.setVisibility(View.GONE);
+                    if (mBadgeView != null) {
+                        mBadgeView.setVisibility(View.GONE);
+                    }
                     startActivity(new Intent(mActivity, DayPushActivity.class));
                     break;
                 case R.id.ll_choose:

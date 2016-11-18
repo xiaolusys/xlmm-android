@@ -110,19 +110,21 @@ public class BaseWebViewFragment extends BaseLazyFragment {
             mWebView.getSettings().setDatabaseEnabled(true);
             mWebView.getSettings().setUseWideViewPort(true);
             mWebView.setDrawingCacheEnabled(true);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
             }
             mWebView.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onProgressChanged(WebView view, int newProgress) {
                     JUtils.Log(TAG, "process:" + newProgress);
-                    mProgressBar.setProgress(newProgress);
-                    if (newProgress == 100) {
+                    if (mProgressBar != null) {
+                        mProgressBar.setProgress(newProgress);
+                        if (newProgress == 100) {
 //                        mWebView.getSettings().setBlockNetworkImage(true);
-                        mProgressBar.setVisibility(View.GONE);
-                    } else {
-                        mProgressBar.setVisibility(View.VISIBLE);
+                            mProgressBar.setVisibility(View.GONE);
+                        } else {
+                            mProgressBar.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 

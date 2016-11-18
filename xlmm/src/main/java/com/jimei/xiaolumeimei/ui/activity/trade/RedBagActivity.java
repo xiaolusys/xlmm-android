@@ -39,7 +39,7 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
 
     @Override
     protected void initData() {
-        showIndeterminateProgressDialog(false);
+        showIndeterminateProgressDialog(true);
         TradeModel.getInstance()
                 .getRedBag(tid)
                 .subscribe(new ServiceResponse<RedBagBean>() {
@@ -83,15 +83,17 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_share:
-                OnekeyShare oks = new OnekeyShare();
-                oks.disableSSOWhenAuthorize();
-                oks.setTitle(redBagEntity.getTitle());
-                oks.setTitleUrl(redBagEntity.getShare_link());
-                oks.setText(redBagEntity.getDescription());
-                oks.setImageUrl(redBagEntity.getPost_img());
-                oks.setUrl(redBagEntity.getShare_link());
-                oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
-                oks.show(this);
+                if (redBagEntity != null) {
+                    OnekeyShare oks = new OnekeyShare();
+                    oks.disableSSOWhenAuthorize();
+                    oks.setTitle(redBagEntity.getTitle());
+                    oks.setTitleUrl(redBagEntity.getShare_link());
+                    oks.setText(redBagEntity.getDescription());
+                    oks.setImageUrl(redBagEntity.getPost_img());
+                    oks.setUrl(redBagEntity.getShare_link());
+                    oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
+                    oks.show(this);
+                }
                 break;
             case R.id.finish_rl:
                 Intent intent = new Intent(this, AllOrdersActivity.class);
