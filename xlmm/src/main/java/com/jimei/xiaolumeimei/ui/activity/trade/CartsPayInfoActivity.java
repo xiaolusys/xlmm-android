@@ -44,8 +44,8 @@ import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -839,7 +839,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 if (payInfoBean.getCode() > 0) {
                                     JUtils.Toast(payInfoBean.getInfo());
                                 } else {
-                                    Pingpp.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
+                                    PayUtils.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
                                 }
                             } else {
                                 if (payInfoBean.getCode() == 0) {
@@ -861,7 +861,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //支付页面返回处理
-        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
+        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
             /* 处理返回值
@@ -898,7 +898,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 } else {
                     EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
-                    showMsg(result, errorMsg, extraMsg);
+                    showMsgAndFinish(result, errorMsg, extraMsg, true);
                 }
             }
         }
@@ -947,9 +947,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         public void onNext(TeamBuyBean teamBuyBean) {
                             int id = teamBuyBean.getId();
                             SharedPreferences preferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-                            String baseUrl = "http://m.xiaolumeimei.com/mall/order/spell/group/" + id + "?from_page=order_commit";
+                            String baseUrl = "https://m.xiaolumeimei.com/mall/order/spell/group/" + id + "?from_page=order_commit";
                             if (!TextUtils.isEmpty(preferences.getString("BASE_URL", ""))) {
-                                baseUrl = "http://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id + "?from_page=order_commit";
+                                baseUrl = "https://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id + "?from_page=order_commit";
                             }
                             JumpUtils.jumpToWebViewWithCookies(mContext,
                                     baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
@@ -977,28 +977,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             startActivity(intent);
             finish();
         }
-    }
-
-    public void showMsg(String title, String msg1, String msg2) {
-        String str = title;
-        if (null != msg1 && msg1.length() != 0) {
-            str += "\n" + msg1;
-        }
-        if (null != msg2 && msg2.length() != 0) {
-            str += "\n" + msg2;
-        }
-        JUtils.Log(TAG, "charge result" + str);
-        if (title.equals("fail")) {
-            str = "支付失败，请重试！";
-        } else if (title.equals("invalid")) {
-            str = "支付失败，支付软件未安装完整！";
-        }
-        new AlertDialog.Builder(CartsPayInfoActivity.this)
-                .setMessage(str)
-                .setTitle("提示")
-                .setPositiveButton("OK", (dialog1, which) -> finish())
-                .create()
-                .show();
     }
 
     @Override

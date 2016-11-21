@@ -21,7 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class AllOrdersActivity extends BaseSwipeBackCompatActivity{
+public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     String TAG = "AllOrdersActivity";
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
@@ -60,7 +60,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity{
     public void swith_fragment() {
         int tabid;
         if (getIntent().getExtras() != null) {
-            tabid = getIntent().getExtras().getInt("fragment",0);
+            tabid = getIntent().getExtras().getInt("fragment", 0);
             JUtils.Log(TAG, "jump to fragment:" + tabid);
             if ((tabid >= 1) && (tabid <= 3)) {
                 try {
@@ -111,8 +111,9 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity{
         MobclickAgent.onPause(this);
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
-      EventBus.getDefault().postSticky(new UserChangeEvent());
+        EventBus.getDefault().postSticky(new UserChangeEvent());
     }
 }

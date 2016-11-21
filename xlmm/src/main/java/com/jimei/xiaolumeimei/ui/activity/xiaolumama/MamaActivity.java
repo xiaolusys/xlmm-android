@@ -193,6 +193,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
             service.shutdownNow();
         }
         isDestroy = true;
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

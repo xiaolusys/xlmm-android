@@ -247,6 +247,7 @@ public final class ViewUtils {
                 || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
                     .load(picPath)
+                    .thumbnail(0.1f)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .centerCrop()
                     .into(img);
@@ -266,6 +267,7 @@ public final class ViewUtils {
                                 + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
                         Glide.with(context)
                                 .load(head_img)
+                                .thumbnail(0.1f)
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .centerCrop()
                                 .into(img);
@@ -276,6 +278,7 @@ public final class ViewUtils {
             } else {
                 Glide.with(context)
                         .load(picPath)
+                        .thumbnail(0.1f)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .centerCrop()
                         .into(img);
