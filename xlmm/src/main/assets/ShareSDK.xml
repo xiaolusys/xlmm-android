@@ -61,7 +61,7 @@
       SortId="5"
       AppKey="2475629754"
       AppSecret="a3daa39a501ac9fcdb00cb73840fd7a1"
-      RedirectUrl="http://m.xiaolumeimei.com/"
+      RedirectUrl="https://m.xiaolumeimei.com/"
       ShareByAppClient="false"
       Enable="true"/>
 

@@ -70,7 +70,6 @@ public class OrderListFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-
     }
 
     private void initView() {

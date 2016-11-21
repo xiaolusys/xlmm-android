@@ -824,6 +824,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     public void onError(Throwable e) {
                         super.onError(e);
                         e.printStackTrace();
+                        hideIndeterminateProgressDialog();
                     }
 
                     @Override
