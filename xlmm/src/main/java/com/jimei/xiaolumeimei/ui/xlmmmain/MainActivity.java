@@ -379,7 +379,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 bundle.putInt("fragment", 1);
                 readyGo(AllOrdersActivity.class, bundle);
             } else if (id == R.id.nav_problem) {
-                JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/mall/faq", -1,
+                JumpUtils.jumpToWebViewWithCookies(this, "https://m.xiaolumeimei.com/mall/faq", -1,
                         CommonWebViewActivity.class, "常见问题", false);
             } else if (id == R.id.nav_complain) {
                 readyGo(ComplainActivity.class);
@@ -730,17 +730,17 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                     brand.addView(brandView);
                 }
                 for (int i = 0; i < brandPromotionEntities.size(); i++) {
-                    brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getActLogo());
+                    brandViews.get(i).setBrandtitleImage(brandPromotionEntities.get(i).getAct_logo());
                     brandViews.get(i)
                             .setBrandDesText(
-                                    brandPromotionEntities.get(i).getExtras().getBrandinfo().getTailTitle());
+                                    brandPromotionEntities.get(i).getExtras().getBrandinfo().getTail_title());
                     brandViews.get(i).setBrandTitle(brandPromotionEntities.get(i).getTitle());
-                    brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getActImg());
+                    brandViews.get(i).setBrandListImage(brandPromotionEntities.get(i).getAct_img());
                     final int finalI1 = i;
                     brandViews.get(i).setOnClickListener(v -> {
-                        if (!TextUtils.isEmpty(brandPromotionEntities.get(finalI1).getActApplink())) {
+                        if (!TextUtils.isEmpty(brandPromotionEntities.get(finalI1).getAct_applink())) {
                             JumpUtils.push_jump_proc(mContext,
-                                    brandPromotionEntities.get(finalI1).getActApplink());
+                                    brandPromotionEntities.get(finalI1).getAct_applink());
                         }
                     });
                 }
@@ -751,7 +751,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public void initPost(PortalBean postBean) throws NullPointerException {
+    public void initActivity(PortalBean postBean) throws NullPointerException {
         JUtils.Log(TAG, "refreshPost");
         List<PortalBean.ActivitysBean> postActivityBean = postBean.getActivitys();
         if (null != postActivityBean && postActivityBean.size() > 0) {

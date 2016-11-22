@@ -21,6 +21,7 @@ import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
+import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -119,6 +120,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         if (!isFirstLoad || !isVisible || !isInitView) {
             return;
         }
+        ((BaseActivity) mActivity).showIndeterminateProgressDialog(false);
         loadMore(page);
         isFirstLoad = false;
     }
@@ -210,10 +212,12 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
                             adapter.update(productListBean.getResults());
                         }
                         xRecyclerView.post(xRecyclerView::loadMoreComplete);
+                        ((BaseActivity) mActivity).hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        ((BaseActivity) mActivity).hideIndeterminateProgressDialog();
                         JUtils.Toast("数据加载失败,请刷新重试!");
                     }
                 }));

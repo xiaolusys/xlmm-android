@@ -119,7 +119,7 @@ public class MainPresenter extends MainContract.Presenter {
 
                             mView.initBrand(portalBean);
 
-                            mView.initPost(portalBean);
+                            mView.initActivity(portalBean);
                         }
                     }
 

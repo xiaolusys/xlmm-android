@@ -247,9 +247,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     .getOrderDetailBean(order_id)
                     .subscribe(orderDetailBean -> {
                         tid = orderDetailBean.getTid();
-                        orderDetail = orderDetailBean;
                         showProcBtn(orderDetailBean);
-                        fillDataToView(orderDetailBean);
                         scrollView.scrollTo(0, 0);
                         if (orderDetailBean.isCan_change_address()) {
                             addressLayout.setOnClickListener(OrderDetailActivity.this);
@@ -483,9 +481,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.team_buy:
                 SharedPreferences preferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-                String baseUrl = "http://m.xiaolumeimei.com/mall/order/spell/group/" + tid + "?from_page=order_detail";
+                String baseUrl = "https://m.xiaolumeimei.com/mall/order/spell/group/" + tid + "?from_page=order_detail";
                 if (!TextUtils.isEmpty(preferences.getString("BASE_URL", ""))) {
-                    baseUrl = "http://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + tid + "?from_page=order_detail";
+                    baseUrl = "https://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + tid + "?from_page=order_detail";
                 }
                 JumpUtils.jumpToWebViewWithCookies(mContext,
                         baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
@@ -570,20 +568,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 .subscribe(new ServiceResponse<PayInfoBean>() {
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
-//                        Intent intent = new Intent();
-//                        String packageName = getPackageName();
-//                        ComponentName componentName = new ComponentName(packageName,
-//                                packageName + ".wxapi.WXPayEntryActivity");
-//                        intent.setComponent(componentName);
-//                        intent.putExtra(PaymentActivity.EXTRA_CHARGE,
-//                                new Gson().toJson(payInfoBean.getCharge()));
-//                        startActivityForResult(intent, REQUEST_CODE_PAYMENT);
                         PayUtils.createPayment(OrderDetailActivity.this, new Gson().toJson(payInfoBean.getCharge()));
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        hideIndeterminateProgressDialog();
                     }
 
                     @Override
@@ -631,6 +616,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         //支付页面返回处理
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
+                hideIndeterminateProgressDialog();
                 String result = data.getExtras().getString("pay_result");
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息

@@ -116,7 +116,6 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
             adapter.updateWithClear(activities);
             b.lv.setAdapter(adapter);
         }
-        b.scrollView.scrollTo(0, 0);
     }
 
     public void init_chart() {

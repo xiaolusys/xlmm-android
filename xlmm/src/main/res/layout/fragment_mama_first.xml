@@ -1,11 +1,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_grey">
+        android:background="@color/bg_grey"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                             android:layout_height="wrap_content"
                             android:text="本周累计收益"
                             android:textColor="@color/text_color_26"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/tv_income"
@@ -44,7 +45,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:textColor="@color/white"
-                            android:textSize="36sp"/>
+                            android:textSize="36sp" />
 
                     </LinearLayout>
 
@@ -60,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:text="当日累计收益"
                             android:textColor="@color/text_color_26"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/tv_day_income"
@@ -68,13 +69,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:textColor="@color/white"
-                            android:textSize="36sp"/>
+                            android:textSize="36sp" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <include layout="@layout/common_gap"/>
+                <include layout="@layout/common_gap" />
 
                 <LinearLayout
                     android:id="@+id/ll_rank"
@@ -90,7 +91,7 @@
                         android:layout_marginLeft="12dp"
                         android:gravity="center"
                         android:textColor="@color/text_color_26"
-                        android:textSize="24sp"/>
+                        android:textSize="24sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,12 +100,12 @@
                         android:gravity="center"
                         android:text="本周我的排名"
                         android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -113,7 +114,7 @@
                         android:paddingRight="12dp"
                         android:text="世界排名TOP10"
                         android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -127,10 +128,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
-                    android:background="@color/white"/>
+                    android:background="@color/white" />
             </RelativeLayout>
 
-            <include layout="@layout/common_gap"/>
+            <include layout="@layout/common_gap" />
 
             <LinearLayout
                 android:id="@+id/rl_order"
@@ -154,7 +155,7 @@
                         android:clickable="true"
                         android:text="访客"
                         android:textColor="@color/text_color_62"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_visit"
@@ -163,7 +164,7 @@
                         android:layout_marginTop="4dp"
                         android:textColor="@color/colorAccent"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -180,7 +181,7 @@
                         android:clickable="true"
                         android:text="订单"
                         android:textColor="@color/text_color_62"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_order"
@@ -189,7 +190,7 @@
                         android:layout_marginTop="4dp"
                         android:textColor="@color/colorAccent"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -205,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:text="收益"
                         android:textColor="@color/text_color_62"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_fund"
@@ -214,11 +215,11 @@
                         android:layout_marginTop="4dp"
                         android:textColor="@color/colorAccent"
                         android:textSize="16sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
-            <include layout="@layout/common_gap"/>
+            <include layout="@layout/common_gap" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -242,7 +243,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/icon_vip_share"/>
+                            android:src="@drawable/icon_vip_share" />
                     </RelativeLayout>
 
 
@@ -252,7 +253,7 @@
                         android:layout_marginTop="12dp"
                         android:text="分享店铺"
                         android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -274,7 +275,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/icon_vip_push"/>
+                            android:src="@drawable/icon_vip_push" />
 
                         <View
                             android:id="@+id/view_push"
@@ -285,7 +286,7 @@
                             android:layout_alignTop="@id/img_push"
                             android:layout_centerHorizontal="true"
                             android:layout_marginRight="-3dp"
-                            android:layout_marginTop="-3dp"/>
+                            android:layout_marginTop="-3dp" />
                     </RelativeLayout>
 
 
@@ -295,7 +296,7 @@
                         android:layout_marginTop="12dp"
                         android:text="每日推送"
                         android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -315,7 +316,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/icon_vip_choose"/>
+                            android:src="@drawable/icon_vip_choose" />
                     </RelativeLayout>
 
 
@@ -325,7 +326,7 @@
                         android:layout_marginTop="12dp"
                         android:text="选品佣金"
                         android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -345,7 +346,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/icon_vip_shop"/>
+                            android:src="@drawable/icon_vip_shop" />
                     </RelativeLayout>
 
 
@@ -355,7 +356,7 @@
                         android:layout_marginTop="12dp"
                         android:text="邀请开店"
                         android:textColor="@color/text_color_26"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -363,7 +364,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="20px"/>
+                android:layout_height="20px" />
 
             <LinearLayout
                 android:id="@+id/ll_renew"
@@ -380,26 +381,26 @@
                     android:layout_height="wrap_content"
                     android:text="我的会员"
                     android:textColor="@color/text_color_26"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="会员剩余期限"
                     android:textColor="@color/text_color_26"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tv_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -407,7 +408,7 @@
                     android:layout_marginRight="8dp"
                     android:text="天"
                     android:textColor="@color/text_color_26"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
 
                 <TextView
@@ -419,11 +420,11 @@
                     android:paddingRight="12dp"
                     android:text="充值"
                     android:textColor="@color/white"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
-            <include layout="@layout/common_gap"/>
+            <include layout="@layout/common_gap" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -440,12 +441,12 @@
                     android:layout_height="wrap_content"
                     android:text="本周任务"
                     android:textColor="@color/text_color_26"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/tv_good_week"
@@ -455,11 +456,11 @@
                     android:gravity="center"
                     android:text="马上执行"
                     android:textColor="@color/white"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
-            <include layout="@layout/common_gap"/>
+            <include layout="@layout/common_gap" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -473,7 +474,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_notice"/>
+                    android:src="@drawable/ic_notice" />
 
                 <com.jimei.library.widget.CircleImageView
                     android:id="@+id/image_notice"
@@ -484,7 +485,7 @@
                     android:layout_marginRight="1dp"
                     android:layout_marginTop="1dp"
                     android:src="@color/red"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/tv_msg"
@@ -495,7 +496,7 @@
                     android:layout_marginRight="8dp"
                     android:text="马上看看"
                     android:textColor="@color/cornflowerblue"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
                 <com.jimei.library.widget.marqueeview.MarqueeView
                     android:id="@+id/marquee_view"
@@ -508,7 +509,7 @@
                     app:mvAnimDuration="500"
                     app:mvGravity="left"
                     app:mvInterval="2000"
-                    app:mvTextColor="@color/colorAccent"/>
+                    app:mvTextColor="@color/colorAccent" />
 
             </RelativeLayout>
 
@@ -517,7 +518,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@null"
-                android:focusable="false"/>
+                android:focusable="false" />
 
         </LinearLayout>
     </ScrollView>
