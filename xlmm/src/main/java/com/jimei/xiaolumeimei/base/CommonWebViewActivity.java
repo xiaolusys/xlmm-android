@@ -49,9 +49,9 @@ import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.RedBagActivity;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
-import com.pingplusplus.android.Pingpp;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
@@ -183,7 +183,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             mWebView.getSettings().setDatabaseEnabled(true);
             mWebView.getSettings().setUseWideViewPort(true);
             mWebView.setDrawingCacheEnabled(true);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
             }
             mWebView.setWebChromeClient(new WebChromeClient() {
@@ -331,18 +331,27 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
             }
             mUploadMessageForAndroid5 = null;
-        } else if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
+        } else if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result");
                 String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
                 String extraMsg = intent.getExtras().getString("extra_msg"); // 错误信息
-                if (result.equals("cancel")) {
-                    JUtils.Toast("已取消支付!");
-                } else if (result.equals("success")) {
-                    JUtils.Toast("支付成功！");
-                    successJump(mAndroidJsBridge.getTid());
-                } else {
-                    showMsg(result, errorMsg, extraMsg);
+                if (result != null) {
+                    switch (result) {
+                        case "cancel":
+                            JUtils.Toast("已取消支付!");
+                            break;
+                        case "success":
+                            JUtils.Toast("支付成功！");
+                            successJump(mAndroidJsBridge.getTid());
+                            break;
+                        default:
+                            showMsg(result, errorMsg, extraMsg);
+                            break;
+                    }
+                }
+                if (mWebView != null && mWebView.canGoBack()) {
+                    mWebView.goBack();
                 }
             }
         }
@@ -356,29 +365,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         startActivity(intent);
         finish();
     }
-
-    public void showMsg(String title, String msg1, String msg2) {
-        String str = title;
-        if (null != msg1 && msg1.length() != 0) {
-            str += "\n" + msg1;
-        }
-        if (null != msg2 && msg2.length() != 0) {
-            str += "\n" + msg2;
-        }
-        JUtils.Log(TAG, "charge result" + str);
-        if (title.equals("fail")) {
-            str = "支付失败，请重试！";
-        } else if (title.equals("invalid")) {
-            str = "支付失败，支付软件未安装完整！";
-        }
-        new AlertDialog.Builder(this)
-                .setMessage(str)
-                .setTitle("提示")
-                .setPositiveButton("OK", (dialog1, which) -> dialog1.dismiss())
-                .create()
-                .show();
-    }
-
 
     private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
         mUploadMessage = uploadMsg;

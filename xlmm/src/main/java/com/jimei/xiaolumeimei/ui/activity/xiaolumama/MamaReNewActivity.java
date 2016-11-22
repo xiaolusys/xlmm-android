@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,12 +23,11 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.entities.event.MaMaInfoEmptyEvent;
 import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.pingplusplus.android.Pingpp;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +40,6 @@ import retrofit2.Response;
  */
 public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final int REQUEST_CODE_PAYMENT = 1;
     private static final String HALF = "half";
     private static final String FULL = "full";
     private static final String ALIPAY = "alipay";
@@ -107,6 +104,7 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(true);
         MamaInfoModel.getInstance()
                 .getRegisterProInfo()
                 .subscribe(new ServiceResponse<MaMaReNewBean>() {
@@ -115,36 +113,35 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                         if (null != maMaReNewBean) {
                             productId = maMaReNewBean.getProduct().getId();
                             for (int i = 0; i < maMaReNewBean.getProduct().getNormalSkus().size(); i++) {
-                                if (maMaReNewBean.getProduct().getNormalSkus().get(i).getOuterId().equals("1")) {
+                                if ("1".equals(maMaReNewBean.getProduct().getNormalSkus().get(i).getOuterId())) {
                                     skuId188 = maMaReNewBean.getProduct().getNormalSkus().get(i).getId();
                                 }
 
-                                if (maMaReNewBean.getProduct().getNormalSkus().get(i).getOuterId().equals("2")) {
+                                if ("2".equals(maMaReNewBean.getProduct().getNormalSkus().get(i).getOuterId())) {
                                     skuId99 = maMaReNewBean.getProduct().getNormalSkus().get(i).getId();
                                 }
-
-                                uuid = maMaReNewBean.getUuid();
-                                payment188 = maMaReNewBean.getPayinfos().get(0).getTotalPayment();
-                                payment99 = maMaReNewBean.getPayinfos().get(1).getTotalPayment();
-                                postfee188 = maMaReNewBean.getPayinfos().get(0).getPostFee();
-                                postfee99 = maMaReNewBean.getPayinfos().get(1).getPostFee();
-                                discountfee188 = maMaReNewBean.getPayinfos().get(0).getDiscountFee();
-                                discountfee99 = maMaReNewBean.getPayinfos().get(1).getDiscountFee();
-                                totalfee188 = maMaReNewBean.getPayinfos().get(0).getTotalFee();
-                                totalfee99 = maMaReNewBean.getPayinfos().get(1).getTotalFee();
                             }
+                            uuid = maMaReNewBean.getUuid();
+                            payment188 = maMaReNewBean.getPayinfos().get(0).getTotalPayment();
+                            payment99 = maMaReNewBean.getPayinfos().get(1).getTotalPayment();
+                            postfee188 = maMaReNewBean.getPayinfos().get(0).getPostFee();
+                            postfee99 = maMaReNewBean.getPayinfos().get(1).getPostFee();
+                            discountfee188 = maMaReNewBean.getPayinfos().get(0).getDiscountFee();
+                            discountfee99 = maMaReNewBean.getPayinfos().get(1).getDiscountFee();
+                            totalfee188 = maMaReNewBean.getPayinfos().get(0).getTotalFee();
+                            totalfee99 = maMaReNewBean.getPayinfos().get(1).getTotalFee();
+                        } else {
+                            JUtils.Toast("数据加载失败，请重新进入加载数据!");
                         }
+                        hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
+                        JUtils.Toast("数据加载失败，请重新进入加载数据!");
+                        hideIndeterminateProgressDialog();
                     }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
                 });
     }
 
@@ -179,17 +176,11 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 .subscribe(new ServiceResponse<Object>() {
                     @Override
                     public void onNext(Object charge) {
-                        Pingpp.createPayment(MamaReNewActivity.this, new Gson().toJson(charge));
+                        PayUtils.createPayment(MamaReNewActivity.this, new Gson().toJson(charge));
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
                         hideIndeterminateProgressDialog();
                     }
                 });
@@ -207,7 +198,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                                 ResultBean body = responseBodyResponse.body();
                                 if (body.getCode() == 0) {
                                     JUtils.Toast("支付成功");
-                                    EventBus.getDefault().post(new MaMaInfoEmptyEvent());
                                     finish();
                                 } else {
                                     JUtils.Toast("支付失败");
@@ -216,11 +206,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                                 e.printStackTrace();
                             }
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
                     }
 
                     @Override
@@ -235,11 +220,10 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_rule:
-                JumpUtils.jumpToWebViewWithCookies(this, "http://m.xiaolumeimei.com/static/tiaokuan.html", -1,
+                JumpUtils.jumpToWebViewWithCookies(this, "https://m.xiaolumeimei.com/static/tiaokuan.html", -1,
                         CommonWebViewActivity.class, "小鹿妈妈服务条款", false);
                 break;
             case R.id.commit:
-                //new MyDialog(this).show();
                 if (radio_99Choose) {
                     if (mamaCarryValue >= 99.00) {
                         showInfo(HALF);
@@ -254,7 +238,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                     }
                 }
                 break;
-
             case R.id.image_991:
                 radio_99Choose = true;
                 radio_188Choose = false;
@@ -263,7 +246,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 image188.setVisibility(View.GONE);
                 image1881.setVisibility(View.VISIBLE);
                 break;
-
             case R.id.image_1881:
                 radio_99Choose = false;
                 radio_188Choose = true;
@@ -285,7 +267,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                 })
                 .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                 .show();
-
     }
 
     @Override
@@ -311,7 +292,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
 
         private void setDialog() {
             View mView = LayoutInflater.from(getContext()).inflate(R.layout.pop_wxoralipay, null);
-
             LinearLayout wx_layout = (LinearLayout) mView.findViewById(R.id.wx_layout);
             LinearLayout alipay_layout = (LinearLayout) mView.findViewById(R.id.alipay_layout);
             TextView tvPay = (TextView) mView.findViewById(R.id.tvPay);
@@ -352,56 +332,14 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
         }
     }
 
-    public void showMsg(String title, String msg1, String msg2) {
-        String str = title;
-        if (null != msg1 && msg1.length() != 0) {
-            str += "\n" + msg1;
-        }
-        if (null != msg2 && msg2.length() != 0) {
-            str += "\n" + msg2;
-        }
-        if (title.equals("fail")) {
-            str = "支付失败，请重试！";
-        } else if (title.equals("invalid")) {
-            str = "支付失败，支付软件未安装完整！";
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(str);
-        builder.setTitle("提示");
-        builder.setPositiveButton("OK", null);
-        builder.create().show();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //支付页面返回处理
         EventBus.getDefault().postSticky(new UserChangeEvent());
-        if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                String result = data.getExtras().getString("pay_result");
-            /* 处理返回值
-             * "success" - payment succeed
-             * "fail"    - payment failed
-             * "cancel"  - user canceld
-             * "invalid" - payment plugin not installed
-             *
-             */
-                String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
-                String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-                if (result == null) {
-                    return;
-                }
-
-                if (result.equals("cancel")) {
-                    finish();
-                } else if (result.equals("success")) {
-                    EventBus.getDefault().post(new MaMaInfoEmptyEvent());
-                    finish();
-                } else {
-                    showMsg(result, errorMsg, extraMsg);
-                }
+        hideIndeterminateProgressDialog();
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
+            if (resultCode == RESULT_OK) {
+                finish();
             }
         }
     }

@@ -59,7 +59,7 @@ public class AllRefundsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG, "getView ");
+        Log.d(TAG, "getView " + position);
         ViewHolder holder;
         AllRefundsBean.ResultsEntity entity = datas.get(position);
         if (convertView == null) {

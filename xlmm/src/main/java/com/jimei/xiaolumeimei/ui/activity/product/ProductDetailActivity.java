@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -18,8 +19,13 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.webkit.CookieSyncManager;
+import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,6 +52,7 @@ import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
+import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -69,7 +76,8 @@ import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
 import rx.Observable;
 
-public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding> implements View.OnClickListener, Animation.AnimationListener {
+public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding>
+        implements View.OnClickListener, Animation.AnimationListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private ShareModelBean shareModel;
     private ProductDetailBean productDetail;
@@ -113,10 +121,49 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     protected void initViews() {
         setStatusBar();
         num = 1;
-        WebSettings settings = b.webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        b.webView.setWebChromeClient(new WebChromeClient());
+        try {
+            WebSettings settings = b.webView.getSettings();
+            if (Build.VERSION.SDK_INT >= 19) {
+                settings.setLoadsImagesAutomatically(true);
+            } else {
+                settings.setLoadsImagesAutomatically(false);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
+            settings.setJavaScriptEnabled(true);
+            b.webView.addJavascriptInterface(new AndroidJsBridge(this), "AndroidBridge");
+            settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            b.webView.setWebChromeClient(new WebChromeClient());
+            b.webView.setWebViewClient(new WebViewClient() {
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    CookieSyncManager.getInstance().sync();
+                    if (b.webView != null && !b.webView.getSettings().getLoadsImagesAutomatically()) {
+                        b.webView.getSettings().setLoadsImagesAutomatically(true);
+                    }
+                }
+
+                @Override
+                public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host,
+                                                      String realm) {
+                    view.reload();
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return super.shouldOverrideUrlLoading(view, url);
+                }
+
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    handler.proceed();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         View view = getLayoutInflater().inflate(R.layout.pop_product_detail_layout, null);
         findById(view);
         dialog = new Dialog(this, R.style.CustomDialog);
@@ -321,7 +368,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                         .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
                         .placeholder(R.drawable.place_holder).into(imageView);
             } else {
-                Glide.with(this).load(head_imgs.get(i) + POST_URL).diskCacheStrategy(DiskCacheStrategy.RESULT)
+                Glide.with(this).load(head_imgs.get(i) + POST_URL)
+                        .thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
             }
             list.add(imageView);
@@ -349,7 +397,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

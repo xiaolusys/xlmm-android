@@ -64,7 +64,7 @@ public interface MainContract {
 
         void initBrand(PortalBean postBean);
 
-        void initPost(PortalBean postBean);
+        void initActivity(PortalBean postBean);
 
         void iniCartsNum(CartsNumResultBean cartsNumResultBean);
 

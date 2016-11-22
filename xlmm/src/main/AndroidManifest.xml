@@ -86,24 +86,21 @@
         <activity
             android:name=".ui.activity.user.ChanggeSelectAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
-
-        <!-- Ping++ sdk -->
-        <activity
-            android:name="com.pingplusplus.android.PaymentActivity"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <!-- 微信支付 sdk ，也是 Ping++ sdk 调用入口 -->
-        <activity-alias
+        <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:targetActivity="com.pingplusplus.android.PaymentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
+            android:name=".utils.pay.PayActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.TransparentActivity.NoTitle"/>
         <!-- 支付宝 sdk -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

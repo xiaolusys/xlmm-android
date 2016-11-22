@@ -41,9 +41,9 @@ import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
-import com.pingplusplus.android.Pingpp;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
@@ -601,7 +601,7 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
             if (payInfoBean.getTrade() != null) {
                 mTid = payInfoBean.getTrade().getTid();
             }
-            Pingpp.createPayment(mContext, new Gson().toJson(payInfoBean.getCharge()));
+            PayUtils.createPayment(mContext, new Gson().toJson(payInfoBean.getCharge()));
         } catch (Exception e) {
             e.printStackTrace();
         }
