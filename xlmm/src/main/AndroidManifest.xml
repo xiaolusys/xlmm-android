@@ -81,10 +81,10 @@
             android:theme="@style/AppTheme.TransparentActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.activity.user.ChanggeAddressActivity"
+            android:name=".ui.activity.user.ChangeAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.ChanggeSelectAddressActivity"
+            android:name=".ui.activity.user.ChangeSelectAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -369,6 +369,7 @@
         <activity
             android:name=".ui.activity.xiaolumama.MamaReNewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity android:name=".ui.activity.main.TabActivity" />
         <activity
             android:name=".ui.xlmmmain.MainActivity"
             android:launchMode="singleTask"

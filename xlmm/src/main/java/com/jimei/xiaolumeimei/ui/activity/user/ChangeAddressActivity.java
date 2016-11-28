@@ -48,10 +48,10 @@ import rx.Subscription;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
+public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = ChanggeAddressActivity.class.getSimpleName();
+    private static final String TAG = ChangeAddressActivity.class.getSimpleName();
     @Bind(R.id.name)
     EditText name;
     @Bind(R.id.mobile)
@@ -77,6 +77,7 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_mobile;
     private String defalut;
     private County county;
+    private boolean isDefaultX;
     private City city;
     private Province province;
     private ArrayList<City> cities;
@@ -95,6 +96,9 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
             name.setText(receiver_name);
             name.setSelection(receiver_name.length());
         }
+        if (isDefaultX) {
+            switchButton.setChecked(true);
+        }
         mobile.setText(receiver_mobile);
         address.setText(city_string);
         clearAddress.setText(clearaddressa);
@@ -110,12 +114,13 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
         receiver_city = extras.getString("receiver_city");
         receiver_district = extras.getString("receiver_district");
         id = extras.getString("id");
+        isDefaultX = extras.getBoolean("isDefaultX", false);
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.activity_changgeaddress;
+        return R.layout.activity_changeaddress;
     }
 
 
@@ -137,12 +142,6 @@ public class ChanggeAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-
-                JUtils.Log(TAG,
-                        receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
-                                receiver_district + "====" +
-                                clearaddressa + "====" + receiver_name);
-
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     Subscription subscribe = AddressModel.getInstance()
                             .update_address(id, receiver_state, receiver_city, receiver_district, clearaddressa,

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.IdCardValidator;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
@@ -72,7 +73,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private String receiver_name;
     private String receiver_mobile;
     private String referal_trade_id;
-
+    private String idNo;
     private County county;
     private City city;
     private Province province;
@@ -99,6 +100,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         mobile.setText(receiver_mobile);
         address.setText(city_string);
         clearAddress.setText(clearaddressa);
+        idNum.setText(idNo);
     }
 
     @Override
@@ -113,18 +115,19 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         id = extras.getString("address_id");
         is_bonded_goods = extras.getBoolean("is_bonded_goods", false);
         referal_trade_id = extras.getString("referal_trade_id");
+        idNo = extras.getString("idNo");
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.activity_changgeaddress;
+        return R.layout.activity_changeaddress;
     }
 
     @Override
     protected void initViews() {
         relativeLayout.setVisibility(View.GONE);
-        if (is_bonded_goods){
+        if (is_bonded_goods) {
             idLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -147,25 +150,29 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                String identification_no = idNum.getText().toString().trim();
-                if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                    Subscription subscribe = AddressModel.getInstance()
-                            .update_address(id, receiver_state, receiver_city, receiver_district,
-                                    clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id, identification_no)
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                @Override
-                                public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null) {
-                                        if (addressResultBean.getCode() == 0) {
-                                            JUtils.Toast("修改成功");
-                                            finish();
-                                        } else {
-                                            JUtils.Toast("修改失败");
+                idNo = idNum.getText().toString().trim();
+                if (IdCardValidator.isValidatedAllIdcard(idNo)) {
+                    if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
+                        Subscription subscribe = AddressModel.getInstance()
+                                .update_address(id, receiver_state, receiver_city, receiver_district,
+                                        clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id, idNo)
+                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                                    @Override
+                                    public void onNext(AddressResultBean addressResultBean) {
+                                        if (addressResultBean != null) {
+                                            if (addressResultBean.getCode() == 0) {
+                                                JUtils.Toast("修改成功");
+                                                finish();
+                                            } else {
+                                                JUtils.Toast("修改失败");
+                                            }
                                         }
                                     }
-                                }
-                            });
-                    addSubscription(subscribe);
+                                });
+                        addSubscription(subscribe);
+                    }
+                } else {
+                    JUtils.Toast("请填写合法的身份证号码!");
                 }
                 break;
         }

@@ -526,6 +526,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
                 bundle.putString("referal_trade_id", orderDetail.getId() + "");
                 bundle.putBoolean("is_bonded_goods", bonded_goods);
+                bundle.putString("idNo",orderDetail.getUser_adress().getIdentification_no());
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
