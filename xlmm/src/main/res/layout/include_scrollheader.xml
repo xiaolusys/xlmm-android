@@ -4,47 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical"
     tools:showIn="@layout/include_mainscrollcontent">
-
-    <!--<FrameLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
 
     <com.jimei.library.widget.banner.SliderLayout
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="280px"
         app:auto_cycle="true" />
-
-    <!--<com.jimei.library.widget.banner.Indicators.PagerIndicator-->
-    <!--android:id="@+id/pi_header"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|left"-->
-    <!--android:layout_marginBottom="10dp"-->
-    <!--android:layout_marginLeft="5dp"-->
-    <!--android:layout_marginRight="5dp"-->
-    <!--android:layout_marginTop="5dp"-->
-    <!--android:gravity="center"-->
-    <!--app:selected_color="@color/colorPrimary"-->
-    <!--app:selected_height="4dp"-->
-    <!--app:selected_padding_left="4dp"-->
-    <!--app:selected_padding_right="4dp"-->
-    <!--app:selected_width="12dp"-->
-    <!--app:shape="rect"-->
-    <!--app:unselected_color="#fff"-->
-    <!--app:unselected_height="3dp"-->
-    <!--app:unselected_padding_left="4dp"-->
-    <!--app:unselected_padding_right="4dp"-->
-    <!--app:unselected_width="3dp"/>-->
-    <!--</FrameLayout>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -53,22 +20,15 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp" />
 
-    <!--</LinearLayout>-->
-
-    <include layout="@layout/common_gap" />
-
-    <com.jimei.library.widget.NestedListView
-        android:id="@+id/lv_activity"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/brand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
-
-    <include layout="@layout/common_gap" />
 
 </LinearLayout>

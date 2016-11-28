@@ -116,15 +116,20 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        loadingdialog = XlmmLoadingDialog.create(mActivity)
-                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                .setCancellable(!horizontal)
-                .show();
+        if (loadingdialog == null) {
+            loadingdialog = XlmmLoadingDialog.create(mActivity)
+                    .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+                    .setCancellable(!horizontal)
+                    .show();
+        }
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            loadingdialog.dismiss();
+            if (loadingdialog != null) {
+                loadingdialog.dismiss();
+                loadingdialog = null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,9 +10,9 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansWebFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.MMPotentialFansFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMFansFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMFansWebFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMPotentialFansFragment;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

@@ -10,7 +10,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityGoodWeekBinding;
 import com.jimei.xiaolumeimei.entities.WeekTaskRewardBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.ui.fragment.v2.TaskRewardFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.TaskRewardFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import java.util.ArrayList;

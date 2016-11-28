@@ -13,7 +13,7 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -72,7 +72,7 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
         }
         JUtils.Toast(msg);
         msgTv.setText(msg);
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override

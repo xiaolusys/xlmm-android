@@ -244,7 +244,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        if (loadingdialog==null) {
+        if (loadingdialog == null) {
             loadingdialog = XlmmLoadingDialog.create(this)
                     .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
                     .setCancellable(!horizontal)
@@ -254,8 +254,10 @@ public abstract class BaseActivity extends AutoLayoutActivity {
 
     public void hideIndeterminateProgressDialog() {
         try {
-            loadingdialog.dismiss();
-            loadingdialog = null;
+            if (loadingdialog != null) {
+                loadingdialog.dismiss();
+                loadingdialog = null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

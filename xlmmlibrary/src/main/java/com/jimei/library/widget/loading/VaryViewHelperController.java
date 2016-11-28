@@ -15,8 +15,7 @@ public class VaryViewHelperController {
         this(new VaryViewHelper(view));
     }
 
-    public VaryViewHelperController(IVaryViewHelper helper) {
-        super();
+    private VaryViewHelperController(IVaryViewHelper helper) {
         this.helper = helper;
     }
 

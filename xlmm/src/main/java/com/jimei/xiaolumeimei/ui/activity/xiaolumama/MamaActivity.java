@@ -20,8 +20,7 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.HideOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.SetOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
-import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.BoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaSecondFragment;
@@ -60,9 +59,9 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     protected void initData() {
         UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
         showIndeterminateProgressDialog(true);
-        addSubscription(Observable.mergeDelayError(MMInfoModel.getInstance().getUserInfo(),
-                MMProductModel.getInstance().getWxCode(),
-                MMInfoModel.getInstance().getLatestOrderCarry())
+        addSubscription(Observable.mergeDelayError(MamaInfoModel.getInstance().getUserInfo(),
+                MamaInfoModel.getInstance().getWxCode(),
+                MamaInfoModel.getInstance().getLatestOrderCarry())
                 .subscribe(o -> {
                             if (o instanceof UserInfoBean) {
                                 fillDataToView((UserInfoBean) o);

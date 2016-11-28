@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderGoodsListAdapter extends BaseAdapter {
-    public final String[] NUM = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
+    private final String[] NUM = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
     private static final String TAG = "OrderGoodsListAdapter";
     private Activity context;
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> data;
@@ -299,7 +299,15 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 btn.setOnClickListener(v -> {
                     //confirm receive goods
                     Log.d(TAG, "confirm receive goods ");
-                    receive_goods(goods_id);
+                    new AlertDialog.Builder(context)
+                            .setTitle("提示")
+                            .setMessage("是否确认签收产品？")
+                            .setPositiveButton("确认", (dialog, which) -> {
+                                receive_goods(goods_id);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                            .show();
                 });
                 break;
             }
@@ -340,5 +348,6 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     }
                 });
     }
+
 }
 

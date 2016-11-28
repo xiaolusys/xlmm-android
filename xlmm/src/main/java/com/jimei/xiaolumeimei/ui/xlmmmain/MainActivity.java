@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -20,6 +19,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,11 +29,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jimei.library.utils.DataClearManager;
 import com.jimei.library.utils.DisplayUtils;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
@@ -47,8 +45,7 @@ import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
+import com.jimei.xiaolumeimei.adapter.MainActivityAdapter;
 import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
 import com.jimei.xiaolumeimei.base.BasePresenterActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
@@ -76,10 +73,10 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v1.view.MastFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.FirstFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.GetCouponFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.ProductListFragment;
+import com.jimei.xiaolumeimei.ui.fragment.main.FirstFragment;
+import com.jimei.xiaolumeimei.ui.fragment.main.GetCouponFragment;
+import com.jimei.xiaolumeimei.ui.fragment.main.MastFragment;
+import com.jimei.xiaolumeimei.ui.fragment.product.ProductListFragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
@@ -97,7 +94,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,12 +123,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     RelativeLayout carts;
     @Bind(R.id.rl_mmentry)
     RelativeLayout rl_mmentry;
-    @Bind(R.id.image_1)
-    ImageView image1;
-    @Bind(R.id.image_2)
-    ImageView image2;
-    @Bind(R.id.lv_activity)
-    ListView activityLv;
     @Bind(R.id.collect)
     ImageView collectIv;
     @Bind(R.id.scrollableLayout)
@@ -159,7 +149,8 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     TabLayout tabLayout;
     @Bind(R.id.show_content)
     RelativeLayout showContent;
-    List<PortalBean.PostersBean> posters = new ArrayList<>();
+    @Bind(R.id.activity_rv)
+    RecyclerView activityRv;
     SharedPreferences sharedPreferencesTime;
     private int mask;
     private List<ProductListFragment> list = new ArrayList<>();
@@ -174,12 +165,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     private UpdateBroadReceiver mUpdateBroadReceiver;
     private String mamaid;
     private boolean updateFlag;
-    private ActivityListAdapter adapter;
     private long firstTime;
     private MainCategoryAdapter mMainCategoryAdapter;
     private boolean mamaFlag = false;
-    private String mJumpUrl;
     private long lastClickTime = 0;
+    private MainActivityAdapter mainActivityAdapter;
 
     @Override
     protected void onStart() {
@@ -198,12 +188,12 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        mPresenter.getTopic();
+        initMainView(null);
         mPresenter.getUserInfoBean();
-        mPresenter.getAddressVersionAndUrl();
         mPresenter.getCategoryDown();
         mPresenter.getVersion();
-        initMainView(null);
+        mPresenter.getAddressVersionAndUrl();
+        mPresenter.getTopic();
         if (LoginUtils.isJumpToLogin(getApplicationContext())) {
             FirstFragment firstFragment = FirstFragment.newInstance("first");
             firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
@@ -212,18 +202,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         if (LoginUtils.checkLoginState(getApplicationContext())) {
             mPresenter.isCouPon();
         }
-        LoginUtils.deleteIsMamaRenwulist(getApplicationContext());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int i = calendar.get(Calendar.WEEK_OF_YEAR);
-        SharedPreferences preferences = getSharedPreferences("clear_cache", Context.MODE_PRIVATE);
-        int flag = preferences.getInt("flag", -1);
-        if (i != flag) {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putInt("flag",i);
-            edit.apply();
-            DataClearManager.cleanApplicationData(XlmmApp.getInstance());
-        }
+        LoginUtils.clearCacheEveryWeek(this);
     }
 
     @Override
@@ -243,22 +222,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
 
     @Override
     protected void getDataCallBack() {
-        mPresenter.getTopic();
-        mPresenter.getUserInfoBean();
-        mPresenter.getAddressVersionAndUrl();
-        mPresenter.getCategoryDown();
-        mPresenter.getVersion();
-        initMainView(null);
-        vp.setCurrentItem(1);
-        scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
-        if (LoginUtils.checkLoginState(getApplicationContext())) {
-            mPresenter.isCouPon();
-        }
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-        mJumpUrl = extras.getString("jumpUrl", "");
+        initData();
     }
 
     @Override
@@ -279,6 +243,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
         mMainCategoryAdapter = new MainCategoryAdapter(MainActivity.this);
         mRecyclerView.setAdapter(mMainCategoryAdapter);
+        activityRv.setLayoutManager(new LinearLayoutManager(this));
+        activityRv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        activityRv.addItemDecoration(new SpaceItemDecoration(0, 0, 6, 6));
+        mainActivityAdapter = new MainActivityAdapter(this);
+        activityRv.setAdapter(mainActivityAdapter);
     }
 
     @Override
@@ -373,7 +342,7 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 bundle.putInt("fragment", 3);
                 readyGo(AllOrdersActivity.class, bundle);
             } else if (id == R.id.nav_returned) {
-                startActivity(new Intent(MainActivity.this, AllRefundsActivity.class));
+                readyGo(AllRefundsActivity.class);
             } else if (id == R.id.nav_orders) {
                 bundle = new Bundle();
                 bundle.putInt("fragment", 1);
@@ -677,26 +646,22 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public void initSliderLayout(PortalBean postBean) throws NullPointerException {
+    public void initSliderLayout(PortalBean postBean) throws RuntimeException {
         JUtils.Log(TAG, "refreshSliderLayout");
-        posters.clear();
         map.clear();
-        posters.addAll(postBean.getPosters());
+        List<PortalBean.PostersBean> posters = postBean.getPosters();
         for (int i = 0; i < posters.size(); i++) {
             map.put(posters.get(i).getPic_link(), posters.get(i).getApp_link());
         }
         if (mSliderLayout != null) {
             mSliderLayout.removeAllSliders();
         }
-
         for (String name : map.keySet()) {
             DefaultSliderView textSliderView = new DefaultSliderView(MainActivity.this);
             textSliderView.image(name + POST_URL).setScaleType(BaseSliderView.ScaleType.CenterInside);
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle().putString("extra", map.get(name));
             mSliderLayout.addSlider(textSliderView);
-            mSliderLayout.setDuration(3000);
-            mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Left_Bottom);
             textSliderView.setOnSliderClickListener(slider -> {
                 if (slider.getBundle() != null) {
                     MobclickAgent.onEvent(MainActivity.this, "BannerID");
@@ -705,17 +670,19 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
                 }
             });
         }
+        mSliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Left_Bottom);
+        mSliderLayout.setDuration(3000);
     }
 
     @Override
-    public void initCategory(PortalBean postBean) throws NullPointerException {
+    public void initCategory(PortalBean postBean) throws RuntimeException {
         JUtils.Log(TAG, "refreshCategory");
         List<PortalBean.CategorysBean> categorys = postBean.getCategorys();
         mMainCategoryAdapter.updateWithClear(categorys);
     }
 
     @Override
-    public void initBrand(PortalBean postBean) throws NullPointerException {
+    public void initBrand(PortalBean postBean) throws RuntimeException {
         List<BrandView> brandViews = new ArrayList<>();
         brand.removeAllViews();
         brandViews.clear();
@@ -751,15 +718,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public void initActivity(PortalBean postBean) throws NullPointerException {
+    public void initActivity(PortalBean postBean) throws RuntimeException {
         JUtils.Log(TAG, "refreshPost");
         List<PortalBean.ActivitysBean> postActivityBean = postBean.getActivitys();
         if (null != postActivityBean && postActivityBean.size() > 0) {
-            if (adapter == null) {
-                adapter = new ActivityListAdapter(this);
-                activityLv.setAdapter(adapter);
-            }
-            adapter.updateWithClear(postActivityBean);
+            mainActivityAdapter.updateWithClear(postActivityBean);
             if (mask != postActivityBean.get(0).getId() && !TextUtils.isEmpty(
                     postActivityBean.get(0).getMask_link())) {
                 MastFragment mastFragment = MastFragment.newInstance("mask");
@@ -899,18 +862,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         mPresenter.getCartsNum();
         mPresenter.getUserInfoBeanChange();
         JUtils.Log(TAG, "resume");
-        if (mJumpUrl != null && !mJumpUrl.equals("")) {
-            String url = mJumpUrl;
-            mJumpUrl = null;
-            if (LoginUtils.checkLoginState(this)) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-            } else {
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.putExtra("login", "push_jump");
-                intent.putExtra("actlink", url);
-                startActivity(intent);
-            }
-        }
     }
 
     @Override
@@ -918,17 +869,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         if (cartsNumResultBean != null) {
             int num = cartsNumResultBean.getResult();
             badge.setBadgeCount(num);
-            if (mPresenter.calcLefttowTime(cartsNumResultBean.getLastCreated()) != 0) {
-                image1.setVisibility(View.INVISIBLE);
-                image2.setVisibility(View.VISIBLE);
-            } else {
-                image1.setVisibility(View.VISIBLE);
-                image2.setVisibility(View.INVISIBLE);
-                badge.setBadgeCount(0);
-            }
-        } else {
-            image1.setVisibility(View.VISIBLE);
-            image2.setVisibility(View.INVISIBLE);
         }
     }
 

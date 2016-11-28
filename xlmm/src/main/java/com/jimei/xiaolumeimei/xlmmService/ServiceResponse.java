@@ -21,6 +21,6 @@ public class ServiceResponse<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
-
+        e.printStackTrace();
     }
 }

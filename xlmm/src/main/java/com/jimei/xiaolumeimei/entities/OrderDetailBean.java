@@ -375,6 +375,7 @@ public class OrderDetailBean implements Serializable {
         private String receiver_state;
         @SerializedName("default")
         private String defaultX;
+        private String identification_no;
         private String receiver_name;
         private String receiver_mobile;
         private String receiver_phone;
@@ -450,6 +451,14 @@ public class OrderDetailBean implements Serializable {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public String getIdentification_no() {
+            return identification_no;
+        }
+
+        public void setIdentification_no(String identification_no) {
+            this.identification_no = identification_no;
         }
     }
 

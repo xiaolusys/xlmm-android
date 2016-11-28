@@ -11,7 +11,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.fragment.coupon.SelectCouponFragment;
+import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 

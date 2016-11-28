@@ -12,7 +12,7 @@ import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
@@ -62,7 +62,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
     @Override
     protected void initData() {
         refreshFortune();
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaUrl()
                 .subscribe(this::setUrl, Throwable::printStackTrace));
         setListener();
@@ -72,7 +72,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
         if (mActivity != null) {
             ((MamaActivity) mActivity).showIndeterminateProgressDialog(true);
         }
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
                 .subscribe(this::initFortune, Throwable::printStackTrace));
     }

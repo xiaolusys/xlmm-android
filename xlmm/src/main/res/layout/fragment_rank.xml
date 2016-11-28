@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jimei.xiaolumeimei.ui.fragment.v2.RankFragment">
+    tools:context="com.jimei.xiaolumeimei.ui.fragment.xiaolumama.RankFragment">
 
     <com.jimei.library.widget.MyXRecyclerView
         android:id="@+id/xrv"

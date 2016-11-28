@@ -6,7 +6,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CollectionTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityCollectionBinding;
-import com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment;
+import com.jimei.xiaolumeimei.ui.fragment.product.CollectionFragment;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

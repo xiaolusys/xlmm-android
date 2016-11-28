@@ -35,6 +35,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     Button addAdress;
     private AddressSelectAdapter adapter;
     private int position;
+    private boolean idFlag;
 
     @Override
     protected void setListener() {
@@ -72,6 +73,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void getBundleExtras(Bundle extras) {
         position = extras.getInt("position");
+        idFlag = extras.getBoolean("idFlag", false);
     }
 
     @Override
@@ -87,6 +89,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
         divider.setColor(getResources().getColor(R.color.bg_grey));
         addressRecyclerView.addItemDecoration(divider);
         adapter = new AddressSelectAdapter(this, position);
+        adapter.setIdFlag(idFlag);
         addressRecyclerView.setAdapter(adapter);
     }
 

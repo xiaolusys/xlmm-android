@@ -66,6 +66,10 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     Button save;
     @Bind(R.id.main)
     LinearLayout main;
+    @Bind(R.id.id_layout)
+    LinearLayout idLayout;
+    @Bind(R.id.id_num)
+    EditText idNum;
     private String id;
     private ArrayList<Province> provinces = new ArrayList<>();
 
@@ -82,12 +86,20 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     private Province province;
     private ArrayList<City> cities;
     private ArrayList<County> counties;
+    private boolean idFlag;
 
     @Override
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
         switchButton.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    protected void initViews() {
+        if (idFlag) {
+            idLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -100,7 +112,7 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        idFlag = extras.getBoolean("idFlag");
         receiver_name = extras.getString("receiver_name");
         receiver_mobile = extras.getString("mobile");
         city_string = extras.getString("address1");
@@ -109,7 +121,6 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
         receiver_city = extras.getString("receiver_city");
         receiver_district = extras.getString("receiver_district");
         id = extras.getString("id");
-
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
 
@@ -126,7 +137,6 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
                 InputMethodManager imm =
                         (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
-
                 if (provinces.size() > 0) {
                     showAddressDialog();
                 } else {
@@ -138,7 +148,7 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-
+                String idNo = idNum.getText().toString().trim();
                 JUtils.Log(TAG,
                         receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
                                 receiver_district + "====" +
@@ -146,8 +156,8 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
 
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     Subscription subscribe = AddressModel.getInstance()
-                            .update_address(id, receiver_state, receiver_city, receiver_district, clearaddressa,
-                                    receiver_name, receiver_mobile, defalut)
+                            .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,
+                                    receiver_name, receiver_mobile, defalut, idNo)
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                 @Override
                                 public void onNext(AddressResultBean addressResultBean) {

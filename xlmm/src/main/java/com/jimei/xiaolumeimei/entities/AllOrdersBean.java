@@ -447,6 +447,7 @@ public class AllOrdersBean {
             private boolean kill_title;
             private boolean is_seckill;
             private String package_order_id;
+            private boolean is_bonded_goods;
 
             public int getId() {
                 return id;
@@ -681,6 +682,14 @@ public class AllOrdersBean {
 
             public void setModel_id(int model_id) {
                 this.model_id = model_id;
+            }
+
+            public boolean is_bonded_goods() {
+                return is_bonded_goods;
+            }
+
+            public void setIs_bonded_goods(boolean is_bonded_goods) {
+                this.is_bonded_goods = is_bonded_goods;
             }
         }
     }

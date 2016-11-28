@@ -16,7 +16,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -54,7 +53,7 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
 
     @Override
     protected void initData() {
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override

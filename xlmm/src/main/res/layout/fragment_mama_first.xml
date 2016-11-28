@@ -1,12 +1,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-        android:id="@+id/scroll_view"
+    <com.jimei.library.widget.scrolllayout.ScrollableLayout
+        android:id="@+id/scrollable_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_grey"
-        android:focusable="true">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,15 +119,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="300px"
-                android:background="@color/white">
+                android:layout_height="300px">
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@color/white" />
+                    android:layout_margin="10dp" />
             </RelativeLayout>
 
             <include layout="@layout/common_gap" />
@@ -137,7 +134,6 @@
                 android:id="@+id/rl_order"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:orientation="horizontal"
                 android:padding="6dp">
 
@@ -224,7 +220,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="180px"
-                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -364,13 +359,13 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="20px" />
+                android:layout_height="20px"
+                android:background="@color/bg_grey"/>
 
             <LinearLayout
                 android:id="@+id/ll_renew"
                 android:layout_width="match_parent"
                 android:layout_height="90px"
-                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="12dp"
@@ -429,7 +424,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90px"
-                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="12dp"
@@ -460,12 +454,9 @@
 
             </LinearLayout>
 
-            <include layout="@layout/common_gap" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="90px"
-                android:background="@color/white"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp">
 
@@ -513,13 +504,13 @@
 
             </RelativeLayout>
 
-            <com.jimei.library.widget.NestedListView
-                android:id="@+id/lv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@null"
-                android:focusable="false" />
-
         </LinearLayout>
-    </ScrollView>
+
+        <include layout="@layout/common_gap" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.jimei.library.widget.scrolllayout.ScrollableLayout>
 </layout>
