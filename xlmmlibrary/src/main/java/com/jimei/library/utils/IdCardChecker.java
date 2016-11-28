@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by wisdom on 16/11/28.
  */
 
-public class IdCardValidator {
+public class IdCardChecker {
 
     /**
      * <pre>
