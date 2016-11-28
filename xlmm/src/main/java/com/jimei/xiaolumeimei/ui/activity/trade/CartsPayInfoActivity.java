@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.jimei.library.utils.IdCardValidator;
+import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.NestedListView;
 import com.jimei.library.widget.SmoothCheckBox;
@@ -508,7 +508,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.confirm:
                 MobclickAgent.onEvent(this, "PayId");
-                if (idFlag && !IdCardValidator.isValidatedAllIdcard(idNo)) {
+                if (idFlag && !IdCardChecker.isValidatedAllIdcard(idNo)) {
                     new AlertDialog.Builder(this)
                             .setTitle("提示")
                             .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
@@ -1096,7 +1096,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     }
 
     private void checkIdNo() {
-        if (idFlag && !IdCardValidator.isValidatedAllIdcard(idNo)) {
+        if (idFlag && !IdCardChecker.isValidatedAllIdcard(idNo)) {
             new AlertDialog.Builder(this)
                     .setTitle("提示")
                     .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")

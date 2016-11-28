@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
-import com.jimei.library.utils.IdCardValidator;
+import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
@@ -158,7 +158,7 @@ public class ChangeSelectAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
                 idNo = idNum.getText().toString().trim();
-                if (IdCardValidator.isValidatedAllIdcard(idNo)) {
+                if (IdCardChecker.isValidatedAllIdcard(idNo)) {
                     if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                         Subscription subscribe = AddressModel.getInstance()
                                 .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,
