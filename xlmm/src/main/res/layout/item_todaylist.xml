@@ -1,10 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/shot_item_background"
-              android:clickable="true"
-              android:foreground="?attr/selectableItemBackground"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shot_item_background"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -15,9 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="450px"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
-        <include layout="@layout/item_sale_status"/>
+        <include layout="@layout/item_sale_status" />
     </RelativeLayout>
 
 
@@ -35,7 +36,7 @@
             android:singleLine="true"
             android:text=""
             android:textColor="#4a4a4a"
-            android:textSize="28px"/>
+            android:textSize="28px" />
     </LinearLayout>
 
     <RelativeLayout
@@ -52,7 +53,7 @@
             android:gravity="center|bottom"
             android:text=""
             android:textColor="#3C3C3C"
-            android:textSize="36px"/>
+            android:textSize="36px" />
 
         <TextView
             android:id="@+id/product_list_stdsale_price"
@@ -62,7 +63,7 @@
             android:layout_toRightOf="@id/product_list_agent_price"
             android:text=""
             android:textColor="#A0A0A0"
-            android:textSize="24px"/>
+            android:textSize="24px" />
     </RelativeLayout>
 
 </LinearLayout>

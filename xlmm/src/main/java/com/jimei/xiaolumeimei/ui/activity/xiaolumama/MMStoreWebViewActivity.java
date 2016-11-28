@@ -5,7 +5,7 @@ import android.view.MenuItem;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
-import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -27,7 +27,7 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
     @Override
     protected void initData() {
         super.initData();
-        MMProductModel.getInstance()
+        MamaInfoModel.getInstance()
                 .getShareShopping()
                 .subscribe(new ServiceResponse<MMShoppingBean>() {
 

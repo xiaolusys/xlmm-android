@@ -29,7 +29,7 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentBoutiqueBinding;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public class BoutiqueFragment extends BaseBindingFragment<FragmentBoutiqueBindin
     @Override
     protected void initData() {
         ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaUrl()
                 .subscribe(this::fillDataToView, Throwable::printStackTrace));
     }

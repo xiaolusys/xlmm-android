@@ -1,6 +1,5 @@
 package com.jimei.library.widget.loading;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,8 @@ public class VaryViewHelper implements IVaryViewHelper {
     private ViewGroup parentView;
     private int viewIndex;
     private ViewGroup.LayoutParams params;
-    private View currentView;
 
     public VaryViewHelper(View view) {
-        super();
         this.view = view;
     }
 
@@ -34,12 +31,6 @@ public class VaryViewHelper implements IVaryViewHelper {
                 break;
             }
         }
-        currentView = view;
-    }
-
-    @Override
-    public View getCurrentLayout() {
-        return currentView;
     }
 
     @Override
@@ -52,7 +43,6 @@ public class VaryViewHelper implements IVaryViewHelper {
         if (parentView == null) {
             init();
         }
-        this.currentView = view;
         if (parentView.getChildAt(viewIndex) != view) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) {
@@ -66,15 +56,5 @@ public class VaryViewHelper implements IVaryViewHelper {
     @Override
     public View inflate(int layoutId) {
         return LayoutInflater.from(view.getContext()).inflate(layoutId, null);
-    }
-
-    @Override
-    public Context getContext() {
-        return view.getContext();
-    }
-
-    @Override
-    public View getView() {
-        return view;
     }
 }

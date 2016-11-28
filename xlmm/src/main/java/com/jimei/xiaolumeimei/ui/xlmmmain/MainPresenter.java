@@ -9,8 +9,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
-import java.util.Date;
-
 import retrofit2.Response;
 
 /**
@@ -42,16 +40,6 @@ public class MainPresenter extends MainContract.Presenter {
                             }
                         }
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
                 }));
     }
 
@@ -72,16 +60,6 @@ public class MainPresenter extends MainContract.Presenter {
                                 mView.initUserView(null);
                             }
                         }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
                     }
                 }));
     }
@@ -141,20 +119,6 @@ public class MainPresenter extends MainContract.Presenter {
                         ((MainActivity) mView).hideIndeterminateProgressDialog();
                     }
                 }));
-    }
-
-    @Override
-    public long calcLefttowTime(long crtTime) {
-        long left = 0;
-        Date now = new Date();
-        try {
-            if (crtTime * 10000 - now.getTime() > 0) {
-                left = crtTime * 10000 - now.getTime();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return left;
     }
 
     @Override

@@ -14,10 +14,10 @@ import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogAllFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogBounsFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogCashbackFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogCommissionFragment;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;

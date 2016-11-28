@@ -22,7 +22,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
-import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -115,7 +115,7 @@ public class NinePicAdapter extends BaseAdapter {
         }
         holder.save.setOnClickListener(v -> {
             MobclickAgent.onEvent(mContext, "NinePic_save");
-            MMProductModel.getInstance()
+            MamaInfoModel.getInstance()
                     .saveTime(ninePicBean.getId(), 1)
                     .subscribe(saveTimeBean -> JUtils.Log("save" + saveTimeBean.getId()),
                             Throwable::printStackTrace);

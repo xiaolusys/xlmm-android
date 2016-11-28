@@ -10,7 +10,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BrandActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -35,17 +35,16 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        Subscription subscribe = ActivityModel.getInstance()
+        Subscription subscribe = ProductModel.getInstance()
                 .getBrandList(id)
                 .subscribe(new ServiceResponse<BrandListBean>() {
                     @Override
                     public void onNext(BrandListBean productListBean) {
-
                         try {
                             if (productListBean != null) {
                                 mBrandActivityAdapter.update(productListBean.getProducts());
                             }
-                        } catch (Exception ex) {
+                        } catch (Exception ignored) {
                         }
                     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
@@ -28,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:src="@drawable/icon_xlmm"/>
+                android:src="@drawable/icon_xlmm" />
 
             <RelativeLayout
                 android:id="@+id/rl_mmentry"
@@ -46,15 +45,14 @@
                     android:layout_marginRight="15dp"
                     android:text="我的微店"
                     android:textColor="@color/white"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
             </RelativeLayout>
 
 
         </com.jimei.library.widget.AutoToolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/include_mainscrollcontent"/>
+    <include layout="@layout/include_mainscrollcontent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -68,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/icon_collection"/>
+            android:src="@drawable/icon_collection" />
 
         <RelativeLayout
             android:id="@+id/rv_cart"
@@ -79,25 +77,15 @@
             android:layout_marginTop="10dp">
 
             <ImageView
-                android:id="@+id/image_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/icon_cart"
-                android:visibility="invisible"/>
-
-            <ImageView
-                android:id="@+id/image_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_cart"/>
+                android:src="@drawable/icon_cart" />
 
             <View
                 android:id="@+id/cart_view"
                 android:layout_width="45px"
                 android:layout_height="45px"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -108,7 +96,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="8dp"
         android:src="@drawable/go_top"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
 
 </android.support.design.widget.CoordinatorLayout>

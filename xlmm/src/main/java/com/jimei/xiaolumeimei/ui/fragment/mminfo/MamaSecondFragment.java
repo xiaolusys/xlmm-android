@@ -22,7 +22,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaSecondBinding;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 
 import java.util.HashMap;
@@ -60,7 +60,7 @@ public class MamaSecondFragment extends BaseBindingFragment<FragmentMamaSecondBi
     @Override
     protected void initData() {
         ((MamaActivity) mActivity).showIndeterminateProgressDialog(false);
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaUrl()
                 .subscribe(this::fillDataToView, Throwable::printStackTrace));
     }

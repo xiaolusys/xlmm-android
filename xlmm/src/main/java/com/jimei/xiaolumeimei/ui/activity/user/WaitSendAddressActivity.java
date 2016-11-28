@@ -57,6 +57,10 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     LinearLayout main;
     @Bind(R.id.rl_default)
     RelativeLayout relativeLayout;
+    @Bind(R.id.id_layout)
+    LinearLayout idLayout;
+    @Bind(R.id.id_num)
+    EditText idNum;
     private String id;
 
     private ArrayList<Province> provinces = new ArrayList<>();
@@ -74,6 +78,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private Province province;
     private ArrayList<City> cities;
     private ArrayList<County> counties;
+    private boolean is_bonded_goods;
 
     @Override
     protected void setListener() {
@@ -106,6 +111,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         receiver_city = extras.getString("receiver_city");
         receiver_district = extras.getString("receiver_district");
         id = extras.getString("address_id");
+        is_bonded_goods = extras.getBoolean("is_bonded_goods", false);
         referal_trade_id = extras.getString("referal_trade_id");
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
@@ -118,6 +124,9 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     @Override
     protected void initViews() {
         relativeLayout.setVisibility(View.GONE);
+        if (is_bonded_goods){
+            idLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -138,14 +147,11 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                JUtils.Log(TAG,
-                        receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
-                                receiver_district + "====" +
-                                clearaddressa + "====" + receiver_name);
+                String identification_no = idNum.getText().toString().trim();
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     Subscription subscribe = AddressModel.getInstance()
                             .update_address(id, receiver_state, receiver_city, receiver_district,
-                                    clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id)
+                                    clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id, identification_no)
                             .subscribe(new ServiceResponse<AddressResultBean>() {
                                 @Override
                                 public void onNext(AddressResultBean addressResultBean) {
@@ -215,6 +221,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
         Context mContext;
         Dialog progressDialog;
+
         public InitAreaTask(Context context) {
             mContext = context;
             progressDialog = Util.createLoadingDialog(mContext, "请稍等...", true, 0);

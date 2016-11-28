@@ -11,7 +11,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
-import com.jimei.xiaolumeimei.ui.fragment.v2.OrderListFragment;
+import com.jimei.xiaolumeimei.ui.fragment.trade.OrderListFragment;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;

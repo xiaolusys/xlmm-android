@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.jimei.xiaolumeimei.ui.fragment.v2.TaskRewardFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.TaskRewardFragment;
 
 import java.util.List;
 

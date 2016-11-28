@@ -3,35 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:actionLayout="@layout/nav_badge">
 
+    <group
+        android:id="@+id/group_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_tobepaid"
+            android:icon="@drawable/drawer_pay"
+            android:title="待支付"
+            app:actionLayout="@layout/nav_badge" />
+        <item
+            android:id="@+id/nav_tobereceived"
+            android:icon="@drawable/drawer_car"
+            android:title="待收货"
+            app:actionLayout="@layout/nav_badge" />
+        <item
+            android:id="@+id/nav_returned"
+            android:icon="@drawable/drawer_refund"
+            android:title="退换货"
+            app:actionLayout="@layout/nav_badge" />
 
+        <item
+            android:id="@+id/nav_orders"
+            android:icon="@drawable/drawer_order"
+            android:title="全部订单" />
 
-  <group android:checkableBehavior="single" android:id="@+id/group_1">
+    </group>
+
     <item
-        app:actionLayout="@layout/nav_badge"
-        android:id="@+id/nav_tobepaid"
-        android:icon="@drawable/drawer_pay"
-        android:title="待支付"
-    />
+        android:id="@+id/my_shop"
+        android:icon="@drawable/drawer_shop"
+        android:title="我的微店" />
     <item
-        app:actionLayout="@layout/nav_badge"
-        android:id="@+id/nav_tobereceived"
-        android:icon="@drawable/drawer_car"
-        android:title="待收货"/>
+        android:id="@+id/nav_complain"
+        android:icon="@drawable/drawer_complain"
+        android:title="投诉建议" />
     <item
-        app:actionLayout="@layout/nav_badge"
-        android:id="@+id/nav_returned"
-        android:icon="@drawable/drawer_refund"
-        android:title="退换货"/>
-
-    <item android:id="@+id/nav_orders" android:icon="@drawable/drawer_order"
-        android:title="全部订单"/>
-
-  </group>
-
-  <item android:id="@+id/my_shop" android:icon="@drawable/drawer_shop"
-        android:title="我的微店"/>
-  <item android:id="@+id/nav_complain" android:icon="@drawable/drawer_complain"
-      android:title="投诉建议"/>
-  <item android:id="@+id/nav_problem" android:icon="@drawable/drawer_problem"
-    android:title="常见问题"/>
+        android:id="@+id/nav_problem"
+        android:icon="@drawable/drawer_problem"
+        android:title="常见问题" />
 </menu>

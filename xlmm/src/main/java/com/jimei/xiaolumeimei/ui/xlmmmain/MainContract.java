@@ -88,8 +88,6 @@ public interface MainContract {
 
         public abstract void getPortalBean(SwipeRefreshLayout swipeRefreshLayout);
 
-        public abstract long calcLefttowTime(long crtTime);
-
         public abstract void getAddressVersionAndUrl();
 
         public abstract void getCategoryDown();

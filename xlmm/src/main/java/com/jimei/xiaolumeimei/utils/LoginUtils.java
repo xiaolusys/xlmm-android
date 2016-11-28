@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.jimei.library.utils.DataClearManager;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
@@ -13,6 +14,9 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by itxuye(www.itxuye.com) on 15/12/29.
@@ -117,7 +121,6 @@ public class LoginUtils {
 
     public static boolean checkFirst(Context context) {
         sharedPreferences2 = context.getSharedPreferences("first", Context.MODE_PRIVATE);
-
         return sharedPreferences2.getBoolean("success", false);
     }
 
@@ -194,25 +197,6 @@ public class LoginUtils {
         editor5.apply();
     }
 
-    public static void saveMamaRenwulist(Context context, boolean isOk) {
-        sharedPreferences6 = context.getSharedPreferences("MamaRenwulist", Context.MODE_PRIVATE);
-        editor6 = sharedPreferences6.edit();
-        editor6.putBoolean("ismipush", isOk);
-        editor6.apply();
-    }
-
-    public static boolean isMamaRenwulist(Context context) {
-        sharedPreferences6 = context.getSharedPreferences("MamaRenwulist", Context.MODE_PRIVATE);
-        return sharedPreferences6.getBoolean("ismipush", false);
-    }
-
-    public static void deleteIsMamaRenwulist(Context context) {
-        sharedPreferences6 = context.getSharedPreferences("MamaRenwulist", Context.MODE_PRIVATE);
-        editor6 = sharedPreferences6.edit();
-        editor6.clear();
-        editor6.apply();
-    }
-
     public static void saveUserAccount(Context context, String userAccount) {
         sharedPreferences4 = context.getSharedPreferences("login_info_mipush", Context.MODE_PRIVATE);
         editor4 = sharedPreferences4.edit();
@@ -236,5 +220,19 @@ public class LoginUtils {
         String account = sharedPreferences4.getString("userAccount", "");
 
         return account;
+    }
+
+    public static void clearCacheEveryWeek(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int i = calendar.get(Calendar.WEEK_OF_YEAR);
+        SharedPreferences preferences = context.getSharedPreferences("clear_cache", Context.MODE_PRIVATE);
+        int flag = preferences.getInt("flag", -1);
+        if (i != flag) {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putInt("flag", i);
+            edit.apply();
+            DataClearManager.cleanApplicationData(XlmmApp.getInstance());
+        }
     }
 }

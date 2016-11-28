@@ -13,7 +13,6 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.umeng.analytics.MobclickAgent;
 
@@ -57,7 +56,7 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-        addSubscription(MMInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
                 .subscribe(mamaFortune -> {
                     mCash = mamaFortune.getMamaFortune().getCashValue();

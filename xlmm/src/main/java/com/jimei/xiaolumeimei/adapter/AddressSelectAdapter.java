@@ -32,16 +32,13 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     private List<AddressBean> mList;
     private Activity context;
     private int num;
-
-    public AddressSelectAdapter(Activity context) {
-        this.context = context;
-        mList = new ArrayList<>();
-    }
+    private boolean idFlag;
 
     public AddressSelectAdapter(Activity context, int num) {
         this.context = context;
         this.num = num;
         mList = new ArrayList<>();
+        idFlag = false;
     }
 
     public void update(List<AddressBean> list) {
@@ -137,7 +134,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
                 + addressBean.getReceiverDistrict()
                 + addressBean.getReceiverAddress());
         intent.putExtra("position", position);
-
+        intent.putExtra("idNo", addressBean.getmIdentificationNo());
         context.setResult(Activity.RESULT_OK, intent);
         context.finish();
     }
@@ -148,7 +145,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         bundle.putString("receiver_state", addressBean.getReceiverState());
         bundle.putString("receiver_district", addressBean.getReceiverDistrict());
         bundle.putString("receiver_city", addressBean.getReceiverCity());
-
+        bundle.putBoolean("idFlag", idFlag);
         bundle.putString("receiver_name", addressBean.getReceiverName());
         bundle.putString("id", addressBean.getId());
         bundle.putString("mobile", addressBean.getReceiverMobile());
@@ -174,6 +171,10 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else {
             return 1;
         }
+    }
+
+    public void setIdFlag(boolean idFlag) {
+        this.idFlag = idFlag;
     }
 
     static class AddressDefaultVH extends RecyclerView.ViewHolder {
