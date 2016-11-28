@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.IdCardValidator;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
@@ -48,10 +49,10 @@ import rx.Subscription;
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
+public class ChangeSelectAddressActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = ChanggeSelectAddressActivity.class.getSimpleName();
+    private static final String TAG = ChangeSelectAddressActivity.class.getSimpleName();
     @Bind(R.id.name)
     EditText name;
     @Bind(R.id.mobile)
@@ -82,6 +83,8 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_mobile;
     private String defalut;
     private County county;
+    private boolean isDefaultX;
+    private String idNo;
     private City city;
     private Province province;
     private ArrayList<City> cities;
@@ -100,6 +103,9 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
         if (idFlag) {
             idLayout.setVisibility(View.VISIBLE);
         }
+        if (isDefaultX) {
+            switchButton.setChecked(true);
+        }
     }
 
     @Override
@@ -108,6 +114,7 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
         mobile.setText(receiver_mobile);
         address.setText(city_string);
         clearAddress.setText(clearaddressa);
+        idNum.setText(idNo);
     }
 
     @Override
@@ -121,12 +128,14 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
         receiver_city = extras.getString("receiver_city");
         receiver_district = extras.getString("receiver_district");
         id = extras.getString("id");
+        idNo = extras.getString("idNo");
+        isDefaultX = extras.getBoolean("isDefaultX", false);
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.activity_changgeaddress;
+        return R.layout.activity_changeaddress;
     }
 
     @Override
@@ -148,28 +157,27 @@ public class ChanggeSelectAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                String idNo = idNum.getText().toString().trim();
-                JUtils.Log(TAG,
-                        receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
-                                receiver_district + "====" +
-                                clearaddressa + "====" + receiver_name);
-
-                if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                    Subscription subscribe = AddressModel.getInstance()
-                            .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,
-                                    receiver_name, receiver_mobile, defalut, idNo)
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                @Override
-                                public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null) {
-                                        if (addressResultBean.getCode() == 0) {
-                                            JUtils.Toast("修改成功");
-                                            finish();
+                idNo = idNum.getText().toString().trim();
+                if (IdCardValidator.isValidatedAllIdcard(idNo)) {
+                    if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
+                        Subscription subscribe = AddressModel.getInstance()
+                                .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,
+                                        receiver_name, receiver_mobile, defalut, idNo)
+                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                                    @Override
+                                    public void onNext(AddressResultBean addressResultBean) {
+                                        if (addressResultBean != null) {
+                                            if (addressResultBean.getCode() == 0) {
+                                                JUtils.Toast("修改成功");
+                                                finish();
+                                            }
                                         }
                                     }
-                                }
-                            });
-                    addSubscription(subscribe);
+                                });
+                        addSubscription(subscribe);
+                    }
+                } else {
+                    JUtils.Toast("请填写合法的身份证号码!");
                 }
                 break;
         }

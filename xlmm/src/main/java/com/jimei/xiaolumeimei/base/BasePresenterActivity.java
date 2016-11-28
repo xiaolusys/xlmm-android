@@ -46,14 +46,6 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E>
     protected abstract View getLoadingView();
 
     @Override
-    public void showLoading() {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
-        }
-        mVaryViewHelperController.showLoading();
-    }
-
-    @Override
     public void showNetworkError() {
         if (!JUtils.isNetWorkAvilable()) {
             hideIndeterminateProgressDialog();
@@ -73,13 +65,5 @@ public abstract class BasePresenterActivity<T extends BasePresenter, E>
     }
 
     protected abstract void getDataCallBack();
-
-    @Override
-    public void showEmpty(String msg) {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
-        }
-        mVaryViewHelperController.showEmpty(msg);
-    }
 
 }

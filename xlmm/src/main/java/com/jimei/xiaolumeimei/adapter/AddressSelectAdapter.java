@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
-import com.jimei.xiaolumeimei.ui.activity.user.ChanggeSelectAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.ChangeSelectAddressActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -140,7 +140,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     private void setBundle1(AddressBean addressBean) {
-        Intent intent = new Intent(context, ChanggeSelectAddressActivity.class);
+        Intent intent = new Intent(context, ChangeSelectAddressActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("receiver_state", addressBean.getReceiverState());
         bundle.putString("receiver_district", addressBean.getReceiverDistrict());
@@ -153,6 +153,8 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
                 + addressBean.getReceiverCity()
                 + addressBean.getReceiverDistrict());
         bundle.putString("address2", addressBean.getReceiverAddress());
+        bundle.putString("idNo", addressBean.getmIdentificationNo());
+        bundle.putBoolean("isDefaultX", addressBean.isDefaultX());
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
