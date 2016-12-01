@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by itxuye on 2016/7/4.
  */
-public class IsGetcoupon {
+public class GetCoupon {
 
   /**
    * info : 没有领取

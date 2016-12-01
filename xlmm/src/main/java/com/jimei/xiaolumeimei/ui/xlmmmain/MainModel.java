@@ -4,7 +4,7 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
-import com.jimei.xiaolumeimei.entities.IsGetcoupon;
+import com.jimei.xiaolumeimei.entities.GetCoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.xlmmService.RetrofitClient;
 import com.jimei.xiaolumeimei.xlmmService.api.MainService;
 
-import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -20,6 +19,11 @@ import rx.Observable;
  */
 public class MainModel implements MainContract.Model {
     private static MainService mainService;
+    private static MainModel mainModel = new MainModel();
+
+    public static MainModel getInstance() {
+        return mainModel;
+    }
 
     private static MainService getService() {
         if (mainService == null) {
@@ -29,14 +33,14 @@ public class MainModel implements MainContract.Model {
     }
 
     @Override
-    public Observable<Response<UserInfoBean>> getProfile() {
+    public Observable<UserInfoBean> getProfile() {
         return getService()
                 .getUserLoginInfo()
                 .compose(new DefaultTransform<>());
     }
 
     @Override
-    public Observable<Response<IsGetcoupon>> isCouPon() {
+    public Observable<GetCoupon> isCouPon() {
         return getService()
                 .isCouPon()
                 .compose(new DefaultTransform<>());

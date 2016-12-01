@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jimei.library.widget.loading.VaryViewHelperController;
+
 /**
  * Created by wisdom on 16/9/8.
  */
@@ -25,9 +27,21 @@ public abstract class BaseBindingFragment<T extends ViewDataBinding> extends Bas
         } else {
             throw new IllegalArgumentException("You must return a right contentView layout resource Id");
         }
+        if (mVaryViewHelperController == null) {
+            mVaryViewHelperController = new VaryViewHelperController(getLoadingView());
+        }
         initViews();
         isInitView = true;
         lazyLoadData();
+        setListener();
         return b.getRoot();
     }
+
+    public void setListener() {
+
+    }
+
+    public abstract View getLoadingView();
+
+
 }

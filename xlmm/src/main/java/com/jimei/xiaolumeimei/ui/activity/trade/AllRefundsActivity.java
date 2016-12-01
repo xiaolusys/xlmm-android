@@ -120,7 +120,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onCompleted() {
                         hideIndeterminateProgressDialog();
-                        super.onCompleted();
                     }
 
                     @Override
@@ -128,7 +127,6 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
                         hideIndeterminateProgressDialog();
                         JUtils.Toast("数据加载异常!");
                         Log.e(TAG, " error:, " + e.toString());
-                        super.onError(e);
                     }
                 });
         addSubscription(subscription);

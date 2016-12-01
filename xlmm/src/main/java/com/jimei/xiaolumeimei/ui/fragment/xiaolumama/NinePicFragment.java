@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.fragment.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
@@ -24,7 +25,7 @@ public class NinePicFragment extends BaseBindingFragment<FragmentNinePicBinding>
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         if (getArguments() != null) {
             String codeLink = getArguments().getString("codeLink");
             mNinePicAdapter.setCodeLink(codeLink);
@@ -43,7 +44,11 @@ public class NinePicFragment extends BaseBindingFragment<FragmentNinePicBinding>
                     if (b.swipeLayout.isRefreshing()) {
                         b.swipeLayout.setRefreshing(false);
                     }
-                }, Throwable::printStackTrace));
+                    hideIndeterminateProgressDialog();
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }));
     }
 
     @Override
@@ -67,5 +72,10 @@ public class NinePicFragment extends BaseBindingFragment<FragmentNinePicBinding>
     @Override
     public void onRefresh() {
         loadData();
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.swipeLayout;
     }
 }

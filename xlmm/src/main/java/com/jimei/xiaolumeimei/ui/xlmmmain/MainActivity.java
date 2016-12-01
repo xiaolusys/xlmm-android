@@ -53,7 +53,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
-import com.jimei.xiaolumeimei.entities.IsGetcoupon;
+import com.jimei.xiaolumeimei.entities.GetCoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
@@ -100,7 +100,6 @@ import java.util.Map;
 
 import butterknife.Bind;
 import okhttp3.Call;
-import retrofit2.Response;
 
 /**
  * Created by itxuye on 2016/7/4.
@@ -417,7 +416,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         }
     }
 
-    @Override
     public void findById() {
         llayout = navigationView.getHeaderView(0);
         tvCoupon = (TextView) llayout.findViewById(R.id.tvDiscount);
@@ -438,7 +436,6 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
     }
 
-    @Override
     public void initSlide() {
         ActionBarDrawerToggle toggle =
                 new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
@@ -628,13 +625,11 @@ public class MainActivity extends BasePresenterActivity<MainPresenter, MainModel
     }
 
     @Override
-    public void initShowCoiuponWindow(Response<IsGetcoupon> isGetcouponResponse) {
-        if (isGetcouponResponse.isSuccessful()) {
-            if (isGetcouponResponse.body().getIsPicked() == 0) {
-                GetCouponFragment firstFragment = GetCouponFragment.newInstance("getCoupon");
-                firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
-                firstFragment.show(getFragmentManager(), "getCoupon");
-            }
+    public void initShowCoiuponWindow(GetCoupon getCoupon) {
+        if (getCoupon != null && getCoupon.getIsPicked() == 0) {
+            GetCouponFragment firstFragment = GetCouponFragment.newInstance("getCoupon");
+            firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
+            firstFragment.show(getFragmentManager(), "getCoupon");
         }
     }
 

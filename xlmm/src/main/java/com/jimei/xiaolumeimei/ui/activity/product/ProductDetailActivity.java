@@ -52,6 +52,7 @@ import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -61,6 +62,8 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -374,37 +377,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             }
             list.add(imageView);
         }
-//        ImageView imageView = new ImageView(this);
-//        imageView.setLayoutParams(new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        String watermark_op = detail_content.getWatermark_op();
-//        if (watermark_op != null && !"".equals(watermark_op)) {
-//            Glide.with(this).load(head_imgs.get(headNum - 1) + POST_URL + "/" + watermark_op)
-//                    .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
-//                    .placeholder(R.drawable.place_holder).into(imageView);
-//        } else {
-//            Glide.with(this).load(head_imgs.get(headNum - 1) + POST_URL)
-//                    .thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .centerCrop().placeholder(R.drawable.place_holder).into(imageView);
-//        }
-//        list.add(0, imageView);
-//
-//        ImageView imageView2 = new ImageView(this);
-//        imageView2.setLayoutParams(new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        imageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        String watermark_op2 = detail_content.getWatermark_op();
-//        if (watermark_op2 != null && !"".equals(watermark_op2)) {
-//            Glide.with(this).load(head_imgs.get(0) + POST_URL + "/" + watermark_op2)
-//                    .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
-//                    .placeholder(R.drawable.place_holder).into(imageView2);
-//        } else {
-//            Glide.with(this).load(head_imgs.get(0) + POST_URL)
-//                    .thumbnail(0.1f).diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .centerCrop().placeholder(R.drawable.place_holder).into(imageView2);
-//        }
-//        list.add(imageView2);
         PagerAdapter viewPagerAdapter = new MyPagerAdapter(list, b.viewPager);
         b.viewPager.setAdapter(viewPagerAdapter);
         isAlive = true;
@@ -534,6 +506,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                                             collectFlag = false;
                                             b.collectImg.setImageResource(R.drawable.icon_collect_false);
                                             b.collectText.setText("收藏");
+                                            EventBus.getDefault().post(new CollectChangeEvent());
                                         }
                                         JUtils.Toast(collectionResultBean.getInfo());
                                     }
@@ -548,6 +521,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                                             collectFlag = true;
                                             b.collectImg.setImageResource(R.drawable.icon_collect_true);
                                             b.collectText.setText("已收藏");
+                                            EventBus.getDefault().post(new CollectChangeEvent());
                                         }
                                         JUtils.Toast(collectionResultBean.getInfo());
                                     }

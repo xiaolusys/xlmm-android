@@ -91,7 +91,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         ScrollLinearLayoutManager layoutManager = new ScrollLinearLayoutManager(this);
         layoutManager.setAutoMeasureEnabled(false);
         rvCart.setLayoutManager(layoutManager);
-        cartListAdapter = new CartListAdapter(this, cartList);
+//        cartListAdapter = new CartListAdapter(this, cartList);
         rvCart.setAdapter(cartListAdapter);
 
 
@@ -101,7 +101,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
         ScrollLinearLayoutManager manager = new ScrollLinearLayoutManager(this);
         manager.setAutoMeasureEnabled(false);
         rvHistory.setLayoutManager(manager);
-        cartHisAdapter = new CartHistoryAdapter(this, cartHisList);
+//        cartHisAdapter = new CartHistoryAdapter(this, cartHisList);
         rvHistory.setAdapter(cartHisAdapter);
     }
 

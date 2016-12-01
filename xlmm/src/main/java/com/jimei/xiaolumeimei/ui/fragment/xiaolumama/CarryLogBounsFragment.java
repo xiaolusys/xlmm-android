@@ -19,9 +19,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 
 /**
@@ -30,7 +27,6 @@ import butterknife.Bind;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class CarryLogBounsFragment extends BaseLazyFragment {
-    List<AwardCarryBean.ResultsEntity> list = new ArrayList<>();
     @Bind(R.id.carrylogall_xry)
     XRecyclerView xRecyclerView;
     private AwardCarryLogAdapter adapter;
@@ -50,29 +46,26 @@ public class CarryLogBounsFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initData() {
-        showIndeterminateProgressDialog(false);
+    public void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaAllAwardCarryLogs("1")
                 .subscribe(new ServiceResponse<AwardCarryBean>() {
 
                     @Override
                     public void onCompleted() {
-                        super.onCompleted();
                         hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
+                        hideIndeterminateProgressDialog();
                         e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(AwardCarryBean carryLogListBean) {
                         if (carryLogListBean != null) {
-                            list.addAll(carryLogListBean.getResults());
-                            adapter.update(list);
+                            adapter.updateWithClear(carryLogListBean.getResults());
                             if (null == carryLogListBean.getNext()) {
                                 xRecyclerView.setLoadingMoreEnabled(false);
                             }
@@ -162,5 +155,10 @@ public class CarryLogBounsFragment extends BaseLazyFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    }
+
+    @Override
+    public View getLoadingView() {
+        return xRecyclerView;
     }
 }

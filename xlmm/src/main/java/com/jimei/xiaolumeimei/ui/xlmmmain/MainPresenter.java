@@ -9,8 +9,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
-import retrofit2.Response;
-
 /**
  * Created by itxuye on 2016/7/4.
  */
@@ -24,20 +22,17 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getUserInfoBean() {
         mRxManager.add(mModel.getProfile()
-                .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
+                .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
-                    public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
-                        if (null != userInfoBeanResponse) {
-                            if (userInfoBeanResponse.isSuccessful()) {
-                                UserInfoBean userInfoBean = userInfoBeanResponse.body();
-                                userInfoNewBean = userInfoBean;
-                                mView.initDrawer(userInfoBean);
-                                mView.initUserView(userInfoBean);
-                            } else if (userInfoBeanResponse.code() == 403) {
-                                LoginUtils.delLoginInfo(XlmmApp.getmContext());
-                                mView.initDrawer(null);
-                                mView.initUserView(null);
-                            }
+                    public void onNext(UserInfoBean userInfoBean) {
+                        if (userInfoBean != null) {
+                            userInfoNewBean = userInfoBean;
+                            mView.initDrawer(userInfoBean);
+                            mView.initUserView(userInfoBean);
+                        } else {
+                            LoginUtils.delLoginInfo(XlmmApp.getmContext());
+                            mView.initDrawer(null);
+                            mView.initUserView(null);
                         }
                     }
                 }));
@@ -46,19 +41,16 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void getUserInfoBeanChange() {
         mRxManager.add(mModel.getProfile()
-                .subscribe(new ServiceResponse<Response<UserInfoBean>>() {
+                .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
-                    public void onNext(Response<UserInfoBean> userInfoBeanResponse) {
-                        if (null != userInfoBeanResponse) {
-                            if (userInfoBeanResponse.isSuccessful()) {
-                                UserInfoBean userInfoBean = userInfoBeanResponse.body();
-                                userInfoNewBean = userInfoBean;
-                                mView.initUserViewChange(userInfoBean);
-                            } else if (userInfoBeanResponse.code() == 403) {
-                                LoginUtils.delLoginInfo(XlmmApp.getmContext());
-                                mView.initDrawer(null);
-                                mView.initUserView(null);
-                            }
+                    public void onNext(UserInfoBean userInfoBean) {
+                        if (userInfoBean != null) {
+                            userInfoNewBean = userInfoBean;
+                            mView.initUserViewChange(userInfoBean);
+                        } else {
+                            LoginUtils.delLoginInfo(XlmmApp.getmContext());
+                            mView.initDrawer(null);
+                            mView.initUserView(null);
                         }
                     }
                 }));
@@ -67,9 +59,9 @@ public class MainPresenter extends MainContract.Presenter {
     @Override
     public void isCouPon() {
         mRxManager.add(mModel.isCouPon()
-                .subscribe(isGetcouponResponse -> {
-                    if (null != isGetcouponResponse) {
-                        mView.initShowCoiuponWindow(isGetcouponResponse);
+                .subscribe(isGetcoupon -> {
+                    if (null != isGetcoupon) {
+                        mView.initShowCoiuponWindow(isGetcoupon);
                     }
                 }, Throwable::printStackTrace));
     }
@@ -125,7 +117,6 @@ public class MainPresenter extends MainContract.Presenter {
     public void getAddressVersionAndUrl() {
         mRxManager.add(mModel.getAddressVersionAndUrl()
                 .subscribe(addressDownloadResultBean -> {
-
                     if (null != addressDownloadResultBean) {
                         mView.downLoaAddressFile(addressDownloadResultBean);
                     }

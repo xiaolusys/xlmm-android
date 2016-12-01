@@ -7,13 +7,12 @@ import com.jimei.xiaolumeimei.base.BaseView;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
-import com.jimei.xiaolumeimei.entities.IsGetcoupon;
+import com.jimei.xiaolumeimei.entities.GetCoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 
-import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -22,9 +21,9 @@ import rx.Observable;
 public interface MainContract {
     interface Model {
 
-        Observable<Response<UserInfoBean>> getProfile();
+        Observable<UserInfoBean> getProfile();
 
-        Observable<Response<IsGetcoupon>> isCouPon();
+        Observable<GetCoupon> isCouPon();
 
         Observable<CartsNumResultBean> getCartsNum();
 
@@ -40,10 +39,6 @@ public interface MainContract {
     }
 
     interface View extends BaseView {
-        void findById();
-
-        void initSlide();
-
         void showBadge();
 
         void initViewsForTab();
@@ -54,7 +49,7 @@ public interface MainContract {
 
         void initDrawer(UserInfoBean userInfoBean);
 
-        void initShowCoiuponWindow(Response<IsGetcoupon> isGetcouponResponse);
+        void initShowCoiuponWindow(GetCoupon getCoupon);
 
         void initMainView(SwipeRefreshLayout swipeRefreshLayout);
 

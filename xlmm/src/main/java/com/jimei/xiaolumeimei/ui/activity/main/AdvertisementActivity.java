@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide;
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 
 public class AdvertisementActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -65,7 +64,7 @@ public class AdvertisementActivity extends AppCompatActivity implements View.OnC
 
     private void jumpAndFinish() {
         isDestroy = true;
-        startActivity(new Intent(AdvertisementActivity.this, MainActivity.class));
+        startActivity(new Intent(AdvertisementActivity.this, TabActivity.class));
         finish();
     }
 

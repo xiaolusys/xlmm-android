@@ -36,7 +36,6 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
-import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -47,8 +46,6 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -897,7 +894,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     return;
                 }
                 if (result.equals("cancel")) {
-                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
@@ -912,11 +908,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     }
                     finish();
                 } else if (result.equals("success")) {
-                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     JUtils.Toast("支付成功！");
                     successJump();
                 } else {
-                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsgAndFinish(result, errorMsg, extraMsg, true);
                 }

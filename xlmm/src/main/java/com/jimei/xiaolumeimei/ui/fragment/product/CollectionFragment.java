@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.fragment.product;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,10 +18,14 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CollectionAdapter;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,6 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     private CollectionAdapter adapter;
     private int page;
     private String next;
-    private CollectionActivity mContext;
 
     public static CollectionFragment newInstance(String title, String type) {
         CollectionFragment fragment = new CollectionFragment();
@@ -48,12 +50,6 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
         args.putString(ARG_PARAM2, type);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext = ((CollectionActivity) context);
     }
 
     @Override
@@ -69,6 +65,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_collection, container, false);
         emptyLayout = view.findViewById(R.id.empty_layout);
         emptyBtn = ((TextView) view.findViewById(R.id.jump_view));
@@ -132,19 +129,17 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
                         if (next != null && !"".equals(next)) {
                             page++;
                         }
-                        mContext.hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onCompleted() {
-                        recyclerView.post(recyclerView::loadMoreComplete);
+                        recyclerView.loadMoreComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        recyclerView.post(recyclerView::loadMoreComplete);
-                        mContext.hideIndeterminateProgressDialog();
+                        recyclerView.loadMoreComplete();
                         JUtils.Toast("数据加载有误!");
                     }
                 });
@@ -166,5 +161,21 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
             default:
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reLoadData(CollectChangeEvent event) {
+        if (collectionList != null) {
+            page = 1;
+            collectionList.clear();
+            initData();
+        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 }

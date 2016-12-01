@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.loading.VaryViewHelperController;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 
 import java.lang.reflect.Field;
@@ -25,6 +26,9 @@ public abstract class BaseLazyFragment extends BaseFragment implements Scrollabl
         } else {
             throw new IllegalArgumentException("You must return a right contentView layout resource Id");
         }
+        if (mVaryViewHelperController == null) {
+            mVaryViewHelperController = new VaryViewHelperController(getLoadingView());
+        }
         initViews();
         isInitView = true;
         lazyLoadData();
@@ -37,6 +41,8 @@ public abstract class BaseLazyFragment extends BaseFragment implements Scrollabl
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    public abstract View getLoadingView();
 
     @Override
     public void onDetach() {

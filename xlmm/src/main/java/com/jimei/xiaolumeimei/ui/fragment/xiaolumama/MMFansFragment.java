@@ -18,9 +18,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 
 /**
@@ -33,8 +30,6 @@ public class MMFansFragment extends BaseLazyFragment {
     XRecyclerView xrvMamaFans;
     private int pageNext = 2;
     private MamaFansAdapter mAdapter;
-
-    List<MamaFansBean.ResultsEntity> list = new ArrayList<>();
 
     public static MMFansFragment newInstance(String title) {
         MMFansFragment mmFansFragment = new MMFansFragment();
@@ -51,20 +46,18 @@ public class MMFansFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initData() {
-        showIndeterminateProgressDialog(false);
+    public void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaFans("1")
                 .subscribe(new ServiceResponse<MamaFansBean>() {
                     @Override
                     public void onCompleted() {
-                        super.onCompleted();
                         hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
+                        hideIndeterminateProgressDialog();
                         e.printStackTrace();
                     }
 
@@ -72,8 +65,7 @@ public class MMFansFragment extends BaseLazyFragment {
                     public void onNext(MamaFansBean fansBeen) {
                         if (fansBeen != null) {
                             if (0 != fansBeen.getCount()) {
-                                list.addAll(fansBeen.getResults());
-                                mAdapter.update(list);
+                                mAdapter.updateWithClear(fansBeen.getResults());
                             }
                             if (null == fansBeen.getNext()) {
                                 xrvMamaFans.setLoadingMoreEnabled(false);
@@ -156,5 +148,10 @@ public class MMFansFragment extends BaseLazyFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    }
+
+    @Override
+    public View getLoadingView() {
+        return xrvMamaFans;
     }
 }

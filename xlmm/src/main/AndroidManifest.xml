@@ -369,7 +369,10 @@
         <activity
             android:name=".ui.activity.xiaolumama.MamaReNewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-        <activity android:name=".ui.activity.main.TabActivity" />
+        <activity
+            android:name=".ui.activity.main.TabActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.xlmmmain.MainActivity"
             android:launchMode="singleTask"

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.fragment.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -31,8 +32,7 @@ public class PushBoutiqueFragment extends BaseBindingFragment<FragmentPushBoutiq
     }
 
     @Override
-    protected void initData() {
-        showIndeterminateProgressDialog(false);
+    public void initData() {
         loadMore();
     }
 
@@ -94,5 +94,10 @@ public class PushBoutiqueFragment extends BaseBindingFragment<FragmentPushBoutiq
     @Override
     public String getTitle() {
         return "按精品展示";
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.recyclerView;
     }
 }

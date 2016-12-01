@@ -158,7 +158,7 @@ public class ChangeSelectAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
                 idNo = idNum.getText().toString().trim();
-                if (IdCardChecker.isValidatedAllIdcard(idNo)) {
+                if (IdCardChecker.isValidatedAllIdcard(idNo) || !idFlag) {
                     if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                         Subscription subscribe = AddressModel.getInstance()
                                 .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,

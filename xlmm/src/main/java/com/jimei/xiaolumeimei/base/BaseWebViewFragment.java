@@ -1,7 +1,9 @@
 package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,41 +17,39 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
+import com.jimei.xiaolumeimei.databinding.FragmentBasewebviewBinding;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class BaseWebViewFragment extends BaseLazyFragment {
+import static android.app.Activity.RESULT_OK;
+
+public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebviewBinding> {
 
     private static final String TAG = "BaseWebViewFragment";
 
-    @Bind(R.id.ll_actwebview)
-    LinearLayout ll_actwebview;
-    @Bind(R.id.pb_view)
-    ProgressBar mProgressBar;
-    @Bind(R.id.wb_view)
-    WebView mWebView;
     private String cookies;
     private String domain;
     private String sessionid;
+
+    public ValueCallback<Uri> mUploadMessage;
+    public ValueCallback<Uri[]> mUploadMessageForAndroid5;
+
+    private final static int FILECHOOSER_RESULTCODE = 1;
+    private final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
     public static BaseWebViewFragment newInstance(String title, String link) {
         BaseWebViewFragment mmFansFragment = new BaseWebViewFragment();
@@ -67,13 +67,14 @@ public class BaseWebViewFragment extends BaseLazyFragment {
     }
 
     private void load() {
+        hideIndeterminateProgressDialog();
         try {
             if (getArguments() != null) {
                 String link = getArguments().getString("link", "");
                 if (link != null && !"".equals(link)) {
                     Map<String, String> extraHeaders = new HashMap<>();
                     extraHeaders.put("Cookie", sessionid);
-                    mWebView.loadUrl(link, extraHeaders);
+                    b.wbView.loadUrl(link, extraHeaders);
                 }
             }
         } catch (Exception e) {
@@ -87,45 +88,65 @@ public class BaseWebViewFragment extends BaseLazyFragment {
         cookies = sharedPreferences.getString("cookiesString", "");
         domain = sharedPreferences.getString("cookiesDomain", "");
         sessionid = sharedPreferences.getString("Cookie", "");
-        EventBus.getDefault().register(this);
         try {
             if (Build.VERSION.SDK_INT >= 19) {
-                mWebView.getSettings().setLoadsImagesAutomatically(true);
+                b.wbView.getSettings().setLoadsImagesAutomatically(true);
             } else {
-                mWebView.getSettings().setLoadsImagesAutomatically(false);
+                b.wbView.getSettings().setLoadsImagesAutomatically(false);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                b.wbView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             }
-            String userAgentString = mWebView.getSettings().getUserAgentString();
-            mWebView.getSettings().setUserAgentString(userAgentString +
+            String userAgentString = b.wbView.getSettings().getUserAgentString();
+            b.wbView.getSettings().setUserAgentString(userAgentString +
                     "; xlmm/" + BuildConfig.VERSION_NAME + ";");
-            mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-            mWebView.getSettings().setJavaScriptEnabled(true);
-            mWebView.addJavascriptInterface(new AndroidJsBridge((BaseSwipeBackCompatActivity) mActivity)
+            b.wbView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+            b.wbView.getSettings().setJavaScriptEnabled(true);
+            b.wbView.addJavascriptInterface(new AndroidJsBridge((BaseActivity) mActivity)
                     , "AndroidBridge");
-            mWebView.getSettings().setAllowFileAccess(true);
-            mWebView.getSettings().setAppCacheEnabled(true);
-            mWebView.getSettings().setDomStorageEnabled(true);
-            mWebView.getSettings().setDatabaseEnabled(true);
-            mWebView.getSettings().setUseWideViewPort(true);
-            mWebView.setDrawingCacheEnabled(true);
+            b.wbView.getSettings().setAllowFileAccess(true);
+            b.wbView.getSettings().setAppCacheEnabled(true);
+            b.wbView.getSettings().setDomStorageEnabled(true);
+            b.wbView.getSettings().setDatabaseEnabled(true);
+            b.wbView.getSettings().setUseWideViewPort(true);
+            b.wbView.setDrawingCacheEnabled(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
+                b.wbView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
             }
-            mWebView.setWebChromeClient(new WebChromeClient() {
+            b.wbView.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onProgressChanged(WebView view, int newProgress) {
                     JUtils.Log(TAG, "process:" + newProgress);
-                    if (mProgressBar != null) {
-                        mProgressBar.setProgress(newProgress);
+                    if (b.pbView != null) {
+                        b.pbView.setProgress(newProgress);
                         if (newProgress == 100) {
-//                        mWebView.getSettings().setBlockNetworkImage(true);
-                            mProgressBar.setVisibility(View.GONE);
+                            b.pbView.setVisibility(View.GONE);
                         } else {
-                            mProgressBar.setVisibility(View.VISIBLE);
+                            b.pbView.setVisibility(View.VISIBLE);
                         }
                     }
+                }
+
+                //扩展浏览器上传文件
+                //3.0++版本
+                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+                    openFileChooserImpl(uploadMsg);
+                }
+
+                //3.0--版本
+                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+                    openFileChooserImpl(uploadMsg);
+                }
+
+                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                    openFileChooserImpl(uploadMsg);
+                }
+
+                // For Android > 5.0
+                public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg,
+                                                 WebChromeClient.FileChooserParams fileChooserParams) {
+                    openFileChooserImplForAndroid5(uploadMsg);
+                    return true;
                 }
 
                 public boolean onJsAlert(WebView view, String url, String message,
@@ -185,14 +206,14 @@ public class BaseWebViewFragment extends BaseLazyFragment {
                     return true;
                 }
             });
-            mWebView.setWebViewClient(new WebViewClient() {
+            b.wbView.setWebViewClient(new WebViewClient() {
 
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     JUtils.Log(TAG, "onPageFinished:" + url);
                     CookieSyncManager.getInstance().sync();
-                    if (mWebView != null && !mWebView.getSettings().getLoadsImagesAutomatically()) {
-                        mWebView.getSettings().setLoadsImagesAutomatically(true);
+                    if (b.wbView != null && !b.wbView.getSettings().getLoadsImagesAutomatically()) {
+                        b.wbView.getSettings().setLoadsImagesAutomatically(true);
                     }
                 }
 
@@ -228,39 +249,33 @@ public class BaseWebViewFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         load();
-    }
-
-    @Override
-    public View getScrollableView() {
-        return null;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (ll_actwebview != null) {
-            ll_actwebview.removeView(mWebView);
+        if (b.llActwebview != null) {
+            b.llActwebview.removeView(b.wbView);
         }
-        if (mWebView != null) {
-            mWebView.removeAllViews();
-            mWebView.destroy();
-            mWebView = null;
+        if (b.wbView != null) {
+            b.wbView.removeAllViews();
+            b.wbView.destroy();
         }
         ButterKnife.unbind(this);
-        WebViewEvent stickyEvent = EventBus.getDefault().getStickyEvent(WebViewEvent.class);
-        if (stickyEvent != null) {
-            EventBus.getDefault().removeStickyEvent(stickyEvent);
-        }
-        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.llActwebview;
     }
 
     public void loadUrl(String url) {
         if (url != null && !"".equals(url)) {
             Map<String, String> extraHeaders = new HashMap<>();
             extraHeaders.put("Cookie", sessionid);
-            mWebView.loadUrl(url, extraHeaders);
+            b.wbView.loadUrl(url, extraHeaders);
         }
     }
 
@@ -269,7 +284,7 @@ public class BaseWebViewFragment extends BaseLazyFragment {
         super.onPause();
         CookieSyncManager.createInstance(mActivity);
         CookieSyncManager.getInstance().stopSync();
-        mWebView.onPause();
+        b.wbView.onPause();
     }
 
     @Override
@@ -277,7 +292,7 @@ public class BaseWebViewFragment extends BaseLazyFragment {
         super.onResume();
         CookieSyncManager.createInstance(mActivity);
         CookieSyncManager.getInstance().startSync();
-        mWebView.onResume();
+        b.wbView.onResume();
     }
 
     public void syncCookie(Context context) {
@@ -296,6 +311,46 @@ public class BaseWebViewFragment extends BaseLazyFragment {
             CookieSyncManager.getInstance().sync();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("image/*");
+        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+    }
+
+    private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
+        mUploadMessageForAndroid5 = uploadMsg;
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType("image/*");
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+
+        startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == FILECHOOSER_RESULTCODE) {
+            if (null == mUploadMessage) return;
+            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+            mUploadMessage.onReceiveValue(result);
+            mUploadMessage = null;
+        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
+            if (null == mUploadMessageForAndroid5) return;
+            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
+            if (result != null) {
+                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
+            } else {
+                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
+            }
+            mUploadMessageForAndroid5 = null;
         }
     }
 }
