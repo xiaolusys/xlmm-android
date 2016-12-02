@@ -18,7 +18,7 @@ import com.jimei.xiaolumeimei.adapter.AllRefundsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -136,8 +136,9 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_jump:
-                Intent intent = new Intent(AllRefundsActivity.this, MainActivity.class);
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "main");
+                readyGo(TabActivity.class, bundle);
                 finish();
                 break;
         }

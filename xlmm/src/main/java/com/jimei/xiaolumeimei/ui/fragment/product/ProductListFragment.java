@@ -79,7 +79,7 @@ public class ProductListFragment extends Fragment implements ScrollableHelper.Sc
         if (restoreInstanceState()) {
             processRestoreInstanceState(savedInstanceState);
         }
-        setRetainInstance(true);
+        setRetainInstance(false);
         if (getArguments() != null) {
             type = getArguments().getInt("type");
         }

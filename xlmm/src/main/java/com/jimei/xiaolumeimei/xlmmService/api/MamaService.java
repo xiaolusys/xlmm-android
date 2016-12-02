@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.xlmmService.api;
 
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
-import com.jimei.xiaolumeimei.entities.BoutiqueListBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
@@ -22,6 +21,7 @@ import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
@@ -253,7 +253,7 @@ public interface MamaService {
             @Field("save_times") int save_times);
 
     @GET("/rest/v2/modelproducts/boutique")
-    Observable<BoutiqueListBean> getBoutiqueList(
+    Observable<ProductListBean> getBoutiqueList(
             @Query("page")int page
     );
 }

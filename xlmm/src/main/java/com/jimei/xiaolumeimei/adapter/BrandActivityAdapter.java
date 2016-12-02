@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
@@ -33,7 +32,6 @@ public class BrandActivityAdapter extends RecyclerView.Adapter<BrandActivityAdap
     private Context mContext;
 
     public BrandActivityAdapter(Context mContext) {
-        JUtils.Log("MainActivity", "-----------BrandActivityAdapter");
         this.mContext = mContext;
         mList = new ArrayList<>();
     }

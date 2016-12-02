@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -16,20 +17,23 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
-import com.jimei.xiaolumeimei.base.BaseWebViewFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
 import com.jimei.xiaolumeimei.entities.event.RefreshCarNumEvent;
 import com.jimei.xiaolumeimei.entities.event.RefreshPersonalEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
+import com.jimei.xiaolumeimei.entities.event.ShowShopEvent;
+import com.jimei.xiaolumeimei.model.MainModel;
+import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
+import com.jimei.xiaolumeimei.ui.fragment.main.BoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.CarTabFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.CollectTabFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.FirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.GetCouponFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.MainTabFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.MyTabFragment;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainModel;
 import com.jimei.xiaolumeimei.utils.FragmentTabUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
@@ -51,14 +55,16 @@ import butterknife.Bind;
 import okhttp3.Call;
 
 
-public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabCheckListener {
+public class TabActivity extends BaseActivity {
     @Bind(R.id.radio_group)
     RadioGroup radioGroup;
     @Bind(R.id.text_car)
     TextView textView;
-    private int check_id = -1;
     private long firstTime = 0;
     private boolean updateFlag = true;
+    private UserInfoBean userInfoNewBean;
+    private UpdateBroadReceiver mUpdateBroadReceiver;
+    private String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +76,15 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
     }
 
     @Override
-    protected void initData() {
-        if (check_id != -1) {
-            radioGroup.check(check_id);
+    protected void onNewIntent(Intent intent) {
+        if (intent.getExtras() != null) {
+            flag = intent.getExtras().getString("flag");
         }
+    }
+
+    @Override
+    protected void initData() {
+        LoginUtils.clearCacheEveryWeek(this);
         showNewCoupon();
         downLoadAddress();
         downLoadCategory();
@@ -82,19 +93,24 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
     }
 
     public void showCarNum() {
-        addSubscription(MainModel.getInstance()
-                .getCartsNum()
-                .subscribe(cartsNumResultBean -> {
-                    if (cartsNumResultBean != null) {
-                        int num = cartsNumResultBean.getResult();
-                        textView.setText(num + "");
-                        if (num > 0) {
-                            textView.setVisibility(View.VISIBLE);
-                        } else {
-                            textView.setVisibility(View.GONE);
+        if (LoginUtils.checkLoginState(this)) {
+            addSubscription(MainModel.getInstance()
+                    .getCartsNum()
+                    .subscribe(cartsNumResultBean -> {
+                        if (cartsNumResultBean != null) {
+                            int num = cartsNumResultBean.getResult();
+                            textView.setText(num + "");
+                            if (num > 0) {
+                                textView.setVisibility(View.VISIBLE);
+                            } else {
+                                textView.setVisibility(View.GONE);
+                            }
                         }
-                    }
-                }, Throwable::printStackTrace));
+                    }, Throwable::printStackTrace));
+        } else {
+            textView.setText("0");
+            textView.setVisibility(View.GONE);
+        }
     }
 
     private void showNewCoupon() {
@@ -119,13 +135,20 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
     @Override
     protected void onResume() {
         super.onResume();
-        if (LoginUtils.checkLoginState(this)) {
-            showCarNum();
-        }
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
+        showCarNum();
         EventBus.getDefault().post(new RefreshCarNumEvent());
         EventBus.getDefault().post(new RefreshPersonalEvent());
+        EventBus.getDefault().post(new ShowShopEvent());
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+        if (flag != null && !"".equals(flag)) {
+            if (flag.equals("main")) {
+                radioGroup.check(R.id.rb_main);
+            } else if (flag.equals("car")) {
+                radioGroup.check(R.id.rb_car);
+            }
+            flag = null;
+        }
     }
 
     @Override
@@ -147,16 +170,11 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
         EventBus.getDefault().register(this);
         List<BaseFragment> fragments = new ArrayList<>();
         fragments.add(MainTabFragment.newInstance());
-        fragments.add(BaseWebViewFragment.newInstance("精品券", "http://m.xiaolumeimei.com/mall/activity/topTen/model/2?id=379"));
+        fragments.add(BoutiqueFragment.newInstance());
         fragments.add(CarTabFragment.newInstance());
         fragments.add(CollectTabFragment.newInstance());
         fragments.add(MyTabFragment.newInstance());
-        new FragmentTabUtils(getSupportFragmentManager(), radioGroup, fragments, R.id.container, this, this);
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
-        check_id = extras.getInt("check_id", -1);
+        new FragmentTabUtils(getSupportFragmentManager(), radioGroup, fragments, R.id.container, this);
     }
 
     @Override
@@ -168,11 +186,6 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_tab;
-    }
-
-    @Override
-    public void onTabCheckListener(RadioGroup group, int checkedId, int index) {
-
     }
 
     @Override
@@ -196,9 +209,7 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void initLogOutInfo(LogOutEmptyEvent event) {
-        if (radioGroup != null) {
-            radioGroup.check(radioGroup.getChildAt(0).getId());
-        }
+
     }
 
     private void setTopic() {
@@ -304,5 +315,28 @@ public class TabActivity extends BaseActivity implements FragmentTabUtils.OnTabC
                         }
                     }
                 }, Throwable::printStackTrace));
+    }
+
+    public UserInfoBean getUserInfoNewBean() {
+        return userInfoNewBean;
+    }
+
+    public void setUserInfoNewBean(UserInfoBean userInfoNewBean) {
+        this.userInfoNewBean = userInfoNewBean;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
+        mUpdateBroadReceiver = new UpdateBroadReceiver();
+        registerReceiver(mUpdateBroadReceiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mUpdateBroadReceiver);
     }
 }

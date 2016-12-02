@@ -80,6 +80,12 @@ public class ProductModel {
                 .compose(new DefaultTransform<>());
     }
 
+    public Observable<ProductListBean> getBoutiqueList(int page, String order_by) {
+        return getService()
+                .getBoutiqueList(page, order_by)
+                .compose(new DefaultTransform<>());
+    }
+
     //今日上新列表
     private Observable<ProductListBean> getTodayProducts(int page) {
         return getService()

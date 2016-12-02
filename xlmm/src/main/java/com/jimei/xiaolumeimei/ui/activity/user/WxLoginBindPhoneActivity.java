@@ -19,7 +19,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -137,7 +137,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.pass:
-                startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
+                startActivity(new Intent(WxLoginBindPhoneActivity.this, TabActivity.class));
                 finish();
                 break;
             case R.id.getCheckCode:
@@ -216,7 +216,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                         JUtils.Log(TAG, codeBean.toString());
                         int code = codeBean.getRcode();
                         if (0 == code) {
-                            startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
+                            startActivity(new Intent(WxLoginBindPhoneActivity.this, TabActivity.class));
                             finish();
                         } else {
                             JUtils.Toast(codeBean.getMsg());

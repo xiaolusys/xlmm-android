@@ -33,21 +33,25 @@
                 android:text="主页" />
 
             <RadioButton
+                android:id="@+id/rb_boutique"
                 style="@style/TabRadioButtonStyle"
                 android:drawableTop="@drawable/tab_boutique"
                 android:text="精品汇" />
 
             <RadioButton
+                android:id="@+id/rb_car"
                 style="@style/TabRadioButtonStyle"
                 android:drawableTop="@drawable/tab_car"
                 android:text="购物车" />
 
             <RadioButton
+                android:id="@+id/rb_collect"
                 style="@style/TabRadioButtonStyle"
                 android:drawableTop="@drawable/tab_collect"
                 android:text="收藏" />
 
             <RadioButton
+                android:id="@+id/rb_my"
                 style="@style/TabRadioButtonStyle"
                 android:drawableTop="@drawable/tab_my"
                 android:text="我的" />

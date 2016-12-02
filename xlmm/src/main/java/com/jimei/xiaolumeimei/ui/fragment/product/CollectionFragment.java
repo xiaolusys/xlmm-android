@@ -20,7 +20,7 @@ import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -156,7 +156,11 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.jump_view:
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "main");
+                Intent intent = new Intent(getActivity(), TabActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             default:
                 break;

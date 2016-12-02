@@ -18,7 +18,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AllOrderAdapter;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -89,9 +89,16 @@ public class OrderListFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        getActivity().startActivity(intent);
-        getActivity().finish();
+        switch (v.getId()) {
+            case R.id.btn_jump:
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "main");
+                Intent intent = new Intent(getActivity(), TabActivity.class);
+                intent.putExtras(bundle);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+                break;
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.xlmmmain;
+package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
@@ -17,7 +17,7 @@ import rx.Observable;
 /**
  * Created by itxuye on 2016/7/4.
  */
-public class MainModel implements MainContract.Model {
+public class MainModel {
     private static MainService mainService;
     private static MainModel mainModel = new MainModel();
 
@@ -32,56 +32,48 @@ public class MainModel implements MainContract.Model {
         return mainService;
     }
 
-    @Override
     public Observable<UserInfoBean> getProfile() {
         return getService()
                 .getUserLoginInfo()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<GetCoupon> isCouPon() {
         return getService()
                 .isCouPon()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<CartsNumResultBean> getCartsNum() {
         return getService()
                 .show_carts_num()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<PortalBean> getPortalBean() {
         return getService()
                 .getPortalBean()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<AddressDownloadResultBean> getAddressVersionAndUrl() {
         return getService()
                 .getAddressVersionAndUrl()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<VersionBean> getVersion() {
         return getService()
                 .getVersion()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<CategoryDownBean> getCategoryDown() {
         return getService()
                 .getCategoryDown()
                 .compose(new DefaultTransform<>());
     }
 
-    @Override
     public Observable<UserTopic> getTopic() {
         return getService()
                 .getTopic()

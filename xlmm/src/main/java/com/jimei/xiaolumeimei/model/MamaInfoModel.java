@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
-import com.jimei.xiaolumeimei.entities.BoutiqueListBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
@@ -23,6 +22,7 @@ import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.PotentialFans;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
@@ -297,7 +297,7 @@ public class MamaInfoModel {
                 .compose(new DefaultTransform<>());
     }
 
-    public Observable<BoutiqueListBean> getBoutiqueList(int page) {
+    public Observable<ProductListBean> getBoutiqueList(int page) {
         return getService()
                 .getBoutiqueList(page)
                 .compose(new DefaultTransform<>());

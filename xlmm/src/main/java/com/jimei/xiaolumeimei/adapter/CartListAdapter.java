@@ -18,7 +18,7 @@ import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.fragment.main.CarTabFragment;
+import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -33,12 +33,12 @@ import butterknife.ButterKnife;
 public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHolder> {
     private List<CartsInfoBean> mList;
     private BaseActivity mActivity;
-    private CarTabFragment mFragment;
+    private ICartHelper helper;
 
-    public CartListAdapter(BaseActivity mActivity, List<CartsInfoBean> mList, CarTabFragment mFragment) {
+    public CartListAdapter(BaseActivity mActivity, List<CartsInfoBean> mList, ICartHelper helper) {
         this.mList = mList;
         this.mActivity = mActivity;
-        this.mFragment = mFragment;
+        this.helper = helper;
     }
 
     @Override
@@ -75,35 +75,35 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                             .setMessage("您确定要删除吗？")
                             .setPositiveButton("确定", (dialog, which) -> {
                                 dialog.dismiss();
-                                mFragment.showIndeterminateProgressDialog(false);
-                                mFragment.addSubscription(CartsModel.getInstance()
+                                helper.showIndeterminateProgressDialog(false);
+                                helper.addSubscription(CartsModel.getInstance()
                                         .delete_carts(cartsInfoBean.getId() + "")
                                         .subscribe(responseBody -> {
                                                     if (responseBody != null) {
                                                         if (responseBody.isSuccessful()) {
-                                                            mFragment.addHistory(cartsInfoBean);
-                                                            mFragment.removeCartList(cartsInfoBean);
+                                                            helper.addHistory(cartsInfoBean);
+                                                            helper.removeCartList(cartsInfoBean);
                                                         } else {
                                                             JUtils.Toast(responseBody.body().getInfo());
                                                         }
                                                     } else {
                                                         JUtils.Toast("操作未成功，请重新尝试");
                                                     }
-                                                    mFragment.hideIndeterminateProgressDialog();
+                                                    helper.hideIndeterminateProgressDialog();
                                                 }, Throwable::printStackTrace
                                         ));
                             })
                             .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                             .show();
                 } else {
-                    mFragment.showIndeterminateProgressDialog(false);
-                    mFragment.addSubscription(CartsModel.getInstance()
+                    helper.showIndeterminateProgressDialog(false);
+                    helper.addSubscription(CartsModel.getInstance()
                             .minus_product_carts(cartsInfoBean.getId() + "")
                             .subscribe(responseBody -> {
                                         if (responseBody != null && responseBody.isSuccessful()) {
                                             CodeBean body = responseBody.body();
                                             if (body != null && body.getCode() == 0) {
-                                                mFragment.setPriceText();
+                                                helper.setPriceText();
                                                 cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
                                                 holder.count.setText(cartsInfoBean.getNum() + "");
                                                 notifyDataSetChanged();
@@ -113,7 +113,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                         } else {
                                             JUtils.Toast("操作未成功，请重新尝试");
                                         }
-                                        mFragment.hideIndeterminateProgressDialog();
+                                        helper.hideIndeterminateProgressDialog();
                                     }, Throwable::printStackTrace
                             ));
                 }
@@ -123,14 +123,14 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                 new NoDoubleClickListener() {
                     @Override
                     protected void onNoDoubleClick(View v) {
-                        mFragment.showIndeterminateProgressDialog(false);
-                        mFragment.addSubscription(CartsModel.getInstance()
+                        helper.showIndeterminateProgressDialog(false);
+                        helper.addSubscription(CartsModel.getInstance()
                                 .plus_product_carts(cartsInfoBean.getId() + "")
                                 .subscribe(responseBody -> {
                                             if (null != responseBody) {
                                                 CodeBean body = responseBody.body();
                                                 if (body != null && body.getCode() == 0) {
-                                                    mFragment.setPriceText();
+                                                    helper.setPriceText();
                                                     cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
                                                     holder.count.setText(cartsInfoBean.getNum() + "");
                                                     notifyDataSetChanged();
@@ -140,7 +140,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                             } else {
                                                 JUtils.Toast("操作未成功，请重新尝试");
                                             }
-                                            mFragment.hideIndeterminateProgressDialog();
+                                            helper.hideIndeterminateProgressDialog();
                                         }, Throwable::printStackTrace
                                 ));
                     }

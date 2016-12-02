@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,17 +10,24 @@ import com.bumptech.glide.Glide;
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.base.BaseActivity;
 
-public class AdvertisementActivity extends AppCompatActivity implements View.OnClickListener {
+public class AdvertisementActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView text;
     private boolean isDestroy;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        setContentView(getContentViewLayoutID());
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_advertisement);
+        initData();
+    }
+
+    @Override
+    protected void initData() {
         ViewUtils.setWindowStatus(this);
         String link = getIntent().getExtras().getString("link");
         isDestroy = false;
@@ -54,6 +60,11 @@ public class AdvertisementActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         isDestroy = true;
         super.onDestroy();
+    }
+
+    @Override
+    protected int getContentViewLayoutID() {
+        return R.layout.activity_advertisement;
     }
 
     @Override

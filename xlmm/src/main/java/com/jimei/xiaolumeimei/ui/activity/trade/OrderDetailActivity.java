@@ -576,6 +576,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
+                        tid = orderDetailBean.getTid();
                         fillDataToView(orderDetailBean);
                     }
                 });

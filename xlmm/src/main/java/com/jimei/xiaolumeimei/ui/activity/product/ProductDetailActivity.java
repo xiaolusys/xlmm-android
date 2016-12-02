@@ -443,8 +443,11 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
                 break;
             case R.id.rl_cart:
-                startActivity(new Intent(this, CartActivity.class));
-                finish();
+                if (!LoginUtils.checkLoginState(getApplicationContext())) {
+                    jumpToLogin();
+                } else {
+                    readyGoThenKill(CartActivity.class);
+                }
                 break;
             case R.id.tv_add:
                 if (!LoginUtils.checkLoginState(getApplicationContext())) {

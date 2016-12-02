@@ -10,7 +10,7 @@ import com.facebook.stetho.Stetho;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.receiver.mipush.XiaoMiMessageReceiver;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 
@@ -82,7 +82,7 @@ public class XlmmApp extends MultiDexApplication {
         @Override
         public void uncaughtException(Thread thread, Throwable ex) {
             ex.printStackTrace();
-            Intent intent = new Intent(XlmmApp.this, MainActivity.class);
+            Intent intent = new Intent(XlmmApp.this, TabActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             XlmmApp.this.startActivity(intent);
             android.os.Process.killProcess(android.os.Process.myPid());

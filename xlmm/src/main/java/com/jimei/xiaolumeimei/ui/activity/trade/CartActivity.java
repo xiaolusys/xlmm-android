@@ -1,12 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
@@ -14,69 +10,29 @@ import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
+import com.jimei.xiaolumeimei.databinding.ActivityCartBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
+import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+/**
+ * Created by wisdom on 16/12/2.
+ */
 
-public class CartActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
-    @Bind(R.id.rv_cart)
-    RecyclerView rvCart;
-    @Bind(R.id.rv_history)
-    RecyclerView rvHistory;
-    @Bind(R.id.empty_content)
-    LinearLayout emptyLayout;
-    @Bind(R.id.go_main)
-    TextView goMain;
-    @Bind(R.id.total_price)
-    TextView totalPrice;
-    @Bind(R.id.tv_line)
-    TextView tvLine;
-    @Bind(R.id.confirm)
-    Button confirm;
-    @Bind(R.id.sv)
-    ScrollView mScrollView;
-
-
+public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implements View.OnClickListener, ICartHelper {
     private List<Integer> ids = new ArrayList<>();
     private List<CartsInfoBean> cartList = new ArrayList<>();
     private List<CartsInfoBean> cartHisList = new ArrayList<>();
     private CartListAdapter cartListAdapter;
     private CartHistoryAdapter cartHisAdapter;
-
-
-    @Override
-    protected void setListener() {
-        goMain.setOnClickListener(this);
-        confirm.setOnClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
-        refreshCartList();
-        addSubscription(CartsModel.getInstance()
-                .getCartsHisList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                    @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
-                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
-                            cartHisList.addAll(cartsInfoBeen);
-                            cartHisAdapter.notifyDataSetChanged();
-                            tvLine.setVisibility(View.VISIBLE);
-                        } else {
-                            tvLine.setVisibility(View.GONE);
-                        }
-                    }
-                }));
-    }
 
     @Override
     protected int getContentViewLayoutID() {
@@ -85,32 +41,47 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
     @Override
     protected void initViews() {
-        rvCart.setNestedScrollingEnabled(false);
-        rvCart.setHasFixedSize(false);
-        rvCart.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        b.rvCart.setNestedScrollingEnabled(false);
+        b.rvCart.setHasFixedSize(false);
+        b.rvCart.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         ScrollLinearLayoutManager layoutManager = new ScrollLinearLayoutManager(this);
         layoutManager.setAutoMeasureEnabled(false);
-        rvCart.setLayoutManager(layoutManager);
-//        cartListAdapter = new CartListAdapter(this, cartList);
-        rvCart.setAdapter(cartListAdapter);
+        b.rvCart.setLayoutManager(layoutManager);
+        cartListAdapter = new CartListAdapter(this, cartList, this);
+        b.rvCart.setAdapter(cartListAdapter);
 
 
-        rvHistory.setNestedScrollingEnabled(false);
-        rvHistory.setHasFixedSize(false);
-        rvHistory.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        b.rvHistory.setNestedScrollingEnabled(false);
+        b.rvHistory.setHasFixedSize(false);
+        b.rvHistory.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         ScrollLinearLayoutManager manager = new ScrollLinearLayoutManager(this);
         manager.setAutoMeasureEnabled(false);
-        rvHistory.setLayoutManager(manager);
-//        cartHisAdapter = new CartHistoryAdapter(this, cartHisList);
-        rvHistory.setAdapter(cartHisAdapter);
+        b.rvHistory.setLayoutManager(manager);
+        cartHisAdapter = new CartHistoryAdapter(this, cartHisList, this);
+        b.rvHistory.setAdapter(cartHisAdapter);
+    }
+
+    @Override
+    public void initData() {
+        refreshCartList();
+        refreshHisCartList();
+    }
+
+    @Override
+    public void setListener() {
+        b.goMain.setOnClickListener(this);
+        b.confirm.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.go_main:
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "main");
+                Intent intent1 = new Intent(this, TabActivity.class);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
                 break;
             case R.id.confirm:
                 if (ids.size() > 0) {
@@ -118,12 +89,20 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                     Intent intent = new Intent(this, CartsPayInfoActivity.class);
                     intent.putExtra("ids", getIds());
                     startActivity(intent);
-                    finish();
                 } else {
                     JUtils.Toast("请至少选择一件商品哦!");
                 }
                 break;
         }
+    }
+
+    private String getIds() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ids.size(); i++) {
+            sb.append(ids.get(i)).append(",");
+        }
+        String str = new String(sb);
+        return str.substring(0, str.length() - 1);
     }
 
     public void setPriceText() {
@@ -134,7 +113,26 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                         super.onNext(cartsPayinfoBean);
                         if (cartsPayinfoBean != null) {
-                            totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
+                            b.totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
+                            b.confirmLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }));
+    }
+
+    private void refreshHisCartList() {
+        addSubscription(CartsModel.getInstance()
+                .getCartsHisList()
+                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                    @Override
+                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                        cartHisList.clear();
+                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                            cartHisList.addAll(cartsInfoBeen);
+                            cartHisAdapter.notifyDataSetChanged();
+                            b.tvLine.setVisibility(View.VISIBLE);
+                        } else {
+                            b.tvLine.setVisibility(View.GONE);
                         }
                     }
                 }));
@@ -142,35 +140,13 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
 
     public void removeCartList(CartsInfoBean cartsInfoBean) {
         cartList.remove(cartsInfoBean);
-        if (cartList.size() == 0) emptyLayout.setVisibility(View.VISIBLE);
+        if (cartList.size() == 0) {
+            b.emptyContent.setVisibility(View.VISIBLE);
+            b.totalPrice.setText("¥0");
+            b.confirmLayout.setVisibility(View.GONE);
+        }
         cartListAdapter.notifyDataSetChanged();
         refreshIds();
-    }
-
-    public void refreshCartList(){
-        showIndeterminateProgressDialog(false);
-        addSubscription(CartsModel.getInstance()
-                .getCartsList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                    @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
-                        cartList.clear();
-                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
-                            cartList.addAll(cartsInfoBeen);
-                            emptyLayout.setVisibility(View.GONE);
-                            cartListAdapter.notifyDataSetChanged();
-                            ids.clear();
-                            for (int i = 0; i < cartsInfoBeen.size(); i++) {
-                                ids.add(cartsInfoBeen.get(i).getId());
-                            }
-                            setPriceText();
-                        } else {
-                            emptyLayout.setVisibility(View.VISIBLE);
-                        }
-                        mScrollView.scrollTo(0,0);
-                        hideIndeterminateProgressDialog();
-                    }
-                }));
     }
 
     private void refreshIds() {
@@ -185,7 +161,7 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
                                 ids.add(cartsInfoBeen.get(i).getId());
                             }
                             setPriceText();
-                        }else {
+                        } else {
                             ids.clear();
                         }
                     }
@@ -195,35 +171,40 @@ public class CartActivity extends BaseSwipeBackCompatActivity implements View.On
     public void removeHistory(CartsInfoBean cartsInfoBean) {
         cartHisList.remove(cartsInfoBean);
         cartHisAdapter.notifyDataSetChanged();
-        if (cartHisList.size() == 0) tvLine.setVisibility(View.GONE);
+        if (cartHisList.size() == 0) b.tvLine.setVisibility(View.GONE);
     }
 
     public void addHistory(CartsInfoBean cartsInfoBean) {
         cartHisList.add(0, cartsInfoBean);
         cartHisAdapter.notifyDataSetChanged();
-        tvLine.setVisibility(View.VISIBLE);
+        b.tvLine.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
-    private String getIds() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < ids.size(); i++) {
-            sb.append(ids.get(i)).append(",");
-        }
-        String str = new String(sb);
-        return str.substring(0, str.length() - 1);
+    public void refreshCartList() {
+        showIndeterminateProgressDialog(false);
+        addSubscription(CartsModel.getInstance()
+                .getCartsList()
+                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                    @Override
+                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                        cartList.clear();
+                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                            cartList.addAll(cartsInfoBeen);
+                            b.emptyContent.setVisibility(View.GONE);
+                            cartListAdapter.notifyDataSetChanged();
+                            ids.clear();
+                            for (int i = 0; i < cartsInfoBeen.size(); i++) {
+                                ids.add(cartsInfoBeen.get(i).getId());
+                            }
+                            setPriceText();
+                        } else {
+                            b.emptyContent.setVisibility(View.VISIBLE);
+                            b.totalPrice.setText("¥0");
+                            b.confirmLayout.setVisibility(View.GONE);
+                        }
+                        b.sv.scrollTo(0, 0);
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
     }
 }

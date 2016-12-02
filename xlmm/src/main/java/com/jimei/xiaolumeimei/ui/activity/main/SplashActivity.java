@@ -15,7 +15,6 @@ import com.jimei.library.utils.NetUtil;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;

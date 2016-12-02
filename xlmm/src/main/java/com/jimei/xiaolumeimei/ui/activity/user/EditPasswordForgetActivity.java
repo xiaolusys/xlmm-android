@@ -12,7 +12,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -96,7 +96,7 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
                                                 LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
                                                         password1);
                                                 JUtils.Toast("密码重置成功,登录成功");
-                                                Intent intent = new Intent(mContext, MainActivity.class);
+                                                Intent intent = new Intent(mContext, TabActivity.class);
                                                 startActivity(intent);
                                                 finish();
                                             } else {

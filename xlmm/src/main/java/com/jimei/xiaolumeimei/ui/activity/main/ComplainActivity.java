@@ -18,7 +18,6 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -82,7 +81,7 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
                             }
                         });
                 addSubscription(subscribe);
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, TabActivity.class);
                 startActivity(intent);
                 finish();
             } else {

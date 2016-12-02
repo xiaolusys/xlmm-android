@@ -39,6 +39,7 @@ import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
@@ -277,7 +278,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             JUtils.Toast("商品已过期,请重新选购");
-                            readyGo(CartActivity.class);
+                            readyGoThenKill(CartActivity.class);
                         }
                     }
                 });
@@ -405,7 +406,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                             pay_extras);
                         } else {
                             JUtils.Toast("商品已过期,请重新选购");
-                            readyGo(CartActivity.class);
+                            readyGoThenKill(CartActivity.class);
                         }
                     }
                 });

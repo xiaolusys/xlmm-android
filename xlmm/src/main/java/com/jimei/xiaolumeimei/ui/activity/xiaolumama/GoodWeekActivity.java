@@ -32,11 +32,6 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
 
 
     @Override
-    protected void setListener() {
-
-    }
-
-    @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
         addSubscription(MamaInfoModel.getInstance()

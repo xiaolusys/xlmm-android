@@ -39,11 +39,11 @@ public class PushBoutiqueFragment extends BaseBindingFragment<FragmentPushBoutiq
     private void loadMore() {
         addSubscription(MamaInfoModel.getInstance()
                 .getBoutiqueList(page)
-                .subscribe(boutiqueListBean -> {
-                    if (boutiqueListBean != null) {
-                        next = boutiqueListBean.getNext();
+                .subscribe(productListBean -> {
+                    if (productListBean != null) {
+                        next = productListBean.getNext();
                         page++;
-                        adapter.update(boutiqueListBean.getResults());
+                        adapter.update(productListBean.getResults());
                     }
                     b.recyclerView.loadMoreComplete();
                     hideIndeterminateProgressDialog();

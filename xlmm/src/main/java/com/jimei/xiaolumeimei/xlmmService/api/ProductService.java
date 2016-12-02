@@ -68,4 +68,11 @@ public interface ProductService {
     @GET("/rest/v1/activitys/{id}")
     Observable<BrandListBean> getBrandList(
             @Path("id") String id);
+
+
+    @GET("/rest/v2/modelproducts/boutique")
+    Observable<ProductListBean> getBoutiqueList(
+            @Query("page") int page,
+            @Query("order_by") String order_by
+    );
 }

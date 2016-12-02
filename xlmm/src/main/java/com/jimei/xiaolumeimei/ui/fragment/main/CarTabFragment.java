@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.fragment.main;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.jimei.library.utils.JUtils;
@@ -18,7 +19,8 @@ import com.jimei.xiaolumeimei.entities.event.RefreshCarNumEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
+import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,7 +35,7 @@ import java.util.List;
  * Created by wisdom on 16/11/29.
  */
 
-public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> implements View.OnClickListener {
+public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> implements View.OnClickListener, ICartHelper {
     private List<Integer> ids = new ArrayList<>();
     private List<CartsInfoBean> cartList = new ArrayList<>();
     private List<CartsInfoBean> cartHisList = new ArrayList<>();
@@ -57,6 +59,10 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     @Override
     public void initData() {
         refreshCartList();
+        refreshHisCartList();
+    }
+
+    private void refreshHisCartList() {
         addSubscription(CartsModel.getInstance()
                 .getCartsHisList()
                 .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
@@ -107,8 +113,11 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.go_main:
-                // TODO: 16/11/29  跳转到主页
-                startActivity(new Intent(mActivity, MainActivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "main");
+                Intent intent1 = new Intent(mActivity, TabActivity.class);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
                 break;
             case R.id.confirm:
                 if (ids.size() > 0) {
@@ -133,7 +142,9 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     }
 
     public void setPriceText() {
-        ((TabActivity) mActivity).showCarNum();
+        if (mActivity instanceof TabActivity) {
+            ((TabActivity) mActivity).showCarNum();
+        }
         addSubscription(CartsModel.getInstance()
                 .getCartsInfoList(getIds())
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
@@ -153,7 +164,9 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
         if (cartList.size() == 0) {
             b.emptyContent.setVisibility(View.VISIBLE);
             b.totalPrice.setText("¥0");
-            ((TabActivity) mActivity).showCarNum();
+            if (mActivity instanceof TabActivity) {
+                ((TabActivity) mActivity).showCarNum();
+            }
             b.confirmLayout.setVisibility(View.GONE);
         }
         cartListAdapter.notifyDataSetChanged();
@@ -227,6 +240,8 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reLoadData(RefreshCarNumEvent event) {
-        initData();
+        if (LoginUtils.checkLoginState(mActivity)) {
+            initData();
+        }
     }
 }

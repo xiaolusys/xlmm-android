@@ -22,12 +22,9 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
-import com.jimei.xiaolumeimei.entities.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -128,9 +125,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                             + ", user.getResult() "
                                             + codeBean.getMsg());
                                     if (codeBean.getRcode() == 0) {
-
                                         hideIndeterminateProgressDialog();
-                                        EventBus.getDefault().post(new UserInfoEmptyEvent());
                                         EventBus.getDefault().post(new SetMiPushEvent());
                                         LoginUtils.saveLoginInfo(true, getApplicationContext(),
                                                 login_name_value, login_pass_value);
@@ -144,35 +139,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                         }
 
                                         if (login != null) {
-                                            if (login.equals("cart")) {
-                                                Intent intent = new Intent(mContext, CartActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else if (login.equals("product")) {
-                                                finish();
-                                            } else if (login.equals("push_jump")) {
+                                            if (login.equals("push_jump")) {
                                                 JumpUtils.push_jump_proc(PhoneLoginActivity.this, actlink);
-                                                finish();
-                                            } else if (login.equals("main")) {
-                                                finish();
-                                            } else if (login.equals("collect")) {
-                                                Intent intent = new Intent(mContext, CollectionActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else if (login.equals("point")) {
-                                                Intent intent =
-                                                        new Intent(mContext, MembershipPointActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else if (login.equals("money")) {
-                                                Intent intent = new Intent(mContext, WalletActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else if (login.equals("axiba")) {
-                                                finish();
-                                            } else if (login.equals("coupon")) {
-                                                Intent intent = new Intent(mContext, AllCouponActivity.class);
-                                                startActivity(intent);
                                                 finish();
                                             } else if (login.equals("productdetail")) {
                                                 Intent intent = new Intent(mContext, ProductDetailActivity.class);
@@ -182,23 +150,32 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                                 startActivity(intent);
                                                 finish();
                                             } else if (login.equals("h5")) {
-                                                JumpUtils.jumpToWebViewWithCookies(mContext, actlink, -1,
-                                                        CommonWebViewActivity.class);
+                                                Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+                                                SharedPreferences sharedPreferences =
+                                                        getSharedPreferences("xlmmCookiesAxiba",
+                                                                Context.MODE_PRIVATE);
+                                                String cookies = sharedPreferences.getString("cookiesString", "");
+                                                String domain = sharedPreferences.getString("cookiesDomain", "");
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("cookies", cookies);
+                                                bundle.putString("domain", domain);
+                                                bundle.putString("actlink", actlink);
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
                                                 finish();
                                             } else if (login.equals("goactivity")) {
                                                 JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
                                                         ActivityWebViewActivity.class, title);
                                                 finish();
                                             } else if (login.equals("getCoupon")) {
-                                                UserModel.getInstance()
+                                                addSubscription(UserModel.getInstance()
                                                         .getCouPon()
                                                         .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                                             @Override
                                                             public void onNext(
                                                                     Response<GetCouponbean> getCouponbeanResponse) {
                                                                 if (getCouponbeanResponse != null) {
-                                                                    if (getCouponbeanResponse.isSuccessful()
-                                                                            && getCouponbeanResponse.code() == 200) {
+                                                                    if (getCouponbeanResponse.isSuccessful()) {
                                                                         JUtils.Toast(getCouponbeanResponse.body().getInfo());
                                                                         finish();
                                                                     }
@@ -212,7 +189,9 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                                                     JUtils.Toast("优惠券领取失败");
                                                                 }
                                                             }
-                                                        });
+                                                        }));
+                                            } else {
+                                                finish();
                                             }
                                         }
                                     } else {

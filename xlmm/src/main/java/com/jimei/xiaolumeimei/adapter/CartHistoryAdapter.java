@@ -17,7 +17,7 @@ import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.fragment.main.CarTabFragment;
+import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -34,12 +34,12 @@ import butterknife.ButterKnife;
 public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.ViewHolder> {
     private List<CartsInfoBean> mList;
     private BaseActivity mActivity;
-    private CarTabFragment mFragment;
+    private ICartHelper helper;
 
-    public CartHistoryAdapter(BaseActivity mActivity, List<CartsInfoBean> mList, CarTabFragment mFragment) {
+    public CartHistoryAdapter(BaseActivity mActivity, List<CartsInfoBean> mList, ICartHelper helper) {
         this.mList = mList;
         this.mActivity = mActivity;
-        this.mFragment = mFragment;
+        this.helper = helper;
     }
 
 
@@ -72,18 +72,18 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
                     @Override
                     protected void onNoDoubleClick(View v) {
                         MobclickAgent.onEvent(mActivity, "ReAddCartsID");
-                        mFragment.showIndeterminateProgressDialog(false);
-                        mFragment.addSubscription(CartsModel.getInstance()
+                        helper.showIndeterminateProgressDialog(false);
+                        helper.addSubscription(CartsModel.getInstance()
                                 .rebuy(cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
                                         cartsInfoBean.getId() + "")
                                 .subscribe(new ServiceResponse<CartsHisBean>() {
                                     @Override
                                     public void onNext(CartsHisBean cartsHisBean) {
-                                        mFragment.hideIndeterminateProgressDialog();
+                                        helper.hideIndeterminateProgressDialog();
                                         if (null != cartsHisBean) {
                                             if (cartsHisBean.getCode() == 0) {
-                                                mFragment.removeHistory(cartsInfoBean);
-                                                mFragment.refreshCartList();
+                                                helper.removeHistory(cartsInfoBean);
+                                                helper.refreshCartList();
                                             } else {
                                                 JUtils.Toast(cartsHisBean.getInfo());
                                             }
@@ -94,7 +94,7 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
                                     public void onError(Throwable e) {
                                         super.onError(e);
                                         JUtils.Toast("重新购买失败,商品可能已下架");
-                                        mFragment.hideIndeterminateProgressDialog();
+                                        helper.hideIndeterminateProgressDialog();
                                     }
                                 }));
                     }
