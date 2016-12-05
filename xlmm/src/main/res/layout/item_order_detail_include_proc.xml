@@ -42,8 +42,7 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="20px"
-                android:visibility="visible">
+                android:padding="20px">
 
                 <TextView
                     android:id="@+id/tv_order_package"
@@ -74,11 +73,19 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="13sp" />
 
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:src="@drawable/to_right_ic"/>
+                    android:background="@drawable/collection_empty_btn"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="查看物流"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

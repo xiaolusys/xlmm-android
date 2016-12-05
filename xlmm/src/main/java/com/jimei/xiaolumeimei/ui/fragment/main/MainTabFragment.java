@@ -29,10 +29,10 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.FragmentMainTabBinding;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.event.ShowShopEvent;
+import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.fragment.product.ProductListFragment;
-import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -123,17 +123,18 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     protected void initViews() {
         EventBus.getDefault().register(this);
         b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
+
         b.recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 4));
         b.recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.recyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
         mMainCategoryAdapter = new MainCategoryAdapter(mActivity);
         b.recyclerView.setAdapter(mMainCategoryAdapter);
+
         b.activityRv.setLayoutManager(new LinearLayoutManager(mActivity));
         b.activityRv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.activityRv.addItemDecoration(new SpaceItemDecoration(0, 0, 6, 6));
         mainActivityAdapter = new MainActivityAdapter(mActivity);
         b.activityRv.setAdapter(mainActivityAdapter);
-
 
         SharedPreferences sharedPreferencesMask = mActivity.getSharedPreferences("maskActivity", 0);
         mask = sharedPreferencesMask.getInt("mask", 0);

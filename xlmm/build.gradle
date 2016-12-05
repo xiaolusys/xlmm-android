@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'AndResGuard'
 
 def releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("UTC"))
 }
 
 def keyStore = file('../xlmm/xlmm.jks')
@@ -155,7 +155,7 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         // Xlmm_版本_yyyy-MM-dd_渠道.apk
-                        def fileName = "Xlmm_v${defaultConfig.versionName.replace(".", "")}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                        def fileName = "Xlmm_v${defaultConfig.versionName.replace(".", "")} _${releaseTime()}_${variant.productFlavors[0].name}.apk"
                         println("====== buildTypes.output ======")
                         println("AppName: " + fileName)
                         output.outputFile = new File(outputFile.parent, fileName)
@@ -172,11 +172,11 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "xlmm",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-
-        Fir {
-            manifestPlaceholders = [CHANNEL_NAME: "Fir",
-                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-        }
+//
+//        Fir {
+//            manifestPlaceholders = [CHANNEL_NAME: "Fir",
+//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+//        }
 
         wandoujia {
             manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
@@ -192,11 +192,11 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "huawei",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-
-        flyme {
-            manifestPlaceholders = [CHANNEL_NAME: "flyme",
-                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-        }
+//
+//        flyme {
+//            manifestPlaceholders = [CHANNEL_NAME: "flyme",
+//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+//        }
 
         qihu360 {
             manifestPlaceholders = [CHANNEL_NAME: "qihu360",

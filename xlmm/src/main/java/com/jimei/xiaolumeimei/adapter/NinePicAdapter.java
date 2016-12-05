@@ -101,8 +101,9 @@ public class NinePicAdapter extends BaseAdapter {
             if (codeLink != null & !"".equals(codeLink)) {
                 if (picArray.size() == 9) {
                     picArray.set(4, "code" + codeLink);
-                } else if (picArray.size() != 1) {
-                    picArray.set(picArray.size() / 2, "code" + codeLink);
+                } else if (picArray.size() < 9) {
+                    picArray.add("code" + codeLink);
+//                    picArray.set(picArray.size() / 2, "code" + codeLink);
                 }
             }
             holder.multiImageView.setVisibility(View.VISIBLE);

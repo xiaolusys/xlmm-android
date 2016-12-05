@@ -2,6 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.jimei.library.utils.JUtils;
@@ -28,6 +30,8 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     ListView circleLv;
     @Bind(R.id.mRefreshLayout)
     SwipeRefreshLayout mRefreshLayout;
+    @Bind(R.id.empty_layout)
+    LinearLayout emptyLayout;
 
     private NinePicAdapter mAdapter;
     private int mSale_category = -1;
@@ -58,8 +62,10 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     }
 
     private void doWhileSuccess(List<NinePicBean> ninePicBean) {
-        if (ninePicBean != null) {
+        if (ninePicBean != null && ninePicBean.size() > 0) {
             mAdapter.update(ninePicBean);
+        } else {
+            emptyLayout.setVisibility(View.VISIBLE);
         }
         if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
