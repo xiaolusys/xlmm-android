@@ -245,7 +245,8 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         if (loadingdialog == null) {
             loadingdialog = XlmmLoadingDialog.create(this)
                     .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                    .setCancellable(!horizontal)
+//                    .setCancellable(!horizontal)
+                    .setCancellable(false)
                     .show();
         }
     }
@@ -279,6 +280,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        hideIndeterminateProgressDialog();
         try {
             if (this.mCompositeSubscription != null) {
                 this.mCompositeSubscription.unsubscribe();

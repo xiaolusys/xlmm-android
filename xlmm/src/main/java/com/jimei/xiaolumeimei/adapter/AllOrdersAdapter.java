@@ -3,10 +3,10 @@ package com.jimei.xiaolumeimei.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,15 +19,19 @@ import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
- * Created by wisdom on 16/7/15.
+ * Created by wisdom on 16/12/7.
  */
-public class AllOrderAdapter extends BaseAdapter {
+
+public class AllOrdersAdapter extends RecyclerView.Adapter<AllOrdersAdapter.ViewHolder> {
 
     private Activity context;
     private List<AllOrdersBean.ResultsEntity> mList;
 
-    public AllOrderAdapter(Activity context) {
+    public AllOrdersAdapter(Activity context) {
         mList = new ArrayList<>();
         this.context = context;
     }
@@ -43,37 +47,15 @@ public class AllOrderAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void clearAll() {
-        mList.clear();
-        notifyDataSetChanged();
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_order_list, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        return mList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return mList.get(position).getId();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder vh;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_order_list, parent, false);
-            vh = new ViewHolder(convertView);
-            convertView.setTag(vh);
-        } else {
-            vh = (ViewHolder) convertView.getTag();
-        }
-        vh.linearLayout.setOnClickListener(
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.linearLayout.setOnClickListener(
                 new NoDoubleClickListener() {
                     @Override
                     protected void onNoDoubleClick(View v) {
@@ -87,22 +69,29 @@ public class AllOrderAdapter extends BaseAdapter {
         );
         OrderListAdapter adapter = new OrderListAdapter(context, mList.get(position).getOrders());
         adapter.setId(mList.get(position).getId());
-        vh.listView.setAdapter(adapter);
-        vh.tv_status.setText(mList.get(position).getStatusDisplay());
-        vh.tv_payment.setText(mList.get(position).getPayment() + "");
-        return convertView;
+        holder.listView.setAdapter(adapter);
+        holder.statusTv.setText(mList.get(position).getStatusDisplay());
+        holder.paymentTv.setText(mList.get(position).getPayment() + "");
     }
 
-    private class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return mList.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.ll)
         LinearLayout linearLayout;
-        TextView tv_status, tv_payment;
+        @Bind(R.id.status)
+        TextView statusTv;
+        @Bind(R.id.payment)
+        TextView paymentTv;
+        @Bind(R.id.lv)
         NestedListView listView;
 
         public ViewHolder(View itemView) {
-            linearLayout = ((LinearLayout) itemView.findViewById(R.id.ll));
-            tv_status = ((TextView) itemView.findViewById(R.id.status));
-            tv_payment = ((TextView) itemView.findViewById(R.id.payment));
-            listView = ((NestedListView) itemView.findViewById(R.id.lv));
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

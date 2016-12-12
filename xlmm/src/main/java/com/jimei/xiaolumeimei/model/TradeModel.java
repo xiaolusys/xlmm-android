@@ -47,7 +47,7 @@ public class TradeModel {
     }
 
     //根据type获得订单列表
-    public Observable<AllOrdersBean> getOrderList(int type, String page) {
+    public Observable<AllOrdersBean> getOrderList(int type, int page) {
         if (type == XlmmConst.WAIT_SEND) {
             return getWaitSendOrdersBean(page);
         } else if (type == XlmmConst.WAIT_PAY) {
@@ -58,7 +58,7 @@ public class TradeModel {
     }
 
     //得到全部订单数据列表
-    private Observable<AllOrdersBean> getAlloderBean(String page) {
+    private Observable<AllOrdersBean> getAlloderBean(int page) {
         return getService()
                 .getAllOdersList(page)
                 .compose(new DefaultTransform<>());
@@ -97,21 +97,21 @@ public class TradeModel {
     }
 
     //得到全部退货单数据列表
-    public Observable<AllRefundsBean> getRefundsBean(String page) {
+    public Observable<AllRefundsBean> getRefundsBean(int page) {
         return getService()
                 .getAllRedundsList(page)
                 .compose(new DefaultTransform<>());
     }
 
     //得到全部待支付订单数据列表
-    private Observable<AllOrdersBean> getWaitPayOrdersBean(String page) {
+    private Observable<AllOrdersBean> getWaitPayOrdersBean(int page) {
         return getService()
                 .getWaitPayOrdersBean(page)
                 .compose(new DefaultTransform<>());
     }
 
     //得到全部待发货订单数据列表
-    private Observable<AllOrdersBean> getWaitSendOrdersBean(String page) {
+    private Observable<AllOrdersBean> getWaitSendOrdersBean(int page) {
         return getService()
                 .getWaitSendOrdersBean(page)
                 .compose(new DefaultTransform<>());

@@ -40,7 +40,7 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(true);
-        TradeModel.getInstance()
+        addSubscription(TradeModel.getInstance()
                 .getRedBag(tid)
                 .subscribe(new ServiceResponse<RedBagBean>() {
                     @Override
@@ -51,10 +51,6 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
                         } else {
                             JUtils.Toast(redBagBean.getMsg());
                         }
-                    }
-
-                    @Override
-                    public void onCompleted() {
                         hideIndeterminateProgressDialog();
                     }
 
@@ -65,7 +61,7 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
                         hideIndeterminateProgressDialog();
                         RedBagActivity.this.finish();
                     }
-                });
+                }));
     }
 
 
@@ -93,6 +89,8 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
                     oks.setUrl(redBagEntity.getShare_link());
                     oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
                     oks.show(this);
+                }else {
+                    JUtils.Toast("数据加载未完成，请加载完成后分享哦!");
                 }
                 break;
             case R.id.finish_rl:
@@ -110,7 +108,7 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
 
         private String text;
 
-        public ShareContentCustom(String text) {
+        ShareContentCustom(String text) {
             this.text = text;
         }
 

@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +26,10 @@ public class CouponListAdapter extends BaseAdapter {
     private List<CouponEntity> mList;
     private int mCouponTyp;
     private String mSelecteCouponid;
-    private boolean clickable;
 
     public CouponListAdapter(Context context) {
         mList = new ArrayList<>();
         this.context = context;
-        clickable = true;
     }
 
     public void updateWithClear(List<CouponEntity> list) {
@@ -98,10 +97,12 @@ public class CouponListAdapter extends BaseAdapter {
             holder.iv_right.setVisibility(View.GONE);
         }
         double coupon_value = mList.get(position).getCoupon_value();
-        if (Math.round(coupon_value * 100) % 100 == 0) {
-            holder.tv_coupon_value.setText("￥" + Math.round(coupon_value * 100) / 100);
+        DecimalFormat df = new DecimalFormat("#.00");
+        double format = Double.parseDouble(df.format(coupon_value));
+        if (Math.round(format * 100) % 100 == 0) {
+            holder.tv_coupon_value.setText("￥" + Math.round(format * 100) / 100);
         } else {
-            holder.tv_coupon_value.setText("￥" + coupon_value);
+            holder.tv_coupon_value.setText("￥" + format);
         }
         holder.tv_coupon_info.setText(mList.get(position).getTitle());
         holder.titleTv.setText(mList.get(position).getPros_desc());
@@ -124,10 +125,6 @@ public class CouponListAdapter extends BaseAdapter {
             holder.img_selected.setVisibility(View.INVISIBLE);
         }
         return convertView;
-    }
-
-    public void setClickable(boolean clickable) {
-        this.clickable = clickable;
     }
 
     class ViewHolder {

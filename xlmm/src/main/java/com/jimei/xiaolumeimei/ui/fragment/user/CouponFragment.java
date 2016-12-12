@@ -38,6 +38,15 @@ public class CouponFragment extends BaseLazyFragment {
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         args.putSerializable("entity", couponEntities);
+        if (type == XlmmConst.UNUSED_COUPON) {
+            args.putString("title", "未使用(" + couponEntities.size() + ")");
+        } else if (type == XlmmConst.PAST_COUPON) {
+            args.putString("title", "已过期(" + couponEntities.size() + ")");
+        } else if (type == XlmmConst.USED_COUPON) {
+            args.putString("title", "已使用(" + couponEntities.size() + ")");
+        } else if (type == XlmmConst.GOOD_COUPON) {
+            args.putString("title", "精品券(" + couponEntities.size() + ")");
+        }
         fragment.setArguments(args);
         return fragment;
     }

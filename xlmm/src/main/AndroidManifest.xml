@@ -84,9 +84,6 @@
             android:name=".ui.activity.user.ChangeAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.ChangeSelectAddressActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
@@ -151,13 +148,10 @@
             android:name=".ui.activity.user.AddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.AddAddressActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.user.WalletActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.AddNoAddressActivity"
+            android:name=".ui.activity.user.AddAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.AddressSelectActivity"

@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -103,7 +103,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         fragments.add(MamaBoutiqueFragment.newInstance("精品汇", mamaId));
         fragments.add(MamaSecondFragment.newInstance("社交活动", mamaId));
         fragments.add(MamaThirdFragment.newInstance("我的", mamaId));
-        MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(), fragments);
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
         b.viewPager.setOffscreenPageLimit(3);
         b.tabLayout.setupWithViewPager(b.viewPager);

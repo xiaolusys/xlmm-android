@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
@@ -14,6 +15,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.databinding.FragmentMyTabBinding;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.RefreshPersonalEvent;
+import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
@@ -23,7 +25,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
-import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -31,6 +32,8 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.net.UnknownHostException;
 
 public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> implements View.OnClickListener {
 
@@ -68,6 +71,11 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             hideIndeterminateProgressDialog();
+                            if (e instanceof UnknownHostException) {
+                                showNetworkError();
+                            } else {
+                                JUtils.Toast("个人信息获取失败!");
+                            }
                         }
                     }));
         } else {

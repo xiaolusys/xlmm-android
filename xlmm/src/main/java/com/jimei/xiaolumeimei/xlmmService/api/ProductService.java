@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.xlmmService.api;
 
+import com.jimei.xiaolumeimei.entities.ActivityGoodListBean;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
@@ -23,6 +24,12 @@ import rx.Observable;
  */
 
 public interface ProductService {
+
+
+    @GET("/sale/promotion/promotion/goods/get_promotion_topic_pics")
+    Observable<ActivityGoodListBean> getActivityGoodList(
+            @Query("promotion_id") int promotion_id
+    );
 
     @GET("/rest/v2/modelproducts/{id}")
     Observable<ProductDetailBean> getProductDetail(

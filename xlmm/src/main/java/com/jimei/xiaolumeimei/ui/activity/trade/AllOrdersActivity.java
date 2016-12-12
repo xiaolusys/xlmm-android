@@ -1,13 +1,12 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.fragment.trade.OrderListFragment;
@@ -24,7 +23,7 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     TabLayout mTabLayout;
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
-    List<OrderListFragment> fragments;
+    List<BaseFragment> fragments;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -39,13 +38,12 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void initTabLayout() {
-        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager(), fragments);
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(3);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
-
 
     private void initFragment() {
         fragments = new ArrayList<>();
@@ -67,30 +65,6 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    class MainTabAdapter extends FragmentPagerAdapter {
-        private List<OrderListFragment> listFragment;
-
-        MainTabAdapter(FragmentManager fm, List<OrderListFragment> listFragment) {
-            super(fm);
-            this.listFragment = listFragment;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return listFragment.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return listFragment.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return listFragment.get(position).getTitle();
         }
     }
 

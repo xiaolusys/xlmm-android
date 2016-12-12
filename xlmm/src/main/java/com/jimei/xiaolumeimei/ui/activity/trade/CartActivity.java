@@ -62,9 +62,19 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     @Override
-    public void initData() {
+    protected void onResume() {
+        super.onResume();
         refreshCartList();
         refreshHisCartList();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 
     @Override

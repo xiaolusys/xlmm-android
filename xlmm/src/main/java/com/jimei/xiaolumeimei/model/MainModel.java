@@ -56,6 +56,12 @@ public class MainModel {
                 .compose(new DefaultTransform<>());
     }
 
+    public Observable<PortalBean> getBoutiqueActivitys() {
+        return getService()
+                .getPortalBean("jingpin")
+                .compose(new DefaultTransform<>());
+    }
+
     public Observable<AddressDownloadResultBean> getAddressVersionAndUrl() {
         return getService()
                 .getAddressVersionAndUrl()

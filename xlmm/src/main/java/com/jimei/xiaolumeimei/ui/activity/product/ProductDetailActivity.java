@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.AttrView;
@@ -65,10 +66,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -253,22 +251,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }, this::hideIndeterminateProgressDialog));
     }
 
-    private void initLeftTime(String time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date offTime = dateFormat.parse(time);
-            Date date = new Date();
-            if ((offTime.getTime() - date.getTime()) > 0) {
-                left = offTime.getTime() - date.getTime();
-            } else {
-                left = 0;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        b.countView.start(left, CountDownView.TYPE_ALL);
-    }
-
     private void fillDataToView(ProductDetailBean productDetailBean) {
         b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
         ProductDetailBean.DetailContentBean detailContent = productDetailBean.getDetail_content();
@@ -331,7 +313,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             b.llTag.addView(tagTextView);
         }
         initAttr(productDetailBean.getComparison().getAttributes());
-        initLeftTime(offshelf_time);
+        long left = DateUtils.calcLeftTime(offshelf_time);
+        b.countView.start(left, CountDownView.TYPE_ALL);
         initHeadImg(detailContent);
     }
 

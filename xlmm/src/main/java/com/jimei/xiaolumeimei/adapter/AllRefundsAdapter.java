@@ -1,76 +1,60 @@
 package com.jimei.xiaolumeimei.adapter;
 
-/**
- * Created by wulei on 15-12-17.
- * 商品订单数据适配
- */
-
 import android.app.Activity;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
+import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllRefundsListAdapter extends BaseAdapter {
-    private static final String TAG = "AllRefundsListAdapter";
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+/**
+ * Created by wisdom on 16/12/8.
+ */
+
+public class AllRefundsAdapter extends RecyclerView.Adapter<AllRefundsAdapter.ViewHolder> {
     private Activity context;
     private List<AllRefundsBean.ResultsEntity> datas;
 
-    public AllRefundsListAdapter(Activity context) {
-        datas = new ArrayList<>();
+    public AllRefundsAdapter(Activity context) {
         this.context = context;
+        this.datas = new ArrayList<>();
     }
 
     public void update(List<AllRefundsBean.ResultsEntity> list) {
-        Log.d(TAG, "update size " + list.size());
         datas.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void clear() {
+    public void updateWithClear(List<AllRefundsBean.ResultsEntity> list) {
         datas.clear();
+        datas.addAll(list);
         notifyDataSetChanged();
     }
 
     @Override
-    public int getCount() {
-        return datas.size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.refunds_list_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public Object getItem(int position) {
-        return datas.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG, "getView " + position);
-        ViewHolder holder;
+    public void onBindViewHolder(ViewHolder holder, int position) {
         AllRefundsBean.ResultsEntity entity = datas.get(position);
-        if (convertView == null) {
-            convertView =
-                    LayoutInflater.from(context).inflate(R.layout.refunds_list_item, null);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
         holder.state.setTextColor(context.getResources().getColor(R.color.colorAccent));
         holder.warn.setVisibility(View.GONE);
         if (entity.isHas_good_return()) {
@@ -96,33 +80,46 @@ public class AllRefundsListAdapter extends BaseAdapter {
         holder.size.setText("尺寸:" + entity.getSku_name());
         holder.payment.setText("交易金额:" + entity.getPayment() + "x" + entity.getRefund_num());
         holder.refund.setText("退款金额:" + entity.getRefund_fee() + "x" + entity.getRefund_num());
-        return convertView;
+        holder.layout.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RefundDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("goods_id", entity.getId());
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        });
     }
 
-    public int getGoodsId(int position) {
-        return datas.get(position).getId();
+    @Override
+    public int getItemCount() {
+        return datas.size();
     }
 
-    public int getRefundStatus(int position) {
-        return datas.get(position).getStatus();
-    }
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-    private class ViewHolder {
-
-        ImageView flag, good, warn;
-        TextView type, state, name, size, payment, refund;
+        @Bind(R.id.flag)
+        ImageView flag;
+        @Bind(R.id.good)
+        ImageView good;
+        @Bind(R.id.warn)
+        ImageView warn;
+        @Bind(R.id.type)
+        TextView type;
+        @Bind(R.id.state)
+        TextView state;
+        @Bind(R.id.name)
+        TextView name;
+        @Bind(R.id.size)
+        TextView size;
+        @Bind(R.id.payment)
+        TextView payment;
+        @Bind(R.id.refund)
+        TextView refund;
+        @Bind(R.id.layout)
+        LinearLayout layout;
 
         public ViewHolder(View itemView) {
-            flag = ((ImageView) itemView.findViewById(R.id.flag));
-            type = ((TextView) itemView.findViewById(R.id.type));
-            state = ((TextView) itemView.findViewById(R.id.state));
-            good = ((ImageView) itemView.findViewById(R.id.good));
-            warn = ((ImageView) itemView.findViewById(R.id.warn));
-            name = ((TextView) itemView.findViewById(R.id.name));
-            size = ((TextView) itemView.findViewById(R.id.size));
-            payment = ((TextView) itemView.findViewById(R.id.payment));
-            refund = ((TextView) itemView.findViewById(R.id.refund));
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
-

@@ -5,9 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.JUtils;
@@ -33,7 +38,6 @@ import butterknife.Bind;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/22.
@@ -41,8 +45,7 @@ import rx.Subscription;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class SmsLoginActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
-    private static final String TAG = SmsLoginActivity.class.getSimpleName();
+        implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
 
     @Bind(R.id.register_name)
     ClearEditText registerName;
@@ -52,9 +55,16 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     Button getCheckCode;
     @Bind(R.id.confirm)
     Button confirm;
+    @Bind(R.id.sb)
+    SeekBar seekBar;
+    @Bind(R.id.tv)
+    TextView textView;
+    @Bind(R.id.view_first)
+    View viewFirst;
+    @Bind(R.id.frame_layout)
+    FrameLayout frameLayout;
 
-    private String mobile, invalid_code;
-    private Subscription subscribe;
+    private String mobile;
     private String actlink;
     private String title;
     private int id;
@@ -63,6 +73,9 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         getCheckCode.setOnClickListener(this);
         confirm.setOnClickListener(this);
+        seekBar.setOnSeekBarChangeListener(this);
+        registerName.addTextChangedListener(this);
+        viewFirst.setOnClickListener(this);
     }
 
     @Override
@@ -74,51 +87,52 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.getCheckCode:
-
                 mobile = registerName.getText().toString().trim();
                 if (checkMobileInput(mobile)) {
-                    RxCountDown.countdown(60).doOnSubscribe(() -> {
-                        getCheckCode.setClickable(false);
-                        getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
-
-                        subscribe = UserModel.getInstance()
-                                .getCodeBean(mobile, "sms_login")
-                                .subscribe(new ServiceResponse<CodeBean>() {
-                                    @Override
-                                    public void onNext(CodeBean codeBean) {
-                                        JUtils.Toast(codeBean.getMsg());
-                                    }
-                                });
-                    }).unsafeSubscribe(new Subscriber<Integer>() {
-                        @Override
-                        public void onCompleted() {
-                            if (getCheckCode != null) {
-                                getCheckCode.setText("获取验证码");
-                                getCheckCode.setClickable(true);
-                                getCheckCode.setBackgroundResource(R.drawable.btn_common_white);
+                    if (seekBar.getProgress() == seekBar.getMax()) {
+                        RxCountDown.countdown(60).doOnSubscribe(() -> {
+                            getCheckCode.setClickable(false);
+                            getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
+                            addSubscription(UserModel.getInstance()
+                                    .getCodeBean(mobile, "sms_login")
+                                    .subscribe(new ServiceResponse<CodeBean>() {
+                                        @Override
+                                        public void onNext(CodeBean codeBean) {
+                                            JUtils.Toast(codeBean.getMsg());
+                                        }
+                                    }));
+                        }).unsafeSubscribe(new Subscriber<Integer>() {
+                            @Override
+                            public void onCompleted() {
+                                if (getCheckCode != null) {
+                                    getCheckCode.setText("获取验证码");
+                                    getCheckCode.setClickable(true);
+                                    getCheckCode.setBackgroundResource(R.drawable.btn_common_white);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable e) {
+                            @Override
+                            public void onError(Throwable e) {
 
-                        }
-
-                        @Override
-                        public void onNext(Integer integer) {
-                            if (getCheckCode != null) {
-                                getCheckCode.setText(integer + "s后重新获取");
                             }
-                        }
-                    });
+
+                            @Override
+                            public void onNext(Integer integer) {
+                                if (getCheckCode != null) {
+                                    getCheckCode.setText(integer + "s后重新获取");
+                                }
+                            }
+                        });
+                    } else {
+                        JUtils.Toast("请先拖动滑块验证");
+                    }
                 }
-
                 break;
             case R.id.confirm:
                 mobile = registerName.getText().toString().trim();
-                invalid_code = checkcode.getText().toString().trim();
+                String invalid_code = checkcode.getText().toString().trim();
                 if (checkInput(mobile, invalid_code)) {
-                    subscribe = UserModel.getInstance()
+                    addSubscription(UserModel.getInstance()
                             .verify_code(mobile, "sms_login", invalid_code)
                             .subscribe(new ServiceResponse<CodeBean>() {
                                 @Override
@@ -127,7 +141,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                     JUtils.Toast(codeBean.getMsg());
                                     if (code == 0) {
                                         EventBus.getDefault().post(new SetMiPushEvent());
-                                        subscribe = UserModel.getInstance()
+                                        addSubscription(UserModel.getInstance()
                                                 .need_set_info()
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                                                     @Override
@@ -206,16 +220,10 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                                             JUtils.Toast(needSetInfoBean.getInfo());
                                                         }
                                                     }
-                                                });
+                                                }));
                                     }
                                 }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    super.onError(e);
-                                    e.printStackTrace();
-                                }
-                            });
+                            }));
                 }
 
                 break;
@@ -255,14 +263,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (subscribe != null && subscribe.isUnsubscribed()) {
-            subscribe.unsubscribe();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
@@ -274,5 +274,58 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        textView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        seekBar.setThumbOffset(0);
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        mobile = registerName.getText().toString().trim();
+        if (seekBar.getProgress() != seekBar.getMax()) {
+            seekBar.setProgress(0);
+            textView.setVisibility(View.VISIBLE);
+            textView.setTextColor(Color.GRAY);
+            textView.setText("向右滑动验证");
+        } else if (!checkMobileInput(mobile)) {
+            seekBar.setProgress(0);
+            textView.setVisibility(View.VISIBLE);
+            textView.setTextColor(Color.GRAY);
+            textView.setText("向右滑动验证");
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView.setTextColor(Color.WHITE);
+            textView.setText("完成验证");
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s.length() < 11) {
+            frameLayout.setVisibility(View.GONE);
+            seekBar.setProgress(0);
+            textView.setVisibility(View.VISIBLE);
+            textView.setTextColor(Color.GRAY);
+            textView.setText("向右滑动验证");
+        } else {
+            frameLayout.setVisibility(View.VISIBLE);
+        }
     }
 }

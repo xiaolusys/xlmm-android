@@ -9,7 +9,7 @@ import android.view.View;
 /**
  * Created by wisdom on 16/7/9.
  */
-public class RecycleViewDivider extends RecyclerView.ItemDecoration {
+public class RecyclerViewDivider extends RecyclerView.ItemDecoration {
     /**
      * 水平方向
      */
@@ -30,11 +30,11 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
     // 分割线尺寸
     private int size;
 
-    public RecycleViewDivider() {
+    public RecyclerViewDivider() {
         this(VERTICAL);
     }
 
-    public RecycleViewDivider(int orientation) {
+    public RecyclerViewDivider(int orientation) {
         this.orientation = orientation;
         paint = new Paint();
     }
@@ -42,7 +42,6 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
-
         if (orientation == VERTICAL) {
             drawHorizontal(c, parent);
         } else {
@@ -73,14 +72,12 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
     protected void drawVertical(Canvas c, RecyclerView parent) {
         final int top = parent.getPaddingTop();
         final int bottom = parent.getHeight() - parent.getPaddingBottom();
-
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
             final int left = child.getRight() + params.rightMargin;
             final int right = left + size;
-
             c.drawRect(left, top, right, bottom, paint);
         }
     }

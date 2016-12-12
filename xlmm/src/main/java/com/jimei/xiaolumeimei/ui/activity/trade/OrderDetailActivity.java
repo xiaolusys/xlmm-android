@@ -43,12 +43,15 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
+import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -281,7 +284,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     });
                                 }, e -> JUtils.Log(e.getMessage())));
                         hideIndeterminateProgressDialog();
-                    }, e -> JUtils.Log(e.getMessage())));
+                    }, e -> {
+                        JUtils.Log(e.getMessage());
+                        JUtils.Toast("订单详情获取失败!");
+                        hideIndeterminateProgressDialog();
+                    }));
+
         }
     }
 
@@ -618,6 +626,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         super.onNext(responseBody);
                         try {
                             finish();
+                            EventBus.getDefault().post(new RefreshOrderListEvent());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -631,6 +640,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         //支付页面返回处理
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
+                EventBus.getDefault().post(new RefreshOrderListEvent());
                 hideIndeterminateProgressDialog();
                 String result = data.getExtras().getString("pay_result");
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息

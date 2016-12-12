@@ -27,7 +27,7 @@ import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.entities.event.ShowShopEvent;
 import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
-import com.jimei.xiaolumeimei.ui.fragment.main.BoutiqueFragment;
+import com.jimei.xiaolumeimei.ui.fragment.main.BoutiqueTabFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.CarTabFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.CollectTabFragment;
 import com.jimei.xiaolumeimei.ui.fragment.main.FirstFragment;
@@ -170,7 +170,7 @@ public class TabActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         List<BaseFragment> fragments = new ArrayList<>();
         fragments.add(MainTabFragment.newInstance());
-        fragments.add(BoutiqueFragment.newInstance());
+        fragments.add(BoutiqueTabFragment.newInstance());
         fragments.add(CarTabFragment.newInstance());
         fragments.add(CollectTabFragment.newInstance());
         fragments.add(MyTabFragment.newInstance());

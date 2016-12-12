@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/layout"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:background="@color/colorAccent"
@@ -20,11 +19,62 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
+            <LinearLayout
+                android:id="@+id/confirm_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <include layout="@layout/common_gap" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="应付款金额"
+                            android:textColor="#26262e"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/total_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/confirm"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/btn_common_default"
+                        android:text="购买"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
             <ScrollView
                 android:id="@+id/sv"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_above="@id/confirm_layout"
+                android:layout_below="@id/title"
                 android:background="@color/bg_grey">
 
                 <LinearLayout
@@ -32,124 +82,71 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <FrameLayout
+                    <LinearLayout
+                        android:id="@+id/empty_content"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="320dp"
+                        android:background="@color/bg_grey"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rv_cart"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/white" />
+                            android:src="@drawable/cart_shopping" />
 
-                        <LinearLayout
-                            android:id="@+id/empty_content"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/bg_grey"
+                            android:layout_marginTop="18dp"
+                            android:text="您的购物车空空如也~快去装满它吧"
+                            android:textColor="@color/text_color_62" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="快去挑选几件喜欢的宝贝吧~"
+                            android:textColor="@color/text_color_9B" />
+
+                        <TextView
+                            android:id="@+id/go_main"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/btn_common_white"
                             android:gravity="center"
-                            android:orientation="vertical"
-                            android:paddingBottom="70dp"
-                            android:paddingTop="70dp"
-                            android:visibility="gone">
+                            android:text="快去抢购"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/cart_shopping" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="18dp"
-                                android:text="您的购物车空空如也~快去装满它吧"
-                                android:textColor="@color/text_color_62" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="快去挑选几件喜欢的宝贝吧~"
-                                android:textColor="@color/text_color_9B" />
-
-                            <TextView
-                                android:id="@+id/go_main"
-                                android:layout_width="80dp"
-                                android:layout_height="30dp"
-                                android:layout_marginTop="8dp"
-                                android:background="@drawable/btn_common_white"
-                                android:gravity="center"
-                                android:text="快去抢购"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                    </FrameLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_cart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white" />
 
                     <TextView
                         android:id="@+id/tv_line"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="12dp"
+                        android:layout_height="36dp"
+                        android:layout_marginLeft="12dp"
+                        android:gravity="center_vertical"
                         android:text="可重新购买的商品"
                         android:visibility="gone" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_history"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@color/white" />
 
                 </LinearLayout>
             </ScrollView>
 
-            <include layout="@layout/common_gap" />
-
-            <LinearLayout
-                android:id="@+id/confirm_layout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="应付款金额"
-                        android:textColor="#26262e"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/total_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/confirm"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@drawable/btn_common_default"
-                    android:text="购买"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </FrameLayout>
-
 </layout>

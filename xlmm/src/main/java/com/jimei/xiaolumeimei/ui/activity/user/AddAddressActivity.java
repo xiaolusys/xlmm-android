@@ -2,34 +2,32 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
 import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -58,9 +56,12 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     Button save;
     @Bind(R.id.address)
     TextView address;
+    @Bind(R.id.id_layout)
+    LinearLayout idLayout;
+    @Bind(R.id.id_num)
+    EditText idNum;
 
-    private ArrayList<Province> provinces = new ArrayList<Province>();
-
+    private ArrayList<Province> provinces = new ArrayList<>();
     private String receiver_state;
     private String receiver_city;
     private String receiver_district;
@@ -68,7 +69,16 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_mobile;
     private String city_string;
     private String clearaddressa;
-    private String defalut;
+    private String defaulta;
+    private boolean idFlag = false;
+    private String idNo;
+
+    @Override
+    protected void initViews() {
+        if (idFlag) {
+            idLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void setListener() {
@@ -83,14 +93,17 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    protected void getBundleExtras(Bundle extras) {
+        idFlag = extras.getBoolean("idFlag", false);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.address:
-
                 InputMethodManager imm =
                         (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
-
                 if (provinces.size() > 0) {
                     showAddressDialog();
                 } else {
@@ -98,31 +111,31 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.save:
-
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-
-                if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                    Subscription subscribe = AddressModel.getInstance()
-                            .create_address(receiver_state, receiver_city, receiver_district, clearaddressa,
-                                    receiver_name, receiver_mobile, defalut)
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                @Override
-                                public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null) {
-                                        if (addressResultBean.getCode() == 0) {
-                                            startActivity(new Intent(AddAddressActivity.this, AddressActivity.class));
-                                            AddAddressActivity.this.finish();
-                                        } else {
+                idNo = idNum.getText().toString().trim();
+                if (IdCardChecker.isValidatedAllIdcard(idNo) || !idFlag) {
+                    if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
+                        Subscription subscribe = AddressModel.getInstance()
+                                .create_addressWithId(receiver_state, receiver_city, receiver_district,
+                                        clearaddressa, receiver_name, receiver_mobile, defaulta, idNo)
+                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                                    @Override
+                                    public void onNext(AddressResultBean addressResultBean) {
+                                        if (addressResultBean != null) {
                                             JUtils.Toast(addressResultBean.getInfo());
+                                            if (addressResultBean.getCode() == 0) {
+                                                finish();
+                                            }
                                         }
                                     }
-                                }
-                            });
-                    addSubscription(subscribe);
+                                });
+                        addSubscription(subscribe);
+                    }
+                } else {
+                    JUtils.Toast("请填写合法的身份证号码!");
                 }
-
                 break;
         }
     }
@@ -130,6 +143,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, null, null, null,
                 (selectProvince, selectCity, selectCounty) -> {
+
                     receiver_state = selectProvince != null ? selectProvince.getName() : "";
                     receiver_district = selectCounty != null ? selectCounty.getName() : "";
                     receiver_city = selectCity != null ? selectCity.getName() : "";
@@ -138,7 +152,8 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }).show();
     }
 
-    public boolean checkInput(String receivername, String mobile, String address1, String address2) {
+    public boolean checkInput(String receivername, String mobile, String address1,
+                              String address2) {
 
         if (receivername == null || receivername.trim().equals("")) {
             JUtils.Toast("请输入收货人姓名");
@@ -157,17 +172,19 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }
             }
         }
+
         return false;
     }
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.switch_button:
                 if (isChecked) {
-                    defalut = "true";
+                    defaulta = "true";
                 } else {
-                    defalut = "false";
+                    defaulta = "false";
                 }
 
                 break;
@@ -194,7 +211,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
 
         Dialog progressDialog;
 
-        public InitAreaTask(Context context) {
+        InitAreaTask(Context context) {
             mContext = context;
             progressDialog = Util.createLoadingDialog(mContext, "请稍等...", true, 0);
         }
@@ -220,24 +237,15 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
             String address;
             InputStream in = null;
             try {
-                if (FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
-                    File file = new File(XlmmConst.XLMM_DIR + "areas.json");
-                    in = new FileInputStream(file);
-                } else {
-                    in = mContext.getResources().getAssets().open("areas.json");
-                }
                 in = mContext.getResources().getAssets().open("areas.json");
                 byte[] arrayOfByte = new byte[in.available()];
                 in.read(arrayOfByte);
                 address = new String(arrayOfByte, "UTF-8");
-
                 Gson gson = new Gson();
-
                 provinces = gson.fromJson(address, new TypeToken<List<Province>>() {
                 }.getType());
-
                 return true;
-            } catch (Exception ignored) {
+            } catch (Exception e) {
             } finally {
                 if (in != null) {
                     try {
@@ -249,5 +257,4 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
             return false;
         }
     }
-
 }

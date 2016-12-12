@@ -30,14 +30,16 @@ public interface AddressService {
     //创建新的地址
     @FormUrlEncoded
     @POST("/rest/v1/address/create_address")
-    Observable<AddressResultBean> create_address(
+    Observable<AddressResultBean> create_addressWithId(
             @Field("receiver_state") String receiver_state,
             @Field("receiver_city") String receiver_city,
             @Field("receiver_district") String receiver_district,
             @Field("receiver_address") String receiver_address,
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
-            @Field("default") String defaultStr);
+            @Field("default") String defaultStr,
+            @Field("identification_no") String identification_no);
+
 
     //修改地址
     @FormUrlEncoded
@@ -65,7 +67,7 @@ public interface AddressService {
             @Field("receiver_name") String receiver_name,
             @Field("receiver_mobile") String receiver_mobile,
             @Field("default") String defaultStr,
-            @Field("identification_no")String identification_no);
+            @Field("identification_no") String identification_no);
 
     //修改地址
     @FormUrlEncoded
@@ -94,5 +96,5 @@ public interface AddressService {
             @Field("receiver_mobile") String receiver_mobile,
             @Field("logistic_company_code") String logistic_company_code,
             @Field("referal_trade_id") String referal_trade_id,
-            @Field("identification_no")String identification_no);
+            @Field("identification_no") String identification_no);
 }

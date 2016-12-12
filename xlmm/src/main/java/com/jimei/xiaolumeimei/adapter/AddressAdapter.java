@@ -31,7 +31,6 @@ import butterknife.ButterKnife;
  */
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = AddressAdapter.class.getSimpleName();
     private List<AddressBean> mList;
     private Context context;
 
@@ -168,7 +167,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 + addressBean.getReceiverCity()
                 + addressBean.getReceiverDistrict());
         bundle.putString("address2", addressBean.getReceiverAddress());
-        bundle.putBoolean("isDefaultX",addressBean.isDefaultX());
+        bundle.putBoolean("isDefaultX", addressBean.isDefaultX());
+        bundle.putString("idNo", addressBean.getmIdentificationNo());
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

@@ -5,8 +5,9 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CollectionTabAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentCollectTabBinding;
 import com.jimei.xiaolumeimei.ui.fragment.product.CollectionFragment;
 
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollectTabFragment extends BaseBindingFragment<FragmentCollectTabBinding> {
-    private List<CollectionFragment> fragments;
 
 
     public static CollectTabFragment newInstance() {
@@ -28,7 +28,7 @@ public class CollectTabFragment extends BaseBindingFragment<FragmentCollectTabBi
 
     @Override
     public View getLoadingView() {
-        return b.layout;
+        return b.viewPager;
     }
 
     @Override
@@ -38,10 +38,10 @@ public class CollectTabFragment extends BaseBindingFragment<FragmentCollectTabBi
 
     @Override
     protected void initViews() {
-        fragments = new ArrayList<>();
+        List<BaseFragment> fragments = new ArrayList<>();
         fragments.add(CollectionFragment.newInstance("热销商品", "on"));
         fragments.add(CollectionFragment.newInstance("未上架商品", "off"));
-        CollectionTabAdapter mAdapter = new CollectionTabAdapter(getChildFragmentManager(), fragments);
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getChildFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
         b.viewPager.setOffscreenPageLimit(2);
         b.tabLayout.setupWithViewPager(b.viewPager);

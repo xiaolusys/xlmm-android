@@ -66,7 +66,6 @@ public class SelectCouponFragment extends BaseLazyFragment implements AdapterVie
             couponEntities = new ArrayList<>();
             couponEntities.addAll((ArrayList<CouponEntity>) getArguments().getSerializable("list"));
             CouponListAdapter adapter = new CouponListAdapter(getContext());
-            adapter.setClickable(false);
             listView.setAdapter(adapter);
             adapter.update(couponEntities, 0, selectId);
             if (couponEntities.size() > 0) {

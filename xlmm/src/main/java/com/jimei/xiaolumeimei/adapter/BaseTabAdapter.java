@@ -4,17 +4,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.jimei.xiaolumeimei.ui.fragment.product.CollectionFragment;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 
 import java.util.List;
 
 /**
- * Created by wisdom on 16/7/28.
+ * Created by wisdom on 16/9/12.
  */
-public class CollectionTabAdapter extends FragmentPagerAdapter {
-    private List<CollectionFragment> listFragment;
+public class BaseTabAdapter extends FragmentPagerAdapter {
+    private List<BaseFragment> listFragment;
 
-    public CollectionTabAdapter(FragmentManager fm, List<CollectionFragment> listFragment) {
+    public BaseTabAdapter(FragmentManager fm, List<BaseFragment> listFragment) {
         super(fm);
         this.listFragment = listFragment;
     }

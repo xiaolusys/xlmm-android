@@ -4,7 +4,8 @@ import android.os.Bundle;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.TaskRewardPagerAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityGoodWeekBinding;
@@ -20,11 +21,11 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
 
     @Override
     protected void initViews() {
-        ArrayList<TaskRewardFragment> fragments = new ArrayList<>();
+        ArrayList<BaseFragment> fragments = new ArrayList<>();
         fragments.add(TaskRewardFragment.newInstance(XlmmConst.TYPE_REWARD_PERSONAL, "个人任务"));
         fragments.add(TaskRewardFragment.newInstance(XlmmConst.TYPE_REWARD_TEAM, "团队任务"));
 
-        TaskRewardPagerAdapter adapter = new TaskRewardPagerAdapter(getSupportFragmentManager(), fragments);
+        BaseTabAdapter adapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(adapter);
         b.viewPager.setOffscreenPageLimit(2);
         b.tabLayout.setupWithViewPager(b.viewPager);

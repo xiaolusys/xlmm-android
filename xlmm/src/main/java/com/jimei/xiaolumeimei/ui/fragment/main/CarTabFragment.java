@@ -2,11 +2,11 @@ package com.jimei.xiaolumeimei.ui.fragment.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
-import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
 
     @Override
     public View getLoadingView() {
-        return b.layout;
+        return b.sv;
     }
 
     @Override
@@ -83,22 +84,25 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
-        b.rvCart.setNestedScrollingEnabled(false);
-        b.rvCart.setHasFixedSize(false);
+        b.rvCart.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.rvCart.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        ScrollLinearLayoutManager layoutManager = new ScrollLinearLayoutManager(mActivity);
-        layoutManager.setAutoMeasureEnabled(false);
-        b.rvCart.setLayoutManager(layoutManager);
+        b.rvCart.setLayoutManager(new LinearLayoutManager(mActivity) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         cartListAdapter = new CartListAdapter((BaseActivity) mActivity, cartList, this);
         b.rvCart.setAdapter(cartListAdapter);
 
-
-        b.rvHistory.setNestedScrollingEnabled(false);
-        b.rvHistory.setHasFixedSize(false);
+        b.rvHistory.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.rvHistory.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        ScrollLinearLayoutManager manager = new ScrollLinearLayoutManager(mActivity);
-        manager.setAutoMeasureEnabled(false);
-        b.rvHistory.setLayoutManager(manager);
+        b.rvHistory.setLayoutManager(new LinearLayoutManager(mActivity) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         cartHisAdapter = new CartHistoryAdapter((BaseActivity) mActivity, cartHisList, this);
         b.rvHistory.setAdapter(cartHisAdapter);
     }
@@ -153,6 +157,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                         super.onNext(cartsPayinfoBean);
                         if (cartsPayinfoBean != null) {
                             b.totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
+                            b.confirm.setClickable(true);
                             b.confirmLayout.setVisibility(View.VISIBLE);
                         }
                     }
@@ -167,6 +172,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
             if (mActivity instanceof TabActivity) {
                 ((TabActivity) mActivity).showCarNum();
             }
+            b.confirm.setClickable(false);
             b.confirmLayout.setVisibility(View.GONE);
         }
         cartListAdapter.notifyDataSetChanged();
@@ -224,10 +230,20 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                         } else {
                             b.emptyContent.setVisibility(View.VISIBLE);
                             b.totalPrice.setText("¥0");
+                            b.confirm.setClickable(false);
                             b.confirmLayout.setVisibility(View.GONE);
                         }
                         b.sv.scrollTo(0, 0);
                         hideIndeterminateProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof UnknownHostException) {
+                            showNetworkError();
+                        } else {
+                            JUtils.Toast("数据加载失败!");
+                        }
                     }
                 }));
     }

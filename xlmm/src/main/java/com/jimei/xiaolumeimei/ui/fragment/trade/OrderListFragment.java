@@ -2,42 +2,38 @@ package com.jimei.xiaolumeimei.ui.fragment.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
-import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.AllOrderAdapter;
+import com.jimei.xiaolumeimei.adapter.AllOrdersAdapter;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
+import com.jimei.xiaolumeimei.databinding.FragmentOrderListBinding;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.lang.reflect.Field;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
-import rx.Subscription;
 
-
-public class OrderListFragment extends Fragment implements View.OnClickListener, AbsListView.OnScrollListener {
+public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBinding> implements View.OnClickListener {
 
     private int type;
-    private ListView listView;
-    private RelativeLayout emptyLayout;
-    private Button button;
-    private AllOrderAdapter adapter;
-    private Subscription subscribe;
-    private int page = 2;
-    private XlmmLoadingDialog loadingdialog;
+    private AllOrdersAdapter adapter;
+    private int page;
+    private String next;
+    private boolean isEvent;
 
     public static OrderListFragment newInstance(int type, String title) {
         OrderListFragment fragment = new OrderListFragment();
@@ -54,37 +50,58 @@ public class OrderListFragment extends Fragment implements View.OnClickListener,
         if (getArguments() != null) {
             type = getArguments().getInt("type");
         }
+        isEvent = false;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order_list, container, false);
-        listView = ((ListView) view.findViewById(R.id.lv));
-        emptyLayout = ((RelativeLayout) view.findViewById(R.id.rlayout_order_empty));
-        button = ((Button) view.findViewById(R.id.btn_jump));
-        return view;
+    public void initData() {
+        showIndeterminateProgressDialog(false);
+        page = 1;
+        loadMoreData();
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView();
+    protected int getContentViewId() {
+        return R.layout.fragment_order_list;
     }
 
-    private void initView() {
-        adapter = new AllOrderAdapter(getActivity());
-        listView.setAdapter(adapter);
-        button.setOnClickListener(this);
-        listView.setOnScrollListener(this);
+    @Override
+    public View getLoadingView() {
+        return b.xrv;
     }
 
-    public String getTitle() {
-        String title = "";
-        if (getArguments() != null) {
-            title = getArguments().getString("title");
-        }
-        return title;
+    @Override
+    public void setListener() {
+        b.btnJump.setOnClickListener(this);
+    }
+
+    @Override
+    protected void initViews() {
+        EventBus.getDefault().register(this);
+        b.xrv.setLayoutManager(new LinearLayoutManager(mActivity));
+        b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
+        b.xrv.setRefreshProgressStyle(ProgressStyle.BallPulse);
+        b.xrv.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 12));
+        adapter = new AllOrdersAdapter(mActivity);
+        b.xrv.setAdapter(adapter);
+        b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                loadMoreData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (next != null && !"".equals(next)) {
+                    page++;
+                    loadMoreData();
+                } else {
+                    JUtils.Toast("没有更多了!");
+                    b.xrv.loadMoreComplete();
+                }
+            }
+        });
     }
 
     @Override
@@ -101,90 +118,58 @@ public class OrderListFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (subscribe != null && subscribe.isUnsubscribed()) {
-            subscribe.unsubscribe();
-        }
-    }
 
-    private void loadMoreData(String pageStr) {
-        subscribe = TradeModel.getInstance()
-                .getOrderList(type, pageStr)
+    private void loadMoreData() {
+        addSubscription(TradeModel.getInstance()
+                .getOrderList(type, page)
                 .subscribe(new ServiceResponse<AllOrdersBean>() {
                     @Override
                     public void onNext(AllOrdersBean allOrdersBean) {
                         if (allOrdersBean != null) {
-                            hideIndeterminateProgressDialog();
                             List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-                            if (results.size() == 0 && "1".equals(pageStr)) {
-                                emptyLayout.setVisibility(View.VISIBLE);
+                            if (results.size() == 0 && page == 1) {
+                                b.emptyLayout.setVisibility(View.VISIBLE);
+                            } else if (page == 1) {
+                                adapter.updateWithClear(results);
                             } else {
                                 adapter.update(results);
                             }
-                            if (null == allOrdersBean.getNext() && !"1".equals(pageStr)) {
+                            next = allOrdersBean.getNext();
+                            if (allOrdersBean.getNext() == null && adapter.getItemCount() != 0 && !isEvent) {
                                 JUtils.Toast("全部订单加载完成!");
                             }
+                            isEvent = false;
                         }
+                        b.xrv.loadMoreComplete();
+                        b.xrv.refreshComplete();
+                        hideIndeterminateProgressDialog();
                     }
-                });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        b.xrv.loadMoreComplete();
+                        b.xrv.refreshComplete();
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reLoadData(RefreshOrderListEvent event) {
+        isEvent = true;
+        initData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        page = 2;
-        adapter.clearAll();
-        showIndeterminateProgressDialog(false);
-        loadMoreData("1");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        try {
-            Field childFragmentManager =
-                    Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void showIndeterminateProgressDialog(boolean horizontal) {
-        loadingdialog = XlmmLoadingDialog.create(getActivity())
-                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                .setCancellable(!horizontal)
-                .show();
-    }
-
-    public void hideIndeterminateProgressDialog() {
-        try {
-            loadingdialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                loadMoreData(page + "");
-                page++;
-            }
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                         int totalItemCount) {
     }
 
     @Override

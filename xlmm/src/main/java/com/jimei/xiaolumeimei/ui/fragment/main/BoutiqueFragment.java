@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.databinding.FragmentBoutiqueBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -87,7 +88,11 @@ public class BoutiqueFragment extends BaseBindingFragment<FragmentBoutiqueBindin
                         }, e -> {
                             hideIndeterminateProgressDialog();
                             b.xrv.loadMoreComplete();
-                            JUtils.Toast("数据加载有误!");
+                            if (e instanceof UnknownHostException) {
+                                showNetworkError();
+                            } else {
+                                JUtils.Toast("数据加载有误!");
+                            }
                         }
                 ));
     }

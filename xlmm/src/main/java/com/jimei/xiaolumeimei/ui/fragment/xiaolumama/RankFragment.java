@@ -2,32 +2,27 @@ package com.jimei.xiaolumeimei.ui.fragment.xiaolumama;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
-import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.PersonalCarryRankAdapter;
 import com.jimei.xiaolumeimei.adapter.TeamCarryRankAdapter;
+import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
+import com.jimei.xiaolumeimei.databinding.FragmentRankBinding;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
-import java.util.List;
+import java.net.UnknownHostException;
 
-public class RankFragment extends Fragment implements ScrollableHelper.ScrollableContainer {
+public class RankFragment extends BaseBindingFragment<FragmentRankBinding> implements ScrollableHelper.ScrollableContainer {
     private static final String TYPE = "type";
     private static final String TITLE = "title";
 
     private int type;
-    private MyXRecyclerView xrv;
     private PersonalCarryRankAdapter personalCarryRankAdapter;
     private TeamCarryRankAdapter teamCarryRankAdapter;
 
@@ -49,97 +44,92 @@ public class RankFragment extends Fragment implements ScrollableHelper.Scrollabl
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_rank, container, false);
-        xrv = ((MyXRecyclerView) view.findViewById(R.id.xrv));
-        return view;
+    public View getLoadingView() {
+        return b.xrv;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        xrv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        xrv.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        xrv.setPullRefreshEnabled(false);
-        xrv.setLoadingMoreEnabled(false);
-        switch (type) {
-            case XlmmConst.TYPE_PERSON_RANK:
-            case XlmmConst.TYPE_PERSON_WEEK_RANK:
-                personalCarryRankAdapter = new PersonalCarryRankAdapter(getActivity());
-                xrv.setAdapter(personalCarryRankAdapter);
-                break;
-            case XlmmConst.TYPE_TEAM_RANK:
-            case XlmmConst.TYPE_TEAM_WEEK_RANK:
-                teamCarryRankAdapter = new TeamCarryRankAdapter(getActivity());
-                xrv.setAdapter(teamCarryRankAdapter);
-                break;
-        }
-        initData();
-    }
-
-    private void initData() {
+    public void initData() {
         switch (type) {
             case XlmmConst.TYPE_PERSON_RANK:
                 MamaInfoModel.getInstance()
                         .getPersonalCarryRankBean()
-                        .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
-                            @Override
-                            public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
-                                if (null != personalCarryRankBeanResponse) {
-                                    personalCarryRankAdapter.addAll(personalCarryRankBeanResponse);
-                                }
+                        .subscribe(personalCarryRankBeanResponse -> {
+                            if (null != personalCarryRankBeanResponse) {
+                                personalCarryRankAdapter.addAll(personalCarryRankBeanResponse);
                             }
-                        });
+                            hideIndeterminateProgressDialog();
+                        }, this::doOnError);
                 break;
             case XlmmConst.TYPE_PERSON_WEEK_RANK:
                 MamaInfoModel.getInstance()
                         .getWeekPersonalCarryRankBean()
-                        .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
-                            @Override
-                            public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
-                                if (null != personalCarryRankBeanResponse) {
-                                    personalCarryRankAdapter.addAll(personalCarryRankBeanResponse);
-                                }
+                        .subscribe(personalCarryRankBeanResponse -> {
+                            if (null != personalCarryRankBeanResponse) {
+                                personalCarryRankAdapter.addAll(personalCarryRankBeanResponse);
                             }
-                        });
+                            hideIndeterminateProgressDialog();
+                        }, this::doOnError);
                 break;
             case XlmmConst.TYPE_TEAM_RANK:
                 MamaInfoModel.getInstance()
                         .getTeamCarryRankBean()
-                        .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
-                            @Override
-                            public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
-                                if (null != personalCarryRankBeanResponse) {
-                                    teamCarryRankAdapter.addAll(personalCarryRankBeanResponse);
-                                }
+                        .subscribe(personalCarryRankBeanResponse -> {
+                            if (null != personalCarryRankBeanResponse) {
+                                teamCarryRankAdapter.addAll(personalCarryRankBeanResponse);
                             }
-                        });
+                            hideIndeterminateProgressDialog();
+                        }, this::doOnError);
                 break;
             case XlmmConst.TYPE_TEAM_WEEK_RANK:
                 MamaInfoModel.getInstance()
                         .getWeekTeamCarryRankBean()
-                        .subscribe(new ServiceResponse<List<PersonalCarryRankBean>>() {
-                            @Override
-                            public void onNext(List<PersonalCarryRankBean> personalCarryRankBeanResponse) {
-                                if (null != personalCarryRankBeanResponse) {
-                                    teamCarryRankAdapter.addAll(personalCarryRankBeanResponse);
-                                }
+                        .subscribe(personalCarryRankBeanResponse -> {
+                            if (null != personalCarryRankBeanResponse) {
+                                teamCarryRankAdapter.addAll(personalCarryRankBeanResponse);
                             }
-                        });
+                            hideIndeterminateProgressDialog();
+                        }, this::doOnError);
                 break;
         }
     }
 
-    public String getTitle() {
-        if (getArguments() != null) {
-            return getArguments().getString("title");
+    private void doOnError(Throwable e) {
+        hideIndeterminateProgressDialog();
+        if (e instanceof UnknownHostException) {
+            showNetworkError();
+        } else {
+            JUtils.Toast("数据加载有误!");
         }
-        return "";
+    }
+
+    @Override
+    protected void initViews() {
+        b.xrv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        b.xrv.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        b.xrv.setPullRefreshEnabled(false);
+        b.xrv.setLoadingMoreEnabled(false);
+        switch (type) {
+            case XlmmConst.TYPE_PERSON_RANK:
+            case XlmmConst.TYPE_PERSON_WEEK_RANK:
+                personalCarryRankAdapter = new PersonalCarryRankAdapter(getActivity());
+                b.xrv.setAdapter(personalCarryRankAdapter);
+                break;
+            case XlmmConst.TYPE_TEAM_RANK:
+            case XlmmConst.TYPE_TEAM_WEEK_RANK:
+                teamCarryRankAdapter = new TeamCarryRankAdapter(getActivity());
+                b.xrv.setAdapter(teamCarryRankAdapter);
+                break;
+        }
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.fragment_rank;
     }
 
     @Override
     public View getScrollableView() {
-        return xrv;
+        return b.xrv;
     }
 }

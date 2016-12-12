@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.ActivityGoodListBean;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
 import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
@@ -36,6 +37,12 @@ public class ProductModel {
 
     public static ProductModel getInstance() {
         return ourInstance;
+    }
+
+    public Observable<ActivityGoodListBean> getActivityList(int promotion_id) {
+        return getService()
+                .getActivityGoodList(promotion_id)
+                .compose(new DefaultTransform<>());
     }
 
     //得到商品详情(新)

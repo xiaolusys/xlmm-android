@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
-import com.jimei.xiaolumeimei.ui.activity.user.ChangeSelectAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.ChangeAddressActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -31,12 +31,12 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private List<AddressBean> mList;
     private Activity context;
-    private int num;
+    private String addressId;
     private boolean idFlag;
 
-    public AddressSelectAdapter(Activity context, int num) {
+    public AddressSelectAdapter(Activity context, String addressId) {
         this.context = context;
-        this.num = num;
+        this.addressId = addressId;
         mList = new ArrayList<>();
         idFlag = false;
     }
@@ -76,7 +76,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             AddressBean addressBean = mList.get(position);
             defaultVH.smoothCheckBox.setCanClickable(false);
-            if (num == position) {
+            if (addressId != null && addressId.equals(addressBean.getId())) {
                 defaultVH.smoothCheckBox.setChecked(true);
             } else {
                 defaultVH.smoothCheckBox.setChecked(false);
@@ -92,7 +92,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
                     + addressBean.getReceiverAddress());
             defaultVH.receiverName.setText(addressBean.getReceiverName());
 
-            ((AddressDefaultVH) holder).card.setOnClickListener(v -> setBundle(addressBean, position));
+            ((AddressDefaultVH) holder).card.setOnClickListener(v -> setBundle(addressBean));
 
             ((AddressDefaultVH) holder).change.setOnClickListener(v -> setBundle1(addressBean));
         } else if (holder instanceof AddressVH) {
@@ -101,7 +101,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             AddressBean addressBean = mList.get(position);
             addressVH.smoothCheckBox.setCanClickable(false);
-            if (num == position) {
+            if (addressId != null && addressId.equals(addressBean.getId())) {
                 addressVH.smoothCheckBox.setChecked(true);
             } else {
                 addressVH.smoothCheckBox.setChecked(false);
@@ -117,15 +117,14 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
                     + addressBean.getReceiverAddress());
             addressVH.receiverName.setText(addressBean.getReceiverName());
 
-            ((AddressVH) holder).card.setOnClickListener(v -> setBundle(addressBean, position));
+            ((AddressVH) holder).card.setOnClickListener(v -> setBundle(addressBean));
 
             ((AddressVH) holder).change.setOnClickListener(v -> setBundle1(addressBean));
         }
     }
 
-    private void setBundle(AddressBean addressBean, int position) {
+    private void setBundle(AddressBean addressBean) {
         Intent intent = new Intent();
-
         intent.putExtra("name", addressBean.getReceiverName());
         intent.putExtra("addr_id", addressBean.getId());
         intent.putExtra("phone", addressBean.getReceiverMobile());
@@ -133,14 +132,14 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
                 + addressBean.getReceiverCity()
                 + addressBean.getReceiverDistrict()
                 + addressBean.getReceiverAddress());
-        intent.putExtra("position", position);
+        intent.putExtra("addressId", addressBean.getId());
         intent.putExtra("idNo", addressBean.getmIdentificationNo());
         context.setResult(Activity.RESULT_OK, intent);
         context.finish();
     }
 
     private void setBundle1(AddressBean addressBean) {
-        Intent intent = new Intent(context, ChangeSelectAddressActivity.class);
+        Intent intent = new Intent(context, ChangeAddressActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("receiver_state", addressBean.getReceiverState());
         bundle.putString("receiver_district", addressBean.getReceiverDistrict());

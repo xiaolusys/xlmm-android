@@ -4,7 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
@@ -40,7 +40,7 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
                         fragments.add(NinePicFragment.newInstance(wxQrcode.getQrcode_link()));
                         fragments.add(PushBoutiqueFragment.newInstance(wxQrcode.getQrcode_link()));
                         fragments.add(PushCategoryFragment.newInstance(wxQrcode.getQrcode_link()));
-                        MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(), fragments);
+                        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
                         mPager.setAdapter(mAdapter);
                         mPager.setOffscreenPageLimit(3);
                         mTabLayout.setupWithViewPager(mPager);

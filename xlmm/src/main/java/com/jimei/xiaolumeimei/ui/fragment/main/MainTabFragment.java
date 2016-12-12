@@ -21,10 +21,11 @@ import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.adapter.MainActivityAdapter;
 import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
-import com.jimei.xiaolumeimei.adapter.MainFragmentAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.FragmentMainTabBinding;
 import com.jimei.xiaolumeimei.entities.PortalBean;
@@ -41,6 +42,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +54,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
 
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private String mamaid;
-    private List<ProductListFragment> list = new ArrayList<>();
+    private List<BaseFragment> list = new ArrayList<>();
     private Map<String, String> map = new HashMap<>();
     private int rvTopHeight;
     private int mask;
@@ -70,7 +72,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
 
     @Override
     public View getLoadingView() {
-        return b.layout;
+        return b.swipeLayout;
     }
 
     @Override
@@ -88,11 +90,15 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                     hideIndeterminateProgressDialog();
                 }, e -> {
                     e.printStackTrace();
-                    JUtils.Toast("数据加载有误,请下拉刷新!");
                     if (b.swipeLayout != null) {
                         b.swipeLayout.setRefreshing(false);
                     }
                     hideIndeterminateProgressDialog();
+                    if (e instanceof UnknownHostException) {
+                        showNetworkError();
+                    } else {
+                        JUtils.Toast("数据加载有误,请下拉刷新!");
+                    }
                 }));
         showShop();
     }
@@ -123,13 +129,13 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     protected void initViews() {
         EventBus.getDefault().register(this);
         b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
-
         b.recyclerView.setLayoutManager(new GridLayoutManager(mActivity, 4));
         b.recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.recyclerView.addItemDecoration(new SpaceItemDecoration(15, 15, 25, 25));
         mMainCategoryAdapter = new MainCategoryAdapter(mActivity);
         b.recyclerView.setAdapter(mMainCategoryAdapter);
 
+//        b.activityRv.setLayoutManager(new GridLayoutManager(mActivity, 4, GridLayoutManager.HORIZONTAL, false));
         b.activityRv.setLayoutManager(new LinearLayoutManager(mActivity));
         b.activityRv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.activityRv.addItemDecoration(new SpaceItemDecoration(0, 0, 6, 6));
@@ -138,7 +144,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
 
         SharedPreferences sharedPreferencesMask = mActivity.getSharedPreferences("maskActivity", 0);
         mask = sharedPreferencesMask.getInt("mask", 0);
-        MainFragmentAdapter adapter = new MainFragmentAdapter(getChildFragmentManager(), list);
+        BaseTabAdapter adapter = new BaseTabAdapter(getChildFragmentManager(), list);
         list.add(ProductListFragment.newInstance(XlmmConst.TYPE_YESTERDAY, "昨天热卖"));
         list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TODAY, "今天特卖"));
         list.add(ProductListFragment.newInstance(XlmmConst.TYPE_TOMORROW, "即将上新"));
@@ -147,7 +153,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
         b.viewPager.setCurrentItem(1);
         b.tabLayout.setupWithViewPager(b.viewPager);
         b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        b.scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(1));
+        b.scrollableLayout.getHelper().setCurrentScrollableContainer((ProductListFragment) list.get(1));
     }
 
 
@@ -180,7 +186,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     @Override
     public void onPageSelected(int position) {
         try {
-            b.scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(position));
+            b.scrollableLayout.getHelper().setCurrentScrollableContainer((ProductListFragment) list.get(position));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,7 +207,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
             b.rvTop.setVisibility(View.VISIBLE);
             b.rvTop.setOnClickListener(v -> {
                 b.scrollableLayout.scrollTo(0, 0);
-                list.get(b.viewPager.getCurrentItem()).goToTop();
+                ((ProductListFragment) list.get(b.viewPager.getCurrentItem())).goToTop();
             });
         } else {
             b.rvTop.setVisibility(View.GONE);
@@ -220,16 +226,17 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
         try {
             switch (b.viewPager.getCurrentItem()) {
                 case 0:
-                    list.get(0).load(b.swipeLayout);
+                    list.get(0).initData();
                     break;
                 case 1:
-                    list.get(1).load(b.swipeLayout);
+                    list.get(1).initData();
                     break;
                 case 2:
-                    list.get(2).load(b.swipeLayout);
+                    list.get(2).initData();
                     break;
             }
-            b.scrollableLayout.getHelper().setCurrentScrollableContainer(list.get(b.viewPager.getCurrentItem()));
+            b.scrollableLayout.getHelper().setCurrentScrollableContainer(
+                    (ProductListFragment) list.get(b.viewPager.getCurrentItem()));
         } catch (Exception e) {
             e.printStackTrace();
         }
