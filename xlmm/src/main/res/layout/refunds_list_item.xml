@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/layout"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -16,7 +16,7 @@
             android:id="@+id/flag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30px" />
+            android:layout_marginLeft="12dp" />
 
         <TextView
             android:id="@+id/type"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10px"
-            android:layout_marginRight="30px"
+            android:layout_marginRight="12dp"
             android:textColor="@color/colorAccent"
             android:textSize="13sp" />
     </LinearLayout>
@@ -55,14 +55,14 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="20px"
-        android:paddingLeft="30px"
-        android:paddingRight="30px"
-        android:paddingTop="20px">
+        android:paddingBottom="8dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="8dp">
 
         <RelativeLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
             android:background="@drawable/choose_img_bg"
             android:gravity="center">
 
@@ -76,35 +76,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20px"
+            android:layout_height="84dp"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:singleLine="true"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:textColor="@color/text_color_62"
-                android:textSize="25px" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/size"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:textColor="@color/text_color_B4"
-                android:textSize="25px" />
+                android:textSize="13sp" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -113,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="25px" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/refund"
@@ -121,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="25px" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 

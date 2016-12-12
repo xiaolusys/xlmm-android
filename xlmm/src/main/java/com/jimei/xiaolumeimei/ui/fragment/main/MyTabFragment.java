@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.fragment.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,7 +36,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.UnknownHostException;
 
-public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> implements View.OnClickListener {
+public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private boolean mamaFlag;
     private int mamaId;
@@ -51,14 +52,14 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
 
     @Override
     public View getLoadingView() {
-        return b.layout;
+        return b.swipeLayout;
     }
 
     @Override
     public void initData() {
         mamaFlag = false;
         if (LoginUtils.checkLoginState(mActivity)) {
-            showIndeterminateProgressDialog(false);
+            showIndeterminateProgressDialog(true);
             addSubscription(MainModel.getInstance()
                     .getProfile()
                     .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -74,7 +75,10 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
                             if (e instanceof UnknownHostException) {
                                 showNetworkError();
                             } else {
-                                JUtils.Toast("个人信息获取失败!");
+                                JUtils.Toast("信息获取失败,请下拉刷新重试!");
+                            }
+                            if (b.swipeLayout.isRefreshing()) {
+                                b.swipeLayout.setRefreshing(false);
                             }
                         }
                     }));
@@ -86,6 +90,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
+        b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
     }
 
     @Override
@@ -103,6 +108,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
         b.llShop.setOnClickListener(this);
         b.llComplain.setOnClickListener(this);
         b.llProblem.setOnClickListener(this);
+        b.swipeLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -190,6 +196,8 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
             }
             if (userInfoBean.getUserBudget() != null) {
                 b.tvMoney.setText("" + userInfoBean.getUserBudget().getBudgetCash());
+            } else {
+                b.tvMoney.setText("0");
             }
             b.tvScore.setText("" + userInfoBean.getScore());
             b.tvDiscount.setText("" + userInfoBean.getCouponNum());
@@ -220,12 +228,15 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
             b.tvNickname.setText("点击登录");
             b.tvDiscount.setText("0");
             b.tvScore.setText("0");
-            b.tvMoney.setText("0");
+            b.tvMoney.setText("0.00");
             b.textPay.setVisibility(View.GONE);
             b.textWait.setVisibility(View.GONE);
             b.textRefund.setVisibility(View.GONE);
         }
         hideIndeterminateProgressDialog();
+        if (b.swipeLayout.isRefreshing()) {
+            b.swipeLayout.setRefreshing(false);
+        }
     }
 
     protected void readyGo(Class<?> clazz) {
@@ -249,6 +260,11 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reLoadData(RefreshPersonalEvent event) {
+        initData();
+    }
+
+    @Override
+    public void onRefresh() {
         initData();
     }
 }

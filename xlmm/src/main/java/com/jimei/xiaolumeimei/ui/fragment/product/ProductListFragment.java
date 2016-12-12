@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -16,6 +17,7 @@ import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.FragmentProductListBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -34,6 +36,7 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
     private int page = 1;
     private String next;
     private ProductListAdapter adapter;
+    private TextView headText;
 
 
     public static ProductListFragment newInstance(int type, String title) {
@@ -70,6 +73,7 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
     protected void initViews() {
         View head = LayoutInflater.from(getActivity()).inflate(R.layout.today_poster_header, null);
         countTime = (CountDownView) head.findViewById(R.id.count_view);
+        headText = (TextView) head.findViewById(R.id.text);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         b.xrv.setLayoutManager(manager);
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -116,8 +120,15 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
                             if (next != null && !"".equals(next)) {
                                 page++;
                             }
-                            countTime.start(DateUtils.calcLeftTime(productListBean.getOffshelf_deadline())
-                                    , CountDownView.TYPE_ALL);
+                            if (type == XlmmConst.TYPE_TOMORROW) {
+                                countTime.start(DateUtils.calcLeftTime(productListBean.getOnshelf_starttime())
+                                        , CountDownView.TYPE_ALL);
+                                headText.setText("距本场开始");
+                            } else {
+                                countTime.start(DateUtils.calcLeftTime(productListBean.getOffshelf_deadline())
+                                        , CountDownView.TYPE_ALL);
+                                headText.setText("距本场结束");
+                            }
                             adapter.update(productListBean.getResults());
                         }
                         b.xrv.loadMoreComplete();

@@ -336,8 +336,8 @@
 
                 <RelativeLayout
                     android:id="@+id/img_layout"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
                     android:background="@drawable/choose_img_bg"
                     android:gravity="center">
 
@@ -350,34 +350,31 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="84dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/tv_good_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
+                        android:layout_marginTop="6dp"
                         android:textColor="@color/text_color_62"
                         android:textSize="14sp" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="4" />
+                        android:layout_weight="1" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -398,10 +395,6 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -519,9 +512,9 @@
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
-                    android:visibility="invisible"
                     android:background="@drawable/choose_img_bg"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="invisible">
 
                     <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image"
@@ -537,9 +530,9 @@
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
-                    android:visibility="invisible"
                     android:background="@drawable/choose_img_bg"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="invisible">
 
                     <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image1"
@@ -555,9 +548,9 @@
                     android:layout_width="110px"
                     android:layout_height="110px"
                     android:layout_margin="8dp"
-                    android:visibility="invisible"
                     android:background="@drawable/choose_img_bg"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="invisible">
 
                     <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image2"
@@ -574,8 +567,8 @@
                     android:layout_height="110px"
                     android:layout_margin="8dp"
                     android:background="@drawable/choose_img_bg"
-                    android:visibility="invisible"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="invisible">
 
                     <com.jimei.library.widget.RoundCornerImageView
                         android:id="@+id/round_image3"

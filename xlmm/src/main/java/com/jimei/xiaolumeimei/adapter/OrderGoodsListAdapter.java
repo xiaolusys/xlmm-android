@@ -101,6 +101,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         }
         View divider = convertView.findViewById(R.id.divider);
         View logisticsLayout = convertView.findViewById(R.id.logistics_layout);
+        View textLogistic = convertView.findViewById(R.id.text_logistic);
         if (position == 0) {
             count = 0;
             divider.setVisibility(View.VISIBLE);
@@ -141,6 +142,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             .show());
                 }
                 final int finalI = i;
+                textLogistic.setVisibility(View.VISIBLE);
                 convertView.findViewById(R.id.ll_item).setOnClickListener(v -> {
                     Intent intent = new Intent(context, LogisticsActivity.class);
                     Bundle bundle = new Bundle();

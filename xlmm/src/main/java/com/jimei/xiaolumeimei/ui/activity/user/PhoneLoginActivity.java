@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -190,6 +191,18 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                                                 }
                                                             }
                                                         }));
+                                            } else if (login.equals("car")) {
+                                                Bundle carBundle = new Bundle();
+                                                carBundle.putString("flag", "car");
+                                                readyGoThenKill(TabActivity.class, carBundle);
+                                            } else if (login.equals("collect")) {
+                                                Bundle carBundle = new Bundle();
+                                                carBundle.putString("flag", "collect");
+                                                readyGoThenKill(TabActivity.class, carBundle);
+                                            } else if (login.equals("my")) {
+                                                Bundle carBundle = new Bundle();
+                                                carBundle.putString("flag", "my");
+                                                readyGoThenKill(TabActivity.class, carBundle);
                                             } else {
                                                 finish();
                                             }

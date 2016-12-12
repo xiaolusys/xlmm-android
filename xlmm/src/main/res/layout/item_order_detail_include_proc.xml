@@ -74,6 +74,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/text_logistic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -85,7 +86,8 @@
                     android:paddingBottom="2dp"
                     android:text="查看物流"
                     android:textColor="@color/text_color_62"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

@@ -22,7 +22,9 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
     private List<BaseFragment> fragments;
     private int containerId;
     private Context context;
-    private boolean isLoad = false;
+    private boolean carLoad = false;
+    private boolean collectLoad = false;
+    private boolean myLoad = false;
     private int currentId;
 
     public FragmentTabUtils(FragmentManager manager, RadioGroup rgs, List<BaseFragment> fragments,
@@ -39,12 +41,25 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if ((checkedId == R.id.rb_car || checkedId == R.id.rb_collect)
+        if ((checkedId == R.id.rb_car || checkedId == R.id.rb_collect || checkedId == R.id.rb_my)
                 && !LoginUtils.checkLoginState(context)) {
             group.check(currentId);
             Intent intent = new Intent(context, LoginActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("login", "main");
+            switch (checkedId) {
+                case R.id.rb_car:
+                    bundle.putString("login", "car");
+                    break;
+                case R.id.rb_collect:
+                    bundle.putString("login", "collect");
+                    break;
+                case R.id.rb_my:
+                    bundle.putString("login", "my");
+                    break;
+                default:
+                    bundle.putString("login", "main");
+                    break;
+            }
             intent.putExtras(bundle);
             context.startActivity(intent);
         } else {
@@ -61,16 +76,33 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
 
     private void addAndShow(int checkedId, BaseFragment fragment) {
         if (!fragment.isAdded()) {
-            if (checkedId != R.id.rb_car || !isLoad) {
-                getFragmentTransaction().add(containerId, fragment).commitAllowingStateLoss();
-            }
-            if (checkedId == R.id.rb_car) {
-                isLoad = true;
+            switch (checkedId) {
+                case R.id.rb_car:
+                    if (!carLoad) {
+                        getFragmentTransaction().add(containerId, fragment).commitAllowingStateLoss();
+                        carLoad = true;
+                    }
+                    break;
+                case R.id.rb_collect:
+                    if (!collectLoad) {
+                        getFragmentTransaction().add(containerId, fragment).commitAllowingStateLoss();
+                        collectLoad = true;
+                    }
+                    break;
+                case R.id.rb_my:
+                    if (!myLoad) {
+                        getFragmentTransaction().add(containerId, fragment).commitAllowingStateLoss();
+                        myLoad = true;
+                    }
+                    break;
+                default:
+                    getFragmentTransaction().add(containerId, fragment).commitAllowingStateLoss();
+                    break;
             }
             fragment.setUserVisibleHint(true);
         }
         getFragmentTransaction().show(fragment).commitAllowingStateLoss();
-        if (checkedId == R.id.rb_main || checkedId == R.id.rb_boutique || checkedId == R.id.rb_my) {
+        if (checkedId == R.id.rb_main || checkedId == R.id.rb_boutique) {
             currentId = checkedId;
         }
     }

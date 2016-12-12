@@ -245,8 +245,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         if (loadingdialog == null) {
             loadingdialog = XlmmLoadingDialog.create(this)
                     .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-//                    .setCancellable(!horizontal)
-                    .setCancellable(false)
+                    .setCancellable(!horizontal)
                     .show();
         }
     }

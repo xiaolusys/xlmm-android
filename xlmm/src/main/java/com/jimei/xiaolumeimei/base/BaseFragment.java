@@ -123,8 +123,7 @@ public abstract class BaseFragment extends Fragment {
         if (loadingdialog == null) {
             loadingdialog = XlmmLoadingDialog.create(mActivity)
                     .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-//                    .setCancellable(!horizontal)
-                    .setCancellable(false)
+                    .setCancellable(!horizontal)
                     .show();
         }
     }
@@ -158,7 +157,7 @@ public abstract class BaseFragment extends Fragment {
                 showNetworkError();
             });
         } else {
-            showIndeterminateProgressDialog(false);
+            showIndeterminateProgressDialog(true);
             initData();
         }
     }

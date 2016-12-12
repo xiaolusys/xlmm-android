@@ -79,6 +79,18 @@ public class TabActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         if (intent.getExtras() != null) {
             flag = intent.getExtras().getString("flag");
+            if (flag != null && !"".equals(flag)) {
+                if (flag.equals("car")) {
+                    radioGroup.check(R.id.rb_car);
+                } else if (flag.equals("collect")) {
+                    radioGroup.check(R.id.rb_collect);
+                } else if (flag.equals("my")) {
+                    radioGroup.check(R.id.rb_my);
+                } else {
+                    radioGroup.check(R.id.rb_main);
+                }
+                flag = null;
+            }
         }
     }
 
@@ -136,19 +148,13 @@ public class TabActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         showCarNum();
-        EventBus.getDefault().post(new RefreshCarNumEvent());
-        EventBus.getDefault().post(new RefreshPersonalEvent());
-        EventBus.getDefault().post(new ShowShopEvent());
+        if (LoginUtils.checkLoginState(this)) {
+            EventBus.getDefault().post(new RefreshCarNumEvent());
+            EventBus.getDefault().post(new RefreshPersonalEvent());
+            EventBus.getDefault().post(new ShowShopEvent());
+        }
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-        if (flag != null && !"".equals(flag)) {
-            if (flag.equals("main")) {
-                radioGroup.check(R.id.rb_main);
-            } else if (flag.equals("car")) {
-                radioGroup.check(R.id.rb_car);
-            }
-            flag = null;
-        }
     }
 
     @Override
@@ -209,7 +215,7 @@ public class TabActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void initLogOutInfo(LogOutEmptyEvent event) {
-
+        radioGroup.check(R.id.rb_main);
     }
 
     private void setTopic() {

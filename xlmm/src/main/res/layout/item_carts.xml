@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="210px"
-    android:orientation="vertical"
+    android:layout_height="240px"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:padding="15px">
 
     <RelativeLayout
         android:id="@+id/rl"
-        android:layout_width="180px"
-        android:layout_height="180px"
+        android:layout_width="200px"
+        android:layout_height="200px"
         android:background="@drawable/choose_img_bg"
         android:gravity="center">
 
@@ -23,30 +24,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="180px"
+        android:layout_height="210px"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_toRightOf="@id/rl"
         android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
+            android:layout_marginTop="8dp"
             android:textColor="@color/text_color_62"
             android:textSize="14sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3" />
 
         <TextView
             android:id="@+id/sku_name"
@@ -58,11 +47,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
             <TextView
@@ -120,12 +110,7 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
