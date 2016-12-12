@@ -161,9 +161,6 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
                         @Override
                         public void onError(Throwable e) {
-//                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                            logistic_name.setText(df.format(new Date()));
-//                            logistic_num.setText("暂时无法查询物流信息,请稍后再试");
                             JUtils.Toast("暂时无法查询物流信息,请稍后再试");
                             logistic_name.setText("物流公司: " + company_name);
                             logistic_num.setText("物流单号: " + packetid);

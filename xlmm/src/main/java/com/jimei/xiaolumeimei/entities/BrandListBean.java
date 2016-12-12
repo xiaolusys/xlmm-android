@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.entities;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,21 +9,30 @@ import java.util.List;
  */
 public class BrandListBean {
 
-    @SerializedName("products") private List<ProductsBean> products;
+    @SerializedName("products")
+    private List<ProductsBean> products;
 
     public List<ProductsBean> getProducts() {
         return products;
     }
 
     public static class ProductsBean {
-        @SerializedName("id") private int id;
-        @SerializedName("product_id") private int productId;
-        @SerializedName("model_id") private int modelId;
-        @SerializedName("product_name") private String productName;
-        @SerializedName("product_img") private String productImg;
-        @SerializedName("product_lowest_price") private double productLowestPrice;
-        @SerializedName("product_std_sale_price") private double productStdSalePrice;
-        @SerializedName("web_url") private String webUrl;
+        @SerializedName("id")
+        private int id;
+        @SerializedName("product_id")
+        private int productId;
+        @SerializedName("model_id")
+        private int modelId;
+        @SerializedName("product_name")
+        private String productName;
+        @SerializedName("product_img")
+        private String productImg;
+        @SerializedName("product_lowest_price")
+        private double productLowestPrice;
+        @SerializedName("product_std_sale_price")
+        private double productStdSalePrice;
+        @SerializedName("web_url")
+        private String webUrl;
 
         public int getId() {
             return id;

@@ -8,11 +8,9 @@ import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 
-import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.StatusBarUtil;
 import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 import butterknife.ButterKnife;
@@ -244,7 +242,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        if (loadingdialog==null) {
+        if (loadingdialog == null) {
             loadingdialog = XlmmLoadingDialog.create(this)
                     .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
                     .setCancellable(!horizontal)
@@ -254,8 +252,10 @@ public abstract class BaseActivity extends AutoLayoutActivity {
 
     public void hideIndeterminateProgressDialog() {
         try {
-            loadingdialog.dismiss();
-            loadingdialog = null;
+            if (loadingdialog != null) {
+                loadingdialog.dismiss();
+                loadingdialog = null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -279,6 +279,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        hideIndeterminateProgressDialog();
         try {
             if (this.mCompositeSubscription != null) {
                 this.mCompositeSubscription.unsubscribe();
@@ -286,30 +287,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
-            if (resultCode == RESULT_OK) {
-                String result = intent.getExtras().getString("pay_result", "");
-                String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
-                String extraMsg = intent.getExtras().getString("extra_msg"); // 错误信息
-                if (result != null) {
-                    switch (result) {
-                        case "cancel":
-                            JUtils.Toast("已取消支付!");
-                            break;
-                        case "success":
-                            JUtils.Toast("支付成功！");
-                            break;
-                        default:
-                            showMsg(result, errorMsg, extraMsg);
-                            break;
-                    }
-                }
-            }
         }
     }
 

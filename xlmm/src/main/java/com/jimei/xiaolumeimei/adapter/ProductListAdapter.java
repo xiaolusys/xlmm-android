@@ -94,12 +94,6 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
                         Bundle bundle = new Bundle();
                         bundle.putInt("model_id", modelId);
                         intent.putExtras(bundle);
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, holder.image, "wisdom");
-//                            context.startActivity(intent, options.toBundle());
-//                        } else {
-//                            context.startActivity(intent);
-//                        }
                         context.startActivity(intent);
                     }
                 }

@@ -2,22 +2,19 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogAllFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogBounsFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCashbackFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.CarryLogCommissionFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogAllFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogBounsFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogCashbackFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogCommissionFragment;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -44,9 +41,8 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     TextView tvHis;
     @Bind(R.id.scrollable_layout)
     ScrollableLayout scrollableLayout;
-    List<BaseLazyFragment> fragments = new ArrayList<>();
+    List<BaseFragment> fragments = new ArrayList<>();
     private String carrylogMoney;
-    private TabLayout.Tab[] tabs;
     private String hisConfirmedCashOut;
 
     @Override
@@ -90,29 +86,12 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
         fragments.add(CarryLogCommissionFragment.newInstance("佣金"));
         fragments.add(CarryLogCashbackFragment.newInstance("返现"));
 
-        List<String> titles = new ArrayList<>();
-        titles.add("全部");
-        titles.add("奖金");
-        titles.add("佣金");
-        titles.add("返现");
-
-        tabs = new TabLayout.Tab[4];
-        tabs[0] = tabLayout.newTab().setText(titles.get(0));
-        tabs[1] = tabLayout.newTab().setText(titles.get(1));
-        tabs[2] = tabLayout.newTab().setText(titles.get(2));
-        tabs[3] = tabLayout.newTab().setText(titles.get(3));
-
-        tabLayout.addTab(tabs[0]);
-        tabLayout.addTab(tabs[1]);
-        tabLayout.addTab(tabs[2]);
-        tabLayout.addTab(tabs[3]);
-
-        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager(), titles);
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        scrollableLayout.getHelper().setCurrentScrollableContainer(fragments.get(0));
+        scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment)fragments.get(0));
     }
 
     @Override
@@ -121,39 +100,16 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public void onPageSelected(int position) {
-        scrollableLayout.getHelper().setCurrentScrollableContainer(fragments.get(position));
+        scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment)fragments.get(position));
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
     }
 
-    class MainTabAdapter extends FragmentPagerAdapter {
-        private List<String> listTitle;
-
-        public MainTabAdapter(FragmentManager fm, List<String> listTitle) {
-            super(fm);
-            this.listTitle = listTitle;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return listTitle.get(position);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
 //        switch (item.getItemId()) {
 //            case R.id.action_personal:
 //                MobclickAgent.onEvent(this, "PersonalRankID");
@@ -162,12 +118,12 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 //            default:
 //                break;
 //        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.menu_personal, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+//        return super.onCreateOptionsMenu(menu);
+//    }
 }

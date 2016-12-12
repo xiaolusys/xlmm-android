@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.View;
 
@@ -19,9 +20,11 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.badgelib.BadgeView;
+import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.ActivityListAdapter;
+import com.jimei.xiaolumeimei.adapter.MainActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaFirstBinding;
@@ -31,14 +34,13 @@ import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DayPushActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
@@ -52,7 +54,8 @@ import java.util.List;
 
 import rx.Observable;
 
-public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBinding> implements View.OnClickListener, OnChartValueSelectedListener {
+public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBinding> implements
+        View.OnClickListener, OnChartValueSelectedListener, ScrollableHelper.ScrollableContainer {
     private static final String TITLE = "title";
     private static final String ID = "id";
     List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
@@ -68,6 +71,7 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     private BadgeView mBadgeView;
     private int mCurrent_dp_turns_num;
     private long lastClickTime = 0;
+    private MainActivityAdapter adapter;
 
     public static MamaFirstFragment newInstance(String title, int id) {
         MamaFirstFragment fragment = new MamaFirstFragment();
@@ -79,8 +83,8 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     }
 
     @Override
-    protected void initData() {
-        MMInfoModel mmInfoModel = MMInfoModel.getInstance();
+    public void initData() {
+        MamaInfoModel mmInfoModel = MamaInfoModel.getInstance();
         addSubscription(Observable.mergeDelayError(mmInfoModel.getMamaUrl(), mmInfoModel.getShareShopping(),
                 mmInfoModel.getMamaFortune(), mmInfoModel.getRecentCarry("0", "7"), mmInfoModel.getMaMaselfList())
                 .subscribe(o -> {
@@ -102,8 +106,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
                             initTask((MamaSelfListBean) o);
                         }
                     }
-                }, Throwable::printStackTrace, () -> b.scrollView.scrollTo(0, 0)));
-        setListener();
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }));
     }
 
     private void initUrl(MamaUrl mamaUrl) {
@@ -112,9 +118,7 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         msgUrl = resultsBean.getExtra().getNotice();
         List<PortalBean.ActivitysBean> activities = resultsBean.getMama_activities();
         if (activities != null && activities.size() > 0) {
-            ActivityListAdapter adapter = new ActivityListAdapter(mActivity);
             adapter.updateWithClear(activities);
-            b.lv.setAdapter(adapter);
         }
     }
 
@@ -216,14 +220,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         }
         List<MamaSelfListBean.ResultsBean> results = bean.getResults();
         List<String> list = new ArrayList<>();
-//        if (unread_cnt > 0) {
         for (int i = 0; i < results.size(); i++) {
-//                if (!results.get(i).isRead()) {
             list.add(results.get(i).getTitle());
-//                }
         }
         b.marqueeView.startWithList(list);
-//        }
     }
 
     private void initFortune(MamaFortune mamaFortune) {
@@ -240,7 +240,6 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         if (fortune.getExtraInfo() != null) {
             hisConfirmedCashOut = fortune.getExtraInfo().getHisConfirmedCashOut();
         }
-        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
         SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
         String time = preferences.getString("time", "");
         int num = preferences.getInt("num", 0);
@@ -269,9 +268,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         } catch (Exception e) {
             e.printStackTrace();
         }
+        hideIndeterminateProgressDialog();
     }
 
-    private void setListener() {
+    public void setListener() {
         b.llRenew.setOnClickListener(this);
         b.llRank.setOnClickListener(this);
         b.llShare.setOnClickListener(this);
@@ -288,6 +288,12 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     @Override
     protected void initViews() {
         init_chart();
+        b.rv.setLayoutManager(new LinearLayoutManager(mActivity));
+        b.rv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.rv.addItemDecoration(new SpaceItemDecoration(0, 0, 6, 6));
+        adapter = new MainActivityAdapter(mActivity);
+        b.rv.setAdapter(adapter);
+        b.scrollableLayout.getHelper().setCurrentScrollableContainer(this);
     }
 
     @Override
@@ -384,5 +390,15 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     @Override
     public void onNothingSelected() {
 
+    }
+
+    @Override
+    public View getScrollableView() {
+        return b.rv;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.scrollableLayout;
     }
 }

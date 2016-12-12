@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
@@ -57,6 +58,10 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     LinearLayout main;
     @Bind(R.id.rl_default)
     RelativeLayout relativeLayout;
+    @Bind(R.id.id_layout)
+    LinearLayout idLayout;
+    @Bind(R.id.id_num)
+    EditText idNum;
     private String id;
 
     private ArrayList<Province> provinces = new ArrayList<>();
@@ -68,12 +73,13 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private String receiver_name;
     private String receiver_mobile;
     private String referal_trade_id;
-
+    private String idNo;
     private County county;
     private City city;
     private Province province;
     private ArrayList<City> cities;
     private ArrayList<County> counties;
+    private boolean is_bonded_goods;
 
     @Override
     protected void setListener() {
@@ -94,6 +100,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         mobile.setText(receiver_mobile);
         address.setText(city_string);
         clearAddress.setText(clearaddressa);
+        idNum.setText(idNo);
     }
 
     @Override
@@ -106,18 +113,23 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         receiver_city = extras.getString("receiver_city");
         receiver_district = extras.getString("receiver_district");
         id = extras.getString("address_id");
+        is_bonded_goods = extras.getBoolean("is_bonded_goods", false);
         referal_trade_id = extras.getString("referal_trade_id");
+        idNo = extras.getString("idNo");
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.activity_changgeaddress;
+        return R.layout.activity_changeaddress;
     }
 
     @Override
     protected void initViews() {
         relativeLayout.setVisibility(View.GONE);
+        if (is_bonded_goods) {
+            idLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -138,28 +150,29 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                JUtils.Log(TAG,
-                        receiver_mobile + "====" + receiver_state + "====" + receiver_city + "====" +
-                                receiver_district + "====" +
-                                clearaddressa + "====" + receiver_name);
-                if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                    Subscription subscribe = AddressModel.getInstance()
-                            .update_address(id, receiver_state, receiver_city, receiver_district,
-                                    clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id)
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                @Override
-                                public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null) {
-                                        if (addressResultBean.getCode() == 0) {
-                                            JUtils.Toast("修改成功");
-                                            finish();
-                                        } else {
-                                            JUtils.Toast("修改失败");
+                idNo = idNum.getText().toString().trim();
+                if (IdCardChecker.isValidatedAllIdcard(idNo) || !is_bonded_goods) {
+                    if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
+                        Subscription subscribe = AddressModel.getInstance()
+                                .update_address(id, receiver_state, receiver_city, receiver_district,
+                                        clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id, idNo)
+                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                                    @Override
+                                    public void onNext(AddressResultBean addressResultBean) {
+                                        if (addressResultBean != null) {
+                                            if (addressResultBean.getCode() == 0) {
+                                                JUtils.Toast("修改成功");
+                                                finish();
+                                            } else {
+                                                JUtils.Toast("修改失败");
+                                            }
                                         }
                                     }
-                                }
-                            });
-                    addSubscription(subscribe);
+                                });
+                        addSubscription(subscribe);
+                    }
+                } else {
+                    JUtils.Toast("请填写合法的身份证号码!");
                 }
                 break;
         }
@@ -215,6 +228,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
         Context mContext;
         Dialog progressDialog;
+
         public InitAreaTask(Context context) {
             mContext = context;
             progressDialog = Util.createLoadingDialog(mContext, "请稍等...", true, 0);

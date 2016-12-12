@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'AndResGuard'
 
 def releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("UTC"))
 }
 
 def keyStore = file('../xlmm/xlmm.jks')
@@ -70,8 +70,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20161121
-        versionName "1.3.3"
+        versionCode 20161212
+        versionName "1.3.5"
 
         multiDexEnabled = true
 
@@ -172,11 +172,11 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "xlmm",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-
-        Fir {
-            manifestPlaceholders = [CHANNEL_NAME: "Fir",
-                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-        }
+//
+//        Fir {
+//            manifestPlaceholders = [CHANNEL_NAME: "Fir",
+//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+//        }
 
         wandoujia {
             manifestPlaceholders = [CHANNEL_NAME: "wandoujia",
@@ -192,11 +192,11 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "huawei",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-
-        flyme {
-            manifestPlaceholders = [CHANNEL_NAME: "flyme",
-                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-        }
+//
+//        flyme {
+//            manifestPlaceholders = [CHANNEL_NAME: "flyme",
+//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+//        }
 
         qihu360 {
             manifestPlaceholders = [CHANNEL_NAME: "qihu360",
@@ -259,6 +259,7 @@ dependencies {
 //    compile 'com.pingxx:pingpp-core:2.1.6'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
 }

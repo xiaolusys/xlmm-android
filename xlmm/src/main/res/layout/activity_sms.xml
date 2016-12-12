@@ -1,71 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.jimei.library.widget.XlmmTitleView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:xlmm_title="短信验证码登录" />
-
-    <include layout="@layout/common_gap" />
-
-    <com.jimei.library.widget.ClearEditText
-        android:id="@+id/register_name"
-        android:textCursorDrawable="@drawable/color_cursor"
-        style="@style/EditTextStyle"
-        android:layout_width="match_parent"
-        android:background="@null"
-        android:hint="请输入手机号"
-        android:inputType="phone"
-        android:maxLength="11"
-        android:paddingLeft="20sp" />
-
-    <include layout="@layout/common_gap" />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:weightSum="3">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/checkcode"
+
+        <com.jimei.library.widget.XlmmTitleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:xlmm_title="短信验证码登录" />
+
+        <com.jimei.library.widget.ClearEditText
+            android:id="@+id/register_name"
             style="@style/EditTextStyle"
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:textCursorDrawable="@drawable/color_cursor"
-            android:hint="请输入验证码"
-            android:inputType="number"
-            android:maxLength="6" />
+            android:layout_width="match_parent"
+            android:background="@null"
+            android:hint="请输入手机号"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:paddingLeft="20sp"
+            android:textCursorDrawable="@drawable/color_cursor" />
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:weightSum="3">
+
+            <EditText
+                android:id="@+id/checkcode"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:hint="请输入验证码"
+                android:inputType="number"
+                android:maxLength="6"
+                android:textCursorDrawable="@drawable/color_cursor" />
+
+            <Button
+                android:id="@+id/getCheckCode"
+                android:layout_width="100px"
+                android:layout_height="64px"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/btn_common_white"
+                android:text="获取验证码"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
+
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="20dp"
+            android:visibility="gone">
+
+            <SeekBar
+                android:id="@+id/sb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/seek_bar_bg"
+                android:thumb="@drawable/thumb"
+                android:thumbOffset="0dp" />
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="向右滑动验证"
+                android:textColor="@color/text_color_88"
+                android:textSize="14sp" />
+
+            <View
+                android:id="@+id/view_first"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="70dp"
+                android:background="@color/transparent" />
+
+        </FrameLayout>
 
         <Button
-            android:id="@+id/getCheckCode"
-            android:layout_width="100px"
-            android:layout_height="64px"
-            android:layout_marginRight="5dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/btn_common_white"
-            android:text="获取验证码"
-            android:textColor="@color/colorAccent" />
+            android:id="@+id/confirm"
+            android:layout_width="656px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_common_default"
+            android:text="提交"
+            android:textColor="@color/white" />
+
     </LinearLayout>
 
-    <include layout="@layout/common_gap" />
-
-    <Button
-        android:id="@+id/confirm"
-        android:layout_width="656px"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80px"
-        android:background="@drawable/btn_common_default"
-        android:text="提交"
-        android:textColor="@color/white"/>
-
-</LinearLayout>
+</FrameLayout>

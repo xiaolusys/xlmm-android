@@ -198,6 +198,7 @@ public class CartsPayinfoBean {
     @SerializedName("pic_path") private String mPicPath;
     @SerializedName("created") private String mCreated;
     @SerializedName("status") private int mStatus;
+    @SerializedName("is_bonded_goods") private boolean is_bonded_goods;
 
     @Override public String toString() {
       return "CartListEntity{" +
@@ -457,6 +458,14 @@ public class CartsPayinfoBean {
 
     public void setStatus(int status) {
       this.mStatus = status;
+    }
+
+    public boolean is_bonded_goods() {
+      return is_bonded_goods;
+    }
+
+    public void setIs_bonded_goods(boolean is_bonded_goods) {
+      this.is_bonded_goods = is_bonded_goods;
     }
   }
 

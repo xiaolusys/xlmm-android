@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.AttrView;
@@ -52,6 +53,7 @@ import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.ProductModel;
@@ -62,10 +64,9 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,22 +251,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }, this::hideIndeterminateProgressDialog));
     }
 
-    private void initLeftTime(String time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date offTime = dateFormat.parse(time);
-            Date date = new Date();
-            if ((offTime.getTime() - date.getTime()) > 0) {
-                left = offTime.getTime() - date.getTime();
-            } else {
-                left = 0;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        b.countView.start(left, CountDownView.TYPE_ALL);
-    }
-
     private void fillDataToView(ProductDetailBean productDetailBean) {
         b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
         ProductDetailBean.DetailContentBean detailContent = productDetailBean.getDetail_content();
@@ -328,7 +313,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             b.llTag.addView(tagTextView);
         }
         initAttr(productDetailBean.getComparison().getAttributes());
-        initLeftTime(offshelf_time);
+        long left = DateUtils.calcLeftTime(offshelf_time);
+        b.countView.start(left, CountDownView.TYPE_ALL);
         initHeadImg(detailContent);
     }
 
@@ -374,7 +360,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             }
             list.add(imageView);
         }
-        PagerAdapter viewPagerAdapter = new MyPagerAdapter(list);
+        PagerAdapter viewPagerAdapter = new MyPagerAdapter(list, b.viewPager);
         b.viewPager.setAdapter(viewPagerAdapter);
         isAlive = true;
         current = 0;
@@ -391,6 +377,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
             }).start();
         }
+
     }
 
     private void setStatusBar() {
@@ -439,8 +426,11 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
                 break;
             case R.id.rl_cart:
-                startActivity(new Intent(this, CartActivity.class));
-                finish();
+                if (!LoginUtils.checkLoginState(getApplicationContext())) {
+                    jumpToLogin();
+                } else {
+                    readyGoThenKill(CartActivity.class);
+                }
                 break;
             case R.id.tv_add:
                 if (!LoginUtils.checkLoginState(getApplicationContext())) {
@@ -502,6 +492,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                                             collectFlag = false;
                                             b.collectImg.setImageResource(R.drawable.icon_collect_false);
                                             b.collectText.setText("收藏");
+                                            EventBus.getDefault().post(new CollectChangeEvent());
                                         }
                                         JUtils.Toast(collectionResultBean.getInfo());
                                     }
@@ -516,6 +507,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                                             collectFlag = true;
                                             b.collectImg.setImageResource(R.drawable.icon_collect_true);
                                             b.collectText.setText("已收藏");
+                                            EventBus.getDefault().post(new CollectChangeEvent());
                                         }
                                         JUtils.Toast(collectionResultBean.getInfo());
                                     }

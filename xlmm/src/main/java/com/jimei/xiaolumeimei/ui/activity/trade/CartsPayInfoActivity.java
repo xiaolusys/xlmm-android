@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.NestedListView;
 import com.jimei.library.widget.SmoothCheckBox;
@@ -35,20 +36,16 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
-import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.activity.user.AddNoAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,8 +145,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private int order_id = -1;
     @Bind(R.id.jiesheng_price)
     TextView jiesheng_price;
-    private int position;
+    private String addressId;
     private boolean mFlag, couponFlag;
+    private String idNo;
+    private boolean idFlag = false;
 
     @Override
     protected void setListener() {
@@ -267,18 +266,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                     }
                                 }
                             }
-
                             calcAllPrice();
-
-                            JUtils.Log(TAG, "discount_fee" + discount_fee);
-                            JUtils.Log(TAG,
-                                    "downLoadCartsInfo:" + cart_ids + "  " + addr_id + "  " + "  " +
-                                            payment + "  " + post_fee + "  " +
-                                            discount_fee + "  " + total_fee + "  " + uuid + "  " +
-                                            pay_extras);
                         } else {
                             JUtils.Toast("商品已过期,请重新选购");
-                            readyGo(CartActivity.class);
+                            readyGoThenKill(CartActivity.class);
                         }
                     }
                 });
@@ -292,9 +283,17 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                         if (cartsPayinfoBean != null) {
+                            List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
+                            for (int i = 0; i < cartList.size(); i++) {
+                                if (cartList.get(i).is_bonded_goods()) {
+                                    idFlag = true;
+                                    checkIdNo();
+                                    break;
+                                }
+                            }
                             JUtils.Log(TAG, cartsPayinfoBean.toString());
-                            mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
-                            goodNum = cartsPayinfoBean.getCartList().get(0).getNum();
+                            mAdapter.updateWithClear(cartList);
+                            goodNum = cartList.get(0).getNum();
                             cart_ids = cartsPayinfoBean.getCartIds();
                             logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
                             for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
@@ -390,16 +389,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             }
 
                             calcAllPrice();
-
-                            JUtils.Log(TAG, "discount_fee" + discount_fee);
-                            JUtils.Log(TAG,
-                                    "downLoadCartsInfo:" + cart_ids + "    " + addr_id + "    " + "    " +
-                                            payment + "    " + post_fee + "    " +
-                                            discount_fee + "    " + total_fee + "    " + uuid + "    " +
-                                            pay_extras);
                         } else {
                             JUtils.Toast("商品已过期,请重新选购");
-                            readyGo(CartActivity.class);
+                            readyGoThenKill(CartActivity.class);
                         }
                     }
                 });
@@ -484,23 +476,28 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.adress:
+                Bundle addressBundle = new Bundle();
+                addressBundle.putString("addressId", addressId);
+                addressBundle.putBoolean("idFlag", idFlag);
                 if (isHaveAddress) {
-                    Intent intent =
-                            new Intent(CartsPayInfoActivity.this, AddressSelectActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("position", position);
-                    intent.putExtras(bundle);
-                    startActivityForResult(intent, REQUEST_CODE_ADDRESS);
+                    readyGoForResult(AddressSelectActivity.class, REQUEST_CODE_ADDRESS, addressBundle);
                 } else {
-                    startActivity(
-                            new Intent(CartsPayInfoActivity.this, AddNoAddressActivity.class));
+                    readyGo(AddAddressActivity.class, addressBundle);
                 }
                 break;
             case R.id.confirm:
                 MobclickAgent.onEvent(this, "PayId");
-                xlmmPayWithDialog();
+                if (idFlag && !IdCardChecker.isValidatedAllIdcard(idNo)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("提示")
+                            .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
+                            .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                            .setCancelable(false)
+                            .show();
+                } else {
+                    xlmmPayWithDialog();
+                }
                 break;
-
             case R.id.coupon_layout:
                 Intent intent = new Intent(CartsPayInfoActivity.this, SelectCouponActivity.class);
                 Bundle bundle = new Bundle();
@@ -785,30 +782,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     private void payV2(String pay_method, String paymentprice_v2, String pay_extrasaa,
                        String discount_fee_price) {
-        JUtils.Log("CartsPayinfo",
-                cart_ids
-                        + "    "
-                        + addr_id
-                        + "    "
-                        + pay_method
-                        + "    "
-                        +
-                        paymentprice_v2
-                        + "    "
-                        + post_fee
-                        + "    "
-                        +
-                        discount_fee_price
-                        + "    "
-                        + total_fee
-                        + "    "
-                        + uuid
-                        + "  "
-                        + pay_extrasaa);
-
         showIndeterminateProgressDialog(false);
-        //int position = spinner.getSelectedItemPosition();
-        //String code = logisticCompanyList.get(position).getCode();
         Subscription subscription = TradeModel.getInstance()
                 .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
                         discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag)
@@ -845,6 +819,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                             } else {
                                 if (payInfoBean.getCode() == 0) {
                                     JUtils.Toast("支付成功");
+                                    hideIndeterminateProgressDialog();
                                     successJump();
                                 } else {
                                     JUtils.Toast(payInfoBean.getInfo());
@@ -878,7 +853,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     return;
                 }
                 if (result.equals("cancel")) {
-                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     //wexin alipay already showmsg
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayCancelID");
                     JUtils.Toast("你已取消支付!");
@@ -893,11 +867,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     }
                     finish();
                 } else if (result.equals("success")) {
-                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     JUtils.Toast("支付成功！");
                     successJump();
                 } else {
-                    EventBus.getDefault().postSticky(new UserChangeEvent());
                     MobclickAgent.onEvent(CartsPayInfoActivity.this, "PayFailID");
                     showMsgAndFinish(result, errorMsg, extraMsg, true);
                 }
@@ -930,7 +902,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 isSelectAddress = true;
                 nameSelect = data.getStringExtra("name");
                 phoneSelect = data.getStringExtra("phone");
-                position = data.getIntExtra("position", 0);
+                addressId = data.getStringExtra("addressId");
+                idNo = data.getStringExtra("idNo");
+                checkIdNo();
                 addressDetailsSelect = data.getStringExtra("addressDetails");
                 addr_idSelect = data.getStringExtra("addr_id");
             } else {
@@ -941,7 +915,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     private void successJump() {
         if (mFlag) {
-            addSubscription(ProductModel.getInstance()
+            addSubscription(TradeModel.getInstance()
                     .getTeamBuyBean(order_no)
                     .subscribe(new ServiceResponse<TeamBuyBean>() {
                         @Override
@@ -998,7 +972,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
             name.setText(nameSelect);
             phone.setText(phoneSelect);
             addressDetails.setText(addressDetailsSelect);
-
             addr_id = addr_idSelect;
         } else {
             addSubscription(AddressModel.getInstance()
@@ -1014,13 +987,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 phone.setVisibility(View.VISIBLE);
                                 addressDetails.setVisibility(View.VISIBLE);
                                 AddressBean addressBean = list.get(0);
-                                position = 0;
-
+                                addressId = addressBean.getId();
                                 addr_id = addressBean.getId();
                                 JUtils.Log(TAG, addr_id + "addr_id");
                                 name.setText(addressBean.getReceiverName());
                                 phone.setText(addressBean.getReceiverMobile());
-
+                                idNo = addressBean.getmIdentificationNo();
+                                checkIdNo();
                                 addressDetails.setText(addressBean.getReceiverState()
                                         + addressBean.getReceiverCity()
                                         + addressBean.getReceiverDistrict()
@@ -1070,6 +1043,17 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         } else {
             confirm.setClickable(false);
             confirm.setEnabled(false);
+        }
+    }
+
+    private void checkIdNo() {
+        if (idFlag && !IdCardChecker.isValidatedAllIdcard(idNo)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
+                    .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                    .setCancelable(false)
+                    .show();
         }
     }
 

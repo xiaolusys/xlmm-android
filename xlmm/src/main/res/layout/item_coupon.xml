@@ -43,7 +43,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="35px"
-                android:text="10"
                 android:textColor="@color/text_color_62"
                 android:textSize="38sp"/>
 

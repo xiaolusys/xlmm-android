@@ -1,13 +1,12 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.jimei.library.widget.RecycleViewDivider;
+import com.jimei.library.widget.RecyclerViewDivider;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AddressSelectAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -19,7 +18,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -34,7 +32,8 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.addAdress)
     Button addAdress;
     private AddressSelectAdapter adapter;
-    private int position;
+    private String addressId;
+    private boolean idFlag;
 
     @Override
     protected void setListener() {
@@ -47,7 +46,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
         showIndeterminateProgressDialog(false);
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
-        Subscription subscribe = AddressModel.getInstance()
+        addSubscription(AddressModel.getInstance()
                 .getAddressList()
                 .subscribe(new ServiceResponse<List<AddressBean>>() {
                     @Override
@@ -58,8 +57,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
                             hideIndeterminateProgressDialog();
                         }
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override
@@ -71,7 +69,8 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        position = extras.getInt("position");
+        addressId = extras.getString("addressId");
+        idFlag = extras.getBoolean("idFlag", false);
     }
 
     @Override
@@ -82,11 +81,12 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecycleViewDivider divider = new RecycleViewDivider(RecycleViewDivider.VERTICAL);
+        RecyclerViewDivider divider = new RecyclerViewDivider(RecyclerViewDivider.VERTICAL);
         divider.setSize(3);
         divider.setColor(getResources().getColor(R.color.bg_grey));
         addressRecyclerView.addItemDecoration(divider);
-        adapter = new AddressSelectAdapter(this, position);
+        adapter = new AddressSelectAdapter(this, addressId);
+        adapter.setIdFlag(idFlag);
         addressRecyclerView.setAdapter(adapter);
     }
 
@@ -94,7 +94,9 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addAdress:
-                startActivity(new Intent(AddressSelectActivity.this, AddNoAddressActivity.class));
+                Bundle addressBundle = new Bundle();
+                addressBundle.putBoolean("idFlag", idFlag);
+                readyGo(AddAddressActivity.class, addressBundle);
                 break;
         }
     }

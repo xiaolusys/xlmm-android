@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -83,7 +83,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     private void loadMoreData() {
-        addSubscription(MMProductModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getMamaAllOderCarryLogs(page)
                 .subscribe(new ServiceResponse<OderCarryBean>() {
                     @Override

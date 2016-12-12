@@ -106,7 +106,6 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         Log.i(TAG, "onNotificationMessageArrived is called. " + message.toString());
         String log =
                 context.getString(R.string.arrive_notification_message, message.getContent());
-        //MainActivity.logList.add(0, getSimpleDate() + " " + log);
 
         if (!TextUtils.isEmpty(message.getTopic())) {
             mTopic = message.getTopic();
@@ -193,7 +192,6 @@ public class XiaoMiMessageReceiver extends PushMessageReceiver {
         } else {
             log = message.getReason();
         }
-        //MainActivity.logList.add(0, getSimpleDate() + "    " + log);
 
         Message msg = Message.obtain();
         msg.obj = log;

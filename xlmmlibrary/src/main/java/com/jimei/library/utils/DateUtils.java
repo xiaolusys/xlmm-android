@@ -222,4 +222,20 @@ public final class DateUtils {
         }
     }
 
+    public static long calcLeftTime(String crtTime) {
+        long left = 0;
+        Date now = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            crtTime = crtTime.replace("T", " ");
+            Date crtdate = format.parse(crtTime);
+            if (crtdate.getTime() - now.getTime() > 0) {
+                left = crtdate.getTime() - now.getTime();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return left;
+    }
+
 }

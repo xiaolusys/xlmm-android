@@ -1,18 +1,15 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.MMFansWebFragment;
-import com.jimei.xiaolumeimei.ui.fragment.v2.MMPotentialFansFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMFansFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMFansWebFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMPotentialFansFragment;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
         fragments.add(MMFansFragment.newInstance("我的粉丝"));
         fragments.add(MMPotentialFansFragment.newInstance("潜在粉丝"));
         fragments.add(MMFansWebFragment.newInstance("关于粉丝"));
-        MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(),fragments);
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
@@ -62,25 +59,4 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
         MobclickAgent.onPause(this);
     }
 
-    class MainTabAdapter extends FragmentPagerAdapter {
-
-        public MainTabAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return fragments.get(position).getTitle();
-        }
-    }
 }

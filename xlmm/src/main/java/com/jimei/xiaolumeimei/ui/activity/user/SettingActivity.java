@@ -18,7 +18,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivitySettingBinding;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.CompanyInfoActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
@@ -105,7 +104,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     }
 
     private void update() {
-        ActivityModel.getInstance()
+        UserModel.getInstance()
                 .getVersion()
                 .subscribe(new ServiceResponse<VersionBean>() {
                     @Override

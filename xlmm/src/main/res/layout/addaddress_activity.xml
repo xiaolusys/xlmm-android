@@ -36,12 +36,12 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="20dp"
             android:background="@null"
             android:hint="请输入收货人姓名"
             android:maxLength="20"
             android:padding="8dp"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -65,13 +65,13 @@
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="20dp"
             android:background="@null"
             android:hint="请输入收货人手机号"
             android:inputType="phone"
             android:maxLength="11"
             android:padding="8dp"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -133,13 +133,53 @@
             android:id="@+id/clear_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textCursorDrawable="@drawable/color_cursor"
             android:layout_marginLeft="13dp"
             android:background="@null"
             android:hint="请输入详细地址"
             android:maxLength="40"
             android:padding="8dp"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <include layout="@layout/common_gap" />
+
+    <LinearLayout
+        android:id="@+id/id_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:minHeight="90px"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="身份证号"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/id_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:background="@null"
+                android:hint="请输入身份证号"
+                android:maxLength="18"
+                android:padding="8dp"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

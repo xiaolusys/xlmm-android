@@ -39,11 +39,11 @@ import com.jimei.xiaolumeimei.adapter.PayAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -51,8 +51,11 @@ import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -163,6 +166,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     private Dialog dialog2;
     private RedBagBean redBagEntity;
     private boolean hasRedBag = false;
+    private boolean bonded_goods = false;
 
     @Override
     protected void setListener() {
@@ -256,14 +260,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             logisticsRightImage.setVisibility(View.GONE);
                         }
                         Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
-                        addSubscription(ActivityModel.getInstance()
+                        addSubscription(TradeModel.getInstance()
                                 .getLogisticCompany(order_id)
                                 .subscribe(logisticCompanies -> {
                                     CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
                                     listView.setAdapter(adapter);
                                     listView.setOnItemClickListener((parent, view, position, id) -> {
                                         String code = logisticCompanies.get(position).getCode();
-                                        addSubscription(ActivityModel.getInstance()
+                                        addSubscription(TradeModel.getInstance()
                                                 .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code)
                                                 .subscribe(resultBean -> {
                                                     switch (resultBean.getCode()) {
@@ -280,19 +284,25 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     });
                                 }, e -> JUtils.Log(e.getMessage())));
                         hideIndeterminateProgressDialog();
-                    }, e -> JUtils.Log(e.getMessage())));
+                    }, e -> {
+                        JUtils.Log(e.getMessage());
+                        JUtils.Toast("订单详情获取失败!");
+                        hideIndeterminateProgressDialog();
+                    }));
+
         }
     }
 
     private void fillDataToView(OrderDetailBean orderDetailBean) {
         PayAdapter payAdapter = new PayAdapter(orderDetailBean.getExtras().getChannels(), this);
         listView2.setAdapter(payAdapter);
+        OrderDetailBean.UserAdressBean user_adress = orderDetailBean.getUser_adress();
         int status = orderDetailBean.getStatus();
         if (!"退款中".equals(orderDetailBean.getStatus_display())
                 && !"退货中".equals(orderDetailBean.getStatus_display())) {
             if (status == 2 || status == 3 || status == 4 || status == 5) {
                 if (orderDetailBean.getOrder_type() == 3) {
-                    addSubscription(ProductModel.getInstance()
+                    addSubscription(TradeModel.getInstance()
                             .getTeamBuyBean(orderDetailBean.getTid())
                             .subscribe(teamBuyBean -> {
                                 if (teamBuyBean.getStatus() != 2) {
@@ -321,13 +331,13 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             }
         }
         tx_order_id.setText(orderDetailBean.getTid());
-        tx_custom_name.setText(orderDetailBean.getUser_adress().getReceiver_name());
-        tx_custom_mobile.setText(orderDetailBean.getUser_adress().getReceiver_mobile());
-        tx_custom_phone.setText(orderDetailBean.getUser_adress().getReceiver_phone());
-        tx_custom_address.setText(orderDetailBean.getUser_adress().getReceiver_state()
-                + orderDetailBean.getUser_adress().getReceiver_city()
-                + orderDetailBean.getUser_adress().getReceiver_district()
-                + orderDetailBean.getUser_adress().getReceiver_address());
+        tx_custom_name.setText(user_adress.getReceiver_name());
+        tx_custom_mobile.setText(user_adress.getReceiver_mobile());
+        tx_custom_phone.setText(user_adress.getReceiver_phone());
+        tx_custom_address.setText(user_adress.getReceiver_state()
+                + user_adress.getReceiver_city()
+                + user_adress.getReceiver_district()
+                + user_adress.getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("-¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
@@ -357,6 +367,23 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
         OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean, orderDetailBean.isCan_refund());
         lv_goods.setAdapter(mGoodsAdapter);
+        ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).is_bonded_goods()) {
+                bonded_goods = true;
+            }
+        }
+        String no = user_adress.getIdentification_no();
+        if (no == null || no.length() < 18) {
+            if (bonded_goods) {
+                new AlertDialog.Builder(this)
+                        .setTitle("提示")
+                        .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
+                        .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                        .setCancelable(false)
+                        .show();
+            }
+        }
         setListViewHeightBasedOnChildren(lv_goods);
     }
 
@@ -474,7 +501,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_order_pay:
-                if (orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
+                if (orderDetail != null && orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
                     JUtils.Log(TAG, "onClick paynow");
                     dialog2.show();
                 }
@@ -493,21 +520,25 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 cancel_order();
                 break;
             case R.id.address:
-                Intent intent = new Intent(this, WaitSendAddressActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
-                bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
-                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
-                        + orderDetail.getUser_adress().getReceiver_city()
-                        + orderDetail.getUser_adress().getReceiver_district());
-                bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
-                bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
-                bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
-                bundle.putString("receiver_district", orderDetail.getUser_adress().getReceiver_district());
-                bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
-                bundle.putString("referal_trade_id", orderDetail.getId() + "");
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if (orderDetail != null) {
+                    Intent intent = new Intent(this, WaitSendAddressActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
+                    bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
+                    bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
+                            + orderDetail.getUser_adress().getReceiver_city()
+                            + orderDetail.getUser_adress().getReceiver_district());
+                    bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
+                    bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
+                    bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
+                    bundle.putString("receiver_district", orderDetail.getUser_adress().getReceiver_district());
+                    bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
+                    bundle.putString("referal_trade_id", orderDetail.getId() + "");
+                    bundle.putBoolean("is_bonded_goods", bonded_goods);
+                    bundle.putString("idNo", orderDetail.getUser_adress().getIdentification_no());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
                 break;
             case R.id.logistics_layout:
                 if (orderDetail != null && "已付款".equals(orderDetail.getStatus_display())) {
@@ -531,15 +562,17 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.red_bag:
-                OnekeyShare oks = new OnekeyShare();
-                oks.disableSSOWhenAuthorize();
-                oks.setTitle(redBagEntity.getTitle());
-                oks.setTitleUrl(redBagEntity.getShare_link());
-                oks.setText(redBagEntity.getDescription());
-                oks.setImageUrl(redBagEntity.getPost_img());
-                oks.setUrl(redBagEntity.getShare_link());
-                oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
-                oks.show(this);
+                if (redBagEntity != null) {
+                    OnekeyShare oks = new OnekeyShare();
+                    oks.disableSSOWhenAuthorize();
+                    oks.setTitle(redBagEntity.getTitle());
+                    oks.setTitleUrl(redBagEntity.getShare_link());
+                    oks.setText(redBagEntity.getDescription());
+                    oks.setImageUrl(redBagEntity.getPost_img());
+                    oks.setUrl(redBagEntity.getShare_link());
+                    oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
+                    oks.show(this);
+                }
                 break;
         }
     }
@@ -555,6 +588,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
+                        tid = orderDetailBean.getTid();
                         fillDataToView(orderDetailBean);
                     }
                 });
@@ -592,20 +626,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         super.onNext(responseBody);
                         try {
                             finish();
+                            EventBus.getDefault().post(new RefreshOrderListEvent());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "delRefund error:, " + e.toString());
-                        super.onError(e);
                     }
                 });
         addSubscription(subscription);
@@ -616,6 +640,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         //支付页面返回处理
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
+                EventBus.getDefault().post(new RefreshOrderListEvent());
                 hideIndeterminateProgressDialog();
                 String result = data.getExtras().getString("pay_result");
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="colorPrimary">#FAAA14</color>
-  <color name="colorPrimaryDark">#FAAA14</color>
+  <color name="colorPrimaryDark">#F2820D</color>
   <color name="colorAccent">#FAAA14</color>
   <color name="colorAccentDark">#F2820D</color>
 
@@ -73,6 +73,7 @@
   <color name="text_color_B4">#B4B4B4</color>
   <color name="text_color_D8">#D8D8D8</color>
   <color name="text_color_A0">#A0A0A0</color>
+  <color name="text_color_88">#888888</color>
   <color name="white">#FFFFFF</color><!--白色 -->
   <color name="white_loading">#99FFFFFF</color><!--白色 -->
   <color name="white_bg">#F4FFFFFF</color><!--微透明白色 -->

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:background="@color/white"
     android:orientation="horizontal"
     android:padding="8dp">
 
     <RelativeLayout
         android:id="@+id/img_layout"
-        android:layout_width="120px"
-        android:layout_height="120px"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:background="@drawable/choose_img_bg"
         android:gravity="center">
 
@@ -22,38 +22,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120px"
+        android:layout_height="84dp"
         android:orientation="vertical"
         android:paddingLeft="8dp"
         android:paddingRight="8dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textColor="@color/text_color_62"
                 android:textSize="14sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/price_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:textColor="@color/text_color_62"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -61,11 +53,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4" />
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -87,11 +80,6 @@
                 android:textColor="@color/text_color_9B"
                 android:textSize="14sp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
     </LinearLayout>
 

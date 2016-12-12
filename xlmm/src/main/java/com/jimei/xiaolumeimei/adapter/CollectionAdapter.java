@@ -18,7 +18,7 @@ import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment;
+import com.jimei.xiaolumeimei.ui.fragment.product.CollectionFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.zhy.autolayout.utils.AutoUtils;
 

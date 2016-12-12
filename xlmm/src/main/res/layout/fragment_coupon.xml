@@ -2,9 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jimei.xiaolumeimei.ui.fragment.coupon.CouponFragment">
+    tools:context="com.jimei.xiaolumeimei.ui.fragment.user.CouponFragment">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"

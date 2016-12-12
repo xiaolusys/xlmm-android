@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 
 /**
  * Created by wulei on 3/12/16.
@@ -34,9 +33,8 @@ public class JumpUtils {
     public static void jumpWithNewTask(Context context, String recvContent) {
         JUtils.Log(TAG, "push_jump_proc:" + recvContent);
         if (TextUtils.isEmpty(recvContent)) return;
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(recvContent));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("jumpUrl", recvContent);
         context.startActivity(intent);
     }
 

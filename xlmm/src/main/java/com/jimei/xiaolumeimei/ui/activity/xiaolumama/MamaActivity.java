@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Intent;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.view.KeyEvent;
@@ -8,9 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MamaTabAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -20,12 +22,12 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.HideOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.SetOrderEvent;
 import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
-import com.jimei.xiaolumeimei.model.MMInfoModel;
-import com.jimei.xiaolumeimei.model.MMProductModel;
-import com.jimei.xiaolumeimei.ui.fragment.mminfo.BoutiqueFragment;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaBoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaSecondFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaThirdFragment;
+import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,9 +62,9 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     protected void initData() {
         UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
         showIndeterminateProgressDialog(true);
-        addSubscription(Observable.mergeDelayError(MMInfoModel.getInstance().getUserInfo(),
-                MMProductModel.getInstance().getWxCode(),
-                MMInfoModel.getInstance().getLatestOrderCarry())
+        addSubscription(Observable.mergeDelayError(MamaInfoModel.getInstance().getUserInfo(),
+                MamaInfoModel.getInstance().getWxCode(),
+                MamaInfoModel.getInstance().getLatestOrderCarry())
                 .subscribe(o -> {
                             if (o instanceof UserInfoBean) {
                                 fillDataToView((UserInfoBean) o);
@@ -98,14 +100,15 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
         UdeskSDKManager.getInstance().setUserInfo(this, id, info);
         fragments.add(MamaFirstFragment.newInstance("我要赚钱", mamaId));
-        fragments.add(BoutiqueFragment.newInstance("精品汇", mamaId));
+        fragments.add(MamaBoutiqueFragment.newInstance("精品汇", mamaId));
         fragments.add(MamaSecondFragment.newInstance("社交活动", mamaId));
         fragments.add(MamaThirdFragment.newInstance("我的", mamaId));
-        MamaTabAdapter mAdapter = new MamaTabAdapter(getSupportFragmentManager(), fragments);
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
         b.viewPager.setOffscreenPageLimit(3);
         b.tabLayout.setupWithViewPager(b.viewPager);
         b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        hideIndeterminateProgressDialog();
     }
 
     @Override
@@ -152,11 +155,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     @Override
     protected void onResume() {
         super.onResume();
-        if (fragments.size() == 3) {
-            if (b.viewPager.getCurrentItem() == 2) {
-                ((MamaThirdFragment) fragments.get(2)).refreshFortune();
-            }
-        }
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
@@ -175,7 +173,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
             if (b.viewPager.getCurrentItem() == 2) {
                 webView = ((MamaSecondFragment) fragments.get(2)).getWebView();
             } else if (b.viewPager.getCurrentItem() == 1) {
-                webView = ((BoutiqueFragment) fragments.get(1)).getWebView();
+                webView = ((MamaBoutiqueFragment) fragments.get(1)).getWebView();
             }
             if (keyCode == KeyEvent.KEYCODE_BACK && webView != null) {
                 if (webView.canGoBack()) {
@@ -195,5 +193,30 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         isDestroy = true;
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode,resultCode,intent);
+        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
+            if (resultCode == RESULT_OK) {
+                String result = intent.getExtras().getString("pay_result", "");
+                String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
+                String extraMsg = intent.getExtras().getString("extra_msg"); // 错误信息
+                if (result != null) {
+                    switch (result) {
+                        case "cancel":
+                            JUtils.Toast("已取消支付!");
+                            break;
+                        case "success":
+                            JUtils.Toast("支付成功！");
+                            break;
+                        default:
+                            showMsg(result, errorMsg, extraMsg);
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

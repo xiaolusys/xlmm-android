@@ -22,7 +22,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
-import com.jimei.xiaolumeimei.model.MMProductModel;
+import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -81,6 +81,7 @@ public class NinePicAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        NinePicBean ninePicBean = mList.get(position);
         ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_ninepic, null);
@@ -89,33 +90,34 @@ public class NinePicAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        NinePicBean ninePicBean = mList.get(position);
         String description = ninePicBean.getDescription();
         holder.titleTv.setText(ninePicBean.getTitle_content());
         holder.contentTv.setText(description);
         holder.timeTv.setText(ninePicBean.getStartTime().replace("T", " "));
         holder.likeTv.setText(ninePicBean.getSave_times() + "");
         holder.shareTv.setText(ninePicBean.getSave_times() + "");
-        List<String> picArray = ninePicBean.getPicArry();
-        if (picArray != null && picArray.size() > 0) {
+//        List<String> picArray = ninePicBean.getPicArry();
+        List<String> picArray = new ArrayList<>();
+        if (ninePicBean.getPicArry() != null && ninePicBean.getPicArry().size() > 0) {
+            picArray.addAll(ninePicBean.getPicArry());
             if (codeLink != null & !"".equals(codeLink)) {
-                if (picArray.size() == 9) {
+                if (ninePicBean.getPicArry().size() == 9) {
                     picArray.set(4, "code" + codeLink);
-                } else if (picArray.size() != 1) {
-                    picArray.set(picArray.size() / 2, "code" + codeLink);
+                } else if (ninePicBean.getPicArry().size() < 9) {
+//                    picArray.add(picArray.size(), "code" + codeLink);
+                    picArray.add(picArray.size() / 2, "code" + codeLink);
                 }
             }
             holder.multiImageView.setVisibility(View.VISIBLE);
             holder.multiImageView.setList(picArray);
-            holder.multiImageView.setOnItemClickListener((view, currentPosition) -> {
-                ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition);
-            });
+            holder.multiImageView.setOnItemClickListener((view, currentPosition) ->
+                    ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition));
         } else {
             holder.multiImageView.setVisibility(View.GONE);
         }
         holder.save.setOnClickListener(v -> {
             MobclickAgent.onEvent(mContext, "NinePic_save");
-            MMProductModel.getInstance()
+            MamaInfoModel.getInstance()
                     .saveTime(ninePicBean.getId(), 1)
                     .subscribe(saveTimeBean -> JUtils.Log("save" + saveTimeBean.getId()),
                             Throwable::printStackTrace);

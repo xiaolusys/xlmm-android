@@ -1,15 +1,56 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.jimei.xiaolumeimei.ui.fragment.v1.CollectionFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include layout="@layout/collection_empty_layout" />
-
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/xrv"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_grey" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/empty_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_collection_empty" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/collection_empty_msg_1"
+                android:textColor="@color/text_color_62"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/collection_empty_msg_2"
+                android:textColor="@color/text_color_9B"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/jump_view"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/collection_empty_btn"
+                android:gravity="center"
+                android:text="@string/collection_empty_btn"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+</layout>

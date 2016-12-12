@@ -5,13 +5,14 @@ import android.text.TextUtils;
 
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.RankFragmentPagerAdapter;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityPersonalcarryrankBinding;
 import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.ui.fragment.v2.RankFragment;
+import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.RankFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -24,7 +25,7 @@ import retrofit2.Response;
  */
 public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonalcarryrankBinding> {
 
-    private ArrayList<RankFragment> fragments;
+    private ArrayList<BaseFragment> fragments;
 
     @Override
     protected void initViews() {
@@ -32,11 +33,11 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
         fragments.add(RankFragment.newInstance(XlmmConst.TYPE_PERSON_RANK, "总排行"));
         fragments.add(RankFragment.newInstance(XlmmConst.TYPE_PERSON_WEEK_RANK, "周排行"));
 
-        RankFragmentPagerAdapter adapter = new RankFragmentPagerAdapter(getSupportFragmentManager(), fragments);
+        BaseTabAdapter adapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(adapter);
         b.viewPager.setOffscreenPageLimit(2);
         b.tabLayout.setupWithViewPager(b.viewPager);
-        b.scrollableLayout.getHelper().setCurrentScrollableContainer(fragments.get(0));
+        b.scrollableLayout.getHelper().setCurrentScrollableContainer((RankFragment) fragments.get(0));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
 
             @Override
             public void onPageSelected(int position) {
-                b.scrollableLayout.getHelper().setCurrentScrollableContainer(fragments.get(position));
+                b.scrollableLayout.getHelper().setCurrentScrollableContainer((RankFragment) fragments.get(position));
             }
 
             @Override

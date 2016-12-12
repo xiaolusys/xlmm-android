@@ -23,14 +23,11 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.MaMaReNewBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
-import com.jimei.xiaolumeimei.entities.event.UserChangeEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import retrofit2.Response;
@@ -334,7 +331,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        EventBus.getDefault().postSticky(new UserChangeEvent());
         hideIndeterminateProgressDialog();
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {

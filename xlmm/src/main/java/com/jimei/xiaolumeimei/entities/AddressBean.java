@@ -40,6 +40,7 @@ public class AddressBean {
   @SerializedName("default") private boolean mDefaultX;
   @SerializedName("status") private String mStatus;
   @SerializedName("created") private String mCreated;
+  @SerializedName("identification_no") private String mIdentificationNo;
 
   public void setId(String id) {
     this.mId = id;
@@ -151,5 +152,13 @@ public class AddressBean {
 
   public String getCreated() {
     return mCreated;
+  }
+
+  public String getmIdentificationNo() {
+    return mIdentificationNo;
+  }
+
+  public void setmIdentificationNo(String mIdentificationNo) {
+    this.mIdentificationNo = mIdentificationNo;
   }
 }

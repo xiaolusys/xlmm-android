@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.ui.activity.user.ChanggeAddressActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.ChangeAddressActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -23,7 +23,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -32,7 +31,6 @@ import rx.schedulers.Schedulers;
  */
 public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = AddressAdapter.class.getSimpleName();
     private List<AddressBean> mList;
     private Context context;
 
@@ -156,7 +154,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void setBundle(AddressBean addressBean) {
-        Intent intent = new Intent(context, ChanggeAddressActivity.class);
+        Intent intent = new Intent(context, ChangeAddressActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("receiver_state", addressBean.getReceiverState());
         bundle.putString("receiver_district", addressBean.getReceiverDistrict());
@@ -169,6 +167,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 + addressBean.getReceiverCity()
                 + addressBean.getReceiverDistrict());
         bundle.putString("address2", addressBean.getReceiverAddress());
+        bundle.putBoolean("isDefaultX", addressBean.isDefaultX());
+        bundle.putString("idNo", addressBean.getmIdentificationNo());
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

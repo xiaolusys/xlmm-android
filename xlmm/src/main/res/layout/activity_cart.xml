@@ -1,146 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.trade.CartActivity">
-
-    <com.jimei.library.widget.XlmmTitleView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:xlmm_title="购物车"/>
-
-    <ScrollView
-        android:id="@+id/sv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/bg_grey">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_cart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"/>
-
-                <LinearLayout
-                    android:id="@+id/empty_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/bg_grey"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingBottom="70dp"
-                    android:paddingTop="70dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/cart_shopping"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="您的购物车空空如也~快去装满它吧"
-                        android:textColor="@color/text_color_62"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="快去挑选几件喜欢的宝贝吧~"
-                        android:textColor="@color/text_color_9B"/>
-
-                    <TextView
-                        android:id="@+id/go_main"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/btn_common_white"
-                        android:gravity="center"
-                        android:text="快去抢购"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/tv_line"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:visibility="gone"
-                android:text="可重新购买的商品"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"/>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <include layout="@layout/common_gap"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.jimei.library.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            app:xlmm_title="购物车" />
 
-            <TextView
-                android:layout_width="wrap_content"
+        <ScrollView
+            android:id="@+id/sv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/bg_grey">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="应付款金额"
-                android:textColor="#26262e"
-                android:textSize="15sp"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/total_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp"/>
-        </LinearLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/confirm"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_cart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white" />
+
+                    <LinearLayout
+                        android:id="@+id/empty_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/bg_grey"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingBottom="70dp"
+                        android:paddingTop="70dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/cart_shopping" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="您的购物车空空如也~快去装满它吧"
+                            android:textColor="@color/text_color_62" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="快去挑选几件喜欢的宝贝吧~"
+                            android:textColor="@color/text_color_9B" />
+
+                        <TextView
+                            android:id="@+id/go_main"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/btn_common_white"
+                            android:gravity="center"
+                            android:text="快去抢购"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:text="可重新购买的商品"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:id="@+id/confirm_layout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/btn_common_default"
-            android:text="购买"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="应付款金额"
+                    android:textColor="#26262e"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_common_default"
+                android:text="购买"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</layout>

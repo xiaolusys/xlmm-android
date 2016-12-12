@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.jimei.library.widget.scrolllayout.ScrollableLayout
-        android:id="@+id/scrollable_layout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.jimei.library.widget.scrolllayout.ScrollableLayout
+            android:id="@+id/scrollable_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="热门分类"
-                android:textColor="@color/text_color_32"
-                android:textSize="17sp"
-                android:textStyle="bold"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:text="热门分类"
+                    android:textColor="@color/text_color_32"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/bg_grey" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/bg_grey"/>
+                android:layout_height="0dp" />
 
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-
-        <ListView
-            android:id="@+id/lv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/bg_grey2"
-            android:dividerHeight="1px"/>
-    </com.jimei.library.widget.scrolllayout.ScrollableLayout>
+            <ListView
+                android:id="@+id/lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/bg_grey2"
+                android:dividerHeight="1px" />
+        </com.jimei.library.widget.scrolllayout.ScrollableLayout>
+    </FrameLayout>
 
 </layout>

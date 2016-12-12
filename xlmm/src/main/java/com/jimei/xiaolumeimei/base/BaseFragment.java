@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.loading.VaryViewHelperController;
 import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 
 import rx.Subscription;
@@ -25,6 +27,7 @@ public abstract class BaseFragment extends Fragment {
     public boolean isInitView = false;
     private boolean isFirstLoad = true;
     private XlmmLoadingDialog loadingdialog;
+    public VaryViewHelperController mVaryViewHelperController;
 
     @Override
     public void onAttach(Context context) {
@@ -78,11 +81,12 @@ public abstract class BaseFragment extends Fragment {
         if (!isFirstLoad || !isVisible || !isInitView) {
             return;
         }
-        initData();
+        refreshView();
+        showNetworkError();
         isFirstLoad = false;
     }
 
-    protected abstract void initData();
+    public abstract void initData();
 
     protected abstract void initViews();
 
@@ -116,15 +120,20 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showIndeterminateProgressDialog(boolean horizontal) {
-        loadingdialog = XlmmLoadingDialog.create(mActivity)
-                .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                .setCancellable(!horizontal)
-                .show();
+        if (loadingdialog == null) {
+            loadingdialog = XlmmLoadingDialog.create(mActivity)
+                    .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
+                    .setCancellable(!horizontal)
+                    .show();
+        }
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            loadingdialog.dismiss();
+            if (loadingdialog != null) {
+                loadingdialog.dismiss();
+                loadingdialog = null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,5 +144,28 @@ public abstract class BaseFragment extends Fragment {
             return getArguments().getString("title");
         }
         return "";
+    }
+
+    public void showNetworkError() {
+        if (!JUtils.isNetWorkAvilable()) {
+            hideIndeterminateProgressDialog();
+            if (mVaryViewHelperController == null) {
+                throw new IllegalStateException("no ViewHelperController");
+            }
+            mVaryViewHelperController.showNetworkError(view -> {
+                refreshView();
+                showNetworkError();
+            });
+        } else {
+            showIndeterminateProgressDialog(true);
+            initData();
+        }
+    }
+
+    public void refreshView() {
+        if (mVaryViewHelperController == null) {
+            throw new IllegalStateException("no ViewHelperController");
+        }
+        mVaryViewHelperController.restore();
     }
 }
