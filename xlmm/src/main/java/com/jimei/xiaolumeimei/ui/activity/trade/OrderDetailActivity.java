@@ -43,12 +43,15 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
+import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -281,7 +284,12 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                     });
                                 }, e -> JUtils.Log(e.getMessage())));
                         hideIndeterminateProgressDialog();
-                    }, e -> JUtils.Log(e.getMessage())));
+                    }, e -> {
+                        JUtils.Log(e.getMessage());
+                        JUtils.Toast("订单详情获取失败!");
+                        hideIndeterminateProgressDialog();
+                    }));
+
         }
     }
 
@@ -493,7 +501,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_order_pay:
-                if (orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
+                if (orderDetail != null && orderDetail.getStatus() == XlmmConst.ORDER_STATE_WAITPAY) {
                     JUtils.Log(TAG, "onClick paynow");
                     dialog2.show();
                 }
@@ -512,23 +520,25 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 cancel_order();
                 break;
             case R.id.address:
-                Intent intent = new Intent(this, WaitSendAddressActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
-                bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
-                bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
-                        + orderDetail.getUser_adress().getReceiver_city()
-                        + orderDetail.getUser_adress().getReceiver_district());
-                bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
-                bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
-                bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
-                bundle.putString("receiver_district", orderDetail.getUser_adress().getReceiver_district());
-                bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
-                bundle.putString("referal_trade_id", orderDetail.getId() + "");
-                bundle.putBoolean("is_bonded_goods", bonded_goods);
-                bundle.putString("idNo",orderDetail.getUser_adress().getIdentification_no());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if (orderDetail != null) {
+                    Intent intent = new Intent(this, WaitSendAddressActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
+                    bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
+                    bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
+                            + orderDetail.getUser_adress().getReceiver_city()
+                            + orderDetail.getUser_adress().getReceiver_district());
+                    bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
+                    bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
+                    bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
+                    bundle.putString("receiver_district", orderDetail.getUser_adress().getReceiver_district());
+                    bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
+                    bundle.putString("referal_trade_id", orderDetail.getId() + "");
+                    bundle.putBoolean("is_bonded_goods", bonded_goods);
+                    bundle.putString("idNo", orderDetail.getUser_adress().getIdentification_no());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
                 break;
             case R.id.logistics_layout:
                 if (orderDetail != null && "已付款".equals(orderDetail.getStatus_display())) {
@@ -552,15 +562,17 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.red_bag:
-                OnekeyShare oks = new OnekeyShare();
-                oks.disableSSOWhenAuthorize();
-                oks.setTitle(redBagEntity.getTitle());
-                oks.setTitleUrl(redBagEntity.getShare_link());
-                oks.setText(redBagEntity.getDescription());
-                oks.setImageUrl(redBagEntity.getPost_img());
-                oks.setUrl(redBagEntity.getShare_link());
-                oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
-                oks.show(this);
+                if (redBagEntity != null) {
+                    OnekeyShare oks = new OnekeyShare();
+                    oks.disableSSOWhenAuthorize();
+                    oks.setTitle(redBagEntity.getTitle());
+                    oks.setTitleUrl(redBagEntity.getShare_link());
+                    oks.setText(redBagEntity.getDescription());
+                    oks.setImageUrl(redBagEntity.getPost_img());
+                    oks.setUrl(redBagEntity.getShare_link());
+                    oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
+                    oks.show(this);
+                }
                 break;
         }
     }
@@ -576,6 +588,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     @Override
                     public void onNext(OrderDetailBean orderDetailBean) {
                         orderDetail = orderDetailBean;
+                        tid = orderDetailBean.getTid();
                         fillDataToView(orderDetailBean);
                     }
                 });
@@ -613,6 +626,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                         super.onNext(responseBody);
                         try {
                             finish();
+                            EventBus.getDefault().post(new RefreshOrderListEvent());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -626,6 +640,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         //支付页面返回处理
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
+                EventBus.getDefault().post(new RefreshOrderListEvent());
                 hideIndeterminateProgressDialog();
                 String result = data.getExtras().getString("pay_result");
                 String errorMsg = data.getExtras().getString("error_msg"); // 错误信息

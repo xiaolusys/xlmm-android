@@ -2,12 +2,11 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -15,7 +14,6 @@ import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     String cart_ids;
     private int goodNum;
     private boolean couponFlag;
-    List<SelectCouponFragment> fragments = new ArrayList<>();
+    List<BaseFragment> fragments = new ArrayList<>();
 
     @Override
     protected void initData() {
@@ -40,7 +38,7 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<CouponSelectEntity>() {
                     @Override
                     public void onNext(CouponSelectEntity couponSelectEntity) {
-                        SelectCouponAdapter mAdapter = new SelectCouponAdapter(getSupportFragmentManager());
+                        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
                         if (couponFlag && goodNum > 1) {
                             fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon(), goodNum));
                         } else {
@@ -73,30 +71,6 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_select;
-    }
-
-    public class SelectCouponAdapter extends FragmentPagerAdapter implements Serializable {
-        FragmentManager fm;
-
-        public SelectCouponAdapter(FragmentManager fm) {
-            super(fm);
-            this.fm = fm;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return fragments.get(position).getTitle();
-        }
     }
 
     @Override

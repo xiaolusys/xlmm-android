@@ -1,22 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F3F3F4">
 
-        <ListView
-            android:id="@+id/lv"
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/xrv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F3F3F4"
-            android:divider="#F3F3F4"
-            android:dividerHeight="12dp" />
+            android:layout_marginTop="-6dp" />
 
-        <include layout="@layout/orders_emptyinfo" />
+        <RelativeLayout
+            android:id="@+id/empty_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f3f3f4"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="190px"
+                android:layout_height="182px"
+                android:layout_marginLeft="265px"
+                android:layout_marginTop="250px"
+                android:src="@drawable/ic_emptyinfo" />
+
+            <TextView
+                android:id="@+id/tx_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView2"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="30px"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="亲，您暂时还没有订单哦~快去看看吧！"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tx2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tx_info"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="再不抢购，就卖光啦~~"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btn_jump"
+                android:layout_width="200px"
+                android:layout_height="60px"
+                android:layout_below="@+id/tx2"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="15px"
+                android:background="@drawable/shape_res"
+                android:gravity="center"
+                android:text="快去抢购"
+                android:textColor="@color/colorAccent" />
+
+        </RelativeLayout>
     </FrameLayout>
-</LinearLayout>
+</layout>

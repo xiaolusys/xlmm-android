@@ -34,13 +34,17 @@ public class PushCategoryFragment extends BaseBindingFragment<FragmentPushCatego
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getPortalBean()
                 .subscribe(portalBean -> {
                     List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
                     mMainCategoryAdapter.updateWithClear(categorys);
-                }, Throwable::printStackTrace));
+                    hideIndeterminateProgressDialog();
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }));
         addSubscription(MamaInfoModel.getInstance()
                 .getNinePicByOrdering()
                 .subscribe(ninePicBean -> {
@@ -83,5 +87,10 @@ public class PushCategoryFragment extends BaseBindingFragment<FragmentPushCatego
     @Override
     public View getScrollableView() {
         return b.lv;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.scrollableLayout;
     }
 }

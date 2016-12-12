@@ -110,11 +110,11 @@ public class WeekTaskRewardBean {
         private MissionBean mission;
         private int mama_id;
         private String year_week;
-        private int finish_value;
+        private double finish_value;
         private String finish_time;
         private String status;
         private String status_name;
-        private int target_value;
+        private double target_value;
         private double award_amount;
 
         public int getId() {
@@ -149,11 +149,11 @@ public class WeekTaskRewardBean {
             this.year_week = year_week;
         }
 
-        public int getFinish_value() {
+        public double getFinish_value() {
             return finish_value;
         }
 
-        public void setFinish_value(int finish_value) {
+        public void setFinish_value(double finish_value) {
             this.finish_value = finish_value;
         }
 
@@ -181,11 +181,11 @@ public class WeekTaskRewardBean {
             this.status_name = status_name;
         }
 
-        public int getTarget_value() {
+        public double getTarget_value() {
             return target_value;
         }
 
-        public void setTarget_value(int target_value) {
+        public void setTarget_value(double target_value) {
             this.target_value = target_value;
         }
 

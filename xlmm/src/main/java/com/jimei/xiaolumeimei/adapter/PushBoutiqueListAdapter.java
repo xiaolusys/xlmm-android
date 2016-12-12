@@ -13,7 +13,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.BoutiqueListBean;
+import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  */
 
 public class PushBoutiqueListAdapter extends XRecyclerView.Adapter<PushBoutiqueListAdapter.ViewHolder> {
-    private List<BoutiqueListBean.ResultsBean> mList;
+    private List<ProductListBean.ResultsBean> mList;
     private Context context;
     private String codeLink;
 
@@ -36,12 +36,12 @@ public class PushBoutiqueListAdapter extends XRecyclerView.Adapter<PushBoutiqueL
         mList = new ArrayList<>();
     }
 
-    public void update(List<BoutiqueListBean.ResultsBean> data) {
+    public void update(List<ProductListBean.ResultsBean> data) {
         mList.addAll(data);
         notifyDataSetChanged();
     }
 
-    public void updateWithClear(List<BoutiqueListBean.ResultsBean> data) {
+    public void updateWithClear(List<ProductListBean.ResultsBean> data) {
         mList.clear();
         mList.addAll(data);
         notifyDataSetChanged();
@@ -55,7 +55,7 @@ public class PushBoutiqueListAdapter extends XRecyclerView.Adapter<PushBoutiqueL
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BoutiqueListBean.ResultsBean bean = mList.get(position);
+        ProductListBean.ResultsBean bean = mList.get(position);
         holder.name.setText(bean.getName());
         ViewUtils.loadImgToImgView(context, holder.img, bean.getHead_img());
         holder.layout.setOnClickListener(v -> {

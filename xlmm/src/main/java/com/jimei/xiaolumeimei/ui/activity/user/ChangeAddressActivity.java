@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/29.
@@ -49,7 +48,7 @@ import rx.Subscription;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+        implements View.OnClickListener {
 
     private static final String TAG = ChangeAddressActivity.class.getSimpleName();
     @Bind(R.id.name)
@@ -66,8 +65,13 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
     Button save;
     @Bind(R.id.main)
     LinearLayout main;
+    @Bind(R.id.id_layout)
+    LinearLayout idLayout;
+    @Bind(R.id.id_num)
+    EditText idNum;
     private String id;
     private ArrayList<Province> provinces = new ArrayList<>();
+
     private String city_string;
     private String clearaddressa;
     private String receiver_state;
@@ -75,19 +79,29 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_district;
     private String receiver_name;
     private String receiver_mobile;
-    private String defalut;
     private County county;
     private boolean isDefaultX;
+    private String idNo;
     private City city;
     private Province province;
     private ArrayList<City> cities;
     private ArrayList<County> counties;
+    private boolean idFlag;
 
     @Override
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
-        switchButton.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    protected void initViews() {
+        if (idFlag) {
+            idLayout.setVisibility(View.VISIBLE);
+        }
+        if (isDefaultX) {
+            switchButton.setChecked(true);
+        }
     }
 
     @Override
@@ -96,16 +110,15 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
             name.setText(receiver_name);
             name.setSelection(receiver_name.length());
         }
-        if (isDefaultX) {
-            switchButton.setChecked(true);
-        }
         mobile.setText(receiver_mobile);
         address.setText(city_string);
         clearAddress.setText(clearaddressa);
+        idNum.setText(idNo);
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
+        idFlag = extras.getBoolean("idFlag", false);
         receiver_name = extras.getString("receiver_name");
         receiver_mobile = extras.getString("mobile");
         city_string = extras.getString("address1");
@@ -114,6 +127,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         receiver_city = extras.getString("receiver_city");
         receiver_district = extras.getString("receiver_district");
         id = extras.getString("id");
+        idNo = extras.getString("idNo");
         isDefaultX = extras.getBoolean("isDefaultX", false);
         JUtils.Log(TAG, receiver_name + receiver_mobile + clearaddressa + receiver_state);
     }
@@ -123,15 +137,14 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         return R.layout.activity_changeaddress;
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.address:
+
                 InputMethodManager imm =
                         (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
-
                 if (provinces.size() > 0) {
                     showAddressDialog();
                 } else {
@@ -142,23 +155,32 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                    Subscription subscribe = AddressModel.getInstance()
-                            .update_address(id, receiver_state, receiver_city, receiver_district, clearaddressa,
-                                    receiver_name, receiver_mobile, defalut)
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                @Override
-                                public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null) {
-                                        if (addressResultBean.getCode() == 0) {
-
-                                            JUtils.Toast("修改成功");
-                                            finish();
+                idNo = idNum.getText().toString().trim();
+                String defalut;
+                if (switchButton.isChecked()) {
+                    defalut = "true";
+                } else {
+                    defalut = "false";
+                }
+                if (IdCardChecker.isValidatedAllIdcard(idNo) || !idFlag) {
+                    if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
+                        addSubscription(AddressModel.getInstance()
+                                .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,
+                                        receiver_name, receiver_mobile, defalut, idNo)
+                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                                    @Override
+                                    public void onNext(AddressResultBean addressResultBean) {
+                                        if (addressResultBean != null) {
+                                            if (addressResultBean.getCode() == 0) {
+                                                JUtils.Toast("修改成功");
+                                                finish();
+                                            }
                                         }
                                     }
-                                }
-                            });
-                    addSubscription(subscribe);
+                                }));
+                    }
+                } else {
+                    JUtils.Toast("请填写合法的身份证号码!");
                 }
                 break;
         }
@@ -170,22 +192,13 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void showAddressDialog() {
-        new CityPickerDialog(this, provinces, province, city, county,
-                (selectProvince, selectCity, selectCounty) -> {
-                    receiver_state = selectProvince != null ? selectProvince.getName() : "";
-                    receiver_district = selectCounty != null ? selectCounty.getName() : "";
-                    receiver_city = selectCity != null ? selectCity.getName() : "";
-                    city_string = receiver_state + receiver_city + receiver_district;
-                    address.setText(city_string);
-                }).show();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
+
             case R.id.action_delete:
-                Subscription subscribe = AddressModel.getInstance()
+                addSubscription(AddressModel.getInstance()
                         .delete_address(id)
                         .subscribe(new ServiceResponse<AddressResultBean>() {
                             @Override
@@ -194,8 +207,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                                     finish();
                                 }
                             }
-                        });
-                addSubscription(subscribe);
+                        }));
                 break;
         }
 
@@ -225,18 +237,15 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         return false;
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.switch_button:
-                if (isChecked) {
-                    defalut = "true";
-                } else {
-                    defalut = "false";
-                }
-
-                break;
-        }
+    private void showAddressDialog() {
+        new CityPickerDialog(this, provinces, province, city, county,
+                (selectProvince, selectCity, selectCounty) -> {
+                    receiver_state = selectProvince != null ? selectProvince.getName() : "";
+                    receiver_district = selectCounty != null ? selectCounty.getName() : "";
+                    receiver_city = selectCity != null ? selectCity.getName() : "";
+                    city_string = receiver_state + receiver_city + receiver_district;
+                    address.setText(city_string);
+                }).show();
     }
 
     @Override
@@ -294,6 +303,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                 byte[] arrayOfByte = new byte[in.available()];
                 in.read(arrayOfByte);
                 address = new String(arrayOfByte, "UTF-8");
+
                 Gson gson = new Gson();
                 provinces = gson.fromJson(address, new TypeToken<List<Province>>() {
                 }.getType());
@@ -317,7 +327,6 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                         county = counties.get(i);
                     }
                 }
-
                 return true;
             } catch (Exception e) {
             } finally {

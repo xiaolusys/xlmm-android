@@ -19,7 +19,7 @@ public class DefaultTransform<T> implements Observable.Transformer<T, T> {
                 .doOnError(throwable -> JUtils.Log(throwable.getLocalizedMessage()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread(), true)
-                .retryWhen(new RxUtils.RetryWhenNoInternet(100, 2000));
+                .retryWhen(new RxUtils.RetryWhenNoInternet(2, 2000));
     }
 }
 

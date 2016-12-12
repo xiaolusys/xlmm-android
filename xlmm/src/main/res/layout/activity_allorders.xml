@@ -13,28 +13,22 @@
     <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="所有订单">
+        app:xlmm_title="所有订单" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/black_overlay" />
-    </com.jimei.library.widget.XlmmTitleView>
-
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabTextColor="@color/black_overlay" />
 
     <include layout="@layout/common_gap" />
-
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
+        android:layout_height="match_parent" />
 </LinearLayout>

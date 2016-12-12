@@ -21,12 +21,10 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
-import com.jimei.xiaolumeimei.entities.event.UserInfoEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.product.CollectionActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -246,59 +244,22 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
 
                             @Override
                             public void onNext(CodeBean codeBean) {
-
                                 if (codeBean != null) {
                                     int code = codeBean.getRcode();
                                     if (0 == code) {
-                                        EventBus.getDefault().post(new UserInfoEmptyEvent());
                                         EventBus.getDefault().post(new SetMiPushEvent());
                                         JUtils.Toast("登录成功");
                                         Subscription subscribe = UserModel.getInstance()
                                                 .need_set_info()
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {
                                                     @Override
-                                                    public void onError(Throwable e) {
-                                                        super.onError(e);
-                                                        JUtils.Log(TAG, "e.getMessage()" + e.getMessage());
-                                                    }
-
-                                                    @Override
                                                     public void onNext(NeedSetInfoBean needSetInfoBean) {
-                                                        //set xiaomi push useraccount
-
                                                         hideIndeterminateProgressDialog();
                                                         LoginUtils.saveLoginSuccess(true, getApplicationContext());
                                                         if (needSetInfoBean.getCode() == 0) {
-                                                            if (null != login) {
-                                                                if (login.equals("cart")) {
-                                                                    Intent intent = new Intent(mContext, CartActivity.class);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                } else if (login.equals("product")) {
-                                                                    finish();
-                                                                } else if (login.equals("main")) {
-                                                                    finish();
-                                                                } else if (login.equals("push_jump")) {
+                                                            if (login != null) {
+                                                                if (login.equals("push_jump")) {
                                                                     JumpUtils.push_jump_proc(LoginActivity.this, actlink);
-                                                                    finish();
-                                                                } else if (login.equals("collect")) {
-                                                                    Intent intent = new Intent(mContext, CollectionActivity.class);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                } else if (login.equals("point")) {
-                                                                    Intent intent =
-                                                                            new Intent(mContext, MembershipPointActivity.class);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                } else if (login.equals("money")) {
-                                                                    Intent intent = new Intent(mContext, WalletActivity.class);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                } else if (login.equals("axiba")) {
-                                                                    finish();
-                                                                } else if (login.equals("coupon")) {
-                                                                    Intent intent = new Intent(mContext, AllCouponActivity.class);
-                                                                    startActivity(intent);
                                                                     finish();
                                                                 } else if (login.equals("productdetail")) {
                                                                     Intent intent = new Intent(mContext, ProductDetailActivity.class);
@@ -309,7 +270,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                     finish();
                                                                 } else if (login.equals("h5")) {
                                                                     Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                                                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                                     SharedPreferences sharedPreferences =
                                                                             getSharedPreferences("xlmmCookiesAxiba",
                                                                                     Context.MODE_PRIVATE);
@@ -327,21 +287,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                             ActivityWebViewActivity.class, title);
                                                                     finish();
                                                                 } else if (login.equals("getCoupon")) {
-                                                                    Subscription subscription1 = UserModel.getInstance()
+                                                                    addSubscription(UserModel.getInstance()
                                                                             .getCouPon()
                                                                             .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
                                                                                 @Override
                                                                                 public void onNext(
                                                                                         Response<GetCouponbean> getCouponbeanResponse) {
-                                                                                    JUtils.Log("getCoupon", "onnext");
                                                                                     if (getCouponbeanResponse != null) {
                                                                                         if (getCouponbeanResponse.isSuccessful()) {
-
-                                                                                            JUtils.Log("getCoupon",
-                                                                                                    "onnext == " + getCouponbeanResponse.body()
-                                                                                                            .toString());
                                                                                             JUtils.Toast(getCouponbeanResponse.body().getInfo());
-
                                                                                             finish();
                                                                                         }
                                                                                     }
@@ -354,8 +308,21 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                                                         JUtils.Toast("优惠券领取失败");
                                                                                     }
                                                                                 }
-                                                                            });
-                                                                    addSubscription(subscription1);
+                                                                            }));
+                                                                } else if (login.equals("car")) {
+                                                                    Bundle carBundle = new Bundle();
+                                                                    carBundle.putString("flag", "car");
+                                                                    readyGoThenKill(TabActivity.class, carBundle);
+                                                                } else if (login.equals("collect")) {
+                                                                    Bundle carBundle = new Bundle();
+                                                                    carBundle.putString("flag", "collect");
+                                                                    readyGoThenKill(TabActivity.class, carBundle);
+                                                                } else if (login.equals("my")) {
+                                                                    Bundle carBundle = new Bundle();
+                                                                    carBundle.putString("flag", "my");
+                                                                    readyGoThenKill(TabActivity.class, carBundle);
+                                                                } else {
+                                                                    finish();
                                                                 }
                                                             }
                                                         } else if (needSetInfoBean.getCode() == 1) {

@@ -84,9 +84,6 @@
             android:name=".ui.activity.user.ChangeAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.ChangeSelectAddressActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
@@ -151,13 +148,10 @@
             android:name=".ui.activity.user.AddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.AddAddressActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.user.WalletActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.user.AddNoAddressActivity"
+            android:name=".ui.activity.user.AddAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.user.AddressSelectActivity"
@@ -369,9 +363,22 @@
         <activity
             android:name=".ui.activity.xiaolumama.MamaReNewActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-        <activity android:name=".ui.activity.main.TabActivity" />
         <activity
-            android:name=".ui.xlmmmain.MainActivity"
+            android:name=".ui.activity.trade.CartActivity"
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="app"
+                    android:path="/v1/shopping_cart"
+                    android:scheme="com.jimei.xlmm" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.main.TabActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
@@ -411,9 +418,6 @@
         </activity>
         <activity
             android:name=".ui.activity.user.SelectCouponActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.product.CollectionActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.PersonalCarryRankActivity"
@@ -498,21 +502,6 @@
         <activity
             android:name=".ui.activity.xiaolumama.OrderLogisticActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
-            android:name=".ui.activity.trade.CartActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="app"
-                    android:path="/v1/shopping_cart"
-                    android:scheme="com.jimei.xlmm" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".ui.activity.xiaolumama.MamaChooseActivity"
             android:theme="@style/AppTheme.TransparentActivity">

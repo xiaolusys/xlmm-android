@@ -15,7 +15,6 @@ import com.jimei.library.utils.NetUtil;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;
@@ -88,7 +87,7 @@ public class SplashActivity extends AppCompatActivity {
             intent.putExtra("link", mPicture);
             startActivity(intent);
         } else {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            startActivity(new Intent(SplashActivity.this, TabActivity.class));
         }
         finish();
     }

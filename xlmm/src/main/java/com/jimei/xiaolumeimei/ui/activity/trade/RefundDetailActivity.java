@@ -232,7 +232,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         reasonTv.setText(refundDetailBean.getReason());
         RoundCornerImageView[] images = {round_image, round_image1, round_image2, round_image3};
         RelativeLayout[] rls = {rl_img, rl_img1, rl_img2, rl_img3};
-        if (refundDetailBean.getProof_pic().size() > 0) {
+        if (refundDetailBean.getProof_pic() != null && refundDetailBean.getProof_pic().size() > 0) {
             for (int i = 0; i < refundDetailBean.getProof_pic().size(); i++) {
                 ViewUtils.loadImgToImgView(getApplicationContext(), images[i],
                         refundDetailBean.getProof_pic().get(i));
@@ -349,7 +349,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 }
                 bundle.putBoolean("flag", isWrited);
                 if (isWrited) {
-                    bundle.putInt("rid",refundDetail.getId());
+                    bundle.putInt("rid", refundDetail.getId());
                     bundle.putString("company_name", refundDetail.getCompany_name());
                     bundle.putString("packetid", refundDetail.getSid());
                     intent.putExtras(bundle);

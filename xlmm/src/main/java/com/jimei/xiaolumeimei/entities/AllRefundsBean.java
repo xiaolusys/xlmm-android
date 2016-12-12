@@ -18,7 +18,7 @@ public class AllRefundsBean {
     @SerializedName("count")
     private int count;
     @SerializedName("next")
-    private Object next;
+    private String next;
     @SerializedName("previous")
     private Object previous;
 
@@ -29,7 +29,7 @@ public class AllRefundsBean {
         this.count = count;
     }
 
-    public void setNext(Object next) {
+    public void setNext(String next) {
         this.next = next;
     }
 
@@ -45,7 +45,7 @@ public class AllRefundsBean {
         return count;
     }
 
-    public Object getNext() {
+    public String getNext() {
         return next;
     }
 

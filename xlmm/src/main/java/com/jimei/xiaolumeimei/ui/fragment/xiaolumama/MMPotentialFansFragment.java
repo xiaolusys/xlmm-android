@@ -17,9 +17,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 
 /**
@@ -32,8 +29,6 @@ public class MMPotentialFansFragment extends BaseLazyFragment {
     XRecyclerView xrvMamaFans;
     private int page = 2;
     private MamaPotentialFansAdapter mAdapter;
-
-    List<PotentialFans.ResultsBean> list = new ArrayList<>();
 
     public static MMPotentialFansFragment newInstance(String title) {
         MMPotentialFansFragment mmFansFragment = new MMPotentialFansFragment();
@@ -50,30 +45,26 @@ public class MMPotentialFansFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initData() {
-        showIndeterminateProgressDialog(false);
+    public void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getPotentialFans("1")
                 .subscribe(new ServiceResponse<PotentialFans>() {
                     @Override
                     public void onCompleted() {
-                        super.onCompleted();
                         hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
+                        hideIndeterminateProgressDialog();
                         e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(PotentialFans fansBeen) {
                         if (fansBeen != null) {
-                            if (0 == fansBeen.getCount()) {
-                            } else {
-                                list.addAll(fansBeen.getResults());
-                                mAdapter.update(list);
+                            if (0 != fansBeen.getCount()) {
+                                mAdapter.updateWithClear(fansBeen.getResults());
                             }
                             if (null == fansBeen.getNext()) {
                                 xrvMamaFans.setLoadingMoreEnabled(false);
@@ -155,5 +146,10 @@ public class MMPotentialFansFragment extends BaseLazyFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    }
+
+    @Override
+    public View getLoadingView() {
+        return xrvMamaFans;
     }
 }

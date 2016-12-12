@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMTeamActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaLivenessActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWalletActivity;
@@ -60,21 +59,20 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         refreshFortune();
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaUrl()
                 .subscribe(this::setUrl, Throwable::printStackTrace));
-        setListener();
     }
 
     public void refreshFortune() {
-        if (mActivity != null) {
-            ((MamaActivity) mActivity).showIndeterminateProgressDialog(true);
-        }
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
-                .subscribe(this::initFortune, Throwable::printStackTrace));
+                .subscribe(this::initFortune, throwable -> {
+                    throwable.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }));
     }
 
     private void initFortune(MamaFortune mamaFortune) {
@@ -100,7 +98,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
         b.tvFans.setText(fortune.getFansNum() + "个");
         b.tvPersonal.setText(fortune.getExtra_figures().getPersonal_total_rank() + "名");
         b.tvTeam.setText(fortune.getExtra_figures().getTeam_total_rank() + "名");
-        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
+        hideIndeterminateProgressDialog();
     }
 
     private void setUrl(MamaUrl mamaUrl) {
@@ -109,7 +107,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
         fansUrl = bean.getFans_explain();
     }
 
-    private void setListener() {
+    public void setListener() {
         b.llWallet.setOnClickListener(this);
         b.llIncome.setOnClickListener(this);
         b.llVisit.setOnClickListener(this);
@@ -184,5 +182,10 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
                     break;
             }
         }
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.scrollView;
     }
 }

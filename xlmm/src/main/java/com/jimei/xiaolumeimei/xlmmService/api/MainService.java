@@ -3,14 +3,14 @@ package com.jimei.xiaolumeimei.xlmmService.api;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CategoryDownBean;
-import com.jimei.xiaolumeimei.entities.IsGetcoupon;
+import com.jimei.xiaolumeimei.entities.GetCoupon;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 
-import retrofit2.Response;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -21,16 +21,21 @@ public interface MainService {
 
     //获取用户信息
     @GET("/rest/v1/users/profile")
-    Observable<Response<UserInfoBean>> getUserLoginInfo();
+    Observable<UserInfoBean> getUserLoginInfo();
 
     @GET("/rest/v1/usercoupons/is_picked_register_gift_coupon")
-    Observable<Response<IsGetcoupon>> isCouPon();
+    Observable<GetCoupon> isCouPon();
 
     @GET("/rest/v2/carts/show_carts_num")
     Observable<CartsNumResultBean> show_carts_num();
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
+
+
+    @GET("/rest/v1/portal")
+    Observable<PortalBean> getPortalBean(
+            @Query("category") String category);
 
     @GET("/rest/v1/districts/latest_version")
     Observable<AddressDownloadResultBean> getAddressVersionAndUrl();

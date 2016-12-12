@@ -21,9 +21,9 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WxLoginBindPhoneActivity;
-import com.jimei.xiaolumeimei.ui.xlmmmain.MainActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -150,11 +150,11 @@ public class MastFragment extends DialogFragment {
                                                                             && (null
                                                                             != mActivity)
                                                                             && (null
-                                                                            != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean())
+                                                                            != ((TabActivity) mActivity).getUserInfoNewBean())
                                                                             && (null
-                                                                            != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                            != ((TabActivity) mActivity).getUserInfoNewBean()
                                                                             .getMobile())
-                                                                            && !(((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                            && !(((TabActivity) mActivity).getUserInfoNewBean()
                                                                             .getMobile()
                                                                             .isEmpty())) {
                                                                         dismiss();
@@ -199,13 +199,13 @@ public class MastFragment extends DialogFragment {
                                                                             JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
                                                                             Intent intent = new Intent(mActivity,
                                                                                     WxLoginBindPhoneActivity.class);
-                                                                            if (null != ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()) {
+                                                                            if (null != ((TabActivity) mActivity).getUserInfoNewBean()) {
                                                                                 Bundle bundle = new Bundle();
                                                                                 bundle.putString("headimgurl",
-                                                                                        ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                                        ((TabActivity) mActivity).getUserInfoNewBean()
                                                                                                 .getThumbnail());
                                                                                 bundle.putString("nickname",
-                                                                                        ((MainActivity) mActivity).mPresenter.getUserInfoNewBean()
+                                                                                        ((TabActivity) mActivity).getUserInfoNewBean()
                                                                                                 .getNick());
                                                                                 intent.putExtras(bundle);
                                                                             }

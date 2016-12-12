@@ -19,9 +19,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 
 /**
@@ -30,7 +27,6 @@ import butterknife.Bind;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class CarryLogCashbackFragment extends BaseLazyFragment {
-    List<ClickcarryBean.ResultsEntity> list = new ArrayList<>();
     @Bind(R.id.carrylogall_xry)
     XRecyclerView xRecyclerView;
     private ClickCarryLogAdapter adapter;
@@ -51,29 +47,26 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initData() {
-        showIndeterminateProgressDialog(false);
+    public void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaAllClickCarryLogs("1")
                 .subscribe(new ServiceResponse<ClickcarryBean>() {
 
                     @Override
                     public void onCompleted() {
-                        super.onCompleted();
                         hideIndeterminateProgressDialog();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
+                        hideIndeterminateProgressDialog();
                         e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(ClickcarryBean carryLogListBean) {
                         if (carryLogListBean != null) {
-                            list.addAll(carryLogListBean.getResults());
-                            adapter.update(list);
+                            adapter.update(carryLogListBean.getResults());
                             if (null == carryLogListBean.getNext()) {
                                 xRecyclerView.setLoadingMoreEnabled(false);
                             }
@@ -164,5 +157,10 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+    }
+
+    @Override
+    public View getLoadingView() {
+        return xRecyclerView;
     }
 }

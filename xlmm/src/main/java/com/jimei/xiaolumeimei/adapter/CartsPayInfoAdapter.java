@@ -73,11 +73,7 @@ public class CartsPayInfoAdapter
                 holder.setImageFromUrl(mContext, R.id.cart_image, picPath);
             }
         }
-        if (cartListEntity.getTitle().length() <= 9) {
-            holder.setText(R.id.title, cartListEntity.getTitle());
-        } else {
-            holder.setText(R.id.title, cartListEntity.getTitle().substring(0, 9) + "...");
-        }
+        holder.setText(R.id.title, cartListEntity.getTitle());
         holder.setText(R.id.tx_good_size, "尺码:" + cartListEntity.getSkuName());
         holder.setText(R.id.tv_num, "x" + cartListEntity.getNum() + "");
         holder.setText(R.id.price_tv, "¥" + cartListEntity.getPrice());

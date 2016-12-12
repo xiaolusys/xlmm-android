@@ -151,7 +151,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
                 idNo = idNum.getText().toString().trim();
-                if (IdCardChecker.isValidatedAllIdcard(idNo)) {
+                if (IdCardChecker.isValidatedAllIdcard(idNo) || !is_bonded_goods) {
                     if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                         Subscription subscribe = AddressModel.getInstance()
                                 .update_address(id, receiver_state, receiver_city, receiver_district,

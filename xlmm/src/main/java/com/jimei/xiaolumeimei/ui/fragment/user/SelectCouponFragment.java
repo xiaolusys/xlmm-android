@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.jimei.xiaolumeimei.R;
@@ -28,6 +29,8 @@ public class SelectCouponFragment extends BaseLazyFragment implements AdapterVie
     ArrayList<CouponEntity> couponEntities;
     @Bind(R.id.btn)
     Button button;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     public static SelectCouponFragment newInstance(int type, String title, String id, ArrayList<CouponEntity> list) {
         SelectCouponFragment fragment = new SelectCouponFragment();
@@ -55,14 +58,14 @@ public class SelectCouponFragment extends BaseLazyFragment implements AdapterVie
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
+        hideIndeterminateProgressDialog();
         if (getArguments() != null) {
             int type = getArguments().getInt(TYPE);
             String selectId = getArguments().getString("id", "");
             couponEntities = new ArrayList<>();
             couponEntities.addAll((ArrayList<CouponEntity>) getArguments().getSerializable("list"));
             CouponListAdapter adapter = new CouponListAdapter(getContext());
-            adapter.setClickable(false);
             listView.setAdapter(adapter);
             adapter.update(couponEntities, 0, selectId);
             if (couponEntities.size() > 0) {
@@ -141,5 +144,10 @@ public class SelectCouponFragment extends BaseLazyFragment implements AdapterVie
                 getActivity().finish();
                 break;
         }
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 }

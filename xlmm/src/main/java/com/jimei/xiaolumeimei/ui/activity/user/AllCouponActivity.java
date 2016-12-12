@@ -1,12 +1,11 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
+import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
@@ -16,7 +15,6 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import rx.Observable;
@@ -26,8 +24,7 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
-    ArrayList<CouponFragment> fragments = new ArrayList<>();
-    List<String> titles = new ArrayList<>();
+    ArrayList<BaseFragment> fragments = new ArrayList<>();
 
     @Override
     protected int getContentViewLayoutID() {
@@ -42,24 +39,20 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                 .subscribe(new ServiceResponse<ArrayList<CouponEntity>>() {
                     @Override
                     public void onNext(ArrayList<CouponEntity> couponEntities) {
-                        if (titles.size() == 0) {
-                            titles.add("未使用(" + couponEntities.size() + ")");
+                        if (fragments.size() == 0) {
                             fragments.add(CouponFragment.newInstance(XlmmConst.UNUSED_COUPON, couponEntities));
-                        } else if (titles.size() == 1) {
-                            titles.add("精品券(" + couponEntities.size() + ")");
+                        } else if (fragments.size() == 1) {
                             fragments.add(CouponFragment.newInstance(XlmmConst.GOOD_COUPON, couponEntities));
-                        } else if (titles.size() == 2) {
-                            titles.add("已过期(" + couponEntities.size() + ")");
+                        } else if (fragments.size() == 2) {
                             fragments.add(CouponFragment.newInstance(XlmmConst.PAST_COUPON, couponEntities));
-                        } else if (titles.size() == 3) {
-                            titles.add("已使用(" + couponEntities.size() + ")");
+                        } else if (fragments.size() == 3) {
                             fragments.add(CouponFragment.newInstance(XlmmConst.USED_COUPON, couponEntities));
                         }
                     }
 
                     @Override
                     public void onCompleted() {
-                        MainTabAdapter mAdapter = new MainTabAdapter(getSupportFragmentManager());
+                        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
                         viewPager.setAdapter(mAdapter);
                         viewPager.setOffscreenPageLimit(3);
                         tabLayout.setupWithViewPager(viewPager);
@@ -72,28 +65,6 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                         hideIndeterminateProgressDialog();
                     }
                 }));
-    }
-
-    public class MainTabAdapter extends FragmentPagerAdapter {
-
-        public MainTabAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles.get(position);
-        }
     }
 
     @Override

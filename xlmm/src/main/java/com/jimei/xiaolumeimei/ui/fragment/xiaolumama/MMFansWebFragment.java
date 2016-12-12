@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.jimei.xiaolumeimei.base.BaseWebViewFragment;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
@@ -19,6 +20,22 @@ public class MMFansWebFragment extends BaseWebViewFragment {
         args.putString("title", title);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void initViews() {
+        EventBus.getDefault().register(this);
+        super.initViews();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        WebViewEvent stickyEvent = EventBus.getDefault().getStickyEvent(WebViewEvent.class);
+        if (stickyEvent != null) {
+            EventBus.getDefault().removeStickyEvent(stickyEvent);
+        }
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(sticky = true)

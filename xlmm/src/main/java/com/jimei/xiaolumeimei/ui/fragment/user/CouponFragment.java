@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.fragment.user;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,12 +30,23 @@ public class CouponFragment extends BaseLazyFragment {
     private List<CouponEntity> couponEntities;
     @Bind(R.id.msg)
     TextView msgTv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     public static CouponFragment newInstance(int type, ArrayList<CouponEntity> couponEntities) {
         CouponFragment fragment = new CouponFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         args.putSerializable("entity", couponEntities);
+        if (type == XlmmConst.UNUSED_COUPON) {
+            args.putString("title", "未使用(" + couponEntities.size() + ")");
+        } else if (type == XlmmConst.PAST_COUPON) {
+            args.putString("title", "已过期(" + couponEntities.size() + ")");
+        } else if (type == XlmmConst.USED_COUPON) {
+            args.putString("title", "已使用(" + couponEntities.size() + ")");
+        } else if (type == XlmmConst.GOOD_COUPON) {
+            args.putString("title", "精品券(" + couponEntities.size() + ")");
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +70,8 @@ public class CouponFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
+        hideIndeterminateProgressDialog();
         if (getArguments() != null) {
             type = getArguments().getInt(TYPE);
             couponEntities = ((List<CouponEntity>) getArguments().getSerializable("entity"));
@@ -81,5 +94,10 @@ public class CouponFragment extends BaseLazyFragment {
     @Override
     public View getScrollableView() {
         return listView;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 }

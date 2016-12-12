@@ -41,7 +41,6 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
@@ -84,7 +83,7 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     }
 
     @Override
-    protected void initData() {
+    public void initData() {
         MamaInfoModel mmInfoModel = MamaInfoModel.getInstance();
         addSubscription(Observable.mergeDelayError(mmInfoModel.getMamaUrl(), mmInfoModel.getShareShopping(),
                 mmInfoModel.getMamaFortune(), mmInfoModel.getRecentCarry("0", "7"), mmInfoModel.getMaMaselfList())
@@ -107,8 +106,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
                             initTask((MamaSelfListBean) o);
                         }
                     }
-                }, Throwable::printStackTrace));
-        setListener();
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }));
     }
 
     private void initUrl(MamaUrl mamaUrl) {
@@ -239,7 +240,6 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         if (fortune.getExtraInfo() != null) {
             hisConfirmedCashOut = fortune.getExtraInfo().getHisConfirmedCashOut();
         }
-        ((MamaActivity) mActivity).hideIndeterminateProgressDialog();
         SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
         String time = preferences.getString("time", "");
         int num = preferences.getInt("num", 0);
@@ -268,9 +268,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         } catch (Exception e) {
             e.printStackTrace();
         }
+        hideIndeterminateProgressDialog();
     }
 
-    private void setListener() {
+    public void setListener() {
         b.llRenew.setOnClickListener(this);
         b.llRank.setOnClickListener(this);
         b.llShare.setOnClickListener(this);
@@ -394,5 +395,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     @Override
     public View getScrollableView() {
         return b.rv;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return b.scrollableLayout;
     }
 }

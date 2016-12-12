@@ -53,6 +53,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        page = 2;
         showIndeterminateProgressDialog(false);
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
@@ -94,6 +95,11 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                     }
                                 }));
                     }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
                 }));
     }
 
@@ -109,12 +115,9 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void initRecyclerView() {
-        walletRcv.setRefreshProgressStyle(ProgressStyle.BallPulse);
         walletRcv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        walletRcv.setArrowImageView(R.drawable.iconfont_downgrey);
         walletRcv.setLayoutManager(new LinearLayoutManager(this));
-        walletRcv.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        walletRcv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         walletRcv.setPullRefreshEnabled(false);
         adapter = new UserWalletAdapter(this);
         walletRcv.setAdapter(adapter);
@@ -145,13 +148,13 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                 adapter.update(budgetDetailBean.getResults());
                                 if (budgetDetailBean.getNext() == null) {
                                     Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
-                                    walletRcv.post(walletRcv::loadMoreComplete);
                                     walletRcv.setLoadingMoreEnabled(false);
                                 }
+                                walletRcv.loadMoreComplete();
                             }
 
                         }, e -> {
-                            walletRcv.post(walletRcv::loadMoreComplete);
+                            walletRcv.loadMoreComplete();
                         }
                 ));
     }

@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.jimei.library.widget.RecycleViewDivider;
+import com.jimei.library.widget.RecyclerViewDivider;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -67,7 +67,7 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecycleViewDivider divider = new RecycleViewDivider(RecycleViewDivider.VERTICAL);
+        RecyclerViewDivider divider = new RecyclerViewDivider(RecyclerViewDivider.VERTICAL);
         divider.setSize(3);
         divider.setColor(getResources().getColor(R.color.bg_grey));
         addressRecyclerView.addItemDecoration(divider);

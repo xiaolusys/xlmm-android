@@ -49,12 +49,13 @@ public class AddressModel {
     }
 
     //创建新的地址
-    public Observable<AddressResultBean> create_address(String receiver_state, String receiver_city,
-                                                        String receiver_district, String receiver_address,
-                                                        String receiver_name, String receiver_mobile, String defaulta) {
+    public Observable<AddressResultBean> create_addressWithId(String receiver_state, String receiver_city,
+                                                              String receiver_district, String receiver_address,
+                                                              String receiver_name, String receiver_mobile,
+                                                              String defaulta, String identification_no) {
         return getService()
-                .create_address(receiver_state, receiver_city, receiver_district,
-                        receiver_address, receiver_name, receiver_mobile, defaulta)
+                .create_addressWithId(receiver_state, receiver_city, receiver_district,
+                        receiver_address, receiver_name, receiver_mobile, defaulta, identification_no)
                 .compose(new DefaultTransform<>());
     }
 
