@@ -104,7 +104,7 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
                         e.printStackTrace();
                         b.xrv.loadMoreComplete();
                         hideIndeterminateProgressDialog();
-                        if (e instanceof UnknownHostException) {
+                        if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                             showNetworkError();
                         } else {
                             JUtils.Toast("数据加载有误!");

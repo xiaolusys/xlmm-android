@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -161,7 +162,22 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public void getIntentUrl(Uri uri) {
+        ids = uri.getQueryParameter("cart_id");
+        String type = uri.getQueryParameter("type");
+        if (type != null) {
+            if (type.equals("3")) {
+                mFlag = true;
+            } else if (type.equals("5")) {
+                couponFlag = true;
+            }
+        }
+    }
+
+    @Override
     protected void initData() {
+        idFlag = false;
+        couponFlag = false;
         list = new ArrayList<>();
         downLoadCartsInfoWithout();
     }
@@ -284,6 +300,13 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                         if (cartsPayinfoBean != null) {
                             List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
+                            if (cartList.size() > 0) {
+                                if (cartList.get(0).getType() == 3) {
+                                    mFlag = true;
+                                } else if (cartList.get(0).getType() == 5) {
+                                    couponFlag = true;
+                                }
+                            }
                             for (int i = 0; i < cartList.size(); i++) {
                                 if (cartList.get(i).is_bonded_goods()) {
                                     idFlag = true;

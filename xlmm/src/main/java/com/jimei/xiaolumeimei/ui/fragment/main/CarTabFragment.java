@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
@@ -95,14 +96,12 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
         cartListAdapter = new CartListAdapter((BaseActivity) mActivity, cartList, this);
         b.rvCart.setAdapter(cartListAdapter);
 
-        b.rvHistory.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.rvHistory.setNestedScrollingEnabled(false);
+        b.rvHistory.setHasFixedSize(false);
         b.rvHistory.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        b.rvHistory.setLayoutManager(new LinearLayoutManager(mActivity) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        ScrollLinearLayoutManager manager = new ScrollLinearLayoutManager(mActivity);
+        manager.setAutoMeasureEnabled(false);
+        b.rvHistory.setLayoutManager(manager);
         cartHisAdapter = new CartHistoryAdapter((BaseActivity) mActivity, cartHisList, this);
         b.rvHistory.setAdapter(cartHisAdapter);
     }
@@ -221,6 +220,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartList.addAll(cartsInfoBeen);
                             b.emptyContent.setVisibility(View.GONE);
+                            b.rvCart.setVisibility(View.VISIBLE);
                             cartListAdapter.notifyDataSetChanged();
                             ids.clear();
                             for (int i = 0; i < cartsInfoBeen.size(); i++) {
@@ -229,6 +229,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                             setPriceText();
                         } else {
                             b.emptyContent.setVisibility(View.VISIBLE);
+                            b.rvCart.setVisibility(View.GONE);
                             b.totalPrice.setText("¥0");
                             b.confirm.setClickable(false);
                             b.confirmLayout.setVisibility(View.GONE);
@@ -239,7 +240,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
 
                     @Override
                     public void onError(Throwable e) {
-                        if (e instanceof UnknownHostException) {
+                        if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                             showNetworkError();
                         } else {
                             JUtils.Toast("数据加载失败!");

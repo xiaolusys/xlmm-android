@@ -148,7 +148,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                             }
                                         }
                                     });
-
                             dialog.dismiss();
                         })
                         .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())

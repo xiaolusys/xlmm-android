@@ -20,6 +20,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -249,6 +250,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                     if (0 == code) {
                                         EventBus.getDefault().post(new SetMiPushEvent());
                                         JUtils.Toast("登录成功");
+                                        EventBus.getDefault().post(new CollectChangeEvent());
                                         Subscription subscribe = UserModel.getInstance()
                                                 .need_set_info()
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {

@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -131,6 +132,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                         LoginUtils.saveLoginInfo(true, getApplicationContext(),
                                                 login_name_value, login_pass_value);
                                         JUtils.Toast("登录成功!");
+                                        EventBus.getDefault().post(new CollectChangeEvent());
                                         String login = null;
                                         if (getIntent() != null && getIntent().getExtras() != null) {
                                             login = getIntent().getExtras().getString("login");

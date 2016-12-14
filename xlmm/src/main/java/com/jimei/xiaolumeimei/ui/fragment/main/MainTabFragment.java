@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.adapter.rxjava.HttpException;
+
 public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
         implements View.OnClickListener, ViewPager.OnPageChangeListener,
         ScrollableLayout.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
@@ -72,7 +74,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
 
     @Override
     public View getLoadingView() {
-        return b.swipeLayout;
+        return b.layout;
     }
 
     @Override
@@ -94,7 +96,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                         b.swipeLayout.setRefreshing(false);
                     }
                     hideIndeterminateProgressDialog();
-                    if (e instanceof UnknownHostException) {
+                    if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                         showNetworkError();
                     } else {
                         JUtils.Toast("数据加载有误,请下拉刷新!");
@@ -119,6 +121,12 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                     }, e -> {
                         e.printStackTrace();
                         b.mainShop.setVisibility(View.INVISIBLE);
+                        if (e instanceof HttpException) {
+                            if (((HttpException) e).code() == 403) {
+                                LoginUtils.delLoginInfo(mActivity);
+                                JUtils.Toast("登录已过期，请重新登录!");
+                            }
+                        }
                     }));
         } else {
             b.mainShop.setVisibility(View.INVISIBLE);

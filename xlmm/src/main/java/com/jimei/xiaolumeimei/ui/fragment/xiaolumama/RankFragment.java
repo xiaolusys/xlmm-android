@@ -96,7 +96,7 @@ public class RankFragment extends BaseBindingFragment<FragmentRankBinding> imple
 
     private void doOnError(Throwable e) {
         hideIndeterminateProgressDialog();
-        if (e instanceof UnknownHostException) {
+        if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
             showNetworkError();
         } else {
             JUtils.Toast("数据加载有误!");

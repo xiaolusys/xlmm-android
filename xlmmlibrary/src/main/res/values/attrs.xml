@@ -238,8 +238,8 @@
   <declare-styleable name="XlmmTitleView">
     <attr name="xlmm_title" format="string"/>
     <attr name="show_finish" format="boolean"/>
-    <!--<attr name="alpha" format="float"/>-->
-    <!--<attr name="back_color" format="color"/>-->
+    <attr name="alpha" format="float"/>
+    <attr name="back_color" format="color"/>
   </declare-styleable>
 
   <declare-styleable name="BrandView">

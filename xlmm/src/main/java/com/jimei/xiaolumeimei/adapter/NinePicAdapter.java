@@ -132,11 +132,11 @@ public class NinePicAdapter extends BaseAdapter {
                                 mFiles.clear();
                                 JUtils.copyToClipboard(description);
                                 if (picArray.size() > 0) {
-                                    downloadNinepic(picArray);
+                                    downloadNinepic(picArray, description);
                                 } else {
-                                    shareToWx();
+                                    shareToWx(description);
                                 }
-                                JUtils.Toast("努力分享中,请稍等几秒钟...");
+                                JUtils.ToastLong("努力分享中,请稍等几秒钟...");
                             } else {
                                 JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
                             }
@@ -146,7 +146,7 @@ public class NinePicAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void downloadNinepic(List<String> picArry) {
+    private void downloadNinepic(List<String> picArry, String desc) {
         new Thread(() -> {
             JUtils.Log("NinePic", "new thread ,pic size " + picArry.size());
             for (int i = 0; i < picArry.size(); i++) {
@@ -166,7 +166,7 @@ public class NinePicAdapter extends BaseAdapter {
                     Uri uri = Uri.fromFile(new File(newFileName));
                     mFiles.add(uri);
                     if (mFiles.size() == picArry.size()) {
-                        mContext.runOnUiThread(this::shareToWx);
+                        mContext.runOnUiThread(() -> shareToWx(desc));
                     }
                 } else {
                     if (!str.contains("code")) {
@@ -218,7 +218,7 @@ public class NinePicAdapter extends BaseAdapter {
                                             scannerIntent.setData(uri);
                                             mContext.sendBroadcast(scannerIntent);
                                             if (mFiles.size() == picArry.size()) {
-                                                shareToWx();
+                                                shareToWx(desc);
                                             }
                                         } catch (Exception e) {
                                             hideLoading();
@@ -228,7 +228,6 @@ public class NinePicAdapter extends BaseAdapter {
                                 }
                             });
                 }
-
             }
         }).start();
     }
@@ -239,7 +238,7 @@ public class NinePicAdapter extends BaseAdapter {
         }
     }
 
-    private void shareToWx() {
+    private void shareToWx(String desc) {
         hideLoading();
         JUtils.Toast("文字已经复制到粘贴板!");
         ArrayList<Uri> imageUris = new ArrayList<>();
@@ -257,6 +256,7 @@ public class NinePicAdapter extends BaseAdapter {
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                 intent.setType("image/*");
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+                intent.putExtra("Kdescription", desc);
                 mContext.startActivity(intent);
             }
         } catch (Exception e) {

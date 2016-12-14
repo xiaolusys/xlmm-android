@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class DataClearManager {
   private static final String newsCacheurl =
-      Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaolumeimei";
+      Environment.getExternalStorageDirectory().getAbsolutePath() + "/xlmm";
   private static double dirSizeAll = 0;
 
   /**

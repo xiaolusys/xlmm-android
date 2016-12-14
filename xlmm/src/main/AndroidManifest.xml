@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
@@ -79,7 +80,18 @@
         <activity
             android:name=".ui.activity.trade.CartsPayInfoActivity"
             android:theme="@style/AppTheme.TransparentActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="app"
+                    android:path="/v1/trades/purchase"
+                    android:scheme="com.jimei.xlmm" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.user.ChangeAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity" />

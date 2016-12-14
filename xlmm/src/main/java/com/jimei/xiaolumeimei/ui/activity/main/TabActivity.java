@@ -64,7 +64,6 @@ public class TabActivity extends BaseActivity {
     private boolean updateFlag = true;
     private UserInfoBean userInfoNewBean;
     private UpdateBroadReceiver mUpdateBroadReceiver;
-    private String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         if (intent.getExtras() != null) {
-            flag = intent.getExtras().getString("flag");
+            String flag = intent.getExtras().getString("flag");
             if (flag != null && !"".equals(flag)) {
                 if (flag.equals("car")) {
                     radioGroup.check(R.id.rb_car);
@@ -89,7 +88,6 @@ public class TabActivity extends BaseActivity {
                 } else {
                     radioGroup.check(R.id.rb_main);
                 }
-                flag = null;
             }
         }
     }
@@ -148,11 +146,9 @@ public class TabActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         showCarNum();
-        if (LoginUtils.checkLoginState(this)) {
-            EventBus.getDefault().post(new RefreshCarNumEvent());
-            EventBus.getDefault().post(new RefreshPersonalEvent());
-            EventBus.getDefault().post(new ShowShopEvent());
-        }
+        EventBus.getDefault().post(new ShowShopEvent());
+        EventBus.getDefault().post(new RefreshCarNumEvent());
+        EventBus.getDefault().post(new RefreshPersonalEvent());
         MobclickAgent.onPageStart(this.getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }

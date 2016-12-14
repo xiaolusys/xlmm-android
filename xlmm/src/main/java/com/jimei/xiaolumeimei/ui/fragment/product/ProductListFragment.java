@@ -30,7 +30,8 @@ import java.net.UnknownHostException;
 /**
  * Created by wisdom on 16/8/16.
  */
-public class ProductListFragment extends BaseBindingFragment<FragmentProductListBinding> implements ScrollableHelper.ScrollableContainer {
+public class ProductListFragment extends BaseBindingFragment<FragmentProductListBinding>
+        implements ScrollableHelper.ScrollableContainer {
     CountDownView countTime;
     private int type;
     private int page = 1;
@@ -121,12 +122,12 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
                                 page++;
                             }
                             if (type == XlmmConst.TYPE_TOMORROW) {
-                                countTime.start(DateUtils.calcLeftTime(productListBean.getOnshelf_starttime())
-                                        , CountDownView.TYPE_ALL);
+                                long time = DateUtils.calcLeftTime(productListBean.getOnshelf_starttime());
+                                countTime.start(time, CountDownView.TYPE_ALL);
                                 headText.setText("距本场开始");
                             } else {
-                                countTime.start(DateUtils.calcLeftTime(productListBean.getOffshelf_deadline())
-                                        , CountDownView.TYPE_ALL);
+                                long time = DateUtils.calcLeftTime(productListBean.getOffshelf_deadline());
+                                countTime.start(time, CountDownView.TYPE_ALL);
                                 headText.setText("距本场结束");
                             }
                             adapter.update(productListBean.getResults());
@@ -138,7 +139,7 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
                     @Override
                     public void onError(Throwable e) {
                         hideIndeterminateProgressDialog();
-                        if (e instanceof UnknownHostException) {
+                        if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                             showNetworkError();
                         } else {
                             JUtils.Toast("数据加载有误,请下拉刷新!");
