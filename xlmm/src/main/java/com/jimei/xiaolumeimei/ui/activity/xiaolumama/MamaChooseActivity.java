@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,7 +19,6 @@ import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,8 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
     TextView saleTv;
     @Bind(R.id.rv_choose)
     XRecyclerView mRecyclerView;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     private List<String> cidList = new ArrayList<>();
     private int page;
@@ -58,6 +60,11 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
         commissionTv.setOnClickListener(this);
         saleTv.setOnClickListener(this);
         mSpinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -194,19 +201,4 @@ public class MamaChooseActivity extends BaseSwipeBackCompatActivity implements
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
 }

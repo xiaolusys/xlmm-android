@@ -199,16 +199,6 @@ public class MastFragment extends DialogFragment {
                                                                             JUtils.Toast("登录成功,前往绑定手机号后才可参加活动");
                                                                             Intent intent = new Intent(mActivity,
                                                                                     WxLoginBindPhoneActivity.class);
-                                                                            if (null != ((TabActivity) mActivity).getUserInfoNewBean()) {
-                                                                                Bundle bundle = new Bundle();
-                                                                                bundle.putString("headimgurl",
-                                                                                        ((TabActivity) mActivity).getUserInfoNewBean()
-                                                                                                .getThumbnail());
-                                                                                bundle.putString("nickname",
-                                                                                        ((TabActivity) mActivity).getUserInfoNewBean()
-                                                                                                .getNick());
-                                                                                intent.putExtras(bundle);
-                                                                            }
                                                                             mActivity.startActivity(intent);
                                                                         }
                                                                     }

@@ -15,7 +15,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.widget.CategoryListTask;
 import com.jimei.xiaolumeimei.widget.CategoryTask;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -30,6 +29,8 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
     XRecyclerView mXRecyclerView;
     @Bind(R.id.empty_layout)
     LinearLayout emptyLayout;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private CategoryAdapter adapter;
     private CategoryListAdapter mCategoryListAdapter;
 
@@ -56,6 +57,11 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void setListener() {
         mListView.setOnItemClickListener(this);
     }
@@ -67,19 +73,4 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         mCategoryListAdapter.setCid(cid);
         new CategoryTask(adapter, emptyLayout).execute(cid);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
 }

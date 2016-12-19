@@ -3,8 +3,10 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.TextView;
 
+import com.jimei.library.widget.PageSelectedListener;
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
@@ -15,7 +17,6 @@ import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogAllFragment;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogBounsFragment;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogCashbackFragment;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.CarryLogCommissionFragment;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,7 @@ import butterknife.Bind;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
-        implements ViewPager.OnPageChangeListener {
+public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
@@ -47,7 +47,12 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        viewPager.setOnPageChangeListener(this);
+        viewPager.addOnPageChangeListener(new PageSelectedListener() {
+            @Override
+            public void onPageSelected(int position) {
+                scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment) fragments.get(position));
+            }
+        });
     }
 
     @Override
@@ -57,22 +62,13 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return scrollableLayout;
+    }
+
+    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_mmcarrylog;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -91,20 +87,7 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment)fragments.get(0));
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment)fragments.get(position));
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
+        scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment) fragments.get(0));
     }
 
 //

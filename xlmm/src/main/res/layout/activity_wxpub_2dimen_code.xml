@@ -11,7 +11,7 @@
         app:xlmm_title="微信公众号二维码" />
 
     <LinearLayout
-        android:id="@+id/ll_mamainfo"
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_grey"
@@ -83,6 +83,5 @@
             android:textColor="@color/white"
             android:textSize="15sp" />
     </LinearLayout>
-
 
 </LinearLayout>

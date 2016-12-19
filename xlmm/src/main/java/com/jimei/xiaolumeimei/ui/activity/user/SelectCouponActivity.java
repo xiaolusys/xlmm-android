@@ -3,6 +3,8 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
@@ -12,7 +14,6 @@ import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     String selected_couponid;
     String cart_ids;
     private int goodNum;
@@ -61,6 +64,11 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void getBundleExtras(Bundle extras) {
         selected_couponid = extras.getString("coupon_id", "");
         cart_ids = extras.getString("cart_ids", "");
@@ -73,17 +81,4 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
         return R.layout.activity_select;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

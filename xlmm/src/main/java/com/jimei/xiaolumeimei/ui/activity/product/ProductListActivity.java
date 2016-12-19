@@ -19,9 +19,7 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
-import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBinding> implements View.OnClickListener {
@@ -76,17 +74,19 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     @Override
     protected void initViews() {
         b.title.setName(title);
-        GridLayoutManager manager = new GridLayoutManager(this, 2);
+        GridLayoutManager manager = new GridLayoutManager(this,2);
         b.xrv.setLayoutManager(manager);
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        b.xrv.setPullRefreshEnabled(false);
+        b.xrv.setRefreshProgressStyle(ProgressStyle.BallPulse);
         mProductListAdapter = new ProductListAdapter(this);
         b.xrv.setAdapter(mProductListAdapter);
         b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+                page = 1;
+                refreshData(type, true);
             }
 
             @Override
@@ -95,7 +95,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                     refreshData(cid, false);
                 } else {
                     JUtils.Toast("已经到底啦!");
-                    b.xrv.post(b.xrv::loadMoreComplete);
+                    b.xrv.loadMoreComplete();
                 }
             }
         });
@@ -142,9 +142,11 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                             }
                             hideIndeterminateProgressDialog();
                             b.xrv.loadMoreComplete();
+                            b.xrv.refreshComplete();
                         }, e -> {
                             hideIndeterminateProgressDialog();
                             b.xrv.loadMoreComplete();
+                            b.xrv.refreshComplete();
                             JUtils.Toast("数据加载有误!");
                         }
                 ));
@@ -178,16 +180,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    public View getLoadingView() {
+        return b.layout;
     }
 }

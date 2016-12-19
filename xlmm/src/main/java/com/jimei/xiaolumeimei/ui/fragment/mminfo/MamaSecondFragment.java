@@ -9,11 +9,10 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 
 public class MamaSecondFragment extends BaseWebViewFragment {
 
-    public static MamaSecondFragment newInstance(String title, int id) {
+    public static MamaSecondFragment newInstance(String title) {
         MamaSecondFragment fragment = new MamaSecondFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
-        args.putInt("id", id);
         fragment.setArguments(args);
         return fragment;
     }

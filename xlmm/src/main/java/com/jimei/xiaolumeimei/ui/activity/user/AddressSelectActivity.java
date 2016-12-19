@@ -5,15 +5,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.jimei.library.widget.RecyclerViewDivider;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AddressSelectAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -31,6 +36,8 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     RecyclerView addressRecyclerView;
     @Bind(R.id.addAdress)
     Button addAdress;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private AddressSelectAdapter adapter;
     private String addressId;
     private boolean idFlag;
@@ -41,11 +48,13 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
+    protected void initData() {
         showIndeterminateProgressDialog(false);
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
         addSubscription(AddressModel.getInstance()
                 .getAddressList()
                 .subscribe(new ServiceResponse<List<AddressBean>>() {
@@ -61,13 +70,6 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
     protected void getBundleExtras(Bundle extras) {
         addressId = extras.getString("addressId");
         idFlag = extras.getBoolean("idFlag", false);
@@ -80,6 +82,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        EventBus.getDefault().register(this);
         addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         RecyclerViewDivider divider = new RecyclerViewDivider(RecyclerViewDivider.VERTICAL);
         divider.setSize(3);
@@ -88,6 +91,17 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
         adapter = new AddressSelectAdapter(this, addressId);
         adapter.setIdFlag(idFlag);
         addressRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshAddress(AddressChangeEvent event) {
+        initData();
     }
 
     @Override

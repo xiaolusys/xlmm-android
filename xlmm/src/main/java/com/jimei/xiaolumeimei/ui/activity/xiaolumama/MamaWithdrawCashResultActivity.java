@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -15,7 +16,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -34,6 +34,8 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     TextView msgTv;
     @Bind(R.id.tv_nickname)
     TextView nickNameTv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     double cash;
     private int code;
@@ -47,11 +49,14 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            cash = extras.getDouble("cash");
-            code = extras.getInt("code");
-            msg = extras.getString("msg");
-        }
+        cash = extras.getDouble("cash");
+        code = extras.getInt("code");
+        msg = extras.getString("msg");
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -111,19 +116,5 @@ public class MamaWithdrawCashResultActivity extends BaseSwipeBackCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_withdrawcash, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

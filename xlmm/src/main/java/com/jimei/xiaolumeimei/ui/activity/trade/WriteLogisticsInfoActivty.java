@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -24,7 +25,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -80,6 +80,8 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     TextView tv_order_last_state;
     @Bind(R.id.rl_scan)
     RelativeLayout scanLayout;
+    @Bind(R.id.layout)
+    ScrollView layout;
     private String address;
     String company;
     int goods_id;
@@ -92,6 +94,11 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     protected void setListener() {
         btn_commit.setOnClickListener(this);
         scanLayout.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -282,19 +289,5 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
                     }
                 });
         addSubscription(subscription);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

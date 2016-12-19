@@ -1,9 +1,10 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.jimei.library.utils.ViewUtils;
+import com.jimei.library.widget.PageSelectedListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
@@ -14,7 +15,6 @@ import com.jimei.xiaolumeimei.entities.PersonalCarryRankBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.RankFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -42,20 +42,10 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
 
     @Override
     protected void setListener() {
-        b.viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        b.viewPager.addOnPageChangeListener(new PageSelectedListener() {
             @Override
             public void onPageSelected(int position) {
                 b.scrollableLayout.getHelper().setCurrentScrollableContainer((RankFragment) fragments.get(position));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -74,6 +64,12 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
                                 fillDataToView(personalCarryRankBean);
                             }
                         }
+                        hideIndeterminateProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
                         hideIndeterminateProgressDialog();
                     }
                 });
@@ -113,17 +109,7 @@ public class PersonalCarryRankActivity extends BaseMVVMActivity<ActivityPersonal
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
+    public View getLoadingView() {
+        return b.scrollableLayout;
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
 }

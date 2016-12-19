@@ -21,12 +21,15 @@ import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/26.
@@ -46,17 +49,12 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     ScrollableLayout scrollableLayout;
     private Double money = 0d;
     private UserWalletAdapter adapter;
-    Subscription subscribe;
-
     private int page = 2;
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void initData() {
         page = 2;
         showIndeterminateProgressDialog(false);
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
         addSubscription(UserModel.getInstance()
                 .budGetDetailBean("1")
                 .subscribe(new ServiceResponse<BudgetDetailBean>() {
@@ -80,7 +78,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                 .subscribe(new ServiceResponse<UserInfoBean>() {
                                     @Override
                                     public void onNext(UserInfoBean userNewBean) {
-
                                         if (userNewBean != null) {
                                             if (null != userNewBean.getUserBudget()) {
                                                 money = userNewBean.getUserBudget().getBudgetCash();
@@ -90,7 +87,6 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
                                                 ll_wallet_empty.setVisibility(View.INVISIBLE);
                                             }
                                         }
-
                                         hideIndeterminateProgressDialog();
                                     }
                                 }));
@@ -104,12 +100,18 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
+    public View getLoadingView() {
+        return scrollableLayout;
+    }
+
+    @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_userwallet;
     }
 
     @Override
     protected void initViews() {
+        EventBus.getDefault().register(this);
         initRecyclerView();
         scrollableLayout.getHelper().setCurrentScrollableContainer(walletRcv);
     }
@@ -119,6 +121,7 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         walletRcv.setLayoutManager(new LinearLayoutManager(this));
         walletRcv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         walletRcv.setPullRefreshEnabled(false);
+        walletRcv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         adapter = new UserWalletAdapter(this);
         walletRcv.setAdapter(adapter);
         walletRcv.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -182,11 +185,15 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshWallet(WalletEvent event) {
+        initData();
+    }
+
 }

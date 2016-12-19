@@ -53,6 +53,7 @@ import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.CartsModel;
@@ -182,7 +183,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         sizeRv.setLayoutManager(new GridLayoutManager(this, 4));
         sizeRv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         sizeRv.addItemDecoration(new SpaceItemDecoration(12, 12, 8, 8));
-
     }
 
     private void findById(View view) {
@@ -581,6 +581,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     @Override
                     public void onNext(ResultEntity resultEntity) {
                         JUtils.Toast(resultEntity.getInfo());
+                        EventBus.getDefault().post(new CartEvent());
                         if (resultEntity.getCode() == 0) {
                             cart_num += num;
                             if (dismiss)
@@ -657,16 +658,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    public View getLoadingView() {
+        return b.layout;
     }
 }

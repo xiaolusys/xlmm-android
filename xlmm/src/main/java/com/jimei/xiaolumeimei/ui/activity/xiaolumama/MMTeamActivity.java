@@ -51,7 +51,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
 
     @Override
     protected void initData() {
-        MamaInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getTeamSelfRank()
                 .subscribe(new ServiceResponse<Response<PersonalCarryRankBean>>() {
                     @Override
@@ -71,9 +71,9 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
                             }
                         }
                     }
-                });
+                }));
 
-        MamaInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getTeamMembers(id)
                 .subscribe(new ServiceResponse<Response<List<PersonalCarryRankBean>>>() {
                     @Override
@@ -83,8 +83,15 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
                                 mmTeamAdapter.addAll(personalCarryRankBeanResponse.body());
                             }
                         }
+                        hideIndeterminateProgressDialog();
                     }
-                });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
     }
 
     @Override
@@ -103,7 +110,7 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
         switch (item.getItemId()) {
             case R.id.action_personal:
                 JumpUtils.jumpToWebViewWithCookies(this, url, -1,
-                        CommonWebViewActivity.class,"团队说明",false);
+                        CommonWebViewActivity.class, "团队说明", false);
                 break;
             default:
                 break;
@@ -135,16 +142,8 @@ public class MMTeamActivity extends BaseMVVMActivity<ActivityMmteamBinding>
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
+    public View getLoadingView() {
+        return b.scrollableLayout;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

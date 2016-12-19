@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -12,7 +13,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -43,9 +43,14 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return xRecyclerView;
+    }
+
+    @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        Subscription subscribe = MamaInfoModel.getInstance()
+        addSubscription(MamaInfoModel.getInstance()
                 .getWithdrawCashHis("1")
                 .subscribe(new ServiceResponse<WithdrawCashHisBean>() {
                     @Override
@@ -71,8 +76,7 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                             mHisAdapter.update(results);
                         }
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     private void initRecyclerView() {
@@ -127,19 +131,5 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                 addSubscription(subscribe);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

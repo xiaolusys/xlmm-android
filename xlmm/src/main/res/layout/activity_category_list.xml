@@ -12,7 +12,7 @@
         app:xlmm_title="分类查询"/>
 
     <LinearLayout
-        android:id="@+id/ll_category"
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">

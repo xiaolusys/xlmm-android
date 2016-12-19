@@ -49,7 +49,6 @@ import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -180,6 +179,11 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return scrollView;
+    }
+
+    @Override
     protected void getBundleExtras(Bundle extras) {
         order_id = extras.getInt("orderinfo");
     }
@@ -251,6 +255,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     .getOrderDetailBean(order_id)
                     .subscribe(orderDetailBean -> {
                         tid = orderDetailBean.getTid();
+                        orderDetail = orderDetailBean;
+                        fillDataToView(orderDetailBean);
                         showProcBtn(orderDetailBean);
                         scrollView.scrollTo(0, 0);
                         if (orderDetailBean.isCan_change_address()) {
@@ -577,24 +583,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-        Subscription subscription = TradeModel.getInstance()
-                .getOrderDetailBean(order_id)
-                .subscribe(new ServiceResponse<OrderDetailBean>() {
-                    @Override
-                    public void onNext(OrderDetailBean orderDetailBean) {
-                        orderDetail = orderDetailBean;
-                        tid = orderDetailBean.getTid();
-                        fillDataToView(orderDetailBean);
-                    }
-                });
-        addSubscription(subscription);
-    }
-
     private void payNow(String channel) {
         showIndeterminateProgressDialog(false);
         Subscription subscription = TradeModel.getInstance()
@@ -723,13 +711,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                 break;
         }
         return false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override

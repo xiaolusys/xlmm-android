@@ -1,35 +1,27 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.JUtils;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.CircleImageView;
 import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import butterknife.Bind;
-import okhttp3.Call;
 import rx.Subscriber;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/05.
@@ -54,10 +46,9 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     Button next;
     @Bind(R.id.pass)
     Button pass;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String mobile;
-    private String headimgurl;
-    private String nickname;
-    private Subscription subscribe;
 
     @Override
     protected void setListener() {
@@ -68,49 +59,21 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        if ((headimgurl != null) && (!headimgurl.isEmpty())) {
-            OkHttpUtils.get().url(headimgurl).build().execute(new BitmapCallback() {
-                @Override
-                public void onError(Call call, Exception e, int id) {
-
-                }
-
-                @Override
-                public void onResponse(Bitmap response, int id) {
-                    if ((headimage != null) && (response != null)) {
-                        headimage.setImageBitmap(response);
+        UserModel.getInstance()
+                .getUserInfo()
+                .subscribe(user -> {
+                    if (user != null) {
+                        if (user.getThumbnail() != null && !"".equals(user.getThumbnail())) {
+                            ViewUtils.loadImgToImgView(WxLoginBindPhoneActivity.this, headimage, user.getThumbnail());
+                        }
+                        tvNickname.setText("微信账号： " + user.getNick());
                     }
-                }
-            });
-        }
+                });
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            headimgurl = extras.getString("headimgurl");
-            nickname = extras.getString("nickname");
-        } else {
-            subscribe = UserModel.getInstance()
-                    .getUserInfo()
-                    .subscribe(new ServiceResponse<UserInfoBean>() {
-                        @Override
-                        public void onNext(UserInfoBean user) {
-                            if (user != null) {
-                                Log.d(TAG, "getUserInfo:, " + user.toString());
-                                headimgurl = user.getThumbnail();
-                                nickname = user.getNick();
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            LoginUtils.delLoginInfo(mContext);
-                            Log.e(TAG, "error:, " + e.toString());
-                            super.onError(e);
-                        }
-                    });
-        }
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -119,15 +82,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initViews() {
-        if (nickname != null) {
-            tvNickname.setText("微信账号： " + nickname);
-        }
-    }
-
-    @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.next:
                 mobile = registerName.getText().toString().trim();
@@ -146,15 +101,14 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                     RxCountDown.countdown(60).doOnSubscribe(() -> {
                         getCheckCode.setClickable(false);
                         getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
-
-                        subscribe = UserModel.getInstance()
+                        addSubscription(UserModel.getInstance()
                                 .getCodeBean(mobile, "bind")
                                 .subscribe(new ServiceResponse<CodeBean>() {
                                     @Override
                                     public void onNext(CodeBean codeBean) {
                                         JUtils.Toast(codeBean.getMsg());
                                     }
-                                });
+                                }));
                     }).subscribe(new Subscriber<Integer>() {
                         @Override
                         public void onCompleted() {
@@ -179,7 +133,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     }
 
     public boolean checkMobileInput(String mobile) {
-        if (mobile == null || mobile.trim().trim().equals("")) {
+        if (mobile == null || mobile.trim().equals("")) {
             JUtils.Toast("请输入手机号");
         } else {
             if (mobile.length() != 11) {
@@ -192,12 +146,8 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     }
 
     public boolean checkInput(String mobile, String checkcode) {
-        if (mobile == null || mobile.trim().trim().equals("")) {
-            JUtils.Toast("请输入手机号");
-        } else {
-            if (mobile.length() != 11) {
-                JUtils.Toast("请输入正确的手机号");
-            } else if (checkcode == null || checkcode.trim().trim().equals("")) {
+        if (checkMobileInput(mobile)) {
+            if (checkcode == null || checkcode.trim().equals("")) {
                 JUtils.Toast("验证码不能为空");
             } else {
                 return true;
@@ -207,13 +157,11 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     }
 
     private void bindMobilePhone(String username, String valid_code) {
-        JUtils.Log(TAG, "username=" + username + " valid_code=" + valid_code);
-        subscribe = UserModel.getInstance()
+        addSubscription(UserModel.getInstance()
                 .verify_code(username, "bind", valid_code)
                 .subscribe(new ServiceResponse<CodeBean>() {
                     @Override
                     public void onNext(CodeBean codeBean) {
-                        JUtils.Log(TAG, codeBean.toString());
                         int code = codeBean.getRcode();
                         if (0 == code) {
                             startActivity(new Intent(WxLoginBindPhoneActivity.this, TabActivity.class));
@@ -222,28 +170,6 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                             JUtils.Toast(codeBean.getMsg());
                         }
                     }
-                });
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (subscribe != null && subscribe.isUnsubscribed()) {
-            subscribe.unsubscribe();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+                }));
     }
 }

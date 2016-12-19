@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -19,7 +20,6 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import butterknife.Bind;
@@ -58,6 +58,8 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
     RadioButton bo;
     @Bind(R.id.rg)
     RadioGroup rg;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void setListener() {
@@ -73,6 +75,11 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_debug;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -167,19 +174,5 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                 editDebug.setText(bo.getText().toString().trim());
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

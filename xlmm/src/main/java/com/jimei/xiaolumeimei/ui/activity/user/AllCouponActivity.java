@@ -2,6 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
@@ -12,7 +14,6 @@ import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.fragment.user.CouponFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,8 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     ArrayList<BaseFragment> fragments = new ArrayList<>();
 
     @Override
@@ -32,7 +35,12 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
-    protected void initViews() {
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
+    protected void initData() {
         showIndeterminateProgressDialog(false);
         addSubscription(Observable.concat(UserModel.getInstance().getCouponList(0), UserModel.getInstance().getCouponList(0, 8),
                 UserModel.getInstance().getCouponList(3), UserModel.getInstance().getCouponList(1))
@@ -67,17 +75,4 @@ public class AllCouponActivity extends BaseSwipeBackCompatActivity {
                 }));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

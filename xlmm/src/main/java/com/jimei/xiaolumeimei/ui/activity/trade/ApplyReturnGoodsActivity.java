@@ -35,7 +35,6 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.tbruyelle.rxpermissions.RxPermissions;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -83,6 +82,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     RelativeLayout rl_proof_pic2;
     @Bind(R.id.rl_proof_pic3)
     RelativeLayout rl_proof_pic3;
+    @Bind(R.id.layout)
+    RelativeLayout layout;
 
     ImageView img_proof_pic1;
     ImageView img_proof_pic2;
@@ -165,6 +166,11 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     protected void getBundleExtras(Bundle extras) {
         id = extras.getInt("id");
         position = extras.getInt("position");
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -578,19 +584,5 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
                 }
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

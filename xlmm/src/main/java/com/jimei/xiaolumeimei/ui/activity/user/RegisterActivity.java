@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -21,7 +22,6 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscriber;
@@ -45,6 +45,8 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
     View viewFirst;
     @Bind(R.id.frame_layout)
     FrameLayout frameLayout;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String mobile;
 
     @Override
@@ -54,6 +56,11 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
         seekBar.setOnSeekBarChangeListener(this);
         editTextMobile.addTextChangedListener(this);
         viewFirst.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -75,19 +82,13 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
     }
 
     public boolean checkInput(String mobile, String checkcode) {
-
-        if (mobile == null || mobile.trim().trim().equals("")) {
-            JUtils.Toast("请输入手机号");
-        } else {
-            if (mobile.length() != 11) {
-                JUtils.Toast("请输入正确的手机号");
-            } else if (checkcode == null || checkcode.trim().trim().equals("")) {
+        if (checkMobileInput(mobile)) {
+            if (checkcode == null || checkcode.trim().equals("")) {
                 JUtils.Toast("验证码不能为空");
             } else {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -157,20 +158,6 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override

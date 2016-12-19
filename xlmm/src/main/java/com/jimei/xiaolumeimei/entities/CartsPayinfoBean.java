@@ -199,6 +199,7 @@ public class CartsPayinfoBean {
     @SerializedName("created") private String mCreated;
     @SerializedName("status") private int mStatus;
     @SerializedName("is_bonded_goods") private boolean is_bonded_goods;
+    @SerializedName("type") private int type;
 
     @Override public String toString() {
       return "CartListEntity{" +
@@ -466,6 +467,14 @@ public class CartsPayinfoBean {
 
     public void setIs_bonded_goods(boolean is_bonded_goods) {
       this.is_bonded_goods = is_bonded_goods;
+    }
+
+    public int getType() {
+      return type;
+    }
+
+    public void setType(int type) {
+      this.type = type;
     }
   }
 

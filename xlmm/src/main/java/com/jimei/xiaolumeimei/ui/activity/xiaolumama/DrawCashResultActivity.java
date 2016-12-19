@@ -6,16 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
 public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.finish_btn)
     Button finishBtn;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private Bundle extras;
 
     @Override
@@ -25,9 +27,12 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras!=null) {
-            this.extras = extras;
-        }
+        this.extras = extras;
+    }
+
+    @Override
+    public boolean isNeedShow() {
+        return false;
     }
 
     @Override
@@ -60,19 +65,5 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_draw_cash_detail, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

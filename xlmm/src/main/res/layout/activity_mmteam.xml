@@ -1,168 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
-  <data>
-    <variable
-        name="teamInfo"
-        type="com.jimei.xiaolumeimei.entities.PersonalCarryRankBean"
-        />
-  </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      >
-    <com.jimei.library.widget.XlmmTitleView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="0dp"
-        app:xlmm_title="团队妈妈"
-        />
-    <com.jimei.library.widget.scrolllayout.ScrollableLayout
-        android:id="@+id/scrollableLayout"
+    <data>
+
+        <variable
+            name="teamInfo"
+            type="com.jimei.xiaolumeimei.entities.PersonalCarryRankBean" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          >
-        <RelativeLayout
+        android:orientation="vertical">
+
+        <com.jimei.library.widget.XlmmTitleView
             android:layout_width="match_parent"
-            android:layout_height="210px"
-            android:background="@color/colorAccent"
-            >
-          <RelativeLayout
-              android:id="@+id/imgCircleStar"
-              android:layout_width="130px"
-              android:layout_height="130px"
-              android:layout_marginLeft="20px"
-              android:layout_marginTop="15px"
-              android:clickable="true"
-              android:gravity="center"
-              >
-
-            <ImageView
-                android:layout_width="130px"
-                android:layout_height="130px"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_circlestar"
-                />
-
-            <ImageView
-                android:id="@+id/imgUser"
-                android:layout_width="114px"
-                android:layout_height="114px"
-                android:layout_centerInParent="true"
-                android:layout_margin="8px"
-                android:clickable="true"
-                />
-
-
-          </RelativeLayout>
-
-          <ImageView
-              android:id="@+id/huangguan"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="20px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/imgCircleStar"
-              android:src="@drawable/huangguan"
-              />
-          <TextView
-              android:id="@+id/tv_rank"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="20px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/huangguan"
-              android:text="团队妈妈"
-              android:textColor="@color/white"
-              android:textSize="30px"
-              />
-
-          <TextView
-              android:id="@+id/tv_carry"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@id/tv_rank"
-              android:layout_marginLeft="20px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/imgCircleStar"
-              android:text=""
-              android:textSize="30px"
-              />
-          <Button
-              android:id="@+id/btn_team"
-              android:layout_width="220px"
-              android:layout_height="60px"
-              android:layout_marginLeft="50px"
-              android:layout_marginTop="25px"
-              android:layout_toRightOf="@id/tv_rank"
-              android:background="@drawable/shape_mamalevel"
-              android:text="查看团队排名"
-              android:textColor="@color/white"
-              />
-
-        </RelativeLayout>
-      </LinearLayout>
-      <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:padding="25px"
-          >
-        <TextView
-            android:id="@+id/nick_name"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10px"
-            android:layout_marginLeft="20px"
-            android:layout_marginTop="10px"
-            android:text="昵称"
-            android:textSize="30px"
-            />
-        <View
-            android:layout_width="2px"
-            android:layout_height="20px"
-            android:layout_toRightOf="@id/nick_name"
-            android:background="#11DADADA"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10px"
-            android:layout_marginTop="10px"
-            android:text="订单数"
-            android:textSize="30px"
-            />
+            app:elevation="0dp"
+            app:xlmm_title="团队妈妈" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10px"
-            android:layout_marginRight="20px"
-            android:layout_marginTop="10px"
-            android:text="收益"
-            android:textSize="30px"
-            />
+        <com.jimei.library.widget.scrolllayout.ScrollableLayout
+            android:id="@+id/scrollableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-      </RelativeLayout>
-      <android.support.v7.widget.RecyclerView
-          android:id="@+id/recyclerview"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          />
-    </com.jimei.library.widget.scrolllayout.ScrollableLayout>
-  </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="210px"
+                    android:background="@color/colorAccent">
+
+                    <RelativeLayout
+                        android:id="@+id/imgCircleStar"
+                        android:layout_width="130px"
+                        android:layout_height="130px"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginTop="15px"
+                        android:clickable="true"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="130px"
+                            android:layout_height="130px"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_circlestar" />
+
+                        <ImageView
+                            android:id="@+id/imgUser"
+                            android:layout_width="114px"
+                            android:layout_height="114px"
+                            android:layout_centerInParent="true"
+                            android:layout_margin="8px"
+                            android:clickable="true" />
+
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/huangguan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginTop="25px"
+                        android:layout_toRightOf="@id/imgCircleStar"
+                        android:src="@drawable/huangguan" />
+
+                    <TextView
+                        android:id="@+id/tv_rank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginTop="25px"
+                        android:layout_toRightOf="@id/huangguan"
+                        android:text="团队妈妈"
+                        android:textColor="@color/white"
+                        android:textSize="30px" />
+
+                    <TextView
+                        android:id="@+id/tv_carry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_rank"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginTop="25px"
+                        android:layout_toRightOf="@id/imgCircleStar"
+                        android:text=""
+                        android:textSize="30px" />
+
+                    <Button
+                        android:id="@+id/btn_team"
+                        android:layout_width="220px"
+                        android:layout_height="60px"
+                        android:layout_marginLeft="50px"
+                        android:layout_marginTop="25px"
+                        android:layout_toRightOf="@id/tv_rank"
+                        android:background="@drawable/shape_mamalevel"
+                        android:text="查看团队排名"
+                        android:textColor="@color/white" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="25px">
+
+                <TextView
+                    android:id="@+id/nick_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10px"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginTop="10px"
+                    android:text="昵称"
+                    android:textSize="30px" />
+
+                <View
+                    android:layout_width="2px"
+                    android:layout_height="20px"
+                    android:layout_toRightOf="@id/nick_name"
+                    android:background="#11DADADA" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10px"
+                    android:layout_marginTop="10px"
+                    android:text="订单数"
+                    android:textSize="30px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10px"
+                    android:layout_marginRight="20px"
+                    android:layout_marginTop="10px"
+                    android:text="收益"
+                    android:textSize="30px" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.jimei.library.widget.scrolllayout.ScrollableLayout>
+    </LinearLayout>
 </layout>

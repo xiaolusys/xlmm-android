@@ -17,12 +17,13 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     @Bind(R.id.tv_money)
@@ -51,9 +52,10 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     TextView tvRule;
     @Bind(R.id.cb_rule)
     CheckBox cbRule;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private double cash;
     private double drawMoney = 0;
-    Subscription subscribe;
     boolean flag = true;
 
     @Override
@@ -85,6 +87,11 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void getBundleExtras(Bundle extras) {
         cash = extras.getDouble("cash");
     }
@@ -103,7 +110,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         if (fund == 0) {
             JUtils.Toast("请选择转账金额。");
         } else {
-            subscribe = MamaInfoModel.getInstance()
+            addSubscription(MamaInfoModel.getInstance()
                     .toWallet(fund + "")
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         String msg = "";
@@ -117,6 +124,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
 
                         @Override
                         public void onCompleted() {
+                            EventBus.getDefault().post(new WalletEvent());
                             if (code == 0) {
                                 Intent intent = new Intent(MamaDrawCashActivity.this, DrawCashResultActivity.class);
                                 Bundle bundle = new Bundle();
@@ -128,7 +136,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                             }
                             finish();
                         }
-                    });
+                    }));
         }
     }
 
@@ -142,11 +150,12 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
             } else if (Double.compare(fund, 200) == 0) {
                 fund_type = "c2";
             }
-            subscribe = MamaInfoModel.getInstance()
+            addSubscription(MamaInfoModel.getInstance()
                     .withdraw_cash(fund_type)
                     .subscribe(new ServiceResponse<ResponseResultBean>() {
                         @Override
                         public void onNext(ResponseResultBean resp) {
+                            EventBus.getDefault().post(new WalletEvent());
                             Intent intent = new Intent(MamaDrawCashActivity.this,
                                     MamaWithdrawCashResultActivity.class);
                             intent.putExtra("cash", fund);
@@ -155,7 +164,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                             startActivity(intent);
                             MamaDrawCashActivity.this.finish();
                         }
-                    });
+                    }));
         }
     }
 
@@ -211,20 +220,6 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                         .show();
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override

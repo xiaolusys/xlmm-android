@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -20,7 +21,6 @@ import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -40,6 +40,8 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     TextView countText;
     @Bind(R.id.rg)
     RadioGroup radioGroup;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     String com_type = "1";
 
     @Override
@@ -51,6 +53,11 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.complain_activity;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -106,25 +113,11 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_complain:
                 String link = XlmmApi.getAppUrl() + "/mall/complaint/history";
-                JumpUtils.jumpToWebViewWithCookies(this, link,-1, CommonWebViewActivity.class,"历史记录",false);
+                JumpUtils.jumpToWebViewWithCookies(this, link, -1, CommonWebViewActivity.class, "历史记录", false);
                 break;
             default:
                 break;

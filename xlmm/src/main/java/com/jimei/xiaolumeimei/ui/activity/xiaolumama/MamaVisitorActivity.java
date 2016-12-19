@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +15,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.MMVisitorsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -41,6 +41,11 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
     protected void initViews() {
         mScrollableLayout.getHelper().setCurrentScrollableContainer(xrv);
         initRecyclerView();
+    }
+
+    @Override
+    public View getLoadingView() {
+        return mScrollableLayout;
     }
 
     @Override
@@ -100,19 +105,5 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
                     }
                     xrv.loadMoreComplete();
                 }, e -> JUtils.Log(e.getMessage())));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

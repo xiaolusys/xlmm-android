@@ -24,9 +24,11 @@ import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,6 +62,8 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     LinearLayout idLayout;
     @Bind(R.id.id_num)
     EditText idNum;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     private ArrayList<Province> provinces = new ArrayList<>();
     private String receiver_state;
@@ -85,6 +89,11 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         save.setOnClickListener(this);
         address.setOnClickListener(this);
         switchButton.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -123,6 +132,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                                 .subscribe(new ServiceResponse<AddressResultBean>() {
                                     @Override
                                     public void onNext(AddressResultBean addressResultBean) {
+                                        EventBus.getDefault().post(new AddressChangeEvent());
                                         if (addressResultBean != null) {
                                             JUtils.Toast(addressResultBean.getInfo());
                                             if (addressResultBean.getCode() == 0) {
@@ -189,20 +199,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
 
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {

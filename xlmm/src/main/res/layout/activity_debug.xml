@@ -1,108 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="调试模式"/>
+        app:xlmm_title="调试模式" />
 
-    <RadioGroup
-        android:id="@+id/rg"
+    <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/staging"
-            android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/rg"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="staging.xiaolumm.com"/>
+            android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/m"
-            android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/staging"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="staging.xiaolumm.com" />
+
+            <RadioButton
+                android:id="@+id/m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="m.xiaolumeimei.com" />
+
+            <RadioButton
+                android:id="@+id/xiuqing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="192.168.1.11:9000" />
+
+            <RadioButton
+                android:id="@+id/huang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="192.168.1.56:8000" />
+
+            <RadioButton
+                android:id="@+id/lin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="192.168.1.31:9000" />
+
+            <RadioButton
+                android:id="@+id/lei"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="192.168.1.50:8000" />
+
+            <RadioButton
+                android:id="@+id/shawn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="s18.xiaolumm.com" />
+
+            <RadioButton
+                android:id="@+id/bo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"
+                android:text="warden.xiaolumm.com" />
+
+        </RadioGroup>
+
+
+        <EditText
+            android:id="@+id/edit_debug"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="m.xiaolumeimei.com"/>
+            android:layout_marginTop="8dp"
+            android:hint="输入地址"
+            android:textCursorDrawable="@drawable/color_cursor" />
 
-        <RadioButton
-            android:id="@+id/xiuqing"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="192.168.1.11:9000"/>
+            android:text="输入地址类似:192.168.1.1:9000" />
 
-        <RadioButton
-            android:id="@+id/huang"
-            android:layout_width="wrap_content"
+
+        <EditText
+            android:id="@+id/edit_pass"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="192.168.1.56:8000"/>
+            android:layout_marginTop="8dp"
+            android:hint="输入密码"
+            android:textCursorDrawable="@drawable/color_cursor" />
 
-        <RadioButton
-            android:id="@+id/lin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="192.168.1.31:9000"/>
+        <Button
+            android:id="@+id/bt_debug"
+            android:layout_width="200px"
+            android:layout_height="100px"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="确定" />
 
-        <RadioButton
-            android:id="@+id/lei"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="192.168.1.50:8000"/>
-
-        <RadioButton
-            android:id="@+id/shawn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="s18.xiaolumm.com"/>
-
-        <RadioButton
-            android:id="@+id/bo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/colorAccent"
-            android:text="warden.xiaolumm.com"/>
-
-    </RadioGroup>
-
-
-    <EditText
-        android:id="@+id/edit_debug"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="输入地址"
-        android:textCursorDrawable="@drawable/color_cursor"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="输入地址类似:192.168.1.1:9000"/>
-
-
-    <EditText
-        android:id="@+id/edit_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="输入密码"
-        android:textCursorDrawable="@drawable/color_cursor"/>
-
-    <Button
-        android:id="@+id/bt_debug"
-        android:layout_width="200px"
-        android:layout_height="100px"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:text="确定"/>
+    </LinearLayout>
 
 </LinearLayout>

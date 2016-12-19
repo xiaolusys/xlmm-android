@@ -997,7 +997,7 @@ public final class FileUtils {
                         String cat_pic = list.get(i).getChilds().get(j).getCat_pic();
                         final String cid = list.get(i).getChilds().get(j).getCid();
                         String picAddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                                + "/xlmmcategory/" + cid + ".png";
+                                + "/xlmm/" + cid + ".png";
                         if (FileUtils.isFileExist(picAddress)) {
                             FileUtils.DeleteFile(new File(picAddress));
                         }

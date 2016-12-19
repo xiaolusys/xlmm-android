@@ -36,6 +36,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.UnknownHostException;
 
+import retrofit2.adapter.rxjava.HttpException;
+
 public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private boolean mamaFlag;
@@ -52,7 +54,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
 
     @Override
     public View getLoadingView() {
-        return b.swipeLayout;
+        return b.layout;
     }
 
     @Override
@@ -72,13 +74,20 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             hideIndeterminateProgressDialog();
-                            if (e instanceof UnknownHostException) {
-                                showNetworkError();
-                            } else {
-                                JUtils.Toast("信息获取失败,请下拉刷新重试!");
-                            }
                             if (b.swipeLayout.isRefreshing()) {
                                 b.swipeLayout.setRefreshing(false);
+                            }
+                            if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
+                                showNetworkError();
+                            } else if (e instanceof HttpException) {
+                                if (((HttpException) e).code() == 403) {
+                                    LoginUtils.delLoginInfo(mActivity);
+                                    fillDataToView(null);
+                                } else {
+                                    JUtils.Toast("网络异常,请下拉刷新重试!");
+                                }
+                            } else {
+                                JUtils.Toast("信息获取失败,请下拉刷新重试!");
                             }
                         }
                     }));
@@ -186,6 +195,8 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
             }
             if (!TextUtils.isEmpty(userInfoBean.getThumbnail())) {
                 ViewUtils.loadImgToImgView(mActivity, b.imgUser, userInfoBean.getThumbnail());
+            } else {
+                b.imgUser.setImageResource(R.drawable.img_head);
             }
             b.tvNickname.setText(userInfoBean.getNick());
             if (userInfoBean.isHasUsablePassword() && userInfoBean.getMobile() != null

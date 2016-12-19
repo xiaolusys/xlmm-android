@@ -8,7 +8,7 @@
         android:id="@+id/category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F3F3F4"
+        android:background="@color/bg_grey"
         android:orientation="vertical">
 
         <RelativeLayout

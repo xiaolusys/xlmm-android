@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,24 +17,20 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.LogisticCompanyAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsCompanyInfo;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 
-public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity {
     final List<LogisticsCompanyInfo> company_list = new ArrayList<LogisticsCompanyInfo>();
     @Bind(R.id.lv_logistics_company)
     ListView lv_logistics_company;
     @Bind(R.id.sideBar)
     SideBar sideBar;
-    @Bind(R.id.et)
-    EditText editText;
-    @Bind(R.id.btn)
-    Button button;
+    @Bind(R.id.layout)
+    FrameLayout layout;
     /**
      * 显示字母的TextView
      */
@@ -43,13 +39,13 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     private LogisticCompanyAdapter mCompanyAdapter;
 
     @Override
-    protected void setListener() {
-        button.setOnClickListener(this);
+    protected int getContentViewLayoutID() {
+        return R.layout.activity_logistics_company;
     }
 
     @Override
-    protected int getContentViewLayoutID() {
-        return R.layout.activity_logistics_company;
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -70,7 +66,6 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         sideBar.setTextView(dialog);
-
         //设置右侧触摸监听
         sideBar.setOnTouchingLetterChangedListener(
                 s -> {
@@ -80,23 +75,6 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
                         lv_logistics_company.setSelection(position);
                     }
                 });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn:
-                if (editText.getText().toString().trim().length() >= 2) {
-                    Intent intent = new Intent(ChooseLogisticsCompanyActivity.this,
-                            WriteLogisticsInfoActivty.class);
-                    intent.putExtra("company", editText.getText().toString().trim());
-                    setResult(1, intent);
-                    finish();
-                } else {
-                    JUtils.Toast("请填写快递名称");
-                }
-                break;
-        }
     }
 
     @Override
@@ -135,20 +113,6 @@ public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     private void fillCompanyInfo() {

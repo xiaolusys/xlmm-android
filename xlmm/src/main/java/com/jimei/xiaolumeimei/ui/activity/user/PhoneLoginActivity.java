@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -21,6 +22,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -29,7 +31,6 @@ import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -55,6 +56,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
     TextView forGetTextView;
     @Bind(R.id.cb_pwd)
     CheckBox cbPwd;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     String login_name_value;//登录名
     String login_pass_value;//登录密码
     private String actlink;
@@ -70,12 +73,16 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void initData() {
         if (!LoginUtils.checkLoginState(getApplicationContext())) {
             removeWX(new Wechat(this));
         }
         String[] loginInfo = LoginUtils.getLoginInfo(getApplicationContext());
-
         JUtils.Log(TAG, loginInfo[0] + "=====" + loginInfo[1]);
         nameEditText.setText(loginInfo[0]);
         passEditText.setText(loginInfo[1]);
@@ -131,6 +138,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                         LoginUtils.saveLoginInfo(true, getApplicationContext(),
                                                 login_name_value, login_pass_value);
                                         JUtils.Toast("登录成功!");
+                                        EventBus.getDefault().post(new CollectChangeEvent());
                                         String login = null;
                                         if (getIntent() != null && getIntent().getExtras() != null) {
                                             login = getIntent().getExtras().getString("login");
@@ -268,19 +276,5 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
             passEditText.setText("");
             cbPwd.setChecked(false);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

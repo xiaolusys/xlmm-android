@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -21,10 +22,12 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DrawCashResultActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 
@@ -53,6 +56,8 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
     EditText codeEt;
     @Bind(R.id.btn_code)
     Button codeBtn;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private double minMoney = 8.88;
     private boolean bindFlag = false;
     private boolean ruleFlag = true;
@@ -69,6 +74,11 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
         cbRule.setOnCheckedChangeListener(this);
         tvRule.setOnClickListener(this);
         codeBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -278,6 +288,7 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                 .subscribe(new ServiceResponse<UserWithdrawResult>() {
                     @Override
                     public void onNext(UserWithdrawResult resp) {
+                        EventBus.getDefault().post(new WalletEvent());
                         switch (resp.getCode()) {
                             case 0:
                                 JUtils.Log(TAG, "SUCCESS");
@@ -302,20 +313,6 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                         drawCashBtn.setClickable(true);
                     }
                 }));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override

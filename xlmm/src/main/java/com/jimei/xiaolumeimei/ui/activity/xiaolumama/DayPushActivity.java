@@ -2,6 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
@@ -28,6 +30,8 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
     TabLayout mTabLayout;
     @Bind(R.id.pager)
     ViewPager mPager;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void initData() {
@@ -54,4 +58,8 @@ public class DayPushActivity extends BaseSwipeBackCompatActivity {
         return R.layout.activity_day_push;
     }
 
+    @Override
+    public View getLoadingView() {
+        return layout;
+    }
 }

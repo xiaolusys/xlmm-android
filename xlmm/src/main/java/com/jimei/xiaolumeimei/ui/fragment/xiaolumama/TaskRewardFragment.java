@@ -62,7 +62,7 @@ public class TaskRewardFragment extends BaseBindingFragment<FragmentTaskRewardBi
                     @Override
                     public void onError(Throwable e) {
                         hideIndeterminateProgressDialog();
-                        if (e instanceof UnknownHostException) {
+                        if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                             showNetworkError();
                         } else {
                             JUtils.Toast("数据加载有误!");

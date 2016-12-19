@@ -11,7 +11,6 @@ import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityOrderLogisticBinding;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -78,16 +77,7 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    public View getLoadingView() {
+        return b.layout;
     }
 }

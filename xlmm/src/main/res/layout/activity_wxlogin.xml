@@ -1,97 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="手机绑定"/>
-
-    <com.jimei.library.widget.CircleImageView
-        android:id="@+id/headimage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
-        app:civ_border_color="@color/colorPrimary"
-        app:civ_border_width="2dp"/>
-
-    <TextView
-        android:id="@+id/tv_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        />
-
-    <com.jimei.library.widget.ClearEditText
-        android:id="@+id/register_name"
-        style="@style/EditTextStyle"
-        android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/text_frame"
-        android:hint="请输入手机号"
-        android:inputType="phone"
-        android:maxLength="11"
-        android:singleLine="true"
-        android:textCursorDrawable="@drawable/color_cursor"/>
-
-    <include layout="@layout/common_gap"/>
+        app:xlmm_title="手机绑定" />
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/checkcode"
+        <com.jimei.library.widget.CircleImageView
+            android:id="@+id/headimage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp" />
+
+        <com.jimei.library.widget.ClearEditText
+            android:id="@+id/register_name"
             style="@style/EditTextStyle"
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:background="@null"
-            android:hint="请输入短信验证码"
-            android:textCursorDrawable="@drawable/color_cursor"/>
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_frame"
+            android:hint="请输入手机号"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/color_cursor" />
+
+        <include layout="@layout/common_gap" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <EditText
+                android:id="@+id/checkcode"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:background="@null"
+                android:hint="请输入短信验证码"
+                android:textCursorDrawable="@drawable/color_cursor" />
+
+            <Button
+                android:id="@+id/getCheckCode"
+                android:layout_width="100px"
+                android:layout_height="64px"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:layout_weight="0.5"
+                android:background="@drawable/btn_common_white"
+                android:text="获取验证码"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+        <include layout="@layout/common_gap" />
 
         <Button
-            android:id="@+id/getCheckCode"
-            android:layout_width="100px"
-            android:layout_height="64px"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
-            android:layout_weight="0.5"
-            android:background="@drawable/btn_common_white"
-            android:text="获取验证码"
-            android:textColor="@color/colorAccent"
-            />
+            android:id="@+id/next"
+            android:layout_width="669px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/btn_common_default"
+            android:text="绑定"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/pass"
+            android:layout_width="669px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_chooselist"
+            android:text="跳过"
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
-
-    <include layout="@layout/common_gap"/>
-
-    <Button
-        android:id="@+id/next"
-        android:layout_width="669px"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/btn_common_default"
-        android:text="绑定"
-        android:textColor="@color/white"
-        />
-
-    <Button
-        android:id="@+id/pass"
-        android:layout_width="669px"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_chooselist"
-        android:text="跳过"
-        android:textColor="@color/colorPrimary"
-        />
-
 </LinearLayout>

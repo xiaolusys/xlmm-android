@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentCarTabBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.event.RefreshCarNumEvent;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
@@ -70,6 +70,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                         cartHisList.clear();
+                        cartHisAdapter.notifyDataSetChanged();
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartHisList.addAll(cartsInfoBeen);
                             cartHisAdapter.notifyDataSetChanged();
@@ -218,6 +219,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                         cartList.clear();
+                        cartListAdapter.notifyDataSetChanged();
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartList.addAll(cartsInfoBeen);
                             b.emptyContent.setVisibility(View.GONE);
@@ -239,7 +241,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
 
                     @Override
                     public void onError(Throwable e) {
-                        if (e instanceof UnknownHostException) {
+                        if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                             showNetworkError();
                         } else {
                             JUtils.Toast("数据加载失败!");
@@ -255,7 +257,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reLoadData(RefreshCarNumEvent event) {
+    public void reLoadData(CartEvent event) {
         if (LoginUtils.checkLoginState(mActivity)) {
             initData();
         }
