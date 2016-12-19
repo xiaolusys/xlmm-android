@@ -12,7 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.github.yoojia.zxing.qrcode.Encoder;
 import com.jimei.library.utils.BitmapUtil;
@@ -22,10 +22,8 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by wulei on 2016/2/4.
@@ -37,6 +35,8 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     ImageView img_2dimen;
     @Bind(R.id.btn_save)
     Button btn_save;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     WxPubAuthInfo wxPubAuthInfo;
     Bitmap bitmap;
@@ -45,6 +45,11 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void setListener() {
         btn_save.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -61,7 +66,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                 .setOutputBitmapHeight(dimension) // 生成图片高度
                 .setOutputBitmapPadding(0) // 设置为没有白边
                 .build();
-        Subscription subscribe1 = UserModel.getInstance()
+        addSubscription(UserModel.getInstance()
                 .getWxPubAuthInfo()
                 .subscribe(new ServiceResponse<WxPubAuthInfo>() {
                     @Override
@@ -77,8 +82,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
                             img_2dimen.setImageBitmap(bitmap);
                         }
                     }
-                });
-        addSubscription(subscribe1);
+                }));
     }
 
     @Override
@@ -87,10 +91,8 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
             case R.id.btn_save:
                 JUtils.Log(TAG, "btn_save save 2 dimen code");
                 save_2dimencode();
-
                 if (null != wxPubAuthInfo && !TextUtils.isEmpty(wxPubAuthInfo.getAuthMsg())) {
-                    Toast.makeText(WxPubTwoDimenCodeActivity.this,
-                            "保存成功，" + wxPubAuthInfo.getAuthMsg(), Toast.LENGTH_SHORT).show();
+                    JUtils.Toast("保存成功，" + wxPubAuthInfo.getAuthMsg());
                 }
                 finish();
                 break;
@@ -130,19 +132,5 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         canvas.translate(6, 410);
         sl.draw(canvas);
         return newBitmap;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

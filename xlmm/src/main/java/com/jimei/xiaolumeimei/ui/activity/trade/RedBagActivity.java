@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,7 +14,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
@@ -29,12 +29,19 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
     RedBagBean redBagEntity;
     @Bind(R.id.finish_rl)
     RelativeLayout finishLayout;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String tid;
 
     @Override
     protected void setListener() {
         shareIv.setOnClickListener(this);
         finishLayout.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -89,7 +96,7 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
                     oks.setUrl(redBagEntity.getShare_link());
                     oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
                     oks.show(this);
-                }else {
+                } else {
                     JUtils.Toast("数据加载未完成，请加载完成后分享哦!");
                 }
                 break;
@@ -105,7 +112,6 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
     }
 
     class ShareContentCustom implements ShareContentCustomizeCallback {
-
         private String text;
 
         ShareContentCustom(String text) {
@@ -118,19 +124,5 @@ public class RedBagActivity extends BaseSwipeBackCompatActivity implements View.
                 paramsToShare.setTitle(text);
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

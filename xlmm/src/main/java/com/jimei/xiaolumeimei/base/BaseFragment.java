@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.loading.VaryViewHelperController;
 import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -167,5 +168,17 @@ public abstract class BaseFragment extends Fragment {
             throw new IllegalStateException("no ViewHelperController");
         }
         mVaryViewHelperController.restore();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     }
 }

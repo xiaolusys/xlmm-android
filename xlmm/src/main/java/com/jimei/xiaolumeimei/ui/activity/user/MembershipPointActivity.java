@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
@@ -21,7 +20,6 @@ import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -56,27 +54,26 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return scrollableLayout;
+    }
+
+    @Override
     protected void initViews() {
         scrollableLayout.getHelper().setCurrentScrollableContainer(this);
         mPointAdapter = new MembershipPointListAdapter(this);
         all_points_listview.setAdapter(mPointAdapter);
-
         tx_point = (TextView) findViewById(R.id.tv_Point);
-
-        TextView tx_info = (TextView) findViewById(R.id.tx_info);
-        tx_info.setText("亲，您暂时还没有积分记录哦~");
-        TextView tx_info2 = (TextView) findViewById(R.id.tx2);
-        tx_info2.setText("快去下单赚取积分吧~");
-
-        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
-        imageView2.setImageResource(R.drawable.img_emptypoint);
+        ((TextView) findViewById(R.id.tx_info)).setText("亲，您暂时还没有积分记录哦~");
+        ((TextView) findViewById(R.id.tx2)).setText("快去下单赚取积分吧~");
+        ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.img_emptypoint);
     }
 
-    //从server端获得所有订单数据，可能要查询几次
+
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        Subscription subscribe = UserModel.getInstance()
+        addSubscription(UserModel.getInstance()
                 .getMembershipPointBean()
                 .subscribe(new ServiceResponse<MembershipPointBean>() {
                     @Override
@@ -84,35 +81,25 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
                         List<MembershipPointBean.ResultsEntity> results = pointBean.getResults();
                         if (0 != results.size()) {
                             tx_point.setText(results.get(0).getIntegral_value() + "");
-                            Log.d(TAG, "point " + results.get(0).getIntegral_value());
-                        } else {
-                            Log.d(TAG, "point record not exist. ");
                         }
-                        Subscription subscribe1 = UserModel.getInstance()
+                        addSubscription(UserModel.getInstance()
                                 .getPointLogBean("1")
-                                .subscribe(new ServiceResponse<PointLogBean>() {
-                                    @Override
-                                    public void onNext(PointLogBean pointLogBean) {
-                                        List<PointLogBean.ResultsBean> results = pointLogBean.getResults();
-                                        if (0 == results.size()) {
-                                            Log.d(TAG, "pointlog 0 ");
-                                            rlayout_order_empty.setVisibility(View.VISIBLE);
-                                        } else {
-                                            Log.d(TAG, "pointlog " + results.get(0).toString());
-                                            mPointAdapter.update(results);
-                                        }
+                                .subscribe(pointLogBean -> {
+                                    List<PointLogBean.ResultsBean> result = pointLogBean.getResults();
+                                    if (0 == result.size()) {
+                                        rlayout_order_empty.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mPointAdapter.update(result);
                                     }
-
-                                    @Override
-                                    public void onCompleted() {
-                                        hideIndeterminateProgressDialog();
-                                    }
-                                });
-                        addSubscription(subscribe1);
+                                    hideIndeterminateProgressDialog();
+                                }));
                     }
 
-                });
-        addSubscription(subscribe);
+                    @Override
+                    public void onError(Throwable e) {
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
     }
 
     @Override
@@ -159,19 +146,5 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
         if ((firstVisibleItem + visibleItemCount) == totalItemCount && totalItemCount > 0) {
             flag = true;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

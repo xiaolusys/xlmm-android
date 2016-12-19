@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
-import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
@@ -56,6 +55,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         } else {
             b.openNoticeA.setChecked(false);
         }
+        b.aboutXlmm.setSummary(JUtils.getAppVersionName());
     }
 
     @Override
@@ -63,23 +63,9 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
         return R.layout.activity_setting;
     }
 
-    public void updatePref() {
-        b.aboutXlmm.setSummary(JUtils.getAppVersionName());
-    }
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        updatePref();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    public View getLoadingView() {
+        return b.layout;
     }
 
     @Override

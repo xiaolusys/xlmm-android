@@ -17,7 +17,6 @@ import com.jimei.library.widget.zxing.decode.DecodeThread;
 import com.jimei.library.widget.zxing.decode.Utils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -59,19 +58,20 @@ public final class CommonScanActivity extends BaseSwipeBackCompatActivity implem
     }
 
     @Override
+    public boolean isNeedShow() {
+        return false;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         scanManager.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         scanManager.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override

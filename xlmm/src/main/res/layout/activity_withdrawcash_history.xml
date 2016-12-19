@@ -11,16 +11,9 @@
         android:layout_height="wrap_content"
         app:xlmm_title="提现历史" />
 
-
-    <FrameLayout
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/xrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
-
-        <com.jcodecraeer.xrecyclerview.XRecyclerView
-            android:id="@+id/xrv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
+        android:background="@color/white" />
 </LinearLayout>

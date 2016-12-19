@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.jimei.xiaolumeimei.ui.activity.user.PhoneLoginActivity">
 
@@ -13,70 +12,79 @@
         android:layout_height="wrap_content"
         app:xlmm_title="手机号登录" />
 
-    <include layout="@layout/common_gap" />
-
-    <com.jimei.library.widget.ClearEditText
-        android:id="@+id/set_login_name"
-        style="@style/EditTextStyle"
+    <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:textCursorDrawable="@drawable/color_cursor"
-        android:background="@null"
-        android:hint="请输入手机号"
-        android:inputType="phone"
-        android:maxLength="11"
-        app:iconClear="@drawable/clear_text" />
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap" />
 
-    <com.jimei.library.widget.PasswordEditText
-        android:id="@+id/set_login_password"
-        style="@style/EditTextStyle"
-        android:layout_width="match_parent"
-        android:textCursorDrawable="@drawable/color_cursor"
-        android:background="@null"
-        android:hint="请输入登录密码"
-        android:inputType="textPassword"
-        android:maxLength="18" />
+        <com.jimei.library.widget.ClearEditText
+            android:id="@+id/set_login_name"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:background="@null"
+            android:hint="请输入手机号"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:textCursorDrawable="@drawable/color_cursor"
+            app:iconClear="@drawable/clear_text" />
 
-    <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
-        android:padding="8dp">
+        <com.jimei.library.widget.PasswordEditText
+            android:id="@+id/set_login_password"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:background="@null"
+            android:hint="请输入登录密码"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:textCursorDrawable="@drawable/color_cursor" />
 
-        <CheckBox
-            android:id="@+id/cb_pwd"
-            android:layout_width="wrap_content"
-            android:layout_height="50px"
-            android:gravity="center"
-            android:text="记住密码"
-            android:buttonTint="@color/colorAccent"
-            android:textColor="@color/text_color_9B"
-            android:textSize="13sp" />
+        <include layout="@layout/common_gap" />
 
-        <TextView
-            android:id="@+id/forgetTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="50px"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right|center_vertical"
-            android:gravity="center"
-            android:text="忘记密码"
-            android:textColor="@color/book_loading_book"
-            android:textSize="14sp" />
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:padding="8dp">
 
-    <Button
-        android:id="@+id/set_login_button"
-        android:layout_width="656px"
-        android:layout_height="90px"
-        android:background="@drawable/btn_common_default"
-        android:clickable="true"
-        android:text="登录"
-        android:textColor="@color/white" />
+            <CheckBox
+                android:id="@+id/cb_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="50px"
+                android:buttonTint="@color/colorAccent"
+                android:gravity="center"
+                android:text="记住密码"
+                android:textColor="@color/text_color_9B"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/forgetTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="50px"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right|center_vertical"
+                android:gravity="center"
+                android:text="忘记密码"
+                android:textColor="@color/book_loading_book"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/set_login_button"
+            android:layout_width="656px"
+            android:layout_height="90px"
+            android:background="@drawable/btn_common_default"
+            android:clickable="true"
+            android:text="登录"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
 </LinearLayout>

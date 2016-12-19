@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.SHA1Utils;
@@ -20,6 +21,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -29,7 +31,6 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -65,6 +66,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     ImageView loginBtn;
     @Bind(R.id.iv_close)
     ImageView closeIv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String timestamp;
     private String noncestr;
     private String sign_params;
@@ -102,17 +105,15 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
     protected void initData() {
         if (!LoginUtils.checkLoginState(getApplicationContext())) {
             removeWX(wechat);
         }
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -249,6 +250,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                     if (0 == code) {
                                         EventBus.getDefault().post(new SetMiPushEvent());
                                         JUtils.Toast("登录成功");
+                                        EventBus.getDefault().post(new CollectChangeEvent());
                                         Subscription subscribe = UserModel.getInstance()
                                                 .need_set_info()
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {
@@ -396,13 +398,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
             platform.removeAccount(true);
             platform.removeAccount();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }
 

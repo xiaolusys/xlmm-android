@@ -11,6 +11,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -23,7 +24,6 @@ import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean.ResultsEntity.StatusShaftBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -124,6 +124,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     TextView textView;
     @Bind(R.id.status_layout)
     LinearLayout statusLayout;
+    @Bind(R.id.layout)
+    ScrollView layout;
 
     private int goods_id;
     private boolean isWrited;
@@ -131,6 +133,11 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void setListener() {
         writeBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -374,19 +381,5 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 initData();
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

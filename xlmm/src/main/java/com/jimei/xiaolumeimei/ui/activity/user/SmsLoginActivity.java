@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
@@ -31,7 +33,6 @@ import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -64,6 +65,8 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
     View viewFirst;
     @Bind(R.id.frame_layout)
     FrameLayout frameLayout;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     private String mobile;
     private String actlink;
@@ -77,6 +80,11 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
         seekBar.setOnSeekBarChangeListener(this);
         registerName.addTextChangedListener(this);
         viewFirst.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -151,7 +159,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                                         int codeInfo = needSetInfoBean.getCode();
                                                         if (0 == codeInfo) {
                                                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
-
+                                                            EventBus.getDefault().post(new CollectChangeEvent());
                                                             String login = null;
                                                             if (null != getIntent()
                                                                     && getIntent().getExtras() != null) {
@@ -273,20 +281,6 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
         }
 
         return false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override

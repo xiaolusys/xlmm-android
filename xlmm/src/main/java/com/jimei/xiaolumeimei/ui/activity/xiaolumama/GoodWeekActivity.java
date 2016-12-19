@@ -1,6 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
-import android.os.Bundle;
+import android.view.View;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
@@ -57,13 +57,13 @@ public class GoodWeekActivity extends BaseMVVMActivity<ActivityGoodWeekBinding> 
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
+    protected int getContentViewLayoutID() {
+        return R.layout.activity_good_week;
     }
 
     @Override
-    protected int getContentViewLayoutID() {
-        return R.layout.activity_good_week;
+    public View getLoadingView() {
+        return b.layout;
     }
 
 }

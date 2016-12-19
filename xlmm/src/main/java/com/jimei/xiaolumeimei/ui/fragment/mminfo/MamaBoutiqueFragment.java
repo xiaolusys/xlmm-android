@@ -12,11 +12,10 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 
 public class MamaBoutiqueFragment extends BaseWebViewFragment {
 
-    public static MamaBoutiqueFragment newInstance(String title, int mamaid) {
+    public static MamaBoutiqueFragment newInstance(String title) {
         MamaBoutiqueFragment fragment = new MamaBoutiqueFragment();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
-        bundle.putInt("mamaid", mamaid);
         fragment.setArguments(bundle);
         return fragment;
     }

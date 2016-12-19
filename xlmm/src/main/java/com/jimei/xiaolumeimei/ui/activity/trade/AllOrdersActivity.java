@@ -10,7 +10,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.ui.fragment.trade.OrderListFragment;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,11 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_allorders;
+    }
+
+    @Override
+    public boolean isNeedShow() {
+        return false;
     }
 
     @Override
@@ -66,19 +70,5 @@ public class AllOrdersActivity extends BaseSwipeBackCompatActivity {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

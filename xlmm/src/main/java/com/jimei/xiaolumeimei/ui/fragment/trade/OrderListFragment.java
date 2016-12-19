@@ -18,7 +18,6 @@ import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -164,17 +163,5 @@ public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBind
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     }
 }

@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -42,6 +41,11 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
         tvCount.setText(order);
         showIndeterminateProgressDialog(false);
         loadMoreData();
+    }
+
+    @Override
+    public View getLoadingView() {
+        return scrollableLayout;
     }
 
     @Override
@@ -111,19 +115,5 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     @Override
     public View getScrollableView() {
         return shoppinglistXry;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

@@ -13,8 +13,12 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 
@@ -31,6 +35,8 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
     TextView smallTv;
     @Bind(R.id.tv_rule)
     TextView ruleTv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private double mCash;
     private double min;
     private double max;
@@ -45,17 +51,15 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void initData() {
         addSubscription(MamaInfoModel.getInstance()
                 .getCashoutPolicy()
                 .subscribe(this::initCashoutPolicy, Throwable::printStackTrace));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
         addSubscription(MamaInfoModel.getInstance()
                 .getMamaFortune()
                 .subscribe(mamaFortune -> {
@@ -64,12 +68,7 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
                 }, Throwable::printStackTrace));
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
+
     private void initCashoutPolicy(CashoutPolicy cashoutPolicy) {
         min = cashoutPolicy.getMin_cashout_amount();
         max = cashoutPolicy.getAudit_cashout_amount();
@@ -89,7 +88,19 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
 
     @Override
     protected void initViews() {
+        EventBus.getDefault().register(this);
         moneyTv.setText(mCash + "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(WalletEvent event) {
+        initData();
     }
 
     @Override

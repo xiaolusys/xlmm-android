@@ -6,52 +6,58 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-  <com.jimei.library.widget.XlmmTitleView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:xlmm_title="修改昵称"/>
+    <com.jimei.library.widget.XlmmTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:xlmm_title="修改昵称" />
 
-  <include layout="@layout/common_gap" />
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-  <EditText
-      android:id="@+id/set_nick_name"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true"
-      android:paddingLeft="10sp"
-      android:paddingRight="10sp"
-      android:paddingTop="10sp"
-      android:paddingBottom="10sp"
-      android:background="@drawable/text_frame"
-      android:hint="请输入新昵称"/>
+        <include layout="@layout/common_gap" />
 
+        <EditText
+            android:id="@+id/set_nick_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_frame"
+            android:hint="请输入新昵称"
+            android:paddingBottom="10sp"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:paddingTop="10sp"
+            android:singleLine="true" />
 
-  <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap" />
 
-  <TextView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true"
-      android:paddingLeft="10sp"
-      android:paddingRight="10sp"
-      android:paddingTop="10sp"
-      android:paddingBottom="10sp"
-      android:background="@drawable/text_frame"
-      android:text="4-20个字符，可由中英文、数字、“-”组成"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_frame"
+            android:paddingBottom="10sp"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:paddingTop="10sp"
+            android:singleLine="true"
+            android:text="4-20个字符，可由中英文、数字、“-”组成" />
 
-  <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap" />
 
-  <Button
+        <Button
+            android:id="@+id/set_save_button"
+            android:layout_width="669px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btn_common_default"
+            android:gravity="center"
+            android:text="保存"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
-      android:layout_marginTop="8dp"
-      android:background="@drawable/btn_common_default"
-      android:id="@+id/set_save_button"
-      android:layout_width="669px"
-      android:layout_height="wrap_content"
-      android:text="保存"
-      android:textColor="@color/white"
-      android:textSize="16sp"
-      android:gravity="center"
-      android:layout_gravity="center" />
+    </LinearLayout>
 
 </LinearLayout>

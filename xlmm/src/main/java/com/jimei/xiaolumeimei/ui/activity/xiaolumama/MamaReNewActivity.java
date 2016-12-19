@@ -27,7 +27,6 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import retrofit2.Response;
@@ -57,6 +56,8 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     TextView ruleTv;
     @Bind(R.id.commit)
     TextView commitTv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     private int productId;
     private int skuId188;
@@ -73,20 +74,6 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
     private double totalfee99;
     private String uuid;
     private double mamaCarryValue;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 
     @Override
     protected void setListener() {
@@ -140,6 +127,11 @@ public class MamaReNewActivity extends BaseSwipeBackCompatActivity implements Vi
                     }
 
                 });
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override

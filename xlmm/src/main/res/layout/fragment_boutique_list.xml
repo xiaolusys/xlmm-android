@@ -16,36 +16,42 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_layout"
+        <FrameLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.jimei.library.widget.scrolllayout.ScrollableLayout
-                android:id="@+id/scrollable_layout"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white">
+                android:layout_height="match_parent">
 
-                <RelativeLayout
+                <com.jimei.library.widget.scrolllayout.ScrollableLayout
+                    android:id="@+id/scrollable_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
 
-                    <com.jimei.library.widget.banner.SliderLayout
-                        android:id="@+id/slider"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="280px"
-                        app:auto_cycle="true" />
-                </RelativeLayout>
+                        android:layout_height="wrap_content">
 
-                <include layout="@layout/common_gap" />
+                        <com.jimei.library.widget.banner.SliderLayout
+                            android:id="@+id/slider"
+                            android:layout_width="match_parent"
+                            android:layout_height="280px"
+                            app:auto_cycle="true" />
+                    </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/xrv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <include layout="@layout/common_gap" />
 
-            </com.jimei.library.widget.scrolllayout.ScrollableLayout>
-        </android.support.v4.widget.SwipeRefreshLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/xrv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.jimei.library.widget.scrolllayout.ScrollableLayout>
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </FrameLayout>
     </LinearLayout>
 </layout>

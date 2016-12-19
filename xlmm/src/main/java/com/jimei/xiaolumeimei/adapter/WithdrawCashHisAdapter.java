@@ -17,9 +17,12 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,7 @@ public class WithdrawCashHisAdapter extends XRecyclerView.Adapter<WithdrawCashHi
                         .subscribe(new ServiceResponse<ResponseResultBean>() {
                             @Override
                             public void onNext(ResponseResultBean resp) {
+                                EventBus.getDefault().post(new WalletEvent());
                                 try {
                                     JUtils.Log(TAG, "ResponseBody11=" + resp.getCode());
                                     switch (resp.getCode()) {

@@ -40,7 +40,7 @@ public class BoutiqueTabFragment extends BaseBindingFragment<FragmentBoutiqueLis
 
     @Override
     public View getLoadingView() {
-        return b.swipeLayout;
+        return b.layout;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BoutiqueTabFragment extends BaseBindingFragment<FragmentBoutiqueLis
                     if (b.swipeLayout.isRefreshing()) {
                         b.swipeLayout.setRefreshing(false);
                     }
-                    if (e instanceof UnknownHostException) {
+                    if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                         showNetworkError();
                     } else {
                         JUtils.Toast("数据加载有误,请下拉刷新!");

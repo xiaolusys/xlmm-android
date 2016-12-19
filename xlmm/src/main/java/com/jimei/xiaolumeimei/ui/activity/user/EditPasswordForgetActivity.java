@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
@@ -15,7 +16,6 @@ import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -30,6 +30,8 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
     Button commit_button;
     String username;
     String valid_code;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void setListener() {
@@ -40,6 +42,11 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
     protected void getBundleExtras(Bundle extras) {
         username = extras.getString("username");
         valid_code = extras.getString("valid_code");
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -124,17 +131,4 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -12,7 +13,6 @@ import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -32,6 +32,8 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     SwipeRefreshLayout mRefreshLayout;
     @Bind(R.id.empty_layout)
     LinearLayout emptyLayout;
+    @Bind(R.id.layout)
+    FrameLayout layout;
 
     private NinePicAdapter mAdapter;
     private int mSale_category = -1;
@@ -46,6 +48,11 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         loadData();
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     private void loadData() {
@@ -103,19 +110,5 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     public void onRefresh() {
         mAdapter.clear();
         loadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

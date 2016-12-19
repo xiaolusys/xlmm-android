@@ -2,15 +2,24 @@ package com.jimei.xiaolumeimei.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.StatusBarUtil;
+import com.jimei.library.widget.loading.VaryViewHelperController;
 import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
+import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
+import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
+import com.jimei.library.widget.swipeback.SwipeBackLayout;
+import com.jimei.library.widget.swipeback.Utils;
 import com.jimei.xiaolumeimei.R;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 import butterknife.ButterKnife;
@@ -21,7 +30,8 @@ import rx.subscriptions.CompositeSubscription;
  * Created by wisdom on 16/10/14.
  */
 
-public abstract class BaseActivity extends AutoLayoutActivity {
+public abstract class BaseActivity extends AutoLayoutActivity
+        implements SwipeBackActivityBase {
     /**
      * Log tag
      */
@@ -40,31 +50,11 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     protected Context mContext = null;
     protected CompositeSubscription mCompositeSubscription;
     protected XlmmLoadingDialog loadingdialog;
+    public VaryViewHelperController mVaryViewHelperController;
+    private SwipeBackActivityHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (toggleOverridePendingTransition()) {
-            switch (getOverridePendingTransitionMode()) {
-                case LEFT:
-                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    break;
-                case RIGHT:
-                    overridePendingTransition(R.anim.right_in, R.anim.right_out);
-                    break;
-                case TOP:
-                    overridePendingTransition(R.anim.top_in, R.anim.top_out);
-                    break;
-                case BOTTOM:
-                    overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
-                    break;
-                case SCALE:
-                    overridePendingTransition(R.anim.scale_in, R.anim.scale_out);
-                    break;
-                case FADE:
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    break;
-            }
-        }
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         Uri uri = getIntent().getData();
@@ -82,7 +72,27 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         mScreenDensity = displayMetrics.density;
         mScreenHeight = displayMetrics.heightPixels;
         mScreenWidth = displayMetrics.widthPixels;
+        if (getContentViewLayoutID() != 0) {
+            initContentView();
+        } else {
+            throw new IllegalArgumentException("You must return a right contentView layout resource Id");
+        }
+        mHelper = new SwipeBackActivityHelper(this);
+        mHelper.onActivityCreate();
+        initViews();
+        if (mVaryViewHelperController == null) {
+            mVaryViewHelperController = new VaryViewHelperController(getLoadingView());
+        }
+        if (isNeedShow()) {
+            refreshView();
+            showNetworkError();
+        } else {
+            initData();
+        }
+        setListener();
     }
+
+    public abstract void initContentView();
 
     public void getIntentUrl(Uri uri) {
 
@@ -94,6 +104,50 @@ public abstract class BaseActivity extends AutoLayoutActivity {
 
     protected void initData() {
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mHelper.onPostCreate();
+    }
+
+    @Override
+    public View findViewById(int id) {
+        View v = super.findViewById(id);
+        if (v == null && mHelper != null) return mHelper.findViewById(id);
+        return v;
+    }
+
+    @Override
+    public SwipeBackLayout getSwipeBackLayout() {
+        return mHelper.getSwipeBackLayout();
+    }
+
+    @Override
+    public void setSwipeBackEnable(boolean enable) {
+        getSwipeBackLayout().setEnableGesture(enable);
+    }
+
+    @Override
+    public void scrollToFinishActivity() {
+        Utils.convertActivityToTranslucent(this);
+        getSwipeBackLayout().scrollToFinishActivity();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        MobclickAgent.onPageStart(this.getClass().getSimpleName());
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -116,28 +170,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     public void finish() {
         super.finish();
         BaseAppManager.getInstance().removeActivity(this);
-        if (toggleOverridePendingTransition()) {
-            switch (getOverridePendingTransitionMode()) {
-                case LEFT:
-                    overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                    break;
-                case RIGHT:
-                    overridePendingTransition(R.anim.right_in, R.anim.right_out);
-                    break;
-                case TOP:
-                    overridePendingTransition(R.anim.top_in, R.anim.top_out);
-                    break;
-                case BOTTOM:
-                    overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out);
-                    break;
-                case SCALE:
-                    overridePendingTransition(R.anim.scale_in, R.anim.scale_out);
-                    break;
-                case FADE:
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    break;
-            }
-        }
     }
 
     @Override
@@ -166,21 +198,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     protected void initViews() {
 
     }
-
-    /**
-     * toggle overridePendingTransition
-     */
-    protected boolean toggleOverridePendingTransition() {
-        return false;
-    }
-
-    /**
-     * get the overridePendingTransition mode
-     */
-    protected TransitionMode getOverridePendingTransitionMode() {
-        return null;
-    }
-
 
     /**
      * startActivity
@@ -261,13 +278,6 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         }
     }
 
-    /**
-     * overridePendingTransition mode
-     */
-    public enum TransitionMode {
-        LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
-    }
-
     public void addSubscription(Subscription s) {
         if (this.mCompositeSubscription == null) {
             this.mCompositeSubscription = new CompositeSubscription();
@@ -318,5 +328,35 @@ public abstract class BaseActivity extends AutoLayoutActivity {
                 })
                 .create()
                 .show();
+    }
+
+    public void showNetworkError() {
+        if (!JUtils.isNetWorkAvilable()) {
+            hideIndeterminateProgressDialog();
+            if (mVaryViewHelperController == null) {
+                throw new IllegalStateException("no ViewHelperController");
+            }
+            mVaryViewHelperController.showNetworkError(view -> {
+                refreshView();
+                showNetworkError();
+            });
+        } else {
+            initData();
+        }
+    }
+
+    public void refreshView() {
+        if (mVaryViewHelperController == null) {
+            throw new IllegalStateException("no ViewHelperController");
+        }
+        mVaryViewHelperController.restore();
+    }
+
+    public View getLoadingView() {
+        return null;
+    }
+
+    public boolean isNeedShow() {
+        return true;
     }
 }

@@ -1,99 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      tools:context="com.jimei.xiaolumeimei.ui.activity.user.SettingActivity"
-      >
-    <com.jimei.library.widget.XlmmTitleView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:xlmm_title="设置"
-        />
-    <!--<FrameLayout-->
-    <!--android:id="@+id/container_setting"-->
-    <!--android:background="@color/ECECEC"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-    <com.jimei.library.widget.MyPreferenceView
-        android:id="@+id/clear_cache"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <com.jimei.library.widget.MyPreferenceView
-        android:id="@+id/update"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?android:listPreferredItemHeight">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-      <TextView
-          android:text="推送通知"
-          android:id="@+id/tv_push"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="24dp"
-          android:ellipsize="marquee"
-          android:fadingEdge="horizontal"
-          android:singleLine="true"
-          android:textColor="@color/primary_text"
-          android:textSize="16sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:layout_marginRight="16dp"
-          android:gravity="center_vertical"
-          android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_summary"
-            android:layout_width="wrap_content"
+        <com.jimei.library.widget.XlmmTitleView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondary_text"
-            android:textSize="14sp" />
+            app:xlmm_title="设置" />
 
-        <!--<ImageView-->
-            <!--android:id="@+id/img_arrow"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:src="@mipmap/common_icon_right_arrow"-->
-            <!--/>-->
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/open_notice_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="2dp"
-            />
-      </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.jimei.library.widget.MyPreferenceView
+                android:id="@+id/clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.jimei.library.widget.MyPreferenceView
+                android:id="@+id/update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="?android:listPreferredItemHeight">
+
+                <TextView
+                    android:id="@+id/tv_push"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:singleLine="true"
+                    android:text="推送通知"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_summary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="14sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/open_notice_a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="2dp" />
+                </LinearLayout>
 
 
-    </RelativeLayout>
+            </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_below="@id/title"
-        android:background="#CCCCCC" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_below="@id/title"
+                android:background="#CCCCCC" />
 
+            <com.jimei.library.widget.MyPreferenceView
+                android:id="@+id/about_xlmm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    <com.jimei.library.widget.MyPreferenceView
-        android:id="@+id/about_xlmm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-
-  </LinearLayout>
+    </LinearLayout>
 </layout>

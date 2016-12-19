@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.jimei.library.utils.DisplayUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.BrandView;
+import com.jimei.library.widget.PageSelectedListener;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.banner.SliderLayout;
 import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
@@ -48,15 +47,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.adapter.rxjava.HttpException;
+
 public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
-        implements View.OnClickListener, ViewPager.OnPageChangeListener,
-        ScrollableLayout.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
+        implements View.OnClickListener, ScrollableLayout.OnScrollListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private String mamaid;
     private List<BaseFragment> list = new ArrayList<>();
     private Map<String, String> map = new HashMap<>();
-    private int rvTopHeight;
     private int mask;
     private MainCategoryAdapter mMainCategoryAdapter;
     private MainActivityAdapter mainActivityAdapter;
@@ -72,7 +72,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
 
     @Override
     public View getLoadingView() {
-        return b.swipeLayout;
+        return b.layout;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                         b.swipeLayout.setRefreshing(false);
                     }
                     hideIndeterminateProgressDialog();
-                    if (e instanceof UnknownHostException) {
+                    if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                         showNetworkError();
                     } else {
                         JUtils.Toast("数据加载有误,请下拉刷新!");
@@ -119,6 +119,12 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                     }, e -> {
                         e.printStackTrace();
                         b.mainShop.setVisibility(View.INVISIBLE);
+                        if (e instanceof HttpException) {
+                            if (((HttpException) e).code() == 403) {
+                                LoginUtils.delLoginInfo(mActivity);
+                                JUtils.Toast("登录已过期，请重新登录!");
+                            }
+                        }
                     }));
         } else {
             b.mainShop.setVisibility(View.INVISIBLE);
@@ -135,7 +141,6 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
         mMainCategoryAdapter = new MainCategoryAdapter(mActivity);
         b.recyclerView.setAdapter(mMainCategoryAdapter);
 
-//        b.activityRv.setLayoutManager(new GridLayoutManager(mActivity, 4, GridLayoutManager.HORIZONTAL, false));
         b.activityRv.setLayoutManager(new LinearLayoutManager(mActivity));
         b.activityRv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.activityRv.addItemDecoration(new SpaceItemDecoration(0, 0, 6, 6));
@@ -160,9 +165,19 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     @Override
     public void setListener() {
         b.mainShop.setOnClickListener(this);
-        b.viewPager.addOnPageChangeListener(this);
         b.scrollableLayout.setOnScrollListener(this);
         b.swipeLayout.setOnRefreshListener(this);
+        b.rvTop.setOnClickListener(this);
+        b.viewPager.addOnPageChangeListener(new PageSelectedListener() {
+            @Override
+            public void onPageSelected(int position) {
+                try {
+                    b.scrollableLayout.getHelper().setCurrentScrollableContainer((ProductListFragment) list.get(position));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -175,47 +190,20 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
+            case R.id.rv_top:
+                b.scrollableLayout.scrollTo(0, 0);
+                ((ProductListFragment) list.get(b.viewPager.getCurrentItem())).goToTop();
+                break;
         }
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        b.swipeLayout.setEnabled(false);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        try {
-            b.scrollableLayout.getHelper().setCurrentScrollableContainer((ProductListFragment) list.get(position));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        b.swipeLayout.setEnabled(true);
     }
 
     @Override
     public void onScroll(int currentY, int maxY) {
-        currentY = -currentY;
-        if (rvTopHeight == (DisplayUtils.getScreenH(mActivity) * 2 - 16)) {
-            rvTopHeight = b.rvTop.getTop();
-        }
-        if (0 > rvTopHeight + currentY) {
+        if (currentY > 0) {
             b.rvTop.setVisibility(View.VISIBLE);
-            b.rvTop.setOnClickListener(v -> {
-                b.scrollableLayout.scrollTo(0, 0);
-                ((ProductListFragment) list.get(b.viewPager.getCurrentItem())).goToTop();
-            });
-        } else {
-            b.rvTop.setVisibility(View.GONE);
-        }
-
-        if ((-currentY) > 0) {
             b.swipeLayout.setEnabled(false);
-        } else {
+        } else if (currentY == 0) {
+            b.rvTop.setVisibility(View.GONE);
             b.swipeLayout.setEnabled(true);
         }
     }

@@ -1,8 +1,10 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -15,7 +17,6 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     TextView lastStateTv;
     @Bind(R.id.lv)
     ListView mListView;
+    @Bind(R.id.layout)
+    ScrollView layout;
     private int id;
     OrderDetailBean.PackageOrdersBean packageOrdersBean;
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> data;
@@ -67,6 +70,11 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             orderTv.setText("未揽件");
             fillDataToView(null);
         }
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
@@ -196,17 +204,4 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         return R.layout.activity_logistics;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

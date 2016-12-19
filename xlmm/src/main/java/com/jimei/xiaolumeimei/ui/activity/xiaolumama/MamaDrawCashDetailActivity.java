@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -41,6 +40,8 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     View lineView;
     @Bind(R.id.tv_ok)
     TextView okTv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String account;
 
     @Override
@@ -84,10 +85,13 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            account = extras.getString("account");
-        }
+        account = extras.getString("account");
     }
 
     @Override
@@ -95,17 +99,4 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
         return R.layout.activity_mama_draw_cash_detail;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

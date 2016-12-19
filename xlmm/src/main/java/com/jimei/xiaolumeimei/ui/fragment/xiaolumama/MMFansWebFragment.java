@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
  */
 
 public class MMFansWebFragment extends BaseWebViewFragment {
+    private String link = "";
 
     public static MMFansWebFragment newInstance(String title) {
         MMFansWebFragment fragment = new MMFansWebFragment();
@@ -29,6 +30,14 @@ public class MMFansWebFragment extends BaseWebViewFragment {
     }
 
     @Override
+    public void initData() {
+        hideIndeterminateProgressDialog();
+        if (link != null && !link.equals("")) {
+            loadUrl(link);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         WebViewEvent stickyEvent = EventBus.getDefault().getStickyEvent(WebViewEvent.class);
@@ -40,6 +49,7 @@ public class MMFansWebFragment extends BaseWebViewFragment {
 
     @Subscribe(sticky = true)
     public void getWebViewInfo(WebViewEvent event) {
-        loadUrl(event.actlink);
+        link = event.actlink;
+        initData();
     }
 }

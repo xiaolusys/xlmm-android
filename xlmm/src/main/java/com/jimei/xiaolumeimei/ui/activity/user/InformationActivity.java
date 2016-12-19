@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -14,17 +13,18 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.event.InformationEvent;
 import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -53,6 +53,8 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     UserInfoBean userinfo;
     @Bind(R.id.debug)
     LinearLayout debug;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void setListener() {
@@ -61,7 +63,13 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initData() {
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
+    protected void initViews() {
+        EventBus.getDefault().register(this);
         nickNameView.setTitleText("昵称");
         bindPhoneView.setTitleText("绑定手机");
         editPwdView.setTitleText("修改密码");
@@ -78,11 +86,8 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-        Subscription subscribe = UserModel.getInstance()
+    protected void initData() {
+        addSubscription(UserModel.getInstance()
                 .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
@@ -100,19 +105,18 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                         ViewUtils.loadImgToImgView(getApplicationContext(), imgUser,
                                 user.getThumbnail());
                     }
+                }));
+    }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "error:, " + e.toString());
-                        super.onError(e);
-                    }
-                });
-        addSubscription(subscribe);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshInfomation(InformationEvent event) {
+        initData();
     }
 
     @Override
@@ -148,7 +152,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                             }
                                         }
                                     });
-
                             dialog.dismiss();
                         })
                         .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
@@ -156,13 +159,5 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                 break;
 
         }
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }
