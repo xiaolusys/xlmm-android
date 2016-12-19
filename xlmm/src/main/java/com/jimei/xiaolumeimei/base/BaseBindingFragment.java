@@ -42,6 +42,4 @@ public abstract class BaseBindingFragment<T extends ViewDataBinding> extends Bas
     }
 
     public abstract View getLoadingView();
-
-
 }

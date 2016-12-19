@@ -57,7 +57,6 @@ import rx.Observable;
 public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBinding> implements
         View.OnClickListener, OnChartValueSelectedListener, ScrollableHelper.ScrollableContainer {
     private static final String TITLE = "title";
-    private static final String ID = "id";
     List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
     List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
 
@@ -73,11 +72,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     private long lastClickTime = 0;
     private MainActivityAdapter adapter;
 
-    public static MamaFirstFragment newInstance(String title, int id) {
+    public static MamaFirstFragment newInstance(String title) {
         MamaFirstFragment fragment = new MamaFirstFragment();
         Bundle args = new Bundle();
         args.putString(TITLE, title);
-        args.putInt(ID, id);
         fragment.setArguments(args);
         return fragment;
     }

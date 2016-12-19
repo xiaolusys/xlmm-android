@@ -267,9 +267,6 @@
             android:name=".ui.activity.xiaolumama.MamaWithdrawCashResultActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
-            android:name=".ui.activity.xiaolumama.TwoDimenCodeActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
-        <activity
             android:name=".ui.activity.xiaolumama.MamaVisitorActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
@@ -377,6 +374,7 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.trade.CartActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

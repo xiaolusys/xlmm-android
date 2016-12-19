@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
-import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
@@ -16,7 +15,7 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentCarTabBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.event.RefreshCarNumEvent;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
@@ -71,6 +70,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                         cartHisList.clear();
+                        cartHisAdapter.notifyDataSetChanged();
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartHisList.addAll(cartsInfoBeen);
                             cartHisAdapter.notifyDataSetChanged();
@@ -96,12 +96,14 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
         cartListAdapter = new CartListAdapter((BaseActivity) mActivity, cartList, this);
         b.rvCart.setAdapter(cartListAdapter);
 
-        b.rvHistory.setNestedScrollingEnabled(false);
-        b.rvHistory.setHasFixedSize(false);
+        b.rvHistory.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.rvHistory.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        ScrollLinearLayoutManager manager = new ScrollLinearLayoutManager(mActivity);
-        manager.setAutoMeasureEnabled(false);
-        b.rvHistory.setLayoutManager(manager);
+        b.rvHistory.setLayoutManager(new LinearLayoutManager(mActivity) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         cartHisAdapter = new CartHistoryAdapter((BaseActivity) mActivity, cartHisList, this);
         b.rvHistory.setAdapter(cartHisAdapter);
     }
@@ -217,10 +219,10 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                     @Override
                     public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                         cartList.clear();
+                        cartListAdapter.notifyDataSetChanged();
                         if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
                             cartList.addAll(cartsInfoBeen);
                             b.emptyContent.setVisibility(View.GONE);
-                            b.rvCart.setVisibility(View.VISIBLE);
                             cartListAdapter.notifyDataSetChanged();
                             ids.clear();
                             for (int i = 0; i < cartsInfoBeen.size(); i++) {
@@ -229,7 +231,6 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
                             setPriceText();
                         } else {
                             b.emptyContent.setVisibility(View.VISIBLE);
-                            b.rvCart.setVisibility(View.GONE);
                             b.totalPrice.setText("¥0");
                             b.confirm.setClickable(false);
                             b.confirmLayout.setVisibility(View.GONE);
@@ -256,7 +257,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reLoadData(RefreshCarNumEvent event) {
+    public void reLoadData(CartEvent event) {
         if (LoginUtils.checkLoginState(mActivity)) {
             initData();
         }

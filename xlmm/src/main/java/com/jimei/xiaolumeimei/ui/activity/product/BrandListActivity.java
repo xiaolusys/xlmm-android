@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -12,7 +13,6 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BrandListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -67,6 +67,11 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         initRecyclerView();
     }
 
+    @Override
+    public View getLoadingView() {
+        return xRecyclerView;
+    }
+
     private void initRecyclerView() {
         xRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         xRecyclerView.addItemDecoration(new SpaceItemDecoration(10));
@@ -79,17 +84,4 @@ public class BrandListActivity extends BaseSwipeBackCompatActivity {
         xRecyclerView.setAdapter(mBrandActivityAdapter);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

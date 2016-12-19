@@ -29,9 +29,8 @@ import java.util.Calendar;
 
 public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBinding> implements View.OnClickListener {
     private static final String TITLE = "title";
-    private static final String ID = "id";
 
-    private int id;
+    private int mamaId = -1;
     private String teamUrl;
     private String fansUrl;
     private double mCashValue;
@@ -41,21 +40,12 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
     private int mActiveValueNum;
     private long lastClickTime = 0;
 
-    public static MamaThirdFragment newInstance(String title, int id) {
+    public static MamaThirdFragment newInstance(String title) {
         MamaThirdFragment fragment = new MamaThirdFragment();
         Bundle args = new Bundle();
         args.putString(TITLE, title);
-        args.putInt(ID, id);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            id = getArguments().getInt(ID);
-        }
     }
 
     @Override
@@ -90,6 +80,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
             b.tvLevel.setText(fortune.getExtraInfo().getAgencylevelDisplay());
         }
         b.tvId.setText("ID:" + fortune.getMamaId());
+        mamaId = fortune.getMamaId();
         b.tvMamaName.setText(fortune.getMamaLevelDisplay());
         b.tvCashValue.setText(fortune.getCashValue() + "元");
         b.tvCarryValue.setText(fortune.getCarryValue() + "元");
@@ -171,9 +162,9 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
                     startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
                     break;
                 case R.id.ll_team:
-                    if (teamUrl != null && !"".equals(teamUrl)) {
+                    if (teamUrl != null && !"".equals(teamUrl) && mamaId != -1) {
                         Bundle teamBundle = new Bundle();
-                        teamBundle.putString("id", id + "");
+                        teamBundle.putString("id", mamaId + "");
                         teamBundle.putString("url", teamUrl);
                         Intent teamIntent = new Intent(mActivity, MMTeamActivity.class);
                         teamIntent.putExtras(teamBundle);

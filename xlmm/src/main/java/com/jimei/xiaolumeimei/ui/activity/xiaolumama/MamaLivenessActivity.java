@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
@@ -15,7 +16,6 @@ import com.jimei.xiaolumeimei.adapter.MamaLivenessAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.MamaLivenessBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -40,9 +40,12 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        if (null != extras) {
-            liveness = extras.getInt("liveness");
-        }
+        liveness = extras.getInt("liveness");
+    }
+
+    @Override
+    public View getLoadingView() {
+        return scrollableLayout;
     }
 
     @Override
@@ -120,19 +123,5 @@ public class MamaLivenessActivity extends BaseSwipeBackCompatActivity {
                     }
                     hideIndeterminateProgressDialog();
                 }, e -> JUtils.Log(e.getMessage())));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

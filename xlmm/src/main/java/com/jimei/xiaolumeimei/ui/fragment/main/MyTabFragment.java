@@ -82,7 +82,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
                             } else if (e instanceof HttpException) {
                                 if (((HttpException) e).code() == 403) {
                                     LoginUtils.delLoginInfo(mActivity);
-                                    JUtils.Toast("登录已过期，请重新登录!");
+                                    fillDataToView(null);
                                 } else {
                                     JUtils.Toast("网络异常,请下拉刷新重试!");
                                 }

@@ -21,7 +21,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
-import com.jimei.xiaolumeimei.entities.event.RefreshCarNumEvent;
 import com.jimei.xiaolumeimei.entities.event.RefreshPersonalEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.entities.event.ShowShopEvent;
@@ -38,7 +37,6 @@ import com.jimei.xiaolumeimei.utils.FragmentTabUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.jimei.xiaolumeimei.xlmmService.UpdateService;
-import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -68,10 +66,17 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        setContentView(getContentViewLayoutID());
         super.onCreate(savedInstanceState);
-        initViews();
-        initData();
+    }
+
+    @Override
+    public void initContentView() {
+        setContentView(getContentViewLayoutID());
+    }
+
+    @Override
+    public boolean isNeedShow() {
+        return false;
     }
 
     @Override
@@ -147,18 +152,13 @@ public class TabActivity extends BaseActivity {
         super.onResume();
         showCarNum();
         EventBus.getDefault().post(new ShowShopEvent());
-        EventBus.getDefault().post(new RefreshCarNumEvent());
         EventBus.getDefault().post(new RefreshPersonalEvent());
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         updateFlag = false;
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -177,6 +177,7 @@ public class TabActivity extends BaseActivity {
         fragments.add(CollectTabFragment.newInstance());
         fragments.add(MyTabFragment.newInstance());
         new FragmentTabUtils(getSupportFragmentManager(), radioGroup, fragments, R.id.container, this);
+        setSwipeBackEnable(false);
     }
 
     @Override

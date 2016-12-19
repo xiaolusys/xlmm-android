@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <com.jimei.library.widget.XlmmTitleView
@@ -12,16 +11,17 @@
         app:xlmm_title="投诉建议" />
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
-
 
         <RadioGroup
             android:id="@+id/rg"
             android:layout_width="match_parent"
             android:layout_height="120px"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="8dp">
@@ -73,14 +73,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_margin="8dp">
+            android:background="@color/white"
+            android:padding="8dp">
 
             <EditText
                 android:id="@+id/complain_text"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:gravity="start|top"
                 android:background="@null"
+                android:gravity="start|top"
                 android:hint="@string/complaininfo"
                 android:maxLength="200"
                 android:textColorHint="@color/text_color_9B"
@@ -96,15 +97,14 @@
                 android:text="0/200" />
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/commit"
+            android:layout_width="656px"
+            android:layout_height="90px"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btn_common_default"
+            android:text="提交"
+            android:textColor="@color/white" />
+
     </LinearLayout>
-
-
-    <Button
-        android:id="@+id/commit"
-        android:layout_width="656px"
-        android:layout_height="90px"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/btn_common_default"
-        android:text="提交"
-        android:textColor="@color/white" />
 </LinearLayout>

@@ -44,6 +44,7 @@ import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.RedBagActivity;
@@ -53,12 +54,15 @@ import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -74,6 +78,9 @@ import rx.Subscription;
  */
 public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         implements PlatformActionListener, Handler.Callback {
+
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     public ValueCallback<Uri> mUploadMessage;
     public ValueCallback<Uri[]> mUploadMessageForAndroid5;
@@ -298,6 +305,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == FILECHOOSER_RESULTCODE) {
             if (null == mUploadMessage)
@@ -436,6 +448,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
+        EventBus.getDefault().post(new CartEvent());
         if (ll_actwebview != null) {
             ll_actwebview.removeView(mWebView);
         }

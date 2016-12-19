@@ -4,7 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
@@ -12,12 +12,13 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.event.InformationEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener {
@@ -26,6 +27,8 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     EditText nameEditText;
     @Bind(R.id.set_save_button)
     Button save_button;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     UserInfoBean userinfo;
     NicknameBean nicknameBean = new NicknameBean();
     String nick_name_value;
@@ -42,6 +45,11 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
     protected int getContentViewLayoutID() {
         return R.layout.setting_nickname_activity;
     }
@@ -50,7 +58,6 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.set_save_button:
-
                 nick_name_value = nameEditText.getText().toString().trim();
                 nicknameBean.setNick(nick_name_value);
                 Log.d(TAG, "nick_name_value " + nick_name_value);
@@ -60,7 +67,7 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
                         setNickname();
                     }
                 } else {
-                    Toast.makeText(mContext, "昵称长度或者字符错误,请检查", Toast.LENGTH_SHORT).show();
+                    JUtils.Toast("昵称长度或者字符错误,请检查");
                 }
                 break;
         }
@@ -83,83 +90,33 @@ public class SettingNicknameActivity extends BaseSwipeBackCompatActivity
     }
 
     private void setNickname() {
-        Subscription subscribe = UserModel.getInstance()
+        addSubscription(UserModel.getInstance()
                 .setNickname(userid, nicknameBean)
                 .subscribe(new ServiceResponse<UserBean>() {
                     @Override
                     public void onNext(UserBean user) {
-                        Log.d(TAG, "user.getCode() "
-                                + user.getCode()
-                                + ", user.getResult() "
-                                + user.getResult());
-
+                        EventBus.getDefault().post(new InformationEvent());
                         if (user.getCode() == 0) {
-                            Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
+                            JUtils.Toast("修改成功");
                             finish();
                         } else {
-
-                            Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+                            JUtils.Toast("修改失败");
                         }
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.e(TAG, " error:, " + e.toString());
-                        super.onError(e);
-                    }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     private void getUserInfo() {
-        Subscription subscribe = UserModel.getInstance()
+        addSubscription(UserModel.getInstance()
                 .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean user) {
                         userinfo = user;
-                        Log.d(TAG, "getUserInfo:, " + userinfo.toString());
-
                         nameEditText.setText(userinfo.getNick());
                         userid = userinfo.getId();
-                        Log.d(TAG, "getUserInfo nick "
-                                + userinfo.getNick()
-                                + " userid "
-                                + userid);
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.e(TAG, "error:, " + e.toString());
-                        super.onError(e);
-                    }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
 }

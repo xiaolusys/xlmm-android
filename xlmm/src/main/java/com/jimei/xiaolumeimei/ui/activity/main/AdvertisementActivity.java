@@ -21,9 +21,22 @@ public class AdvertisementActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        setContentView(getContentViewLayoutID());
         super.onCreate(savedInstanceState);
-        initData();
+    }
+
+    @Override
+    public void initContentView() {
+        setContentView(getContentViewLayoutID());
+    }
+
+    @Override
+    protected void initViews() {
+        setSwipeBackEnable(false);
+    }
+
+    @Override
+    public boolean isNeedShow() {
+        return false;
     }
 
     @Override

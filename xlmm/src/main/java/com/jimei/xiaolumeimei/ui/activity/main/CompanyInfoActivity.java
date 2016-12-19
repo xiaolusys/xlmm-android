@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 
@@ -41,6 +40,11 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity implements 
     }
 
     @Override
+    public boolean isNeedShow() {
+        return false;
+    }
+
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.imageView) {
             num++;
@@ -51,19 +55,5 @@ public class CompanyInfoActivity extends BaseSwipeBackCompatActivity implements 
                 num = 0;
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

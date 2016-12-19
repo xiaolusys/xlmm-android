@@ -29,7 +29,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,14 +53,14 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     EditText clearAddress;
     @Bind(R.id.save)
     Button save;
-    @Bind(R.id.main)
-    LinearLayout main;
     @Bind(R.id.rl_default)
     RelativeLayout relativeLayout;
     @Bind(R.id.id_layout)
     LinearLayout idLayout;
     @Bind(R.id.id_num)
     EditText idNum;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String id;
 
     private ArrayList<Province> provinces = new ArrayList<>();
@@ -101,6 +100,11 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         address.setText(city_string);
         clearAddress.setText(clearaddressa);
         idNum.setText(idNo);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -209,20 +213,6 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                     city_string = receiver_state + receiver_city + receiver_district;
                     address.setText(city_string);
                 }).show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {

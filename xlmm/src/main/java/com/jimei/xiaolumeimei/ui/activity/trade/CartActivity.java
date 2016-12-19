@@ -14,11 +14,16 @@ import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityCartBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
 
     @Override
     protected void initViews() {
+        EventBus.getDefault().register(this);
         b.rvCart.setNestedScrollingEnabled(false);
         b.rvCart.setHasFixedSize(false);
         b.rvCart.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
@@ -62,19 +68,14 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        refreshCartList();
-        refreshHisCartList();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
+    public View getLoadingView() {
+        return b.layout;
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    protected void initData() {
+        refreshCartList();
+        refreshHisCartList();
     }
 
     @Override
@@ -121,7 +122,6 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
                 .subscribe(new ServiceResponse<CartsPayinfoBean>() {
                     @Override
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                        super.onNext(cartsPayinfoBean);
                         if (cartsPayinfoBean != null) {
                             b.totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
                             b.confirmLayout.setVisibility(View.VISIBLE);
@@ -216,5 +216,17 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
                         hideIndeterminateProgressDialog();
                     }
                 }));
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().post(new CartEvent());
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reLoadData(CartEvent event) {
+        initData();
     }
 }

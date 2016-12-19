@@ -37,6 +37,7 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
@@ -47,6 +48,8 @@ import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -425,8 +428,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         jieshengjine =
                 (double) (Math.round((discount_feeInfo + coupon_price + appcut) * 100)) / 100;
         paymentInfo = payment;
-        JUtils.Log("CartsPayinfo",
-                "jishengjine ===" + jieshengjine + "   payment==" + payment);
         if (Double.compare(coupon_price + appcut - paymentInfo, 0) >= 0) {
             yue = 0;
             real_use_yue = 0;
@@ -454,16 +455,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                 real_use_yue = 0;
             }
         }
-
-        JUtils.Log("CartsPayinfo", "yue:"
-                + yue
-                + " real use yue:"
-                + real_use_yue
-                + " paymentInfo:"
-                + paymentInfo
-                + " jieshengjine:"
-                + jieshengjine);
-
         tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100);
         extraBudget.setText("¥" + budgetCash);
         totalPrice.setText("¥" + (double) (Math.round(paymentInfo * 100)) / 100);
@@ -476,6 +467,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         ids = extras.getString("ids");
         mFlag = extras.getBoolean("flag", false);
         couponFlag = extras.getBoolean("couponFlag", false);
+    }
+
+    @Override
+    public boolean isNeedShow() {
+        return false;
     }
 
     @Override
@@ -711,8 +707,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 + BUDGET_PAY
                                 + yue
                                 + ";";
-
-                        JUtils.Log(TAG, pay_extras);
                         payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
                                 (jieshengjine) + "");
                     } else {
@@ -826,6 +820,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
+                        EventBus.getDefault().post(new CartEvent());
                         if (null != payInfoBean && payInfoBean.getTrade() != null) {
                             order_id = payInfoBean.getTrade().getId();
                             order_no = payInfoBean.getTrade().getTid();
@@ -981,9 +976,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     protected void onResume() {
 
         super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-
         if (isSelectAddress && chooseAddress != null) {
 
             chooseAddress.setVisibility(View.INVISIBLE);
@@ -1162,13 +1154,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
         public void dismiss() {
             super.dismiss();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     private void setConfirmClickAble() {

@@ -9,23 +9,8 @@ import com.umeng.analytics.MobclickAgent;
 public class ActivityWebViewActivity extends CommonWebViewActivity {
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
     public void sharePartyInfo() {
         super.sharePartyInfo();
         MobclickAgent.onEvent(this,"Activity_share");
     }
-
 }

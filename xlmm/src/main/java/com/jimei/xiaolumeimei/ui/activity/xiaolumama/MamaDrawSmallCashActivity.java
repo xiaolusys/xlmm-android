@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -16,10 +17,12 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 
@@ -39,6 +42,8 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
     Button drawCashBtn;
     @Bind(R.id.tv_msg)
     TextView msgTv;
+    @Bind(R.id.layout)
+    LinearLayout layout;
 
     private double mCash, mMax, mMin;
     private CountDownTimer mCountDownTimer;
@@ -49,6 +54,11 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
         codeBtn.setOnClickListener(this);
         drawCashBtn.setOnClickListener(this);
         moneyEt.addTextChangedListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -126,6 +136,7 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
                     addSubscription(MamaInfoModel.getInstance()
                             .getNoauditCashout(drawMoney, codeEt.getText().toString())
                             .subscribe(resultEntity -> {
+                                EventBus.getDefault().post(new WalletEvent());
                                 JUtils.Toast(resultEntity.getInfo());
                                 if (resultEntity.getCode() == 0) {
                                     Intent intent = new Intent(MamaDrawSmallCashActivity.this, DrawCashResultActivity.class);
@@ -223,19 +234,5 @@ public class MamaDrawSmallCashActivity extends BaseSwipeBackCompatActivity imple
         msgTv.setTextColor(getResources().getColor(R.color.red));
         drawCashBtn.setClickable(false);
         drawCashBtn.setEnabled(false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

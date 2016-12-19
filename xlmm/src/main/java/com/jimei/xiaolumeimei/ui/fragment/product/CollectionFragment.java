@@ -97,12 +97,14 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
                     public void onCompleted() {
                         hideIndeterminateProgressDialog();
                         b.xrv.loadMoreComplete();
+                        b.xrv.refreshComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         b.xrv.loadMoreComplete();
+                        b.xrv.refreshComplete();
                         hideIndeterminateProgressDialog();
                         if (e instanceof UnknownHostException && !JUtils.isNetWorkAvilable()) {
                             showNetworkError();
@@ -121,13 +123,15 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
-        b.xrv.setPullRefreshEnabled(false);
+        b.xrv.setRefreshProgressStyle(ProgressStyle.BallPulse);
         adapter = new CollectionAdapter(this, getActivity(), collectionList);
         b.xrv.setAdapter(adapter);
         b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-
+                page = 1;
+                collectionList.clear();
+                initData();
             }
 
             @Override

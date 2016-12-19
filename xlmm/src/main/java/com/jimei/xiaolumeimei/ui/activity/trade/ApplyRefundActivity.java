@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
@@ -22,7 +23,6 @@ import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -62,6 +62,8 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     TextView typeName;
     @Bind(R.id.refund_tv_desc)
     TextView typeTvDesc;
+    @Bind(R.id.layout)
+    RelativeLayout layout;
 
     AllOrdersBean.ResultsEntity.OrdersEntity goods_info;
     String reason = "";
@@ -103,6 +105,11 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.activity_apply_refund;
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -257,19 +264,5 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                 })
                 .setNegativeButton("取消", null)
                 .show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

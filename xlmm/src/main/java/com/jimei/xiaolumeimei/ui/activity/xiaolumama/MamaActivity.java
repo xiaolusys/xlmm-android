@@ -28,7 +28,6 @@ import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaSecondFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaThirdFragment;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +54,15 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
+        fragments.add(MamaFirstFragment.newInstance("我要赚钱"));
+        fragments.add(MamaBoutiqueFragment.newInstance("精品汇"));
+        fragments.add(MamaSecondFragment.newInstance("社交活动"));
+        fragments.add(MamaThirdFragment.newInstance("我的"));
+        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
+        b.viewPager.setAdapter(mAdapter);
+        b.viewPager.setOffscreenPageLimit(3);
+        b.tabLayout.setupWithViewPager(b.viewPager);
+        b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
 
@@ -93,21 +101,11 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     private void fillDataToView(UserInfoBean userInfoBean) {
         String id = userInfoBean.getId() + "";
-        int mamaId = userInfoBean.getXiaolumm().getId();
         Map<String, String> info = new HashMap<>();
         info.put(UdeskConst.UdeskUserInfo.USER_SDK_TOKEN, id);
         info.put(UdeskConst.UdeskUserInfo.NICK_NAME, userInfoBean.getNick() + "(ID:" + id + ")");
         info.put(UdeskConst.UdeskUserInfo.CELLPHONE, userInfoBean.getMobile());
         UdeskSDKManager.getInstance().setUserInfo(this, id, info);
-        fragments.add(MamaFirstFragment.newInstance("我要赚钱", mamaId));
-        fragments.add(MamaBoutiqueFragment.newInstance("精品汇", mamaId));
-        fragments.add(MamaSecondFragment.newInstance("社交活动", mamaId));
-        fragments.add(MamaThirdFragment.newInstance("我的", mamaId));
-        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
-        b.viewPager.setAdapter(mAdapter);
-        b.viewPager.setOffscreenPageLimit(3);
-        b.tabLayout.setupWithViewPager(b.viewPager);
-        b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
         hideIndeterminateProgressDialog();
     }
 
@@ -153,17 +151,8 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    public boolean isNeedShow() {
+        return false;
     }
 
     @Override
@@ -197,7 +186,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode,resultCode,intent);
+        super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result", "");

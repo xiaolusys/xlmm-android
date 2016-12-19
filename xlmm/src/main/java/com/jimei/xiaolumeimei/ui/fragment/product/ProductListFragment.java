@@ -22,7 +22,6 @@ import com.jimei.xiaolumeimei.databinding.FragmentProductListBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
 
 import java.net.UnknownHostException;
 
@@ -149,12 +148,6 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-    }
-
-    @Override
     public View getScrollableView() {
         if (b != null) {
             return b.xrv;
@@ -168,11 +161,5 @@ public class ProductListFragment extends BaseBindingFragment<FragmentProductList
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
     }
 }

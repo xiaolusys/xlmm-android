@@ -12,8 +12,10 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 
@@ -44,6 +46,11 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     @Override
+    public boolean isNeedShow() {
+        return false;
+    }
+
+    @Override
     protected void getBundleExtras(Bundle extras) {
         money = extras.getDouble("cash");
     }
@@ -60,9 +67,10 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                 .setMessage("兑换优惠券金额将直接从妈妈账户余额扣除!")
                 .setPositiveButton("确定", (dialog, which) -> {
                     dialog.dismiss();
-                    MamaInfoModel.getInstance()
+                    addSubscription(MamaInfoModel.getInstance()
                             .drawCoupon(id)
                             .subscribe(drawCouponBean -> {
+                                EventBus.getDefault().post(new WalletEvent());
                                 JUtils.Toast(drawCouponBean.getInfo());
                                 if (drawCouponBean.getCode() == 0) {
                                     Intent intent = new Intent(MamaDrawCouponActivity.this, DrawCouponResultActivity.class);
@@ -79,7 +87,7 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                                         finish();
                                     }
                                 }
-                            });
+                            }, Throwable::printStackTrace));
                 })
                 .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                 .create();
@@ -110,19 +118,5 @@ public class MamaDrawCouponActivity extends BaseSwipeBackCompatActivity implemen
                 }
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 }

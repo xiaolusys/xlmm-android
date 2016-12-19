@@ -5,20 +5,24 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.jimei.library.widget.RecyclerViewDivider;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
+import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/18.
@@ -32,6 +36,8 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
     RecyclerView addressRecyclerView;
     @Bind(R.id.addAdress)
     Button addAdress;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private AddressAdapter adapter;
 
     @Override
@@ -40,11 +46,13 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-        Subscription subscribe = AddressModel.getInstance()
+    public View getLoadingView() {
+        return layout;
+    }
+
+    @Override
+    protected void initData() {
+        addSubscription(AddressModel.getInstance()
                 .getAddressList()
                 .subscribe(new ServiceResponse<List<AddressBean>>() {
                     @Override
@@ -54,8 +62,7 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
                             adapter.updateWithClear(list);
                         }
                     }
-                });
-        addSubscription(subscribe);
+                }));
     }
 
     @Override
@@ -66,6 +73,7 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
+        EventBus.getDefault().register(this);
         addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         RecyclerViewDivider divider = new RecyclerViewDivider(RecyclerViewDivider.VERTICAL);
         divider.setSize(3);
@@ -84,11 +92,14 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshAddress(AddressChangeEvent event) {
+        initData();
+    }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

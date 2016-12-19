@@ -29,9 +29,11 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,12 +65,12 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
     SwitchCompat switchButton;
     @Bind(R.id.save)
     Button save;
-    @Bind(R.id.main)
-    LinearLayout main;
     @Bind(R.id.id_layout)
     LinearLayout idLayout;
     @Bind(R.id.id_num)
     EditText idNum;
+    @Bind(R.id.layout)
+    LinearLayout layout;
     private String id;
     private ArrayList<Province> provinces = new ArrayList<>();
 
@@ -92,6 +94,11 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
+    }
+
+    @Override
+    public View getLoadingView() {
+        return layout;
     }
 
     @Override
@@ -170,6 +177,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                                 .subscribe(new ServiceResponse<AddressResultBean>() {
                                     @Override
                                     public void onNext(AddressResultBean addressResultBean) {
+                                        EventBus.getDefault().post(new AddressChangeEvent());
                                         if (addressResultBean != null) {
                                             if (addressResultBean.getCode() == 0) {
                                                 JUtils.Toast("修改成功");
@@ -203,6 +211,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                         .subscribe(new ServiceResponse<AddressResultBean>() {
                             @Override
                             public void onNext(AddressResultBean addressResultBean) {
+                                EventBus.getDefault().post(new AddressChangeEvent());
                                 if (addressResultBean != null && addressResultBean.isRet()) {
                                     finish();
                                 }
@@ -246,20 +255,6 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                     city_string = receiver_state + receiver_city + receiver_district;
                     address.setText(city_string);
                 }).show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(this.getClass().getSimpleName());
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(this.getClass().getSimpleName());
-        MobclickAgent.onPause(this);
     }
 
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
