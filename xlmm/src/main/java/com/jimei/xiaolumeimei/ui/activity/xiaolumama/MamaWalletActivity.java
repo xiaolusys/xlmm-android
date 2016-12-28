@@ -6,12 +6,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
+import com.jimei.xiaolumeimei.databinding.ActivityMamaWalletBinding;
 import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
@@ -20,23 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.Bind;
-
-public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
-    @Bind(R.id.ll_small)
-    LinearLayout smallLayout;
-    @Bind(R.id.ll_hundred)
-    LinearLayout hundredLayout;
-    @Bind(R.id.ll_coupon)
-    LinearLayout couponLayout;
-    @Bind(R.id.money)
-    TextView moneyTv;
-    @Bind(R.id.tv_small)
-    TextView smallTv;
-    @Bind(R.id.tv_rule)
-    TextView ruleTv;
-    @Bind(R.id.layout)
-    LinearLayout layout;
+public class MamaWalletActivity extends BaseMVVMActivity<ActivityMamaWalletBinding> implements View.OnClickListener {
     private double mCash;
     private double min;
     private double max;
@@ -44,15 +27,15 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
 
     @Override
     protected void setListener() {
-        smallLayout.setOnClickListener(this);
-        hundredLayout.setOnClickListener(this);
-        couponLayout.setOnClickListener(this);
-        ruleTv.setOnClickListener(this);
+        b.llSmall.setOnClickListener(this);
+        b.llHundred.setOnClickListener(this);
+        b.llCoupon.setOnClickListener(this);
+        b.tvRule.setOnClickListener(this);
     }
 
     @Override
     public View getLoadingView() {
-        return layout;
+        return b.layout;
     }
 
     @Override
@@ -64,7 +47,7 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
                 .getMamaFortune()
                 .subscribe(mamaFortune -> {
                     mCash = mamaFortune.getMamaFortune().getCashValue();
-                    moneyTv.setText(mCash + "");
+                    b.money.setText(mCash + "");
                 }, Throwable::printStackTrace));
     }
 
@@ -73,7 +56,7 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
         min = cashoutPolicy.getMin_cashout_amount();
         max = cashoutPolicy.getAudit_cashout_amount();
         mMessage = cashoutPolicy.getMessage();
-        smallTv.setText("提现金额" + min + "元至" + max + "元");
+        b.tvSmall.setText("提现金额" + min + "元至" + max + "元");
     }
 
     @Override
@@ -89,7 +72,7 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
-        moneyTv.setText(mCash + "");
+        b.money.setText(mCash + "");
     }
 
     @Override
@@ -114,13 +97,9 @@ public class MamaWalletActivity extends BaseSwipeBackCompatActivity implements V
                 startActivity(intent);
                 break;
             case R.id.ll_hundred:
-                if (mCash >= 100) {
-                    Intent hundredIntent = new Intent(this, MamaDrawCashActivity.class);
-                    hundredIntent.putExtra("cash", mCash);
-                    startActivity(hundredIntent);
-                } else {
-                    JUtils.Toast("整额提现最低需要100元哦!");
-                }
+                Intent hundredIntent = new Intent(this, MamaDrawCashActivity.class);
+                hundredIntent.putExtra("cash", mCash);
+                startActivity(hundredIntent);
                 break;
             case R.id.ll_coupon:
                 if (mCash >= 20) {

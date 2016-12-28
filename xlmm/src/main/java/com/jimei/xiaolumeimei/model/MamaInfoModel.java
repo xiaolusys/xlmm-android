@@ -107,9 +107,9 @@ public class MamaInfoModel {
     }
 
     //转账到小鹿钱包
-    public Observable<ResponseResultBean> toWallet(String cashout_amount) {
+    public Observable<ResultEntity> toWallet(String value) {
         return getService()
-                .toWallet(cashout_amount)
+                .toWallet(value)
                 .compose(new DefaultTransform<>());
     }
 

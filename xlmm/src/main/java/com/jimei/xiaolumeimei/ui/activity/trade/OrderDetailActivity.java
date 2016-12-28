@@ -716,6 +716,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void onDestroy() {
         mHandler.removeMessages(HAND_MSG);
+        mCountDownView.cancel();
         super.onDestroy();
     }
 

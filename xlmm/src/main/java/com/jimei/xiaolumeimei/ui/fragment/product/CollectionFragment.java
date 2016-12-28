@@ -14,7 +14,6 @@ import com.jimei.xiaolumeimei.adapter.CollectionAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentCollectionBinding;
 import com.jimei.xiaolumeimei.entities.CollectionAllBean;
-import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
@@ -25,14 +24,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 
 public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBinding> implements View.OnClickListener {
     private static final String ARG_PARAM1 = "title";
     private static final String ARG_PARAM2 = "param2";
     private String type;
-    private ArrayList<CollectionBean> collectionList;
     private CollectionAdapter adapter;
     private int page;
     private String next;
@@ -51,7 +48,6 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             page = 1;
-            collectionList = new ArrayList<>();
             type = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -74,13 +70,21 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
 
     @Override
     public void initData() {
+        loadData(true);
+    }
+
+    private void loadData(boolean clear){
         addSubscription(ProductModel.getInstance()
                 .getCollection(page, type)
                 .subscribe(new ServiceResponse<CollectionAllBean>() {
                     @Override
                     public void onNext(CollectionAllBean collectionAllBean) {
-                        collectionList.addAll(collectionAllBean.getResults());
-                        if (collectionList.size() > 0) {
+                        if (clear){
+                            adapter.updateWithClear(collectionAllBean.getResults());
+                        }else {
+                            adapter.update(collectionAllBean.getResults());
+                        }
+                        if (adapter.getItemCount() > 0) {
                             b.emptyLayout.setVisibility(View.GONE);
                             b.xrv.setVisibility(View.VISIBLE);
                         } else {
@@ -124,14 +128,13 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         b.xrv.setRefreshProgressStyle(ProgressStyle.BallPulse);
-        adapter = new CollectionAdapter(this, getActivity(), collectionList);
+        adapter = new CollectionAdapter(this, getActivity());
         b.xrv.setAdapter(adapter);
         b.xrv.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 page = 1;
-                collectionList.clear();
-                initData();
+                loadData(true);
             }
 
             @Override
@@ -140,7 +143,7 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
                     JUtils.Toast("已经到底啦");
                     b.xrv.loadMoreComplete();
                 } else {
-                    initData();
+                    loadData(false);
                 }
             }
         });
@@ -166,10 +169,9 @@ public class CollectionFragment extends BaseBindingFragment<FragmentCollectionBi
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reLoadData(CollectChangeEvent event) {
-        if (collectionList != null) {
+        if (adapter != null) {
             page = 1;
-            collectionList.clear();
-            initData();
+            loadData(true);
         }
     }
 

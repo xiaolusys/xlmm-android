@@ -40,6 +40,7 @@ public class PushCategoryFragment extends BaseBindingFragment<FragmentPushCatego
                 .subscribe(portalBean -> {
                     List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
                     mMainCategoryAdapter.updateWithClear(categorys);
+                    b.scrollableLayout.setVisibility(View.VISIBLE);
                     hideIndeterminateProgressDialog();
                 }, throwable -> {
                     throwable.printStackTrace();

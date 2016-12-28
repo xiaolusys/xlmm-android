@@ -104,7 +104,7 @@ public interface TradeService {
             @Path("pk") int order_id);
 
     //删除订单数据
-    @DELETE("/rest/v1/trades/{pk}")
+    @DELETE("/rest/v2/trades/{pk}")
     Observable<ResponseBody> delRefund(
             @Path("pk") int order_id);
 

@@ -221,7 +221,6 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
-        EventBus.getDefault().post(new CartEvent());
         super.onDestroy();
     }
 

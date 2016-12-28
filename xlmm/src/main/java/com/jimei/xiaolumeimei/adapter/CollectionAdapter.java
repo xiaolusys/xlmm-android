@@ -16,12 +16,16 @@ import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CollectionBean;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
+import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.fragment.product.CollectionFragment;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -35,10 +39,15 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     private Context mContext;
     private List<CollectionBean> mData;
 
-    public CollectionAdapter(CollectionFragment mFragment, Context mContext, List<CollectionBean> mData) {
+    public CollectionAdapter(CollectionFragment mFragment, Context mContext) {
         this.mFragment = mFragment;
         this.mContext = mContext;
-        this.mData = mData;
+        this.mData = new ArrayList<>();
+    }
+
+    public void clear(){
+        mData.clear();
+        notifyDataSetChanged();
     }
 
     public void update(List<CollectionBean> list) {
@@ -74,11 +83,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
                         if (collectionResultBean != null) {
                             JUtils.Toast(collectionResultBean.getInfo());
                             if (collectionResultBean.getCode() == 0) {
-                                mData.remove(position);
-                                notifyDataSetChanged();
-                                if (mData.size() == 0) {
-                                    mFragment.showEmpty();
-                                }
+                                EventBus.getDefault().post(new CollectChangeEvent());
                             }
                         }
                     }

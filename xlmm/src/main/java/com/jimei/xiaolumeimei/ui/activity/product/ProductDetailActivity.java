@@ -84,7 +84,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private ShareModelBean shareModel;
     private ProductDetailBean productDetail;
     private int cart_num = 0;
-    private long left;
     private boolean collectFlag, isAlive;
     private Dialog dialog;
     private ImageView img, plusIv, minusIv;
@@ -395,8 +394,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
 
     @Override
     protected void onDestroy() {
-        left = 0;
         isAlive = false;
+        b.countView.cancel();
         super.onDestroy();
     }
 
