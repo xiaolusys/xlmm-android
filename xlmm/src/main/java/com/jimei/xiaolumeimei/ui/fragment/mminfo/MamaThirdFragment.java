@@ -11,6 +11,7 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaThirdBinding;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
@@ -24,6 +25,8 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.PersonalCarryRankActivity;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 
@@ -111,7 +114,7 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
 
     @Override
     protected void initViews() {
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -173,6 +176,17 @@ public class MamaThirdFragment extends BaseBindingFragment<FragmentMamaThirdBind
                     break;
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reLoadData(WalletEvent event) {
+        refreshFortune();
     }
 
     @Override

@@ -113,6 +113,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     TextView tvWuliu;
     @Bind(R.id.wuliu_layout)
     RelativeLayout wuliuLayout;
+    @Bind(R.id.logistic_layout)
+    LinearLayout layout;
     private boolean isAlipay, isWx, isBudget;
     private String ids;
     private String cart_ids;
@@ -303,18 +305,16 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                     public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                         if (cartsPayinfoBean != null) {
                             List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
-                            if (cartList.size() > 0) {
-                                if (cartList.get(0).getType() == 3) {
-                                    mFlag = true;
-                                } else if (cartList.get(0).getType() == 5) {
-                                    couponFlag = true;
-                                }
-                            }
                             for (int i = 0; i < cartList.size(); i++) {
                                 if (cartList.get(i).is_bonded_goods()) {
                                     idFlag = true;
                                     checkIdNo();
                                     break;
+                                }
+                            }
+                            for (int i = 0; i < cartList.size(); i++) {
+                                if (cartList.get(i).getProduct_type()!=1){
+                                    layout.setVisibility(View.VISIBLE);
                                 }
                             }
                             JUtils.Log(TAG, cartsPayinfoBean.toString());

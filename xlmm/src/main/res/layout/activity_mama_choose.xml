@@ -1,60 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.jimei.library.widget.XlmmTitleView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:xlmm_title="选品列表"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical">
 
-        <LinearLayout
+        <com.jimei.library.widget.XlmmTitleView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="24px">
+            app:xlmm_title="选品列表" />
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/tv_commission"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="佣金排序"/>
-
-            <TextView
-                android:id="@+id/tv_sale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="销量排序"/>
-        </LinearLayout>
-
-        <include layout="@layout/common_gap"/>
-
-        <com.jcodecraeer.xrecyclerview.XRecyclerView
-            android:id="@+id/rv_choose"
+        <LinearLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="24px">
+
+                <RelativeLayout
+                    android:id="@+id/rl_main"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_main"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="全部"
+                        android:textColor="@color/text_color_4A"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/tv_main"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_downarrow" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_commission"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="佣金排序"
+                    android:textColor="@color/text_color_4A"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_sale"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="销量排序"
+                    android:textColor="@color/text_color_4A"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <include layout="@layout/common_gap" />
+
+            <com.jcodecraeer.xrecyclerview.XRecyclerView
+                android:id="@+id/rv_choose"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

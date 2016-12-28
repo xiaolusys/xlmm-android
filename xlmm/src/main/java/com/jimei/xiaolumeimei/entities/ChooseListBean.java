@@ -82,6 +82,7 @@ public class ChooseListBean {
         private String rebet_amount_desc;
         private String next_rebet_amount_desc;
         private double next_rebet_amount;
+        private boolean is_boutique;
         /**
          * next_agencylevel_desc : VIP1
          * agencylevel_desc : A类
@@ -89,7 +90,13 @@ public class ChooseListBean {
          * next_agencylevel : 2
          */
 
+
         private LevelInfoBean level_info;
+        /**
+         * elite_level_prices : {"next_elite_level_price":"升级后￥50.0","elite_level_price":"￥50.0"}
+         */
+
+        private EliteLevelPricesBean elite_level_prices;
 
         public int getId() {
             return id;
@@ -203,6 +210,22 @@ public class ChooseListBean {
             this.level_info = level_info;
         }
 
+        public boolean is_boutique() {
+            return is_boutique;
+        }
+
+        public void setIs_boutique(boolean is_boutique) {
+            this.is_boutique = is_boutique;
+        }
+
+        public EliteLevelPricesBean getElite_level_prices() {
+            return elite_level_prices;
+        }
+
+        public void setElite_level_prices(EliteLevelPricesBean elite_level_prices) {
+            this.elite_level_prices = elite_level_prices;
+        }
+
         public static class LevelInfoBean {
             private String next_agencylevel_desc;
             private String agencylevel_desc;
@@ -239,6 +262,32 @@ public class ChooseListBean {
 
             public void setNext_agencylevel(int next_agencylevel) {
                 this.next_agencylevel = next_agencylevel;
+            }
+        }
+
+        public static class EliteLevelPricesBean {
+            /**
+             * next_elite_level_price : 升级后￥50.0
+             * elite_level_price : ￥50.0
+             */
+
+            private String next_elite_level_price;
+            private String elite_level_price;
+
+            public String getNext_elite_level_price() {
+                return next_elite_level_price;
+            }
+
+            public void setNext_elite_level_price(String next_elite_level_price) {
+                this.next_elite_level_price = next_elite_level_price;
+            }
+
+            public String getElite_level_price() {
+                return elite_level_price;
+            }
+
+            public void setElite_level_price(String elite_level_price) {
+                this.elite_level_price = elite_level_price;
             }
         }
     }

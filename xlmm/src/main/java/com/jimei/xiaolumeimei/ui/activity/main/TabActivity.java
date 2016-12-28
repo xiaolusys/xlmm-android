@@ -139,7 +139,7 @@ public class TabActivity extends BaseActivity {
                     .isCouPon()
                     .subscribe(getCoupon -> {
                         if (getCoupon != null && getCoupon.getIsPicked() == 0) {
-                            GetCouponFragment firstFragment = GetCouponFragment.newInstance("getCoupon");
+                            GetCouponFragment firstFragment = GetCouponFragment.newInstance("getCoupon ");
                             firstFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Translucent_NoTitle);
                             firstFragment.show(getFragmentManager(), "getCoupon");
                         }

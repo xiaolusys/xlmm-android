@@ -61,16 +61,24 @@ public class ChooseListAdapter extends RecyclerView.Adapter<ChooseListAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         ChooseListBean.ResultsBean bean = mList.get(position);
         holder.name.setText(bean.getName());
+        holder.lockNum.setText(bean.getSale_num_desc());
         ViewUtils.loadImgToImgView(mContext, holder.imageChooselist,
                 bean.getPic_path());
         holder.agentPrice.setText(
                 "¥" + (float) (Math.round(bean.getLowest_agent_price() * 100)) / 100);
         holder.stdSalePrice.setText(
                 "/¥" + (float) (Math.round(bean.getLowest_std_sale_price() * 100)) / 100);
-        holder.rebetAmount.setText("你的" + bean.getRebet_amount_desc());
-        holder.lockNum.setText(bean.getSale_num_desc());
-        holder.vip.setText(bean.getLevel_info().getNext_agencylevel_desc());
-        holder.vipMoney.setText(bean.getNext_rebet_amount_desc());
+        if (bean.is_boutique()) {
+            holder.rebetAmount.setText(bean.getElite_level_prices().getElite_level_price()+"");
+            holder.vip.setText("");
+            holder.vipMoney.setText(bean.getElite_level_prices().getNext_elite_level_price()+"");
+            holder.descText.setText("购买价格");
+        }else {
+            holder.rebetAmount.setText("你的" + bean.getRebet_amount_desc());
+            holder.vip.setText(bean.getLevel_info().getNext_agencylevel_desc());
+            holder.vipMoney.setText(bean.getNext_rebet_amount_desc());
+            holder.descText.setText("返利佣金");
+        }
         holder.imageChooselist.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, ProductDetailActivity.class);
             Bundle bundle = new Bundle();
@@ -103,6 +111,8 @@ public class ChooseListAdapter extends RecyclerView.Adapter<ChooseListAdapter.Vi
         TextView vip;
         @Bind(R.id.vip_money)
         TextView vipMoney;
+        @Bind(R.id.text_desc)
+        TextView descText;
 
         public ViewHolder(View itemView) {
             super(itemView);

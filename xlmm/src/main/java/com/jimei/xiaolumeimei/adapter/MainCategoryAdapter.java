@@ -36,11 +36,13 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
     private Activity mActivity;
     private List<PortalBean.CategorysBean> mList;
     private String codeLink;
+    private boolean isPush;
 
 
     public MainCategoryAdapter(Activity activity) {
         mActivity = activity;
         mList = new ArrayList<>();
+        isPush = false;
     }
 
     public void updateWithClear(List<PortalBean.CategorysBean> data) {
@@ -87,7 +89,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
         }
         String cat_link = mList.get(position).getCat_link();
         String name = mList.get(position).getName();
-        if (codeLink != null && !"".equals(codeLink)) {
+        if (isPush) {
             holder.layout.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
                 bundle.putString("codeLink", codeLink);
@@ -108,6 +110,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
 
     public void setCodeLink(String codeLink) {
         this.codeLink = codeLink;
+        isPush = true;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

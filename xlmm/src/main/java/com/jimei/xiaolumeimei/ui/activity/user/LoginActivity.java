@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -250,7 +251,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                     if (0 == code) {
                                         EventBus.getDefault().post(new SetMiPushEvent());
                                         JUtils.Toast("登录成功");
-                                        EventBus.getDefault().post(new CollectChangeEvent());
                                         Subscription subscribe = UserModel.getInstance()
                                                 .need_set_info()
                                                 .subscribe(new ServiceResponse<NeedSetInfoBean>() {
@@ -258,6 +258,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                     public void onNext(NeedSetInfoBean needSetInfoBean) {
                                                         hideIndeterminateProgressDialog();
                                                         LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                                                        EventBus.getDefault().post(new CollectChangeEvent());
+                                                        EventBus.getDefault().post(new CartEvent());
                                                         if (needSetInfoBean.getCode() == 0) {
                                                             if (login != null) {
                                                                 if (login.equals("push_jump")) {

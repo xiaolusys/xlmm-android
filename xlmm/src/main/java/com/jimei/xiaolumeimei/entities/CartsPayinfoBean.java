@@ -200,6 +200,7 @@ public class CartsPayinfoBean {
     @SerializedName("status") private int mStatus;
     @SerializedName("is_bonded_goods") private boolean is_bonded_goods;
     @SerializedName("type") private int type;
+    @SerializedName("product_type")private int product_type;
 
     @Override public String toString() {
       return "CartListEntity{" +
@@ -475,6 +476,14 @@ public class CartsPayinfoBean {
 
     public void setType(int type) {
       this.type = type;
+    }
+
+    public int getProduct_type() {
+      return product_type;
+    }
+
+    public void setProduct_type(int product_type) {
+      this.product_type = product_type;
     }
   }
 
