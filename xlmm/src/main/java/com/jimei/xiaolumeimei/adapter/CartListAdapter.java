@@ -16,11 +16,15 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.event.CartFragmentEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -79,6 +83,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                 helper.addSubscription(CartsModel.getInstance()
                                         .delete_carts(cartsInfoBean.getId() + "")
                                         .subscribe(responseBody -> {
+                                                    if (helper instanceof CartActivity) {
+                                                        EventBus.getDefault().post(new CartFragmentEvent());
+                                                    }
                                                     if (responseBody != null) {
                                                         if (responseBody.isSuccessful()) {
                                                             helper.addHistory(cartsInfoBean);
@@ -100,6 +107,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                     helper.addSubscription(CartsModel.getInstance()
                             .minus_product_carts(cartsInfoBean.getId() + "")
                             .subscribe(responseBody -> {
+                                        if (helper instanceof CartActivity) {
+                                            EventBus.getDefault().post(new CartFragmentEvent());
+                                        }
                                         if (responseBody != null && responseBody.isSuccessful()) {
                                             CodeBean body = responseBody.body();
                                             if (body != null && body.getCode() == 0) {
@@ -127,6 +137,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                         helper.addSubscription(CartsModel.getInstance()
                                 .plus_product_carts(cartsInfoBean.getId() + "")
                                 .subscribe(responseBody -> {
+                                            if (helper instanceof CartActivity) {
+                                                EventBus.getDefault().post(new CartFragmentEvent());
+                                            }
                                             if (null != responseBody) {
                                                 CodeBean body = responseBody.body();
                                                 if (body != null && body.getCode() == 0) {

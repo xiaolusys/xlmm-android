@@ -24,6 +24,7 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
@@ -160,6 +161,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                                         if (0 == codeInfo) {
                                                             LoginUtils.saveLoginSuccess(true, getApplicationContext());
                                                             EventBus.getDefault().post(new CollectChangeEvent());
+                                                            EventBus.getDefault().post(new CartEvent());
                                                             String login = null;
                                                             if (null != getIntent()
                                                                     && getIntent().getExtras() != null) {

@@ -67,6 +67,11 @@ public class XlmmConst {
     public static final int TYPE_REWARD_PERSONAL = 0;
     public static final int TYPE_REWARD_TEAM = 1;
 
+    //商品类型
+    public static final int USUAL_TYPE = 0;
+    public static final int VIRTUAL_TYPE = 1;
+    public static final int NOT_SALE_TYPE = 2;
+
     public static final String XLMM_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()
             + "/xlmm/";
 

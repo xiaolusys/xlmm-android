@@ -2,11 +2,11 @@ package com.jimei.xiaolumeimei.ui.fragment.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
+import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.databinding.FragmentCarTabBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
+import com.jimei.xiaolumeimei.entities.event.CartFragmentEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
@@ -54,7 +55,7 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
 
     @Override
     public View getLoadingView() {
-        return b.sv;
+        return b.layout;
     }
 
     @Override
@@ -85,25 +86,21 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
-        b.rvCart.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.rvCart.setNestedScrollingEnabled(false);
+        b.rvCart.setHasFixedSize(false);
         b.rvCart.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        b.rvCart.setLayoutManager(new LinearLayoutManager(mActivity) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        ScrollLinearLayoutManager layoutManager = new ScrollLinearLayoutManager(mActivity);
+        layoutManager.setAutoMeasureEnabled(false);
+        b.rvCart.setLayoutManager(layoutManager);
         cartListAdapter = new CartListAdapter((BaseActivity) mActivity, cartList, this);
         b.rvCart.setAdapter(cartListAdapter);
 
-        b.rvHistory.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        b.rvHistory.setNestedScrollingEnabled(false);
+        b.rvHistory.setHasFixedSize(false);
         b.rvHistory.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-        b.rvHistory.setLayoutManager(new LinearLayoutManager(mActivity) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        });
+        ScrollLinearLayoutManager manager = new ScrollLinearLayoutManager(mActivity);
+        manager.setAutoMeasureEnabled(false);
+        b.rvHistory.setLayoutManager(manager);
         cartHisAdapter = new CartHistoryAdapter((BaseActivity) mActivity, cartHisList, this);
         b.rvHistory.setAdapter(cartHisAdapter);
     }
@@ -258,6 +255,14 @@ public class CarTabFragment extends BaseBindingFragment<FragmentCarTabBinding> i
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reLoadData(CartEvent event) {
+        if (LoginUtils.checkLoginState(mActivity)) {
+            initData();
+        }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshData(CartFragmentEvent event) {
         if (LoginUtils.checkLoginState(mActivity)) {
             initData();
         }

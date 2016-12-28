@@ -83,11 +83,10 @@ public interface MamaService {
     Observable<ResponseResultBean> withdraw_cash(
             @Field("choice") String fund_type);
 
-    //妈妈钱包转账到小鹿钱包
     @FormUrlEncoded
-    @POST("/rest/v1/pmt/cashout/cashout_to_budget")
-    Observable<ResponseResultBean> toWallet(
-            @Field("cashout_amount") String cashout_amount);
+    @POST("/rest/v2/mmcashout/cash_out_2_budget")
+    Observable<ResultEntity> toWallet(
+            @Field("value") String value);
 
     //cancel提款单信息
     @FormUrlEncoded

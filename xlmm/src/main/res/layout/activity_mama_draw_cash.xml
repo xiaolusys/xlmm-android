@@ -152,10 +152,12 @@
 
 
         <LinearLayout
+            android:id="@+id/layout_wx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <View
@@ -208,6 +210,21 @@
                 android:layout_weight="1" />
 
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_cash"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:hint="请输入提现金额"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:maxLength="8"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/text_color_26"
+            android:textColorHint="#BBBBBB"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="14sp" />
 
         <include layout="@layout/common_gap" />
 

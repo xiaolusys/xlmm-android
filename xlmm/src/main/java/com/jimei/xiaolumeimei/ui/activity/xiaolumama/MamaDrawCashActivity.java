@@ -1,13 +1,18 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +21,7 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResponseResultBean;
+import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
@@ -25,7 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 
-public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, TextWatcher {
     @Bind(R.id.tv_money)
     TextView moneyTv;
     @Bind(R.id.iv_wx)
@@ -54,8 +60,13 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
     CheckBox cbRule;
     @Bind(R.id.layout)
     LinearLayout layout;
+    @Bind(R.id.edit_cash)
+    EditText cashText;
+    @Bind(R.id.layout_wx)
+    LinearLayout layoutWx;
     private double cash;
-    private double drawMoney = 0;
+    private double drawMoney = 100;
+    private double walletMoney = 0;
     boolean flag = true;
 
     @Override
@@ -69,11 +80,11 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         textView200.setOnClickListener(this);
         tvRule.setOnClickListener(this);
         cbRule.setOnCheckedChangeListener(this);
+        cashText.addTextChangedListener(this);
     }
 
     @Override
     protected void initData() {
-        drawMoney = 100;
         addSubscription(MamaInfoModel.getInstance()
                 .getUserInfo()
                 .subscribe(new ServiceResponse<UserInfoBean>() {
@@ -112,13 +123,13 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         } else {
             addSubscription(MamaInfoModel.getInstance()
                     .toWallet(fund + "")
-                    .subscribe(new ServiceResponse<ResponseResultBean>() {
+                    .subscribe(new ServiceResponse<ResultEntity>() {
                         String msg = "";
                         int code = -1;
 
                         @Override
-                        public void onNext(ResponseResultBean resp) {
-                            msg = resp.getMsg();
+                        public void onNext(ResultEntity resp) {
+                            msg = resp.getInfo();
                             code = resp.getCode();
                         }
 
@@ -175,18 +186,31 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                 if (!flag) {
                     drawCash(drawMoney);
                 } else {
-                    toWallet(drawMoney);
+                    toWallet(walletMoney);
                 }
                 break;
             case R.id.wx_layout:
+                try {
+                    View focus = getCurrentFocus();
+                    if (focus != null) {
+                        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                                hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 flag = false;
                 wxIv.setImageResource(R.drawable.radio_bg_checked);
                 xlIv.setImageResource(R.drawable.radio_bg);
+                layoutWx.setVisibility(View.VISIBLE);
+                cashText.setVisibility(View.GONE);
                 break;
             case R.id.xl_layout:
                 flag = true;
                 xlIv.setImageResource(R.drawable.radio_bg_checked);
                 wxIv.setImageResource(R.drawable.radio_bg);
+                layoutWx.setVisibility(View.GONE);
+                cashText.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_100:
             case R.id.iv_100:
@@ -213,7 +237,7 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
                         .setTitle("提现提示")
                         .setMessage("由于微信存在提现次数限制,为了在方便妈妈提现和多次小额提现等待审核时间长之间做一个"
                                 + "平衡,我们设定提现金额为100元和200元.金额不足100元或者活跃值不足的情况下,"
-                                + "妈妈可以兑换现金券进行消费.")
+                                + "妈妈可以提现到小鹿钱包或者兑换现金券进行消费.")
                         .setPositiveButton("确认", (dialog, which) -> {
                             dialog.dismiss();
                         })
@@ -230,6 +254,52 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
         } else {
             drawCashBtn.setClickable(false);
             drawCashBtn.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (s.toString().contains(".")) {
+            if (s.length() - 1 - s.toString().indexOf(".") > 2) {
+                s = s.toString().subSequence(0, s.toString().indexOf(".") + 3);
+                cashText.setText(s);
+                cashText.setSelection(s.length());
+            }
+        }
+        if (s.toString().equals(".")) {
+            s = "0" + s;
+            cashText.setText(s);
+            cashText.setSelection(2);
+        }
+
+        if (s.toString().startsWith("0") && s.toString().length() > 1) {
+            if (!s.toString().substring(1, 2).equals(".")) {
+                cashText.setText(s.subSequence(0, 1));
+                cashText.setSelection(1);
+            }
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s.length() == 0) {
+            cashText.setTextSize(14);
+            walletMoney = 0;
+        } else {
+            cashText.setTextSize(32);
+            if (!s.toString().startsWith(".")) {
+                walletMoney = Double.parseDouble(s.toString());
+            }
+        }
+        if (walletMoney > cash) {
+            walletMoney = cash;
+            cashText.setText(walletMoney + "");
+            cashText.setSelection((walletMoney + "").length());
         }
     }
 }

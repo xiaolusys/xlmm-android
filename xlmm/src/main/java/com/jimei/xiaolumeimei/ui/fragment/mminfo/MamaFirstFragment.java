@@ -107,7 +107,7 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
                 }, throwable -> {
                     throwable.printStackTrace();
                     hideIndeterminateProgressDialog();
-                }));
+                },this::hideIndeterminateProgressDialog));
     }
 
     private void initUrl(MamaUrl mamaUrl) {
@@ -266,7 +266,6 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         } catch (Exception e) {
             e.printStackTrace();
         }
-        hideIndeterminateProgressDialog();
     }
 
     public void setListener() {

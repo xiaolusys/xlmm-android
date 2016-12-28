@@ -54,8 +54,8 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
-        fragments.add(MamaFirstFragment.newInstance("我要赚钱"));
         fragments.add(MamaBoutiqueFragment.newInstance("精品汇"));
+        fragments.add(MamaFirstFragment.newInstance("我要赚钱"));
         fragments.add(MamaSecondFragment.newInstance("社交活动"));
         fragments.add(MamaThirdFragment.newInstance("我的"));
         BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);

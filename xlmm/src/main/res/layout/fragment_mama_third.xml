@@ -411,7 +411,7 @@
                     android:layout_marginTop="1dp"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:id="@+id/ll_personal"

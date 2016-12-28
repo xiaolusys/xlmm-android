@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
@@ -16,8 +15,6 @@ import butterknife.Bind;
 public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.finish_btn)
     Button finishBtn;
-    @Bind(R.id.layout)
-    LinearLayout layout;
     private Bundle extras;
 
     @Override

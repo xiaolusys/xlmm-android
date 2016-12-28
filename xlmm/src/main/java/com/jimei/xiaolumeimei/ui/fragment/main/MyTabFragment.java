@@ -61,7 +61,6 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
     public void initData() {
         mamaFlag = false;
         if (LoginUtils.checkLoginState(mActivity)) {
-            showIndeterminateProgressDialog(true);
             addSubscription(MainModel.getInstance()
                     .getProfile()
                     .subscribe(new ServiceResponse<UserInfoBean>() {

@@ -15,13 +15,17 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
+import com.jimei.xiaolumeimei.entities.event.CartFragmentEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -79,6 +83,9 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
                                 .subscribe(new ServiceResponse<CartsHisBean>() {
                                     @Override
                                     public void onNext(CartsHisBean cartsHisBean) {
+                                        if (helper instanceof CartActivity) {
+                                            EventBus.getDefault().post(new CartFragmentEvent());
+                                        }
                                         helper.hideIndeterminateProgressDialog();
                                         if (null != cartsHisBean) {
                                             if (cartsHisBean.getCode() == 0) {
