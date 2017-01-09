@@ -222,7 +222,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
 
     @Override
     public void onPageSelected(int position) {
-        if (position==0||position==2){
+        if (position==0){
             b.titleView.setVisibility(View.GONE);
         }else {
             b.titleView.setVisibility(View.VISIBLE);
