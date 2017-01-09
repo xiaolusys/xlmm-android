@@ -130,6 +130,7 @@ public class ProductDetailBean {
         private CategoryBean category;
         private String sale_state;
         private boolean is_newsales;
+        private boolean is_boutique;
         private String model_code;
         private String name;
         private String sale_time;
@@ -288,6 +289,14 @@ public class ProductDetailBean {
 
         public void setIs_onsale(boolean is_onsale) {
             this.is_onsale = is_onsale;
+        }
+
+        public boolean is_boutique() {
+            return is_boutique;
+        }
+
+        public void setIs_boutique(boolean is_boutique) {
+            this.is_boutique = is_boutique;
         }
 
         public static class CategoryBean {

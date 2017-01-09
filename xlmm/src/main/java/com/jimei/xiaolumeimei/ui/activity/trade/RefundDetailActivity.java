@@ -161,13 +161,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                         hideIndeterminateProgressDialog();
                         super.onCompleted();
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.e(TAG, "getRefundDetailBean error:, " + e.toString());
-                        super.onError(e);
-                    }
                 });
         addSubscription(subscription);
     }
@@ -183,31 +176,28 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
-        if (refundDetailBean.isHas_good_return()) {
-            switch (refundDetailBean.getStatus()) {
-                case XlmmConst.REFUND_STATE_SELLER_AGREED:
-                    returnLayout.setVisibility(View.VISIBLE);
-                    writeBtn.setText("填写快递单");
-                    isWrited = false;
-                    break;
-                case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
-                case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
-                    returnLayout.setVisibility(View.VISIBLE);
-                    writeBtn.setText("已验收");
-                    isWrited = true;
-                    break;
-                case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
-                    returnLayout.setVisibility(View.VISIBLE);
-                    writeBtn.setText("查看进度");
-                    isWrited = true;
-                    break;
-                default:
-                    returnLayout.setVisibility(View.GONE);
-                    isWrited = true;
-                    break;
-            }
+        switch (refundDetailBean.getStatus()) {
+            case XlmmConst.REFUND_STATE_SELLER_AGREED:
+                returnLayout.setVisibility(View.VISIBLE);
+                writeBtn.setText("填写快递单");
+                isWrited = false;
+                break;
+            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
+            case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
+                returnLayout.setVisibility(View.VISIBLE);
+                writeBtn.setText("已验收");
+                isWrited = true;
+                break;
+            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
+                returnLayout.setVisibility(View.VISIBLE);
+                writeBtn.setText("查看进度");
+                isWrited = true;
+                break;
+            default:
+                returnLayout.setVisibility(View.GONE);
+                isWrited = true;
+                break;
         }
-        JUtils.Log(TAG, "fillDataToView ");
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
         String address = refundDetailBean.getReturn_address();

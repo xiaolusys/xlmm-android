@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,11 +46,16 @@ import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
 import rx.Observable;
 
-public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
+public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implements ViewPager.OnPageChangeListener {
 
     private List<BaseFragment> fragments = new ArrayList<>();
     private boolean isDestroy = false;
     private ExecutorService service;
+
+    @Override
+    protected void setListener() {
+        b.viewPager.addOnPageChangeListener(this);
+    }
 
     @Override
     protected void initViews() {
@@ -57,7 +63,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
         fragments.add(MamaBoutiqueFragment.newInstance("精品汇"));
         fragments.add(MamaFirstFragment.newInstance("我要赚钱"));
         fragments.add(MamaSecondFragment.newInstance("社交活动"));
-        fragments.add(MamaThirdFragment.newInstance("我的"));
+        fragments.add(MamaThirdFragment.newInstance("妈妈中心"));
         BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
         b.viewPager.setOffscreenPageLimit(3);
@@ -161,8 +167,8 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
             WebView webView = null;
             if (b.viewPager.getCurrentItem() == 2) {
                 webView = ((MamaSecondFragment) fragments.get(2)).getWebView();
-            } else if (b.viewPager.getCurrentItem() == 1) {
-                webView = ((MamaBoutiqueFragment) fragments.get(1)).getWebView();
+            } else if (b.viewPager.getCurrentItem() == 0) {
+                webView = ((MamaBoutiqueFragment) fragments.get(0)).getWebView();
             }
             if (keyCode == KeyEvent.KEYCODE_BACK && webView != null) {
                 if (webView.canGoBack()) {
@@ -207,5 +213,24 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
                 }
             }
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position==0||position==2){
+            b.titleView.setVisibility(View.GONE);
+        }else {
+            b.titleView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

@@ -276,6 +276,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             item_id = skuInfo.get(0).getProduct_id();
             sku_id = skuInfo.get(0).getSku_items().get(0).getSku_id();
         } else {
+            if (detailContent.is_onsale()||detailContent.is_boutique()) {
+                b.tvAdd.setText("直接购买");
+            }
             if (skuInfo.size() > 0) {
                 ViewUtils.loadImgToImgView(this, img, skuInfo.get(0).getProduct_img());
                 nameTv.setText(detailContent.getName() + "/" + skuInfo.get(0).getName());
