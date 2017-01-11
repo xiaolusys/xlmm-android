@@ -26,7 +26,6 @@ import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaBoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
-import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaSecondFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaThirdFragment;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 
@@ -62,7 +61,7 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
         EventBus.getDefault().register(this);
         fragments.add(MamaBoutiqueFragment.newInstance("精品汇"));
         fragments.add(MamaFirstFragment.newInstance("我要赚钱"));
-        fragments.add(MamaSecondFragment.newInstance("社交活动"));
+//        fragments.add(MamaSecondFragment.newInstance("社交活动"));
         fragments.add(MamaThirdFragment.newInstance("妈妈中心"));
         BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
@@ -163,11 +162,12 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (fragments.size() == 4) {
+        if (fragments.size() == 3) {
             WebView webView = null;
-            if (b.viewPager.getCurrentItem() == 2) {
-                webView = ((MamaSecondFragment) fragments.get(2)).getWebView();
-            } else if (b.viewPager.getCurrentItem() == 0) {
+//            if (b.viewPager.getCurrentItem() == 2) {
+//                webView = ((MamaSecondFragment) fragments.get(2)).getWebView();
+//            } else
+            if (b.viewPager.getCurrentItem() == 0) {
                 webView = ((MamaBoutiqueFragment) fragments.get(0)).getWebView();
             }
             if (keyCode == KeyEvent.KEYCODE_BACK && webView != null) {

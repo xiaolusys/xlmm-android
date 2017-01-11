@@ -66,6 +66,8 @@ public class ProductDetailBean {
 
     private TeamBuyInfo teambuy_info;
 
+    private String buy_coupon_url;
+
     public int getId() {
         return id;
     }
@@ -120,6 +122,14 @@ public class ProductDetailBean {
 
     public void setTeambuy_info(TeamBuyInfo teambuy_info) {
         this.teambuy_info = teambuy_info;
+    }
+
+    public String getBuy_coupon_url() {
+        return buy_coupon_url;
+    }
+
+    public void setBuy_coupon_url(String buy_coupon_url) {
+        this.buy_coupon_url = buy_coupon_url;
     }
 
     public static class DetailContentBean {

@@ -558,6 +558,9 @@
         <activity
             android:name=".ui.activity.main.AdvertisementActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.SearchActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
 
         <service
             android:name=".xlmmService.UpdateService"

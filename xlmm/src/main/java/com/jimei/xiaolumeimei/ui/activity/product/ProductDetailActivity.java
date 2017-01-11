@@ -61,6 +61,7 @@ import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.utils.JumpUtils;
 import com.jimei.xiaolumeimei.utils.LoginUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
@@ -209,6 +210,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         b.tvAddTeam.setOnClickListener(this);
         b.tvAddOne.setOnClickListener(this);
         b.collectLayout.setOnClickListener(this);
+        b.boutiqueLayout.setOnClickListener(this);
         plusIv.setOnClickListener(this);
         minusIv.setOnClickListener(this);
         commitTv.setOnClickListener(this);
@@ -253,6 +255,10 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private void fillDataToView(ProductDetailBean productDetailBean) {
         b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
         ProductDetailBean.DetailContentBean detailContent = productDetailBean.getDetail_content();
+        if (detailContent.is_boutique()&&LoginUtils.checkLoginState(this)&&LoginUtils.getMamaInfo(this)){
+            b.boutiqueDriver.setVisibility(View.VISIBLE);
+            b.boutiqueLayout.setVisibility(View.VISIBLE);
+        }
         teamBuyInfo = productDetailBean.getTeambuy_info();
         skuInfo = productDetailBean.getSku_info();
         if ("will".equals(detailContent.getSale_state())) {
@@ -425,6 +431,11 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     oks.setShareContentCustomizeCallback(new ShareContentCustom(
                             shareModel.getDesc() + shareModel.getShare_link()));
                     oks.show(this);
+                }
+                break;
+            case R.id.boutique_layout:
+                if (productDetail.getBuy_coupon_url()!=null&&!"".equals(productDetail.getBuy_coupon_url())) {
+                    JumpUtils.push_jump_proc(this,productDetail.getBuy_coupon_url());
                 }
                 break;
             case R.id.rl_cart:
