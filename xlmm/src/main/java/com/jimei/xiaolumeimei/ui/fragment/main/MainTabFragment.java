@@ -31,6 +31,7 @@ import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.event.ShowShopEvent;
 import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.SearchActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.ui.fragment.product.ProductListFragment;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -164,6 +165,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
 
     @Override
     public void setListener() {
+        b.searchLayout.setOnClickListener(this);
         b.mainShop.setOnClickListener(this);
         b.scrollableLayout.setOnScrollListener(this);
         b.swipeLayout.setOnRefreshListener(this);
@@ -183,6 +185,9 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.search_layout:
+                startActivity(new Intent(mActivity, SearchActivity.class));
+                break;
             case R.id.main_shop:
                 Intent intent = new Intent(mActivity, MamaActivity.class);
                 Bundle bundle = new Bundle();

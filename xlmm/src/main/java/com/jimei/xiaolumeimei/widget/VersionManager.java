@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -73,13 +72,7 @@ public abstract class VersionManager {
 
             okBtn.setOnClickListener(mPositiveListener);
             contentTv.setText(getUpdateContent());
-            ignoreBtn.setOnClickListener(v -> {
-                SharedPreferences updatePreferences = context.getSharedPreferences("update", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = updatePreferences.edit();
-                editor.putBoolean("update", false);
-                editor.apply();
-                dialog.dismiss();
-            });
+            ignoreBtn.setOnClickListener(v -> dialog.dismiss());
             dialog.show();
         } else {
             if (showMsg()) {

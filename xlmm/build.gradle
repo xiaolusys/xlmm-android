@@ -70,8 +70,8 @@ android {
 
         targetSdkVersion 23
 
-        versionCode 20161228
-        versionName "1.3.7"
+        versionCode 20170111
+        versionName "1.3.9"
 
         multiDexEnabled = true
 
@@ -219,16 +219,16 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "baidu",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-
+//
         vivo {
             manifestPlaceholders = [CHANNEL_NAME: "vivo",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-//
-//        samsung {
-//            manifestPlaceholders = [CHANNEL_NAME: "samsung",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
+
+        samsung {
+            manifestPlaceholders = [CHANNEL_NAME: "samsung",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
 
     }
 

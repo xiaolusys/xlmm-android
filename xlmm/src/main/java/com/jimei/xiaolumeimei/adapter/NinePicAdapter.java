@@ -99,19 +99,29 @@ public class NinePicAdapter extends BaseAdapter {
 //        List<String> picArray = ninePicBean.getPicArry();
         List<String> picArray = new ArrayList<>();
         if (ninePicBean.getPicArry() != null && ninePicBean.getPicArry().size() > 0) {
-            picArray.addAll(ninePicBean.getPicArry());
-            if (codeLink != null & !"".equals(codeLink)) {
-                if (ninePicBean.getPicArry().size() == 9) {
-                    picArray.set(4, "code" + codeLink);
-                } else if (ninePicBean.getPicArry().size() < 9) {
-//                    picArray.add(picArray.size(), "code" + codeLink);
-                    picArray.add(picArray.size() / 2, "code" + codeLink);
+            for (int i = 0; i < ninePicBean.getPicArry().size(); i++) {
+                String picUrl = ninePicBean.getPicArry().get(i);
+                if (picUrl !=null&&!"".equals(picUrl)
+                        && picUrl.length()>20){
+                    picArray.add(picUrl);
                 }
             }
-            holder.multiImageView.setVisibility(View.VISIBLE);
-            holder.multiImageView.setList(picArray);
-            holder.multiImageView.setOnItemClickListener((view, currentPosition) ->
-                    ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition));
+            if (picArray.size()>0){
+                if (codeLink != null & !"".equals(codeLink)) {
+                    if (ninePicBean.getPicArry().size() == 9) {
+                        picArray.set(4, "code" + codeLink);
+                    } else if (ninePicBean.getPicArry().size() < 9) {
+//                    picArray.add(picArray.size(), "code" + codeLink);
+                        picArray.add(picArray.size() / 2, "code" + codeLink);
+                    }
+                }
+                holder.multiImageView.setVisibility(View.VISIBLE);
+                holder.multiImageView.setList(picArray);
+                holder.multiImageView.setOnItemClickListener((view, currentPosition) ->
+                        ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition));
+            }else {
+                holder.multiImageView.setVisibility(View.GONE);
+            }
         } else {
             holder.multiImageView.setVisibility(View.GONE);
         }
