@@ -151,9 +151,13 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
         mWebView = (WebView) findViewById(R.id.wb_view);
-        if (getIntent().getExtras() != null && getIntent().getExtras().getString("title") != null) {
-            assert titleView != null;
-            titleView.setName(getIntent().getExtras().getString("title"));
+        if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras().getString("title") != null) {
+                titleView.setName(getIntent().getExtras().getString("title"));
+            }
+            if (getIntent().getExtras().getBoolean("hide")) {
+                titleView.setVisibility(View.GONE);
+            }
         }
         try {
             if (Build.VERSION.SDK_INT >= 19) {

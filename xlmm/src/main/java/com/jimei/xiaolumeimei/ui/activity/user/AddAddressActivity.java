@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.IdCardChecker;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
@@ -23,6 +24,7 @@ import com.jimei.library.widget.wheelcitypicker.Util;
 import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
 import com.jimei.xiaolumeimei.model.AddressModel;
@@ -30,6 +32,8 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -233,7 +237,12 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
             String address;
             InputStream in = null;
             try {
-                in = mContext.getResources().getAssets().open("areas.json");
+                if (FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
+                    File file = new File(XlmmConst.XLMM_DIR + "areas.json");
+                    in = new FileInputStream(file);
+                } else {
+                    in = mContext.getResources().getAssets().open("areas.json");
+                }
                 byte[] arrayOfByte = new byte[in.available()];
                 in.read(arrayOfByte);
                 address = new String(arrayOfByte, "UTF-8");

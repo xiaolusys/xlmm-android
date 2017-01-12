@@ -317,6 +317,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                                 teamLayout.setVisibility(View.VISIBLE);
                             }, e -> JUtils.Log(e.getMessage())));
                 } else {
+                    setStatusView(status);
                     addSubscription(TradeModel.getInstance()
                             .getRedBag(tid)
                             .subscribe(redBagBean -> {

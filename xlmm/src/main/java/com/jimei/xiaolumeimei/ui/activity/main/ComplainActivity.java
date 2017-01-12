@@ -117,7 +117,7 @@ public class ComplainActivity extends BaseSwipeBackCompatActivity
         switch (item.getItemId()) {
             case R.id.action_complain:
                 String link = XlmmApi.getAppUrl() + "/mall/complaint/history";
-                JumpUtils.jumpToWebViewWithCookies(this, link, -1, CommonWebViewActivity.class, "历史记录", false);
+                JumpUtils.jumpToWebViewWithCookies(this, link, -1, CommonWebViewActivity.class, false, true);
                 break;
             default:
                 break;

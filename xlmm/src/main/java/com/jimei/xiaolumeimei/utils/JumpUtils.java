@@ -60,6 +60,14 @@ public class JumpUtils {
     }
 
 
+    public static void jumpToWebViewWithCookies(Context context, String actlink, int id,
+                                                Class<?> classname, boolean share, boolean hide) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("share", share);
+        bundle.putBoolean("hide", hide);
+        setBundleWithStart(context, bundle, classname, id, actlink);
+    }
+
     private static void setBundleWithStart(Context context, Bundle bundle, Class<?> classname,
                                            int id, String actlink) {
         Intent intent = new Intent(context, classname);

@@ -178,7 +178,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
                     break;
                 case R.id.ll_problem:
                     JumpUtils.jumpToWebViewWithCookies(mActivity, "https://m.xiaolumeimei.com/mall/faq", -1,
-                            CommonWebViewActivity.class, "常见问题", false);
+                            CommonWebViewActivity.class, false, true);
                     break;
             }
         }

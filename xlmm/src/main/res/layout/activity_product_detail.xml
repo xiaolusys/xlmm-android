@@ -128,6 +128,46 @@
                                     android:background="@color/bg_grey2" />
 
                                 <LinearLayout
+                                    android:id="@+id/boutique_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="90px"
+                                    android:visibility="gone"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="32px"
+                                        android:text="精品商品"
+                                        android:textColor="@color/text_color_4A"
+                                        android:textSize="14sp"/>
+
+                                    <View
+                                        android:layout_width="0dp"
+                                        android:layout_height="1dp"
+                                        android:layout_weight="1"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="32px"
+                                        android:text="前往购券>>"
+                                        android:textColor="@color/colorAccent"
+                                        android:textSize="14sp"/>
+
+
+                                </LinearLayout>
+
+
+                                <View
+                                    android:id="@+id/boutique_driver"
+                                    android:layout_width="match_parent"
+                                    android:visibility="gone"
+                                    android:layout_height="20px"
+                                    android:background="@color/bg_grey" />
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="90px"
                                     android:gravity="center_vertical"

@@ -277,18 +277,7 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.MMNinePicActivity"
-            android:theme="@style/AppTheme.TransparentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="app"
-                    android:path="/v1/vip_0day"
-                    android:scheme="com.jimei.xlmm" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.ImagePagerActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
@@ -554,9 +543,23 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity
             android:name=".ui.activity.xiaolumama.DayPushActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="app"
+                    android:path="/v1/vip_0day"
+                    android:scheme="com.jimei.xlmm" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.main.AdvertisementActivity"
+            android:theme="@style/AppTheme.TransparentActivity" />
+        <activity
+            android:name=".ui.activity.product.SearchActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
 
         <service

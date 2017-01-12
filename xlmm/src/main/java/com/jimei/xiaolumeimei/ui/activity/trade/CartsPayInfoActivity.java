@@ -115,6 +115,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     RelativeLayout wuliuLayout;
     @Bind(R.id.logistic_layout)
     LinearLayout layout;
+    @Bind(R.id.jiesheng_price)
+    TextView jiesheng_price;
     private boolean isAlipay, isWx, isBudget;
     private String ids;
     private String cart_ids;
@@ -149,10 +151,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
     private String code;
     private String order_no = "";
     private int order_id = -1;
-    @Bind(R.id.jiesheng_price)
-    TextView jiesheng_price;
     private String addressId;
-    private boolean mFlag, couponFlag;
+    private boolean mFlag = false;
+    private boolean couponFlag = false;
     private String idNo;
     private boolean idFlag = false;
 
@@ -181,8 +182,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        idFlag = false;
-        couponFlag = false;
         list = new ArrayList<>();
         downLoadCartsInfoWithout();
     }
@@ -313,7 +312,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                                 }
                             }
                             for (int i = 0; i < cartList.size(); i++) {
-                                if (cartList.get(i).getProduct_type()!=1){
+                                if (cartList.get(i).getProduct_type() != 1) {
                                     layout.setVisibility(View.VISIBLE);
                                 }
                             }

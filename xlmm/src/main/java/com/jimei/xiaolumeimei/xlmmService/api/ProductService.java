@@ -7,6 +7,7 @@ import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.SearchHistoryBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 
 import retrofit2.http.Body;
@@ -80,6 +81,19 @@ public interface ProductService {
     @GET("/rest/v2/modelproducts/boutique")
     Observable<ProductListBean> getBoutiqueList(
             @Query("page") int page,
-            @Query("order_by") String order_by
-    );
+            @Query("order_by") String order_by);
+
+    @GET("/rest/v2/modelproducts/search_by_name")
+    Observable<ProductListBean> searchProduct(
+            @Query("name") String name,
+            @Query("page") int page);
+
+    @GET("/rest/v2/searchhistory/product_search_history")
+    Observable<SearchHistoryBean> getSearchHistory();
+
+
+    @FormUrlEncoded
+    @POST("/rest/v2/searchhistory/clear_search_history")
+    Observable<Object> clearSearch(
+            @Field("target") String target);
 }

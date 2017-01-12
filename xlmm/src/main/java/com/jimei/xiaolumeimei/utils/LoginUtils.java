@@ -10,6 +10,7 @@ import com.jimei.library.utils.DataClearManager;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
+import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -31,14 +32,12 @@ public class LoginUtils {
     private static SharedPreferences sharedPreferences3;
     private static SharedPreferences sharedPreferences4;
     private static SharedPreferences sharedPreferences5;
-    private static SharedPreferences sharedPreferences6;
     private static SharedPreferences.Editor editor;
     private static SharedPreferences.Editor editor1;
     private static SharedPreferences.Editor editor2;
     private static SharedPreferences.Editor editor3;
     private static SharedPreferences.Editor editor4;
     private static SharedPreferences.Editor editor5;
-    private static SharedPreferences.Editor editor6;
 
     public static void saveLoginInfo(boolean isSuccess, Context context, String username,
                                      String password) {
@@ -48,6 +47,7 @@ public class LoginUtils {
         editor.putString("password", password);
         editor.putBoolean("success", isSuccess);
         editor.apply();
+        setMamaInfo(context);
         Log.d(TAG, "save logininfo ");
     }
 
@@ -56,7 +56,27 @@ public class LoginUtils {
         editor = sharedPreferences.edit();
         editor.putBoolean("success", isSuccess);
         editor.apply();
+        setMamaInfo(context);
         Log.d(TAG, "save logininfo success");
+    }
+
+    public static void setMamaInfo(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("mama_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = preferences.edit();
+        MainModel.getInstance()
+                .getProfile()
+                .subscribe(userInfoBean -> {
+                    if (userInfoBean != null && userInfoBean.getXiaolumm() != null
+                            && userInfoBean.getXiaolumm().getId() != 0) {
+                        edit.putBoolean("success", true);
+                        edit.apply();
+                    }
+                }, Throwable::printStackTrace);
+    }
+
+    public static boolean getMamaInfo(Context context) {
+        SharedPreferences shared = context.getSharedPreferences("mama_info", Context.MODE_PRIVATE);
+        return shared.getBoolean("success", false);
     }
 
     public static void delLoginInfo(Context context) {
@@ -76,6 +96,10 @@ public class LoginUtils {
         editor3.clear();
         editor3.apply();
         Log.d(TAG, "clear logininfo ");
+        SharedPreferences shared = context.getSharedPreferences("mama_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shared.edit();
+        edit.clear();
+        edit.apply();
     }
 
     //获取用户信息

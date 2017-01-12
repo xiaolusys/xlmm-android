@@ -10,9 +10,11 @@
         tools:context="com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity">
 
         <com.jimei.library.widget.XlmmTitleView
+            android:id="@+id/title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:elevation="0dp"
+            android:visibility="gone"
             app:xlmm_title="妈妈中心" />
 
         <FrameLayout

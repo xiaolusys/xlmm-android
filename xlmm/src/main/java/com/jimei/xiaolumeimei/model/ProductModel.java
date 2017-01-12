@@ -9,6 +9,7 @@ import com.jimei.xiaolumeimei.entities.CollectionDeleteBody;
 import com.jimei.xiaolumeimei.entities.CollectionResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.SearchHistoryBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.xlmmService.RetrofitClient;
 import com.jimei.xiaolumeimei.xlmmService.api.ProductService;
@@ -129,6 +130,27 @@ public class ProductModel {
     public Observable<BrandListBean> getBrandList(String id) {
         return getService()
                 .getBrandList(id)
+                .compose(new DefaultTransform<>());
+    }
+
+    //根据关键字查询商品
+    public Observable<ProductListBean> searchProduct(String name,int page){
+        return getService()
+                .searchProduct(name,page)
+                .compose(new DefaultTransform<>());
+    }
+
+    //获取搜索历史
+    public Observable<SearchHistoryBean> getSearchHistory(){
+        return getService()
+                .getSearchHistory()
+                .compose(new DefaultTransform<>());
+    }
+
+    //清除搜索历史
+    public Observable<Object> clearSearch(){
+        return getService()
+                .clearSearch("ModelProduct")
                 .compose(new DefaultTransform<>());
     }
 }

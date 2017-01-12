@@ -1,9 +1,7 @@
 package com.jimei.xiaolumeimei.ui.activity.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
@@ -58,6 +56,7 @@ public class TabActivity extends BaseActivity {
     RadioGroup radioGroup;
     @Bind(R.id.text_car)
     TextView textView;
+    private int num = 1;
     private long firstTime = 0;
     private boolean updateFlag = true;
     private UserInfoBean userInfoNewBean;
@@ -100,6 +99,7 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void initData() {
         LoginUtils.clearCacheEveryWeek(this);
+        LoginUtils.setMamaInfo(this);
         showNewCoupon();
         downLoadAddress();
         downLoadCategory();
@@ -234,7 +234,7 @@ public class TabActivity extends BaseActivity {
                 .subscribe(versionBean -> {
                     if (versionBean != null) {
                         new Thread(() -> {
-                            SystemClock.sleep(5000);
+                            SystemClock.sleep(2500);
                             runOnUiThread(() -> checkVersion(versionBean));
                         }).start();
                     }
@@ -253,10 +253,8 @@ public class TabActivity extends BaseActivity {
                     versionManager.getDialog().dismiss();
                     JUtils.Toast("应用正在后台下载!");
                 });
-                SharedPreferences updatePreferences =
-                        getSharedPreferences("update", Context.MODE_PRIVATE);
-                boolean update = updatePreferences.getBoolean("update", true);
-                if (update && updateFlag) {
+                if (num == 1 && updateFlag) {
+                    num = 2;
                     versionManager.checkVersion(TabActivity.this);
                 }
             }
