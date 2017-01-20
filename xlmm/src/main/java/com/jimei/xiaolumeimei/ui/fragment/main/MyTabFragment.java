@@ -21,9 +21,9 @@ import com.jimei.xiaolumeimei.ui.activity.main.ComplainActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AllCouponActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.CoinActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaActivity;
 import com.jimei.xiaolumeimei.utils.JumpUtils;
@@ -137,7 +137,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
                     readyGo(WalletActivity.class);
                     break;
                 case R.id.ll_score:
-                    readyGo(MembershipPointActivity.class);
+                    readyGo(CoinActivity.class);
                     break;
                 case R.id.ll_discount:
                     readyGo(AllCouponActivity.class);
@@ -209,7 +209,7 @@ public class MyTabFragment extends BaseBindingFragment<FragmentMyTabBinding> imp
             } else {
                 b.tvMoney.setText("0");
             }
-            b.tvScore.setText("" + userInfoBean.getScore());
+            b.tvScore.setText("" + userInfoBean.getXiaoluCoin());
             b.tvDiscount.setText("" + userInfoBean.getCouponNum());
             if (userInfoBean.getWaitgoodsNum() > 0) {
                 b.textWait.setText(userInfoBean.getWaitgoodsNum() + "");

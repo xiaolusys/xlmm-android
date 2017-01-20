@@ -89,6 +89,8 @@ public class UserInfoBean {
   private int refundsNum;
   @SerializedName("score")
   private int score;
+  @SerializedName("xiaolu_coin")
+  private double xiaoluCoin;
 
   public void setId(int id) {
     this.id = id;
@@ -283,6 +285,14 @@ public class UserInfoBean {
             ", refundsNum=" + refundsNum +
             ", score=" + score +
             '}';
+  }
+
+  public double getXiaoluCoin() {
+    return xiaoluCoin;
+  }
+
+  public void setXiaoluCoin(double xiaoluCoin) {
+    this.xiaoluCoin = xiaoluCoin;
   }
 
   public static class XiaolummEntity {

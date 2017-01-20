@@ -962,9 +962,14 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity
                         }
                     }));
         } else {
-            Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
+//            Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("tid", order_no);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+            Intent intent = new Intent(this, AllOrdersActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("tid", order_no);
+            bundle.putInt("fragment", 3);
             intent.putExtras(bundle);
             startActivity(intent);
             finish();

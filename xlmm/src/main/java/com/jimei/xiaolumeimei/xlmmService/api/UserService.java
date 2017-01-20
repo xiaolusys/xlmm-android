@@ -3,14 +3,13 @@ package com.jimei.xiaolumeimei.xlmmService.api;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
-import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
-import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -58,13 +57,9 @@ public interface UserService {
     @POST("/rest/v1/users/customer_logout")
     Observable<LogOutBean> customer_logout();
 
-    //获取用户积分信息
-    @GET("/rest/v1/integral")
-    Observable<MembershipPointBean> getMembershipPointBean();
-
     //获取用户积分记录信息
-    @GET("/rest/v1/integrallog")
-    Observable<PointLogBean> getPointLogBean(
+    @GET("/rest/v2/xiaolucoin/history")
+    Observable<CoinHistoryListBean> getCoinHisList(
             @Query("page") String page);
 
     //获取优惠券
