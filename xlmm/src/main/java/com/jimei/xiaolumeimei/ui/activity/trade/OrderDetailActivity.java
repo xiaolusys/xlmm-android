@@ -59,7 +59,6 @@ import rx.Subscription;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, AdapterView.OnItemClickListener {
-//    public static final int HAND_MSG = 6;
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_pay)
     ImageView btn_order_pay;
@@ -137,8 +136,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     TextView tv5;
     @Bind(R.id.hsv)
     HorizontalScrollView hsv;
-//    @Bind(R.id.red_bag)
-//    LinearLayout redBagLayout;
     @Bind(R.id.scroll_view)
     ScrollView scrollView;
     @Bind(R.id.team_buy)
@@ -146,7 +143,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.count_view)
     CountDownView mCountDownView;
 
-//    Handler mHandler;
     ListView listView;
     ListView listView2;
 
@@ -155,8 +151,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     String tid;
     private Dialog dialog;
     private Dialog dialog2;
-//    private RedBagBean redBagEntity;
-//    private boolean hasRedBag = false;
     private boolean bonded_goods = false;
 
     @Override
@@ -164,8 +158,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         btn_order_pay.setOnClickListener(this);
         btn_order_cancel.setOnClickListener(this);
         logisticsLayout.setOnClickListener(this);
-//        redBagLayout.setOnClickListener(this);
-//        scrollView.setOnTouchListener(this);
         listView2.setOnItemClickListener(this);
         teamLayout.setOnClickListener(this);
     }
@@ -222,25 +214,9 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         closeIv2.setOnClickListener(this);
     }
 
-//    public void resendMsg() {
-//        mHandler.removeMessages(HAND_MSG);
-//        Message msg = mHandler.obtainMessage(HAND_MSG);
-//        mHandler.sendMessageDelayed(msg, 1500);
-//    }
-
     //从server端获得所有订单数据，可能要查询几次
     @Override
     protected void initData() {
-//        mHandler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                switch (msg.what) {
-//                    case HAND_MSG:
-//                        redBagLayout.setVisibility(View.VISIBLE);
-//                        break;
-//                }
-//            }
-//        };
         if (order_id != -1) {
             showIndeterminateProgressDialog(false);
             addSubscription(TradeModel.getInstance()
@@ -310,20 +286,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             }, e -> JUtils.Log(e.getMessage())));
                 } else {
                     setStatusView(status);
-//                    addSubscription(TradeModel.getInstance()
-//                            .getRedBag(tid)
-//                            .subscribe(redBagBean -> {
-//                                if (redBagBean.getCode() == 0) {
-//                                    if (redBagBean.getShare_times_limit() > 0) {
-//                                        hasRedBag = true;
-//                                        redBagLayout.setVisibility(View.VISIBLE);
-//                                        redBagEntity = redBagBean;
-//                                    } else {
-//                                        hasRedBag = false;
-//                                        redBagLayout.setVisibility(View.GONE);
-//                                    }
-//                                }
-//                            }, e -> JUtils.Log(e.getMessage())));
                 }
             } else {
                 setStatusView(status);
@@ -560,19 +522,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     dialog.dismiss();
                 }
                 break;
-//            case R.id.red_bag:
-//                if (redBagEntity != null) {
-//                    OnekeyShare oks = new OnekeyShare();
-//                    oks.disableSSOWhenAuthorize();
-//                    oks.setTitle(redBagEntity.getTitle());
-//                    oks.setTitleUrl(redBagEntity.getShare_link());
-//                    oks.setText(redBagEntity.getDescription());
-//                    oks.setImageUrl(redBagEntity.getPost_img());
-//                    oks.setUrl(redBagEntity.getShare_link());
-//                    oks.setShareContentCustomizeCallback(new ShareContentCustom(redBagEntity.getDescription()));
-//                    oks.show(this);
-//                }
-//                break;
         }
     }
 
@@ -633,11 +582,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             break;
                         case "success":
                             JUtils.Toast("支付成功！");
-//                            Intent intent = new Intent(this, RedBagActivity.class);
-//                            Bundle bundle = new Bundle();
-//                            bundle.putString("tid", orderDetail.getTid());
-//                            intent.putExtras(bundle);
-//                            startActivity(intent);
                             Intent intent = new Intent(this, AllOrdersActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putInt("fragment", 3);
@@ -695,25 +639,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         listView.setLayoutParams(params);
     }
 
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_DOWN:
-//            case MotionEvent.ACTION_SCROLL:
-//            case MotionEvent.ACTION_MOVE:
-//                redBagLayout.setVisibility(View.GONE);
-//                if (hasRedBag) {
-//                    resendMsg();
-//                }
-//                break;
-//        }
-//        return false;
-//    }
-
     @Override
     protected void onDestroy() {
-//        mHandler.removeMessages(HAND_MSG);
         mCountDownView.cancel();
         super.onDestroy();
     }
@@ -724,21 +651,5 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         dialog2.dismiss();
         payNow(channel);
     }
-
-//    class ShareContentCustom implements ShareContentCustomizeCallback {
-//
-//        private String text;
-//
-//        public ShareContentCustom(String text) {
-//            this.text = text;
-//        }
-//
-//        @Override
-//        public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
-//            if (WechatMoments.NAME.equals(platform.getName())) {
-//                paramsToShare.setTitle(text);
-//            }
-//        }
-//    }
 
 }
