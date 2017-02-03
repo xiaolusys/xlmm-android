@@ -251,6 +251,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }.getType());
                 return true;
             } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 if (in != null) {
                     try {

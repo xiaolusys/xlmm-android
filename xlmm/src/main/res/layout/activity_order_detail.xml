@@ -557,40 +557,40 @@
 
     <include layout="@layout/orders_pay_lefttime"/>
 
-    <LinearLayout
-        android:id="@+id/red_bag"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/C48"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="30px"
-        android:visibility="gone">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/red_bag"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="@color/C48"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:padding="30px"-->
+        <!--android:visibility="gone">-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/red_bag_bottom"/>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/red_bag_bottom"/>-->
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="您获得十六个红包可以分享给好友"
-            android:textColor="@color/white"
-            android:textSize="14sp"/>
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:ellipsize="end"-->
+            <!--android:singleLine="true"-->
+            <!--android:text="您获得十六个红包可以分享给好友"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="14sp"/>-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/red_bag_share"/>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/red_bag_share"/>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/team_buy"

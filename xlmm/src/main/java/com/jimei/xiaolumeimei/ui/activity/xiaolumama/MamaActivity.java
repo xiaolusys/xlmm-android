@@ -140,14 +140,17 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
         MiPushOrderCarryBean bean = event.getBean();
         try {
             ViewUtils.loadImgToHead(this, b.miHead, bean.getAvatar());
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            JUtils.Log("error");
         }
         b.miInfo.setText(bean.getContent());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showOrder(ShowOrderEvent event) {
-        b.miLayout.setVisibility(View.VISIBLE);
+        if (b.viewPager.getCurrentItem()!=0) {
+            b.miLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

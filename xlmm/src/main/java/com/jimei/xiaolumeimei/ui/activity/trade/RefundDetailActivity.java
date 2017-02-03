@@ -126,6 +126,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     LinearLayout statusLayout;
     @Bind(R.id.layout)
     ScrollView layout;
+    @Bind(R.id.driver)
+    View driver;
 
     private int goods_id;
     private boolean isWrited;
@@ -176,27 +178,31 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     }
 
     private void fillDataToView(AllRefundsBean.ResultsEntity refundDetailBean) {
-        switch (refundDetailBean.getStatus()) {
-            case XlmmConst.REFUND_STATE_SELLER_AGREED:
-                returnLayout.setVisibility(View.VISIBLE);
-                writeBtn.setText("填写快递单");
-                isWrited = false;
-                break;
-            case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
-            case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
-                returnLayout.setVisibility(View.VISIBLE);
-                writeBtn.setText("已验收");
-                isWrited = true;
-                break;
-            case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
-                returnLayout.setVisibility(View.VISIBLE);
-                writeBtn.setText("查看进度");
-                isWrited = true;
-                break;
-            default:
-                returnLayout.setVisibility(View.GONE);
-                isWrited = true;
-                break;
+        if (refundDetailBean.isHas_good_return()) {
+            switch (refundDetailBean.getStatus()) {
+                case XlmmConst.REFUND_STATE_SELLER_AGREED:
+                    returnLayout.setVisibility(View.VISIBLE);
+                    writeBtn.setText("填写快递单");
+                    isWrited = false;
+                    break;
+                case XlmmConst.REFUND_STATE_WAIT_RETURN_FEE:
+                case XlmmConst.REFUND_STATE_REFUND_SUCCESS:
+                    returnLayout.setVisibility(View.VISIBLE);
+                    writeBtn.setText("已验收");
+                    isWrited = true;
+                    break;
+                case XlmmConst.REFUND_STATE_BUYER_RETURNED_GOODS:
+                    returnLayout.setVisibility(View.VISIBLE);
+                    writeBtn.setText("查看进度");
+                    isWrited = true;
+                    break;
+                default:
+                    returnLayout.setVisibility(View.GONE);
+                    isWrited = true;
+                    break;
+            }
+        } else {
+            returnLayout.setVisibility(View.GONE);
         }
         orderIdTv.setText(refundDetailBean.getRefund_no());
         statusTv.setText(refundDetailBean.getStatus_display());
@@ -266,6 +272,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             lp.gravity = Gravity.CENTER;
             statusLayout.setLayoutParams(lp);
+            driver.setVisibility(View.GONE);
         }
         if (status_shaft.size() > 1) {
             String display = status_shaft.get(status_shaft.size() - 1).getStatus_display();
@@ -303,7 +310,6 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         lineImage5.setBackgroundColor(getResources().getColor(R.color.text_color_32));
         lineImage6.setBackgroundColor(getResources().getColor(R.color.text_color_32));
     }
-
 
     private void setView3() {
         setView2();
