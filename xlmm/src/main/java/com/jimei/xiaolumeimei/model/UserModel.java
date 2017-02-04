@@ -4,14 +4,13 @@ import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
-import com.jimei.xiaolumeimei.entities.MembershipPointBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
-import com.jimei.xiaolumeimei.entities.PointLogBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
@@ -78,17 +77,10 @@ public class UserModel {
                 .compose(new DefaultTransform<>());
     }
 
-    //得到用户积分信息
-    public Observable<MembershipPointBean> getMembershipPointBean() {
-        return getService()
-                .getMembershipPointBean()
-                .compose(new DefaultTransform<>());
-    }
-
     //得到用户积分记录信息
-    public Observable<PointLogBean> getPointLogBean(String page) {
+    public Observable<CoinHistoryListBean> getCoinHisList(String page) {
         return getService()
-                .getPointLogBean(page)
+                .getCoinHisList(page)
                 .compose(new DefaultTransform<>());
     }
 

@@ -4,14 +4,13 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 
-import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
 import com.jimei.xiaolumeimei.R;
 
 
 /**
  * Created by itxuye on 2016/7/26.
  */
-public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseActivity implements SwipeBackActivityBase {
+public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseActivity{
     protected T b;
 
     @Override

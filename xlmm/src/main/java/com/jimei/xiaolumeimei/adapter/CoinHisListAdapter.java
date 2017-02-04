@@ -1,10 +1,5 @@
 package com.jimei.xiaolumeimei.adapter;
 
-/**
- * Created by wulei on 15-12-17.
- * 商品订单数据适配
- */
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,28 +9,28 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MembershipPointListAdapter extends BaseAdapter {
+public class CoinHisListAdapter extends BaseAdapter {
     private static final String TAG = "PointListAdapter";
     private Context context;
-    private List<PointLogBean.ResultsBean> mList;
+    private List<CoinHistoryListBean.ResultsBean> mList;
 
-    public MembershipPointListAdapter(Context context) {
+    public CoinHisListAdapter(Context context) {
         mList = new ArrayList<>();
         this.context = context;
     }
 
-    public void updateWithClear(List<PointLogBean.ResultsBean> list) {
+    public void updateWithClear(List<CoinHistoryListBean.ResultsBean> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<PointLogBean.ResultsBean> list) {
+    public void update(List<CoinHistoryListBean.ResultsBean> list) {
         Log.d(TAG, "dataSource.size " + list.size());
         mList.addAll(list);
         notifyDataSetChanged();
@@ -67,10 +62,14 @@ public class MembershipPointListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.logTime.setText("" + mList.get(position).getCreated().replace("T", " "));
-        holder.info.setText("购物订单完成奖励积分");
-        holder.value.setText("+" + mList.get(position).getLog_value() + "分");
+        CoinHistoryListBean.ResultsBean bean = mList.get(position);
+        holder.logTime.setText(bean.getCreated().replace("T", " "));
+        holder.info.setText(bean.getSubject());
+        if ("收入".equals(bean.getIro_type())) {
+            holder.value.setText("+" + (bean.getAmount() / 100));
+        } else if ("支出".equals(bean.getIro_type())) {
+            holder.value.setText("-" + (bean.getAmount() / 100));
+        }
         return convertView;
     }
 

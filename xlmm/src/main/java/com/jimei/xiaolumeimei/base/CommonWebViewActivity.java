@@ -47,7 +47,6 @@ import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.ui.activity.trade.RedBagActivity;
 import com.jimei.xiaolumeimei.utils.pay.PayUtils;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
@@ -184,6 +183,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             mWebView.getSettings().setDomStorageEnabled(true);
             mWebView.getSettings().setDatabaseEnabled(true);
             mWebView.getSettings().setUseWideViewPort(true);
+
+            mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            mWebView.setInitialScale(100);
+            mWebView.getSettings().setSupportZoom(true);
+
             mWebView.setDrawingCacheEnabled(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
@@ -344,7 +348,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             break;
                         case "success":
                             JUtils.Toast("支付成功！");
-                            successJump(mAndroidJsBridge.getTid());
+//                            successJump(mAndroidJsBridge.getTid());
+                            finish();
                             break;
                         default:
                             showMsg(result, errorMsg, extraMsg);
@@ -358,14 +363,14 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         }
     }
 
-    private void successJump(String tid) {
-        Intent intent = new Intent(this, RedBagActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("tid", tid);
-        intent.putExtras(bundle);
-        startActivity(intent);
-        finish();
-    }
+//    private void successJump(String tid) {
+//        Intent intent = new Intent(this, RedBagActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("tid", tid);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
+//        finish();
+//    }
 
     private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
         mUploadMessage = uploadMsg;

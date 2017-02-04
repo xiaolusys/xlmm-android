@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jimei.xiaolumeimei.ui.activity.user.MembershipPointActivity">
+    tools:context="com.jimei.xiaolumeimei.ui.activity.user.CoinActivity">
 
     <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="我的积分" />
+        app:xlmm_title="小鹿币" />
 
     <com.cpoopc.scrollablelayoutlib.ScrollableLayout
         android:id="@+id/scrollable_layout"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="我的积分"
+                android:text="我的小鹿币"
                 android:textSize="16sp" />
 
         </LinearLayout>

@@ -13,10 +13,10 @@ import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MembershipPointListAdapter;
+import com.jimei.xiaolumeimei.adapter.CoinHisListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.MembershipPointBean;
-import com.jimei.xiaolumeimei.entities.PointLogBean;
+import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
+import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
@@ -24,11 +24,10 @@ import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
-public class MembershipPointActivity extends BaseSwipeBackCompatActivity
+public class CoinActivity extends BaseSwipeBackCompatActivity
         implements View.OnClickListener, ScrollableHelper.ScrollableContainer, AbsListView.OnScrollListener {
-    String TAG = "MembershipPointActivity";
+    String TAG = "CoinActivity";
     @Bind(R.id.btn_jump)
     Button btn_jump;
     @Bind(R.id.rlayout_order_empty)
@@ -38,7 +37,7 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.scrollable_layout)
     ScrollableLayout scrollableLayout;
     TextView tx_point;
-    private MembershipPointListAdapter mPointAdapter;
+    private CoinHisListAdapter mPointAdapter;
     boolean flag;
     int page = 2;
 
@@ -61,11 +60,11 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         scrollableLayout.getHelper().setCurrentScrollableContainer(this);
-        mPointAdapter = new MembershipPointListAdapter(this);
+        mPointAdapter = new CoinHisListAdapter(this);
         all_points_listview.setAdapter(mPointAdapter);
         tx_point = (TextView) findViewById(R.id.tv_Point);
-        ((TextView) findViewById(R.id.tx_info)).setText("亲，您暂时还没有积分记录哦~");
-        ((TextView) findViewById(R.id.tx2)).setText("快去下单赚取积分吧~");
+        ((TextView) findViewById(R.id.tx_info)).setText("亲，您暂时还没有小鹿币记录哦~");
+        ((TextView) findViewById(R.id.tx2)).setText("快去下单吧~");
         ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.img_emptypoint);
     }
 
@@ -73,32 +72,25 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
+        addSubscription(MainModel.getInstance()
+                .getProfile()
+                .subscribe(userInfoBean -> {
+                    tx_point.setText("" + userInfoBean.getXiaoluCoin());
+                }, throwable -> {
+                    hideIndeterminateProgressDialog();
+                }));
         addSubscription(UserModel.getInstance()
-                .getMembershipPointBean()
-                .subscribe(new ServiceResponse<MembershipPointBean>() {
-                    @Override
-                    public void onNext(MembershipPointBean pointBean) {
-                        List<MembershipPointBean.ResultsEntity> results = pointBean.getResults();
-                        if (0 != results.size()) {
-                            tx_point.setText(results.get(0).getIntegral_value() + "");
-                        }
-                        addSubscription(UserModel.getInstance()
-                                .getPointLogBean("1")
-                                .subscribe(pointLogBean -> {
-                                    List<PointLogBean.ResultsBean> result = pointLogBean.getResults();
-                                    if (0 == result.size()) {
-                                        rlayout_order_empty.setVisibility(View.VISIBLE);
-                                    } else {
-                                        mPointAdapter.update(result);
-                                    }
-                                    hideIndeterminateProgressDialog();
-                                }));
+                .getCoinHisList("1")
+                .subscribe(historyListBean -> {
+                    List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
+                    if (0 == result.size()) {
+                        rlayout_order_empty.setVisibility(View.VISIBLE);
+                    } else {
+                        mPointAdapter.update(result);
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        hideIndeterminateProgressDialog();
-                    }
+                    hideIndeterminateProgressDialog();
+                }, throwable -> {
+                    hideIndeterminateProgressDialog();
                 }));
     }
 
@@ -122,27 +114,25 @@ public class MembershipPointActivity extends BaseSwipeBackCompatActivity
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE && flag) {
-            Subscription subscribe1 = UserModel.getInstance()
-                    .getPointLogBean(page + "")
-                    .subscribe(new ServiceResponse<PointLogBean>() {
+            addSubscription(UserModel.getInstance()
+                    .getCoinHisList(page + "")
+                    .subscribe(new ServiceResponse<CoinHistoryListBean>() {
                         @Override
-                        public void onNext(PointLogBean pointLogBean) {
-                            List<PointLogBean.ResultsBean> results = pointLogBean.getResults();
+                        public void onNext(CoinHistoryListBean historyListBean) {
+                            List<CoinHistoryListBean.ResultsBean> results = historyListBean.getResults();
                             page++;
                             mPointAdapter.update(results);
-                            if ("".equals(pointLogBean.getNext()) || pointLogBean.getNext() == null) {
+                            if ("".equals(historyListBean.getNext()) || historyListBean.getNext() == null) {
                                 JUtils.Toast("没有更多的数据了");
                             }
                         }
-                    });
-            addSubscription(subscribe1);
+                    }));
             flag = false;
         }
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
         if ((firstVisibleItem + visibleItemCount) == totalItemCount && totalItemCount > 0) {
             flag = true;
         }

@@ -32,7 +32,6 @@ public interface MainService {
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
 
-
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean(
             @Query("category") String category);
