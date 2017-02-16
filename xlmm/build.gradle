@@ -58,8 +58,8 @@ andResGuard {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     dataBinding {
         enabled = true
@@ -68,10 +68,10 @@ android {
         applicationId "com.jimei.xiaolumeimei"
         minSdkVersion 15
 
-        targetSdkVersion 23
+        targetSdkVersion 25
 
-        versionCode 20170124
-        versionName "1.4.0"
+        versionCode 20170216
+        versionName "2.0.0"
 
         multiDexEnabled = true
 
@@ -219,7 +219,7 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "baidu",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-//
+
         vivo {
             manifestPlaceholders = [CHANNEL_NAME: "vivo",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
@@ -258,7 +258,8 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Moments-2.7.8.jar')
 //    compile 'com.pingxx:pingpp-core:2.1.6'
     compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:recyclerview-v7:25.1.1'
     compile 'com.android.support:design:23.4.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'

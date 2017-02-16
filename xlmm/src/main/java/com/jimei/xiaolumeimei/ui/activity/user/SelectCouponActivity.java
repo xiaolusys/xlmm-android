@@ -13,7 +13,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;

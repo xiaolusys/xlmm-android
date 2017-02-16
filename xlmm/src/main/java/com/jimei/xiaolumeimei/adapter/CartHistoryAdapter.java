@@ -15,17 +15,13 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
-import com.jimei.xiaolumeimei.entities.event.CartFragmentEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -72,40 +68,37 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
             }
         });
         holder.rebuy.setOnClickListener(
-                new NoDoubleClickListener() {
-                    @Override
-                    protected void onNoDoubleClick(View v) {
-                        MobclickAgent.onEvent(mActivity, "ReAddCartsID");
-                        helper.showIndeterminateProgressDialog(false);
-                        helper.addSubscription(CartsModel.getInstance()
-                                .rebuy(cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
-                                        cartsInfoBean.getId() + "")
-                                .subscribe(new ServiceResponse<CartsHisBean>() {
-                                    @Override
-                                    public void onNext(CartsHisBean cartsHisBean) {
-                                        if (helper instanceof CartActivity) {
-                                            EventBus.getDefault().post(new CartFragmentEvent());
-                                        }
-                                        helper.hideIndeterminateProgressDialog();
-                                        if (null != cartsHisBean) {
-                                            if (cartsHisBean.getCode() == 0) {
-                                                helper.removeHistory(cartsInfoBean);
-                                                helper.refreshCartList();
-                                            } else {
-                                                JUtils.Toast(cartsHisBean.getInfo());
-                                            }
-                                        }
+            new NoDoubleClickListener() {
+                @Override
+                protected void onNoDoubleClick(View v) {
+                    MobclickAgent.onEvent(mActivity, "ReAddCartsID");
+                    helper.showIndeterminateProgressDialog(false);
+                    helper.addSubscription(CartsModel.getInstance()
+                        .rebuy(cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
+                            cartsInfoBean.getId() + "")
+                        .subscribe(new ServiceResponse<CartsHisBean>() {
+                            @Override
+                            public void onNext(CartsHisBean cartsHisBean) {
+                                helper.hideIndeterminateProgressDialog();
+                                if (null != cartsHisBean) {
+                                    if (cartsHisBean.getCode() == 0) {
+                                        helper.removeHistory(cartsInfoBean);
+                                        helper.refreshCartList();
+                                    } else {
+                                        JUtils.Toast(cartsHisBean.getInfo());
                                     }
+                                }
+                            }
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        super.onError(e);
-                                        JUtils.Toast("重新购买失败,商品可能已下架");
-                                        helper.hideIndeterminateProgressDialog();
-                                    }
-                                }));
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                super.onError(e);
+                                JUtils.Toast("重新购买失败,商品可能已下架");
+                                helper.hideIndeterminateProgressDialog();
+                            }
+                        }));
                 }
+            }
         );
     }
 

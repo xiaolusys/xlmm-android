@@ -41,7 +41,7 @@ public class ResultBean {
 
     @Override
     public String toString() {
-        return "MMHavaChooseResultBean{" +
+        return "ResultBean{" +
                 "message='" + message + '\'' +
                 ", code=" + code +
                 '}';

@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 

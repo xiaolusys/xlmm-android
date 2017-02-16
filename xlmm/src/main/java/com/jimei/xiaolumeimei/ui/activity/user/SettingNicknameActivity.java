@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.InformationEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
 

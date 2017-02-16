@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -27,9 +29,11 @@ public class CarryLogAllAdapter
         extends RecyclerView.Adapter<CarryLogAllAdapter.CarryLogListVH> {
 
     private List<CarryLogListBean.ResultsEntity> mList;
+    private Context context;
 
-    public CarryLogAllAdapter() {
+    public CarryLogAllAdapter(Context context) {
         mList = new ArrayList<>();
+        this.context = context;
     }
 
     public void updateWithClear(List<CarryLogListBean.ResultsEntity> list) {
@@ -88,11 +92,11 @@ public class CarryLogAllAdapter
         holder.shoptime.setText(resultsEntity.getDateField());
         int carryType = resultsEntity.getCarryType();
         if (carryType == 3) {
-            holder.picPath.setImageResource(R.drawable.img_jiang);
+            Glide.with(context).load(R.drawable.img_jiang).into(holder.picPath);
         } else if (carryType == 1) {
-            holder.picPath.setImageResource(R.drawable.img_yellowreturn);
+            Glide.with(context).load(R.drawable.img_yellowreturn).into(holder.picPath);
         } else if (carryType == 2) {
-            holder.picPath.setImageResource(R.drawable.carrylog_image);
+            Glide.with(context).load(R.drawable.carrylog_image).into(holder.picPath);
         }
 
         holder.totalCash.setText(

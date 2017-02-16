@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.adapter.AwardCarryLogAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 

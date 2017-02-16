@@ -42,9 +42,9 @@ import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.utils.pay.PayUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.util.JumpUtils;
+import com.jimei.xiaolumeimei.util.pay.PayUtils;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
 

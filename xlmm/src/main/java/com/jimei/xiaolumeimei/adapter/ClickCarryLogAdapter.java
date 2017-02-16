@@ -1,5 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -28,9 +30,11 @@ public class ClickCarryLogAdapter
 
 
     private List<ClickcarryBean.ResultsEntity> mList;
+    private Context context;
 
-    public ClickCarryLogAdapter() {
+    public ClickCarryLogAdapter(Context context) {
         mList = new ArrayList<>();
+        this.context = context;
     }
 
     public void updateWithClear(List<ClickcarryBean.ResultsEntity> list) {
@@ -86,7 +90,7 @@ public class ClickCarryLogAdapter
         }
 
         holder.shoptime.setText(resultsEntity.getDateField());
-        holder.picPath.setImageResource(R.drawable.img_yellowreturn);
+        Glide.with(context).load(R.drawable.img_yellowreturn).into(holder.picPath);
         holder.totalCash.setText(
                 "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 

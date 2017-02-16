@@ -1,71 +1,43 @@
 package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 
 import android.content.Intent;
-import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 
 import com.jimei.library.utils.JUtils;
-import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaBinding;
-import com.jimei.xiaolumeimei.entities.MiPushOrderCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.event.HideOrderEvent;
-import com.jimei.xiaolumeimei.entities.event.SetOrderEvent;
-import com.jimei.xiaolumeimei.entities.event.ShowOrderEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaBoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaFirstFragment;
-import com.jimei.xiaolumeimei.ui.fragment.mminfo.MamaThirdFragment;
-import com.jimei.xiaolumeimei.utils.pay.PayUtils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.jimei.xiaolumeimei.util.pay.PayUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import cn.udesk.UdeskConst;
 import cn.udesk.UdeskSDKManager;
 import rx.Observable;
 
-public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implements ViewPager.OnPageChangeListener {
+public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> {
 
     private List<BaseFragment> fragments = new ArrayList<>();
-    private boolean isDestroy = false;
-    private ExecutorService service;
-
-    @Override
-    protected void setListener() {
-        b.viewPager.addOnPageChangeListener(this);
-    }
 
     @Override
     protected void initViews() {
-        EventBus.getDefault().register(this);
         fragments.add(MamaBoutiqueFragment.newInstance("精品汇"));
         fragments.add(MamaFirstFragment.newInstance("我要赚钱"));
-//        fragments.add(MamaSecondFragment.newInstance("社交活动"));
-        fragments.add(MamaThirdFragment.newInstance("妈妈中心"));
         BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
         b.viewPager.setAdapter(mAdapter);
-        b.viewPager.setOffscreenPageLimit(3);
+        b.viewPager.setOffscreenPageLimit(2);
         b.tabLayout.setupWithViewPager(b.viewPager);
         b.tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
@@ -76,32 +48,13 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
         UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
         showIndeterminateProgressDialog(true);
         addSubscription(Observable.mergeDelayError(MamaInfoModel.getInstance().getUserInfo(),
-                MamaInfoModel.getInstance().getWxCode(),
-                MamaInfoModel.getInstance().getLatestOrderCarry())
-                .subscribe(o -> {
-                            if (o instanceof UserInfoBean) {
-                                fillDataToView((UserInfoBean) o);
-                            } else if (o instanceof List<?>) {
-                                List list = (List) o;
-                                service = Executors.newSingleThreadExecutor();
-                                service.execute(() -> {
-                                    for (int i = 0; i < list.size() && !isDestroy; i++) {
-                                        SystemClock.sleep(new Random().nextInt(5000));
-                                        if (!isDestroy)
-                                            EventBus.getDefault().post(new SetOrderEvent(
-                                                    (MiPushOrderCarryBean) list.get(list.size() - 1 - i)));
-                                        SystemClock.sleep(1000);
-                                        if (!isDestroy)
-                                            EventBus.getDefault().post(new ShowOrderEvent());
-                                        SystemClock.sleep(3000);
-                                        if (!isDestroy)
-                                            EventBus.getDefault().post(new HideOrderEvent());
-                                        SystemClock.sleep(3000);
-                                    }
-                                });
-                            }
-                        }, e -> hideIndeterminateProgressDialog()
-                        , this::hideIndeterminateProgressDialog));
+            MamaInfoModel.getInstance().getWxCode())
+            .subscribe(o -> {
+                    if (o instanceof UserInfoBean) {
+                        fillDataToView((UserInfoBean) o);
+                    }
+                }, e -> hideIndeterminateProgressDialog()
+                , this::hideIndeterminateProgressDialog));
     }
 
     private void fillDataToView(UserInfoBean userInfoBean) {
@@ -120,56 +73,14 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_kefu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.kefu:
-                UdeskSDKManager.getInstance().showRobotOrConversation(this);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setOrderCarry(SetOrderEvent event) {
-        MiPushOrderCarryBean bean = event.getBean();
-        try {
-            ViewUtils.loadImgToHead(this, b.miHead, bean.getAvatar());
-        } catch (Exception e) {
-            JUtils.Log("error");
-        }
-        b.miInfo.setText(bean.getContent());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void showOrder(ShowOrderEvent event) {
-        if (b.viewPager.getCurrentItem()!=0) {
-            b.miLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void hideOrder(HideOrderEvent event) {
-        b.miLayout.setVisibility(View.GONE);
-    }
-
-    @Override
     public boolean isNeedShow() {
         return false;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (fragments.size() == 3) {
+        if (fragments.size() == 2) {
             WebView webView = null;
-//            if (b.viewPager.getCurrentItem() == 2) {
-//                webView = ((MamaSecondFragment) fragments.get(2)).getWebView();
-//            } else
             if (b.viewPager.getCurrentItem() == 0) {
                 webView = ((MamaBoutiqueFragment) fragments.get(0)).getWebView();
             }
@@ -181,16 +92,6 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (service != null) {
-            service.shutdownNow();
-        }
-        isDestroy = true;
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     @Override
@@ -216,24 +117,5 @@ public class MamaActivity extends BaseMVVMActivity<ActivityMamaBinding> implemen
                 }
             }
         }
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        if (position==0){
-            b.titleView.setVisibility(View.GONE);
-        }else {
-            b.titleView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
     }
 }

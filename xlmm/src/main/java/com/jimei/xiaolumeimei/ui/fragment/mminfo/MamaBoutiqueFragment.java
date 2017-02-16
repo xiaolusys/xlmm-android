@@ -33,7 +33,6 @@ public class MamaBoutiqueFragment extends BaseWebViewFragment {
                 .getMamaUrl()
                 .subscribe(mamaUrl -> {
                     loadUrl(mamaUrl.getResults().get(0).getExtra().getBoutique());
-                    hideIndeterminateProgressDialog();
                 }, throwable -> {
                     throwable.printStackTrace();
                     hideIndeterminateProgressDialog();

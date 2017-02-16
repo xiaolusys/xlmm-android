@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Process;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
@@ -17,12 +19,12 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.util.LoginUtils;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by itxuye on 16/5/9.
@@ -60,6 +62,9 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
     RadioGroup rg;
     @Bind(R.id.layout)
     LinearLayout layout;
+    @Bind(R.id.desc)
+    TextView desc;
+
 
     @Override
     protected void setListener() {
@@ -70,6 +75,8 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         sharedPreferences = getSharedPreferences("APICLIENT", MODE_PRIVATE);
+        String str = sharedPreferences.getString("BASE_URL", "m.xiaolumeimei.com");
+        desc.setText("当前API地址为:" + str);
     }
 
     @Override
@@ -109,7 +116,6 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                                     editor.putString("BASE_URL", textDebug);
                                     boolean isPut = editor.commit();
                                     if (isPut) {
-
                                         final String finalAccount =
                                                 LoginUtils.getUserAccount(getApplicationContext());
                                         UserModel.getInstance()
@@ -126,9 +132,8 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                                                             }
 
                                                             LoginUtils.delLoginInfo(getApplicationContext());
-
                                                             Intent intent =
-                                                                    new Intent(DebugActivity.this, LoginActivity.class);
+                                                                    new Intent(DebugActivity.this, SplashActivity.class);
                                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                             startActivity(intent);
                                                             Process.killProcess(Process.myPid());
@@ -138,7 +143,6 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                                                 });
                                     }
                                 }
-
                                 JUtils.Toast(codeBean.getMsg());
                             }
                         }
@@ -174,5 +178,12 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
                 editDebug.setText(bo.getText().toString().trim());
                 break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

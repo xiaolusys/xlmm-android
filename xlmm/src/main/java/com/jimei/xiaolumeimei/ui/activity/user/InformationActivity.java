@@ -14,10 +14,9 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.InformationEvent;
-import com.jimei.xiaolumeimei.entities.event.LogOutEmptyEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -141,7 +140,6 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                         public void onNext(LogOutBean responseBody) {
                                             super.onNext(responseBody);
                                             if (responseBody.getCode() == 0) {
-                                                EventBus.getDefault().post(new LogOutEmptyEvent());
                                                 JUtils.Toast("退出成功");
                                                 if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
                                                     MiPushClient.unsetUserAccount(getApplicationContext(),

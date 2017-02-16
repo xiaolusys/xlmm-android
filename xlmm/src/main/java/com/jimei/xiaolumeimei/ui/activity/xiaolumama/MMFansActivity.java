@@ -9,7 +9,6 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMFansFragment;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMFansWebFragment;
-import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.MMPotentialFansFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +34,10 @@ public class MMFansActivity extends BaseSwipeBackCompatActivity{
     @Override
     protected void initViews() {
         fragments.add(MMFansFragment.newInstance("我的粉丝"));
-        fragments.add(MMPotentialFansFragment.newInstance("潜在粉丝"));
         fragments.add(MMFansWebFragment.newInstance("关于粉丝"));
         BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(),fragments);
         viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.View;
 
@@ -20,11 +19,9 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
-import com.jimei.library.widget.SpaceItemDecoration;
+import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.badgelib.BadgeView;
-import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.MainActivityAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.databinding.FragmentMamaFirstBinding;
@@ -32,30 +29,35 @@ import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MamaFortune;
 import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
-import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
+import com.jimei.xiaolumeimei.entities.event.WalletEvent;
+import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DayPushActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.GoodWeekActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMCarryLogActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMcarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaReNewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWalletActivity;
+import com.jimei.xiaolumeimei.util.JumpUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import cn.udesk.UdeskSDKManager;
 import rx.Observable;
 
 public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBinding> implements
-        View.OnClickListener, OnChartValueSelectedListener, ScrollableHelper.ScrollableContainer {
+    View.OnClickListener, OnChartValueSelectedListener {
     private static final String TITLE = "title";
     List<RecentCarryBean.ResultsEntity> show_refund = new ArrayList<>();
     List<RecentCarryBean.ResultsEntity> his_refund = new ArrayList<>();
@@ -69,8 +71,7 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     private String hisConfirmedCashOut;
     private BadgeView mBadgeView;
     private int mCurrent_dp_turns_num;
-    private long lastClickTime = 0;
-    private MainActivityAdapter adapter;
+    private String fansUrl;
 
     public static MamaFirstFragment newInstance(String title) {
         MamaFirstFragment fragment = new MamaFirstFragment();
@@ -82,42 +83,40 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
 
     @Override
     public void initData() {
+        refreshFortune();
         MamaInfoModel mmInfoModel = MamaInfoModel.getInstance();
         addSubscription(Observable.mergeDelayError(mmInfoModel.getMamaUrl(), mmInfoModel.getShareShopping(),
-                mmInfoModel.getMamaFortune(), mmInfoModel.getRecentCarry("0", "7"), mmInfoModel.getMaMaselfList())
-                .subscribe(o -> {
-                    if (o != null) {
-                        if (o instanceof MamaUrl) {
-                            initUrl((MamaUrl) o);
-                        } else if (o instanceof MMShoppingBean) {
-                            shopLink = ((MMShoppingBean) o).getShopInfo().getPreviewShopLink();
-                        } else if (o instanceof MamaFortune) {
-                            initFortune((MamaFortune) o);
-                        } else if (o instanceof RecentCarryBean) {
-                            his_refund.clear();
-                            his_refund.addAll(((RecentCarryBean) o).getResults());
-                            if ((his_refund.size() > 0)) {
-                                setDataOfThisWeek();
-                                initTodatText(his_refund);
-                            }
-                        } else if (o instanceof MamaSelfListBean) {
-                            initTask((MamaSelfListBean) o);
+            mmInfoModel.getMamaFortune(), mmInfoModel.getRecentCarry("0", "7"), mmInfoModel.getMaMaselfList())
+            .subscribe(o -> {
+                if (o != null) {
+                    if (o instanceof MamaUrl) {
+                        initUrl((MamaUrl)  o);
+                    } else if (o instanceof MMShoppingBean) {
+                        shopLink = ((MMShoppingBean) o).getShopInfo().getPreviewShopLink();
+                    } else if (o instanceof MamaFortune) {
+                        initFortune((MamaFortune) o);
+                    } else if (o instanceof RecentCarryBean) {
+                        his_refund.clear();
+                        his_refund.addAll(((RecentCarryBean) o).getResults());
+                        if ((his_refund.size() > 0)) {
+                            setDataOfThisWeek();
+                            initTodatText(his_refund);
                         }
+                    } else if (o instanceof MamaSelfListBean) {
+                        initTask((MamaSelfListBean) o);
                     }
-                }, throwable -> {
-                    throwable.printStackTrace();
-                    hideIndeterminateProgressDialog();
-                },this::hideIndeterminateProgressDialog));
+                }
+            }, throwable -> {
+                throwable.printStackTrace();
+                hideIndeterminateProgressDialog();
+            }, this::hideIndeterminateProgressDialog));
     }
 
     private void initUrl(MamaUrl mamaUrl) {
         MamaUrl.ResultsBean resultsBean = mamaUrl.getResults().get(0);
         shareLink = resultsBean.getExtra().getInvite();
         msgUrl = resultsBean.getExtra().getNotice();
-        List<PortalBean.ActivitysBean> activities = resultsBean.getMama_activities();
-        if (activities != null && activities.size() > 0) {
-            adapter.updateWithClear(activities);
-        }
+        fansUrl = resultsBean.getExtra().getFans_explain();
     }
 
     public void init_chart() {
@@ -148,8 +147,6 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
         b.chart.getAxisLeft().setDrawGridLines(false);
         b.chart.getAxisRight().setDrawGridLines(false);
         b.chart.getXAxis().setPosition(XAxis.XAxisPosition.TOP);
-        //x y 坐标是否显示
-        //mChart.getXAxis().setEnabled(false);
         b.chart.getAxisRight().setEnabled(false);
         b.chart.getAxisLeft().setEnabled(false);
     }
@@ -182,10 +179,10 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     }
 
     public void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund) {
-        b.tvVisit.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
-        b.tvOrder.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
-        b.tvFund.setText(Double.toString(
-                (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
+        b.chartVisit.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
+        b.chartOrder.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
+        b.chartFund.setText(Double.toString(
+            (double) (Math.round(his_refund.get(his_refund.size() - 1).getCarry() * 100)) / 100));
     }
 
     public void setData(ArrayList<String> xVals, ArrayList<Entry> yVals) {
@@ -226,18 +223,24 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
 
     private void initFortune(MamaFortune mamaFortune) {
         MamaFortune.MamaFortuneBean fortune = mamaFortune.getMamaFortune();
-        MamaFortune.MamaFortuneBean.ExtraFiguresBean figures = fortune.getExtra_figures();
-        b.tvIncome.setText(figures.getWeek_duration_total() + "");
-        b.tvDayIncome.setText(figures.getToday_carry_record() + "");
-        b.tvRank.setText(figures.getWeek_duration_rank() + "");
-        b.tvWeekTask.setText("本周完成任务" + (figures.getTask_percentage() * 100) + "%");
         b.tvDay.setText(fortune.getExtraInfo().getSurplusDays() + "");
         mCashValue = fortune.getCashValue();
         orderNum = fortune.getOrderNum();
         carryLogMoney = fortune.getCarryValue() + "";
         if (fortune.getExtraInfo() != null) {
             hisConfirmedCashOut = fortune.getExtraInfo().getHisConfirmedCashOut();
+            if (fortune.getExtraInfo().getThumbnail() != null) {
+                ViewUtils.loadImgToImgView(mActivity, b.ivHead,
+                    fortune.getExtraInfo().getThumbnail());
+            }
+            b.tvLevel.setText(fortune.getExtraInfo().getAgencylevelDisplay());
         }
+        b.tvId.setText("ID:" + fortune.getMamaId());
+        b.tvMamaName.setText(fortune.getMamaLevelDisplay());
+        b.tvCashValue.setText(fortune.getCashValue() + "元");
+        b.tvCarryValue.setText(fortune.getCarryValue() + "元");
+        b.tvOrder.setText(fortune.getOrderNum() + "个");
+        b.tvFans.setText(fortune.getFansNum() + "个");
         SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
         String time = preferences.getString("time", "");
         int num = preferences.getInt("num", 0);
@@ -269,28 +272,26 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
     }
 
     public void setListener() {
-        b.llRenew.setOnClickListener(this);
-        b.llRank.setOnClickListener(this);
+        b.btnFinish.setOnClickListener(this);
+        b.btnService.setOnClickListener(this);
         b.llShare.setOnClickListener(this);
         b.llPush.setOnClickListener(this);
         b.llChoose.setOnClickListener(this);
         b.llShop.setOnClickListener(this);
-        b.tvGoodWeek.setOnClickListener(this);
         b.tvMsg.setOnClickListener(this);
         b.visitLayout.setOnClickListener(this);
         b.orderLayout.setOnClickListener(this);
         b.fundLayout.setOnClickListener(this);
+        b.llWallet.setOnClickListener(this);
+        b.llIncome.setOnClickListener(this);
+        b.llVisit.setOnClickListener(this);
+        b.llOrder.setOnClickListener(this);
+        b.llFans.setOnClickListener(this);
     }
 
     @Override
     protected void initViews() {
         init_chart();
-        b.rv.setLayoutManager(new LinearLayoutManager(mActivity));
-        b.rv.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        b.rv.addItemDecoration(new SpaceItemDecoration(0, 0, 6, 6));
-        adapter = new MainActivityAdapter(mActivity);
-        b.rv.setAdapter(adapter);
-        b.scrollableLayout.getHelper().setCurrentScrollableContainer(this);
     }
 
     @Override
@@ -300,88 +301,107 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
 
     @Override
     public void onClick(View v) {
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - lastClickTime > NoDoubleClickListener.MIN_CLICK_DELAY_TIME) {
-            lastClickTime = currentTime;
-            switch (v.getId()) {
-                case R.id.ll_renew:
-                    Intent renewIntent = new Intent(mActivity, MamaReNewActivity.class);
-                    renewIntent.putExtra("mamaCarryValue", mCashValue);
-                    startActivity(renewIntent);
-                    break;
-                case R.id.ll_rank:
-//                startActivity(new Intent(mActivity, PersonalCarryRankActivity.class));
-                    break;
-                case R.id.ll_share:
-                    if (shopLink != null && !"".equals(shopLink)) {
-                        JumpUtils.jumpToWebViewWithCookies(mActivity, shopLink, -1,
-                                MMStoreWebViewActivity.class);
-                    }
-                    break;
-                case R.id.ll_push:
-                    SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    String str = null;
-                    try {
-                        str = DateUtils.dateToString(new Date(), DateUtils.yyyyMMDD);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    editor.putString("time", str);
-                    editor.putInt("num", mCurrent_dp_turns_num);
-                    editor.apply();
-                    if (mBadgeView != null) {
-                        mBadgeView.setVisibility(View.GONE);
-                    }
-                    startActivity(new Intent(mActivity, DayPushActivity.class));
-                    break;
-                case R.id.ll_choose:
-                    startActivity(new Intent(mActivity, MamaChooseActivity.class));
-                    break;
-                case R.id.ll_shop:
-                    if (shareLink != null && !"".equals(shareLink)) {
-                        JumpUtils.jumpToWebViewWithCookies(mActivity, shareLink, 26,
-                                MMShareCodeWebViewActivity.class);
-                    }
-                    break;
-                case R.id.tv_good_week:
-                    startActivity(new Intent(mActivity, GoodWeekActivity.class));
-                    break;
-                case R.id.tv_msg:
-                    if (msgUrl != null && !"".equals(msgUrl)) {
-                        b.imageNotice.setVisibility(View.GONE);
-                        JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
-                                CommonWebViewActivity.class, "信息通知", false);
-                    }
-                    break;
-                case R.id.visit_layout:
-                    startActivity(new Intent(mActivity, MamaVisitorActivity.class));
-                    break;
-                case R.id.order_layout:
-                    Intent intent3 = new Intent(mActivity, MMShoppingListActivity.class);
-                    Bundle bundle3 = new Bundle();
-                    bundle3.putInt("orderNum", orderNum);
-                    intent3.putExtras(bundle3);
-                    startActivity(intent3);
-                    break;
-                case R.id.fund_layout:
-                    Bundle incomeBundle = new Bundle();
-                    incomeBundle.putString("carrylogMoney", carryLogMoney);
-                    incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                    Intent incomeIntent = new Intent(mActivity, MMcarryLogActivity.class);
-                    incomeIntent.putExtras(incomeBundle);
-                    startActivity(incomeIntent);
-                    break;
-            }
+        switch (v.getId()) {
+            case R.id.btn_finish:
+                mActivity.finish();
+                break;
+            case R.id.btn_service:
+                UdeskSDKManager.getInstance().showRobotOrConversation(mActivity);
+                break;
+            case R.id.ll_share:
+                if (shopLink != null && !"".equals(shopLink)) {
+                    JumpUtils.jumpToWebViewWithCookies(mActivity, shopLink, -1,
+                        MMStoreWebViewActivity.class);
+                }
+                break;
+            case R.id.ll_push:
+                SharedPreferences preferences = mActivity.getSharedPreferences("push_num", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                String str = null;
+                try {
+                    str = DateUtils.dateToString(new Date(), DateUtils.yyyyMMDD);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                editor.putString("time", str);
+                editor.putInt("num", mCurrent_dp_turns_num);
+                editor.apply();
+                if (mBadgeView != null) {
+                    mBadgeView.setVisibility(View.GONE);
+                }
+                startActivity(new Intent(mActivity, DayPushActivity.class));
+                break;
+            case R.id.ll_choose:
+                startActivity(new Intent(mActivity, MamaChooseActivity.class));
+                break;
+            case R.id.ll_shop:
+                if (shareLink != null && !"".equals(shareLink)) {
+                    JumpUtils.jumpToWebViewWithCookies(mActivity, shareLink, 26,
+                        MMShareCodeWebViewActivity.class);
+                }
+                break;
+            case R.id.tv_msg:
+                if (msgUrl != null && !"".equals(msgUrl)) {
+                    b.imageNotice.setVisibility(View.GONE);
+                    JumpUtils.jumpToWebViewWithCookies(mActivity, msgUrl, -1,
+                        CommonWebViewActivity.class, "信息通知", false);
+                }
+                break;
+            case R.id.visit_layout:
+                startActivity(new Intent(mActivity, MamaVisitorActivity.class));
+                break;
+            case R.id.order_layout:
+                Intent intent3 = new Intent(mActivity, MMShoppingListActivity.class);
+                Bundle bundle3 = new Bundle();
+                bundle3.putInt("orderNum", orderNum);
+                intent3.putExtras(bundle3);
+                startActivity(intent3);
+                break;
+            case R.id.fund_layout:
+                Bundle incomeBundle = new Bundle();
+                incomeBundle.putString("carrylogMoney", carryLogMoney);
+                incomeBundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
+                Intent incomeIntent = new Intent(mActivity, MMCarryLogActivity.class);
+                incomeIntent.putExtras(incomeBundle);
+                startActivity(incomeIntent);
+                break;
+            case R.id.ll_wallet:
+                Intent walletIntent = new Intent(mActivity, MamaWalletActivity.class);
+                walletIntent.putExtra("cash", mCashValue);
+                startActivity(walletIntent);
+                break;
+            case R.id.ll_income:
+                Bundle incomeBundle2 = new Bundle();
+                incomeBundle2.putString("carrylogMoney", carryLogMoney);
+                incomeBundle2.putString("hisConfirmedCashOut", hisConfirmedCashOut);
+                Intent incomeIntent2 = new Intent(mActivity, MMCarryLogActivity.class);
+                incomeIntent2.putExtras(incomeBundle2);
+                startActivity(incomeIntent2);
+                break;
+            case R.id.ll_visit:
+                Intent visitIntent = new Intent(mActivity, MamaVisitorActivity.class);
+                startActivity(visitIntent);
+                break;
+            case R.id.ll_order:
+                Intent orderIntent = new Intent(mActivity, MMShoppingListActivity.class);
+                orderIntent.putExtra("orderNum", orderNum);
+                startActivity(orderIntent);
+                break;
+            case R.id.ll_fans:
+                if (fansUrl != null && !"".equals(fansUrl)) {
+                    EventBus.getDefault().postSticky(new WebViewEvent(fansUrl));
+                    startActivity(new Intent(mActivity, MMFansActivity.class));
+                }
+                break;
         }
     }
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        b.tvVisit.setText(Integer.toString(show_refund.get(e.getXIndex()).getVisitorNum()));
-        b.tvOrder.setText(Integer.toString(show_refund.get(e.getXIndex()).getOrderNum()));
-        b.tvFund.setText(Double.toString(
-                (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
+        b.chartVisit.setText(Integer.toString(show_refund.get(e.getXIndex()).getVisitorNum()));
+        b.chartOrder.setText(Integer.toString(show_refund.get(e.getXIndex()).getOrderNum()));
+        b.chartFund.setText(Double.toString(
+            (double) (Math.round(show_refund.get(e.getXIndex()).getCarry() * 100)) / 100));
     }
 
     @Override
@@ -389,13 +409,28 @@ public class MamaFirstFragment extends BaseBindingFragment<FragmentMamaFirstBind
 
     }
 
+    public void refreshFortune() {
+        addSubscription(MamaInfoModel.getInstance()
+            .getMamaFortune()
+            .subscribe(this::initFortune, throwable -> {
+                throwable.printStackTrace();
+                hideIndeterminateProgressDialog();
+            }));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reLoadData(WalletEvent event) {
+        refreshFortune();
+    }
+
     @Override
-    public View getScrollableView() {
-        return b.rv;
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public View getLoadingView() {
-        return b.scrollableLayout;
+        return b.ll;
     }
 }

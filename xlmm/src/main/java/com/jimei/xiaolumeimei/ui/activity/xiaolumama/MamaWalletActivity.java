@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaWalletBinding;
@@ -29,7 +28,6 @@ public class MamaWalletActivity extends BaseMVVMActivity<ActivityMamaWalletBindi
     protected void setListener() {
         b.llSmall.setOnClickListener(this);
         b.llHundred.setOnClickListener(this);
-        b.llCoupon.setOnClickListener(this);
         b.tvRule.setOnClickListener(this);
     }
 
@@ -100,15 +98,6 @@ public class MamaWalletActivity extends BaseMVVMActivity<ActivityMamaWalletBindi
                 Intent hundredIntent = new Intent(this, MamaDrawCashActivity.class);
                 hundredIntent.putExtra("cash", mCash);
                 startActivity(hundredIntent);
-                break;
-            case R.id.ll_coupon:
-                if (mCash >= 20) {
-                    Intent couponIntent = new Intent(this, MamaDrawCouponActivity.class);
-                    couponIntent.putExtra("cash", mCash);
-                    startActivity(couponIntent);
-                } else {
-                    JUtils.Toast("兑换现金消费券至少需要20元!");
-                }
                 break;
             case R.id.tv_rule:
                 new AlertDialog.Builder(this)

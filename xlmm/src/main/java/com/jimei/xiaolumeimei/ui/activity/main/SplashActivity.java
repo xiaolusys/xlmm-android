@@ -49,17 +49,17 @@ public class SplashActivity extends AppCompatActivity {
         super.onResume();
         PackageManager pm = getPackageManager();
         boolean permission = (PackageManager.PERMISSION_GRANTED ==
-                pm.checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", getPackageName()));
+            pm.checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", getPackageName()));
         mSubscribe = ActivityModel.getInstance()
-                .getStartAds()
-                .subscribe(startBean -> {
-                    if (startBean != null) {
-                        mPicture = startBean.getPicture();
-                        if (startBean.getPicture() != null && !"".equals(startBean.getPicture())) {
-                            Glide.with(SplashActivity.this).load(startBean.getPicture()).downloadOnly(mWidthPixels, mHeightPixels);
-                        }
+            .getStartAds()
+            .subscribe(startBean -> {
+                if (startBean != null) {
+                    mPicture = startBean.getPicture();
+                    if (mPicture != null && !"".equals(mPicture)) {
+                        Glide.with(SplashActivity.this).load(mPicture).downloadOnly(mWidthPixels, mHeightPixels);
                     }
-                }, Throwable::printStackTrace);
+                }
+            }, Throwable::printStackTrace);
         if (permission) {
             RxCountDown.countdown(2).subscribe(integer -> {
                 if (integer == 0) {
@@ -68,16 +68,16 @@ public class SplashActivity extends AppCompatActivity {
             }, throwable -> jumpToAds());
         } else {
             new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("应用包含缓存节省流量功能,需要打开存储权限,应用才能正常使用。")
-                    .setPositiveButton("确认", (dialog, which) -> {
-                        dialog.dismiss();
-                        getAppDetailSettingIntent();
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                        dialog.dismiss();
-                        finish();
-                    }).show();
+                .setTitle("提示")
+                .setMessage("应用包含缓存节省流量功能,需要打开存储权限,应用才能正常使用。")
+                .setPositiveButton("确认", (dialog, which) -> {
+                    dialog.dismiss();
+                    getAppDetailSettingIntent();
+                })
+                .setNegativeButton("取消", (dialog, which) -> {
+                    dialog.dismiss();
+                    finish();
+                }).show();
         }
     }
 
@@ -87,7 +87,7 @@ public class SplashActivity extends AppCompatActivity {
             intent.putExtra("link", mPicture);
             startActivity(intent);
         } else {
-            startActivity(new Intent(SplashActivity.this, TabActivity.class));
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
         }
         finish();
     }

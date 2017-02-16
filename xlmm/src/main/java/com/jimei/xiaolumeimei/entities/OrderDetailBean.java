@@ -676,6 +676,7 @@ public class OrderDetailBean implements Serializable {
         private String assign_time;
         private String finish_time;
         private String cancel_time;
+        private String weight_time;
         private String assign_status_display;
         private String ware_by_display;
         private String out_sid;
@@ -766,6 +767,14 @@ public class OrderDetailBean implements Serializable {
 
         public void setOut_sid(String out_sid) {
             this.out_sid = out_sid;
+        }
+
+        public String getWeight_time() {
+            return weight_time;
+        }
+
+        public void setWeight_time(String weight_time) {
+            this.weight_time = weight_time;
         }
     }
 }
