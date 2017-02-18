@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">小鹿美美</string>
-    <string name="navigation_drawer_open">打开</string>
-    <string name="navigation_drawer_close">关闭</string>
-    <string name="today_new">今日上新</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="title_activity_allorders">所有订单</string>
@@ -32,7 +29,6 @@
     <string name="not_enough_cash1">您的余额不足，不能提现哦</string>
     <string name="publish_info">发布产品就会\n有机会获得更多的返利现金哦~</string>
     <string name="chooselist">选品列表</string>
-    <string name="complaininfo">请描述您的具体问题，我们将尽快为你解决！</string>
     <string name="logining">正在登录</string>
     <string name="auth_cancel">取消授权</string>
     <string name="auth_error">授权失败</string>
@@ -74,9 +70,6 @@
     <string name="collection_empty_msg_1">您还没有收藏的商品哦....</string>
     <string name="collection_empty_msg_2">赶紧把你喜欢的商品加入收藏吧~</string>
     <string name="collection_empty_btn">快去抢购</string>
-    <string name="draw_coupon_info">兑换说明：为了方便妈妈在金额不能提现时使用妈妈钱包金额购买商品，可以使用兑换
-        现金券功能。兑换现金券后会扣除妈妈钱包里的金额，兑换的优惠券可以用来购物，有效期为1个月，兑换后不能退回。使用
-        现金券可以购买低于现金券金额的商品，不会找零。使用现金券购买高于现金券金额的商品，需要补差价。</string>
     <string name="open_notice">推送通知</string>
     <string name="press_again_exit">再按一次退出</string>
     <string name="buy_rule">亲爱的小鹿用户，由于特卖商品购买人数过多和供应商供货原因，可能存在极少数用户出现缺货的

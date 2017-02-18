@@ -19,7 +19,7 @@ import com.jimei.xiaolumeimei.databinding.ActivityMamaChooseBinding;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;

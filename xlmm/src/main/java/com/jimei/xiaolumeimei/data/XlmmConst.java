@@ -38,11 +38,6 @@ public class XlmmConst {
     public static final int WAIT_PAY = 1;
     public static final int WAIT_SEND = 2;
 
-    //特卖类型
-    public static final int TYPE_YESTERDAY = 0;
-    public static final int TYPE_TODAY = 1;
-    public static final int TYPE_TOMORROW = 2;
-
     //分类cid
     public static final String TYPE_CHILD = "1";
     public static final String TYPE_LADY = "2";
@@ -58,19 +53,9 @@ public class XlmmConst {
     //微信
     public static final String WX_APP_ID = "wx25fcb32689872499";
 
-    //排名类别
-    public static final int TYPE_PERSON_RANK = 0;
-    public static final int TYPE_PERSON_WEEK_RANK = 1;
-    public static final int TYPE_TEAM_RANK = 2;
-    public static final int TYPE_TEAM_WEEK_RANK = 3;
-
     public static final int TYPE_REWARD_PERSONAL = 0;
     public static final int TYPE_REWARD_TEAM = 1;
 
-    //商品类型
-    public static final int USUAL_TYPE = 0;
-    public static final int VIRTUAL_TYPE = 1;
-    public static final int NOT_SALE_TYPE = 2;
 
     public static final String XLMM_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()
             + "/xlmm/";

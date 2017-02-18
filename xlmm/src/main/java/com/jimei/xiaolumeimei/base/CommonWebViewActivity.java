@@ -47,8 +47,8 @@ import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.utils.pay.PayUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.util.pay.PayUtils;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.mob.tools.utils.UIHandler;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
@@ -145,6 +145,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     @SuppressLint("JavascriptInterface")
     @Override
     protected void initViews() {
+        showIndeterminateProgressDialog(false);
+        setDialogContent("页面载入中...");
         ShareSDK.initSDK(this);
         titleView = (XlmmTitleView) findViewById(R.id.title_view);
         ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
@@ -171,8 +173,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             mWebView.getSettings().setUserAgentString(userAgentString +
                     "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-//            mWebView.getSettings().setBlockNetworkImage(false);
-//            mWebView.getSettings().setBlockNetworkLoads(false);
             mWebView.getSettings().setJavaScriptEnabled(true);
             mAndroidJsBridge = new AndroidJsBridge(this);
             mWebView.addJavascriptInterface(mAndroidJsBridge, "AndroidBridge");
@@ -190,7 +190,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
             mWebView.setDrawingCacheEnabled(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mWebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
+                WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
             }
             mWebView.setWebChromeClient(new WebChromeClient() {
                 @Override
@@ -198,8 +198,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     mProgressBar.setProgress(newProgress);
                     if (newProgress == 100) {
                         mProgressBar.setVisibility(View.GONE);
-//                        mWebView.getSettings().setBlockNetworkImage(true);
-//                        mWebView.getSettings().setBlockNetworkLoads(true);
+                        hideIndeterminateProgressDialog();
                     } else {
                         mProgressBar.setVisibility(View.VISIBLE);
                     }
@@ -258,27 +257,27 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     return true;
                 }
 
-                //扩展浏览器上传文件
-                //3.0++版本
-                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-                    openFileChooserImpl(uploadMsg);
-                }
-
-                //3.0--版本
-                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-                    openFileChooserImpl(uploadMsg);
-                }
-
-                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-                    openFileChooserImpl(uploadMsg);
-                }
-
-                // For Android > 5.0
-                public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg,
-                                                 WebChromeClient.FileChooserParams fileChooserParams) {
-                    openFileChooserImplForAndroid5(uploadMsg);
-                    return true;
-                }
+//                //扩展浏览器上传文件
+//                //3.0++版本
+//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+//                    openFileChooserImpl(uploadMsg);
+//                }
+//
+//                //3.0--版本
+//                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+//                    openFileChooserImpl(uploadMsg);
+//                }
+//
+//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+//                    openFileChooserImpl(uploadMsg);
+//                }
+//
+//                // For Android > 5.0
+//                public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg,
+//                                                 WebChromeClient.FileChooserParams fileChooserParams) {
+//                    openFileChooserImplForAndroid5(uploadMsg);
+//                    return true;
+//                }
             });
             mWebView.setWebViewClient(new WebViewClient() {
 
@@ -319,24 +318,25 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == FILECHOOSER_RESULTCODE) {
-            if (null == mUploadMessage)
-                return;
-            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-            mUploadMessage.onReceiveValue(result);
-            mUploadMessage = null;
-
-        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
-            if (null == mUploadMessageForAndroid5)
-                return;
-            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
-            if (result != null) {
-                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
-            } else {
-                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
-            }
-            mUploadMessageForAndroid5 = null;
-        } else if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
+//        if (requestCode == FILECHOOSER_RESULTCODE) {
+//            if (null == mUploadMessage)
+//                return;
+//            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+//            mUploadMessage.onReceiveValue(result);
+//            mUploadMessage = null;
+//
+//        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
+//            if (null == mUploadMessageForAndroid5)
+//                return;
+//            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
+//            if (result != null) {
+//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
+//            } else {
+//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
+//            }
+//            mUploadMessageForAndroid5 = null;
+//        } else
+        if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result");
                 String errorMsg = intent.getExtras().getString("error_msg"); // 错误信息
@@ -372,24 +372,24 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 //        finish();
 //    }
 
-    private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
-        mUploadMessage = uploadMsg;
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.addCategory(Intent.CATEGORY_OPENABLE);
-        i.setType("image/*");
-        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
-    }
-
-    private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
-        mUploadMessageForAndroid5 = uploadMsg;
-        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        contentSelectionIntent.setType("image/*");
-        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
-        startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
-    }
+//    private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
+//        mUploadMessage = uploadMsg;
+//        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+//        i.addCategory(Intent.CATEGORY_OPENABLE);
+//        i.setType("image/*");
+//        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+//    }
+//
+//    private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
+//        mUploadMessageForAndroid5 = uploadMsg;
+//        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//        contentSelectionIntent.setType("image/*");
+//        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+//        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+//        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+//        startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
+//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

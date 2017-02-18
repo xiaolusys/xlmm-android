@@ -17,7 +17,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
+import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 

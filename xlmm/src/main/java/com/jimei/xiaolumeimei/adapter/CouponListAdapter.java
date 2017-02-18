@@ -75,7 +75,6 @@ public class CouponListAdapter extends BaseAdapter {
         if (mCouponTyp == XlmmConst.UNUSED_COUPON || mCouponTyp == XlmmConst.GOOD_COUPON) {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#F05050"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_coupon);
-            holder.iv_right.setVisibility(View.VISIBLE);
         } else if (mCouponTyp == XlmmConst.PAST_COUPON) {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#B4B4B4"));
             holder.tv_coupon_info.setTextColor(Color.parseColor("#D2D2D2"));
@@ -83,15 +82,12 @@ public class CouponListAdapter extends BaseAdapter {
             holder.titleTv.setTextColor(Color.parseColor("#D2D2D2"));
             holder.use_fee.setTextColor(Color.parseColor("#D2D2D2"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_pastcoupon);
-            holder.iv_right.setVisibility(View.GONE);
         } else if (mCouponTyp == XlmmConst.USED_COUPON) {
             holder.tv_coupon_value.setTextColor(context.getResources().getColor(R.color.text_color_62));
             holder.rl.setBackgroundResource(R.drawable.bg_img_usedcoupon);
-            holder.iv_right.setVisibility(View.GONE);
         } else {
             holder.tv_coupon_value.setTextColor(Color.parseColor("#646464"));
             holder.rl.setBackgroundResource(R.drawable.bg_img_dcoupon);
-            holder.iv_right.setVisibility(View.GONE);
         }
         double coupon_value = mList.get(position).getCoupon_value();
         DecimalFormat df = new DecimalFormat("#.00");
@@ -128,7 +124,7 @@ public class CouponListAdapter extends BaseAdapter {
         TextView tv_coupon_value;
         TextView tv_coupon_info;
         TextView tv_coupon_crttime;
-        ImageView img_selected, iv_right;
+        ImageView img_selected;
         TextView use_fee;
         TextView titleTv;
         RelativeLayout rl;
@@ -138,7 +134,6 @@ public class CouponListAdapter extends BaseAdapter {
             tv_coupon_info = (TextView) itemView.findViewById(R.id.tv_coupon_info);
             tv_coupon_crttime = (TextView) itemView.findViewById(R.id.tv_coupon_crttime);
             img_selected = (ImageView) itemView.findViewById(R.id.img_selected);
-            iv_right = (ImageView) itemView.findViewById(R.id.iv_right);
             use_fee = (TextView) itemView.findViewById(R.id.use_fee);
             titleTv = (TextView) itemView.findViewById(R.id.title);
             rl = (RelativeLayout) itemView.findViewById(R.id.rl);

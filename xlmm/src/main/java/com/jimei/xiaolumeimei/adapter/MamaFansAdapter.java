@@ -30,76 +30,86 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MamaFansAdapter extends RecyclerView.Adapter<MamaFansAdapter.ViewHolder> {
-  private static final String TAG = "MamaFansAdapter";
-  private Activity context;
-  private List<MamaFansBean.ResultsEntity> mList;
+    private static final String TAG = "MamaFansAdapter";
+    private Activity context;
+    private List<MamaFansBean.ResultsEntity> mList;
 
-  public MamaFansAdapter(Activity context) {
-    mList = new ArrayList<>();
-    this.context = context;
-  }
-
-  public void updateWithClear(List<MamaFansBean.ResultsEntity> list) {
-    mList.clear();
-    mList.addAll(list);
-    notifyDataSetChanged();
-  }
-
-  public void update(List<MamaFansBean.ResultsEntity> list) {
-
-    mList.addAll(list);
-    notifyDataSetChanged();
-  }
-
-  @Override public long getItemId(int position) {
-    return position;
-  }
-
-  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View v =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mamafans, parent, false);
-    return new ViewHolder(v);
-  }
-
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    JUtils.Log(TAG, "getView ");
-
-    MamaFansBean.ResultsEntity resultsEntity = mList.get(position);
-
-    holder.tvFans.setText(resultsEntity.getFansNick());
-    holder.tvInfo.setText(resultsEntity.getFansDescription());
-    holder.tvTime.setText(resultsEntity.getCreated().replace("T", " ").substring(6, 16));
-    holder.tvPhone.setText(resultsEntity.getFans_mobile());
-    if (TextUtils.isEmpty(resultsEntity.getFansThumbnail())) {
-      Glide.with(context)
-          .load(R.mipmap.ic_launcher)
-          .diskCacheStrategy(DiskCacheStrategy.ALL)
-          .bitmapTransform(new CropCircleTransformation(context))
-          .into(holder.imgFans);
-    } else {
-
-      ViewUtils.loadImgToImgViewWithTransformCircle(context, holder.imgFans,
-          resultsEntity.getFansThumbnail());
+    public MamaFansAdapter(Activity context) {
+        mList = new ArrayList<>();
+        this.context = context;
     }
-  }
 
-  @Override public int getItemCount() {
-    return mList.size();
-  }
-
-  public static class ViewHolder extends RecyclerView.ViewHolder {
-    int id = R.layout.item_mamafans;
-    @Bind(R.id.img_fans) ImageView imgFans;
-    @Bind(R.id.tv_fans) TextView tvFans;
-    @Bind(R.id.tv_info) TextView tvInfo;
-    @Bind(R.id.tv_time) TextView tvTime;
-    @Bind(R.id.phone) TextView tvPhone;
-    @Bind(R.id.llayout_fans_item) RelativeLayout llayoutFansItem;
-
-    public ViewHolder(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
+    public void updateWithClear(List<MamaFansBean.ResultsEntity> list) {
+        mList.clear();
+        mList.addAll(list);
+        notifyDataSetChanged();
     }
-  }
+
+    public void update(List<MamaFansBean.ResultsEntity> list) {
+
+        mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v =
+            LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mamafans, parent, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        JUtils.Log(TAG, "getView ");
+
+        MamaFansBean.ResultsEntity resultsEntity = mList.get(position);
+
+        holder.tvFans.setText(resultsEntity.getFansNick());
+        holder.tvInfo.setText(resultsEntity.getFansDescription());
+        holder.tvTime.setText(resultsEntity.getCreated().replace("T", " ").substring(6, 16));
+        holder.tvPhone.setText(resultsEntity.getFans_mobile());
+        if (TextUtils.isEmpty(resultsEntity.getFansThumbnail())) {
+            Glide.with(context)
+                .load(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .bitmapTransform(new CropCircleTransformation(context))
+                .into(holder.imgFans);
+        } else {
+
+            ViewUtils.loadImgToImgViewWithTransformCircle(context, holder.imgFans,
+                resultsEntity.getFansThumbnail());
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        int id = R.layout.item_mamafans;
+        @Bind(R.id.img_fans)
+        ImageView imgFans;
+        @Bind(R.id.tv_fans)
+        TextView tvFans;
+        @Bind(R.id.tv_info)
+        TextView tvInfo;
+        @Bind(R.id.tv_time)
+        TextView tvTime;
+        @Bind(R.id.phone)
+        TextView tvPhone;
+        @Bind(R.id.llayout_fans_item)
+        RelativeLayout llayoutFansItem;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }
 

@@ -12,7 +12,7 @@ import com.jimei.xiaolumeimei.adapter.WithdrawCashHisAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
@@ -114,7 +114,7 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                                     if (withdrawCashHisBean.getNext() == null) {
                                         JUtils.Toast("没有更多了");
                                         xRecyclerView.setLoadingMoreEnabled(false);
-                                        xRecyclerView.setRefreshing(false);
+                                        xRecyclerView.refreshComplete();
                                     }
                                     xRecyclerView.post(xRecyclerView::loadMoreComplete);
                                 }
@@ -125,7 +125,7 @@ public class MamaWithdrawCashHistoryActivity extends BaseSwipeBackCompatActivity
                                 JUtils.Toast("没有更多了");
                                 xRecyclerView.post(xRecyclerView::loadMoreComplete);
                                 xRecyclerView.setLoadingMoreEnabled(false);
-                                xRecyclerView.setRefreshing(false);
+                                xRecyclerView.refreshComplete();
                             }
                         });
                 addSubscription(subscribe);

@@ -130,9 +130,9 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             lastStateTv.setText("取消订单");
             lastTimeTv.setText(packageOrdersBean.getCancel_time().replace("T", " "));
             addFinishTime();
-        } else if (packageOrdersBean.getFinish_time() != null) {
+        } else if (packageOrdersBean.getWeight_time() != null) {
             lastStateTv.setText("产品发货中");
-            lastTimeTv.setText(packageOrdersBean.getFinish_time().replace("T", " "));
+            lastTimeTv.setText(packageOrdersBean.getWeight_time().replace("T", " "));
             addAssignTime();
         } else if (packageOrdersBean.getAssign_time() != null) {
             lastStateTv.setText("仓库质检");
@@ -151,11 +151,11 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void addFinishTime() {
-        if (packageOrdersBean.getFinish_time() != null) {
+        if (packageOrdersBean.getWeight_time() != null) {
             logImageLayout.addView(new LogImageView(this));
             LogMsgView logMsgView = new LogMsgView(this);
             logMsgView.setMsg("产品发货中");
-            logMsgView.setTime(packageOrdersBean.getFinish_time().replace("T", " "));
+            logMsgView.setTime(packageOrdersBean.getWeight_time().replace("T", " "));
             logMsgLayout.addView(logMsgView);
         }
         addAssignTime();

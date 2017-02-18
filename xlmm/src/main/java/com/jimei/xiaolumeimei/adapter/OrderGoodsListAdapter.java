@@ -37,7 +37,7 @@ import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +132,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                 }
                 if ((orderDetailEntity.getPackage_orders().get(i).getBook_time() != null)
                         && orderDetailEntity.getPackage_orders().get(i).getAssign_time() == null
-                        && orderDetailEntity.getPackage_orders().get(i).getFinish_time() == null
+                        && orderDetailEntity.getPackage_orders().get(i).getWeight_time() == null
                         && orderDetailEntity.getOrders().get(position).getStatus() == 2) {
                     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
                     btn.setOnClickListener(v -> new AlertDialog.Builder(context)
@@ -155,7 +155,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
             }
         }
         ((TextView) convertView.findViewById(R.id.tx_good_name)).setText(data.get(position).getTitle());
-        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + (data.get(position).getTotal_fee() / data.get(position).getNum()));
+        double price = (double) (Math.round((data.get(position).getTotal_fee() / data.get(position).getNum()) * 100)) / 100;
+        ((TextView) convertView.findViewById(R.id.tx_good_price)).setText("¥" + price);
         ((TextView) convertView.findViewById(R.id.tx_good_size)).setText(data.get(position).getSku_name());
         ((TextView) convertView.findViewById(R.id.tx_good_num)).setText("x" + data.get(position).getNum());
         ImageView img_goods = (ImageView) convertView.findViewById(R.id.img_good);

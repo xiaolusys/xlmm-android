@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -44,8 +43,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jimei.library.R;
 import com.jimei.library.widget.glidemoudle.CropCircleTransformation;
 import com.jimei.library.widget.glidemoudle.GlideRoundTransform;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -54,8 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import okhttp3.Call;
 
 /**
  * ViewUtils
@@ -284,15 +279,6 @@ public final class ViewUtils {
         }
     }
 
-    public static void loadActivityToImgView(Context context, ImageView img, String picPath) {
-        if (null == picPath) return;
-        Glide.with(context)
-                .load(picPath + "?imageMogr2/format/jpg")
-                .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .into(img);
-    }
-
     public static void loadImgToImgView(Context context, ImageView img, String picPath, int radius) {
         if (null == picPath) return;
         if (picPath.contains("mmbiz.qlogo.cn") || picPath.contains("wx.qlogo.cn") || picPath.contains(
@@ -384,15 +370,6 @@ public final class ViewUtils {
                         .into(img);
             }
         }
-    }
-
-    public static void loadImgToHead(Context context, ImageView img, String picPath) {
-        Glide.with(context)
-                .load(picPath)
-                .thumbnail(0.2f)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .bitmapTransform(new CropCircleTransformation(context))
-                .into(img);
     }
 
     public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
@@ -489,81 +466,6 @@ public final class ViewUtils {
                         .into(img);
             }
         }
-    }
-
-    public static void loadImgToImgViewWithPlaceholderFragment(Fragment context, ImageView img,
-                                                               String picPath) {
-        if (null == picPath) return;
-        if (picPath.contains("wx.qlogo.cn")
-                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-                || picPath.contains("mmbiz.qlogo.cn")) {
-            Glide.with(context)
-                    .load(picPath)
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .into(img);
-        } else {
-            String head_img;
-            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-            Matcher m = p.matcher(picPath);
-            if (m.find()) {
-                String group = m.group();
-                String[] temp = picPath.split(group + "/");
-                if (temp.length > 1) {
-                    try {
-                        head_img = "http://"
-                                + group
-                                + "/"
-                                + URLEncoder.encode(temp[1], "utf-8")
-                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/70";
-                        Glide.with(context)
-                                .load(head_img)
-                                .thumbnail(0.1f)
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .centerCrop()
-                                .placeholder(R.drawable.place_holder)
-                                .into(img);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Glide.with(context)
-                        .load(picPath)
-                        .thumbnail(0.1f)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .centerCrop()
-                        .into(img);
-            }
-        }
-    }
-
-    public static void loadImageWithOkhttp(String picpath, Activity context,
-                                           ImageView imageView, int size) {
-        OkHttpUtils.get().url(picpath).build().execute(new BitmapCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Bitmap response, int id) {
-                if (null != response) {
-                    int width = response.getWidth();
-                    int height = response.getHeight();
-                    imageView.setAdjustViewBounds(true);
-                    int screenWidth = DisplayUtils.getScreenW(context) / size;
-                    int value = (int) ((height * 1.0 / width) * 2 * screenWidth / 3 + screenWidth / 5);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(screenWidth, value);
-                    imageView.setLayoutParams(lp);
-                    imageView.setMaxWidth(screenWidth);
-                    imageView.setMaxHeight(value);
-                    imageView.setPadding(screenWidth / 6, screenWidth / 10, screenWidth / 6, screenWidth / 10);
-                    imageView.setImageBitmap(response);
-                }
-            }
-        });
     }
 
     public static LayoutParams getLayoutParams(Bitmap bitmap, int screenWidth) {

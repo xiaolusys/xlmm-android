@@ -16,17 +16,67 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="160px"
             android:layout_marginLeft="130px">
 
-            <ImageView
-                android:id="@+id/iv_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="50px"
-                android:src="@drawable/to_right_ic"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90px">
+
+                    <TextView
+                        android:id="@+id/tv_coupon_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="32sp"/>
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/tv_coupon_value"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/use_fee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/tv_coupon_value"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_62"
+                        android:textSize="12sp"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_coupon_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/img_selected"
@@ -38,54 +88,7 @@
                 android:src="@drawable/img_mark_selected_coupon"
                 android:visibility="invisible"/>
 
-            <TextView
-                android:id="@+id/tv_coupon_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35px"
-                android:textColor="@color/text_color_62"
-                android:textSize="38sp"/>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="-20px"
-                android:layout_marginTop="20px"
-                android:layout_toLeftOf="@id/img_selected"
-                android:layout_toRightOf="@+id/tv_coupon_value"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/text_color_62"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/use_fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_marginLeft="20px"
-                android:layout_marginTop="10px"
-                android:layout_toRightOf="@+id/tv_coupon_value"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/text_color_62"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/tv_coupon_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/use_fee"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="35px"
-                android:layout_marginTop="10px"
-                android:layout_toRightOf="@+id/tv_coupon_value"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/text_color_62"
-                android:textSize="12sp"/>
         </RelativeLayout>
 
         <LinearLayout

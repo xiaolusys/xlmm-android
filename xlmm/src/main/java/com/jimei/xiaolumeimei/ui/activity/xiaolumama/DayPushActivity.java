@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.NinePicFragment;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.PushBoutiqueFragment;
 import com.jimei.xiaolumeimei.ui.fragment.xiaolumama.PushCategoryFragment;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;

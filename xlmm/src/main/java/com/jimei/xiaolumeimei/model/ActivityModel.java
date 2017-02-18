@@ -2,14 +2,10 @@ package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.entities.PostActivityBean;
 import com.jimei.xiaolumeimei.entities.StartBean;
-import com.jimei.xiaolumeimei.xlmmService.RetrofitClient;
-import com.jimei.xiaolumeimei.xlmmService.api.ActivityService;
+import com.jimei.xiaolumeimei.service.RetrofitClient;
+import com.jimei.xiaolumeimei.service.api.ActivityService;
 
-import java.util.List;
-
-import okhttp3.ResponseBody;
 import rx.Observable;
 
 /**
@@ -39,23 +35,11 @@ public class ActivityModel {
     //活动内容分享
     public Observable<ActivityBean> get_party_share_content(String id) {
         return getService().get_party_share_content(id)
-                .compose(new DefaultTransform<>());
-    }
-
-    //活动海报
-    public Observable<List<PostActivityBean>> getPostActivity() {
-        return getService().getPostActivity()
-                .compose(new DefaultTransform<>());
-    }
-
-    //领取优惠券
-    public Observable<ResponseBody> getUsercoupons(String template_id) {
-        return getService().getUsercoupons(template_id)
-                .compose(new DefaultTransform<>());
+            .compose(new DefaultTransform<>());
     }
 
     public Observable<StartBean> getStartAds() {
         return getService().getStartAds()
-                .compose(new DefaultTransform<>());
+            .compose(new DefaultTransform<>());
     }
 }

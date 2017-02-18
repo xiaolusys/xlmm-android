@@ -61,32 +61,6 @@
                                         android:textColor="@color/text_color_4A"
                                         android:textSize="16sp" />
 
-                                    <LinearLayout
-                                        android:id="@+id/collect_layout"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="50px"
-                                        android:gravity="center_vertical"
-                                        android:orientation="horizontal">
-
-
-                                        <ImageView
-                                            android:id="@+id/collect_img"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="15px"
-                                            android:layout_marginRight="15px"
-                                            android:src="@drawable/icon_collect_false" />
-
-                                        <TextView
-                                            android:id="@+id/collect_text"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="收藏"
-                                            android:textColor="@color/text_color_4A"
-                                            android:textSize="14sp" />
-
-                                    </LinearLayout>
-
                                 </LinearLayout>
 
 
@@ -98,27 +72,51 @@
                                     android:layout_marginLeft="32px"
                                     android:layout_marginRight="32px"
                                     android:layout_marginTop="15px"
-                                    android:gravity="bottom"
+                                    android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
-                                    <TextView
-                                        android:id="@+id/agent_price"
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textColor="@color/text_color_32"
-                                        android:textSize="35sp" />
+                                        android:gravity="bottom"
+                                        android:orientation="horizontal">
 
-                                    <TextView
-                                        android:id="@+id/sale_price"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="@color/text_color_A0"
-                                        android:textSize="14sp" />
+                                        <TextView
+                                            android:id="@+id/agent_price"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="@color/text_color_32"
+                                            android:textSize="35sp" />
+
+                                        <TextView
+                                            android:id="@+id/sale_price"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="@color/text_color_A0"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
 
                                     <View
                                         android:layout_width="0dp"
                                         android:layout_height="1dp"
                                         android:layout_weight="1" />
+
+                                    <!--<LinearLayout-->
+                                        <!--android:id="@+id/collect_layout"-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:gravity="center_vertical"-->
+                                        <!--android:orientation="horizontal">-->
+
+                                        <!--<ImageView-->
+                                            <!--android:id="@+id/collect_img"-->
+                                            <!--android:layout_width="wrap_content"-->
+                                            <!--android:layout_height="wrap_content"-->
+                                            <!--android:layout_margin="15dp"-->
+                                            <!--android:src="@drawable/icon_collect_false" />-->
+
+                                    <!--</LinearLayout>-->
 
                                 </LinearLayout>
 
@@ -131,9 +129,9 @@
                                     android:id="@+id/boutique_layout"
                                     android:layout_width="match_parent"
                                     android:layout_height="90px"
-                                    android:visibility="gone"
                                     android:gravity="center_vertical"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -141,12 +139,12 @@
                                         android:layout_marginLeft="32px"
                                         android:text="精品商品"
                                         android:textColor="@color/text_color_4A"
-                                        android:textSize="14sp"/>
+                                        android:textSize="14sp" />
 
                                     <View
                                         android:layout_width="0dp"
                                         android:layout_height="1dp"
-                                        android:layout_weight="1"/>
+                                        android:layout_weight="1" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -154,7 +152,7 @@
                                         android:layout_marginRight="32px"
                                         android:text="前往购券>>"
                                         android:textColor="@color/colorAccent"
-                                        android:textSize="14sp"/>
+                                        android:textSize="14sp" />
 
 
                                 </LinearLayout>
@@ -163,9 +161,9 @@
                                 <View
                                     android:id="@+id/boutique_driver"
                                     android:layout_width="match_parent"
-                                    android:visibility="gone"
                                     android:layout_height="20px"
-                                    android:background="@color/bg_grey" />
+                                    android:background="@color/bg_grey"
+                                    android:visibility="gone" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -194,6 +192,15 @@
                                         android:textColor="@color/text_color_4A"
                                         android:textSize="16sp" />
 
+                                    <TextView
+                                        android:id="@+id/text_not_sale"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="32px"
+                                        android:text="暂未上架"
+                                        android:textColor="@color/text_color_4A"
+                                        android:textSize="14sp"
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
                                 <View

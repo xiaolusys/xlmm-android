@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.jimei.xiaolumeimei.xlmmService.UpdateService;
+import com.jimei.xiaolumeimei.service.UpdateService;
 
 /**
  * Created by wisdom on 16/7/26.

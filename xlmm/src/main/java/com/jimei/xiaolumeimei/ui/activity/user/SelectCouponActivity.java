@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
@@ -13,7 +14,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,30 +38,31 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     protected void initData() {
         showIndeterminateProgressDialog(false);
         UserModel.getInstance()
-                .getCouponSelectEntity(cart_ids)
-                .subscribe(new ServiceResponse<CouponSelectEntity>() {
-                    @Override
-                    public void onNext(CouponSelectEntity couponSelectEntity) {
-                        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
-                        if (couponFlag && goodNum > 1) {
-                            fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon(), goodNum));
-                        } else {
-                            fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon()));
-                        }
-                        fragments.add(SelectCouponFragment.newInstance(1, "不可用优惠券", "", couponSelectEntity.getDisable_coupon()));
-                        viewPager.setAdapter(mAdapter);
-                        viewPager.setOffscreenPageLimit(2);
-                        tabLayout.setupWithViewPager(viewPager);
-                        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                        hideIndeterminateProgressDialog();
+            .getCouponSelectEntity(cart_ids)
+            .subscribe(new ServiceResponse<CouponSelectEntity>() {
+                @Override
+                public void onNext(CouponSelectEntity couponSelectEntity) {
+                    BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
+                    if (couponFlag && goodNum > 1) {
+                        fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon(), goodNum));
+                    } else {
+                        fragments.add(SelectCouponFragment.newInstance(0, "可用优惠券", selected_couponid, couponSelectEntity.getUsable_coupon()));
                     }
+                    fragments.add(SelectCouponFragment.newInstance(1, "不可用优惠券", "", couponSelectEntity.getDisable_coupon()));
+                    viewPager.setAdapter(mAdapter);
+                    viewPager.setOffscreenPageLimit(2);
+                    tabLayout.setupWithViewPager(viewPager);
+                    tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                    hideIndeterminateProgressDialog();
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        hideIndeterminateProgressDialog();
-                    }
-                });
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    JUtils.Toast("获取优惠券信息失败!");
+                    hideIndeterminateProgressDialog();
+                }
+            });
     }
 
     @Override

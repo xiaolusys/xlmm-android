@@ -16,7 +16,7 @@ import com.jimei.xiaolumeimei.adapter.ClickCarryLogAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 
@@ -86,7 +86,7 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.setLoadingMoreEnabled(true);
 
-        adapter = new ClickCarryLogAdapter();
+        adapter = new ClickCarryLogAdapter(mActivity);
         xRecyclerView.setAdapter(adapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

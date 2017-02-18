@@ -16,8 +16,8 @@ import com.jimei.xiaolumeimei.databinding.FragmentOrderListBinding;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -107,10 +107,7 @@ public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBind
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_jump:
-                Bundle bundle = new Bundle();
-                bundle.putString("flag", "main");
-                Intent intent = new Intent(getActivity(), TabActivity.class);
-                intent.putExtras(bundle);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 getActivity().startActivity(intent);
                 getActivity().finish();
                 break;
@@ -120,37 +117,37 @@ public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBind
 
     private void loadMoreData() {
         addSubscription(TradeModel.getInstance()
-                .getOrderList(type, page)
-                .subscribe(new ServiceResponse<AllOrdersBean>() {
-                    @Override
-                    public void onNext(AllOrdersBean allOrdersBean) {
-                        if (allOrdersBean != null) {
-                            List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
-                            if (results.size() == 0 && page == 1) {
-                                b.emptyLayout.setVisibility(View.VISIBLE);
-                            } else if (page == 1) {
-                                adapter.updateWithClear(results);
-                            } else {
-                                adapter.update(results);
-                            }
-                            next = allOrdersBean.getNext();
-                            if (allOrdersBean.getNext() == null && adapter.getItemCount() != 0 && !isEvent) {
-                                JUtils.Toast("全部订单加载完成!");
-                            }
-                            isEvent = false;
+            .getOrderList(type, page)
+            .subscribe(new ServiceResponse<AllOrdersBean>() {
+                @Override
+                public void onNext(AllOrdersBean allOrdersBean) {
+                    if (allOrdersBean != null) {
+                        List<AllOrdersBean.ResultsEntity> results = allOrdersBean.getResults();
+                        if (results.size() == 0 && page == 1) {
+                            b.emptyLayout.setVisibility(View.VISIBLE);
+                        } else if (page == 1) {
+                            adapter.updateWithClear(results);
+                        } else {
+                            adapter.update(results);
                         }
-                        b.xrv.loadMoreComplete();
-                        b.xrv.refreshComplete();
-                        hideIndeterminateProgressDialog();
+                        next = allOrdersBean.getNext();
+                        if (allOrdersBean.getNext() == null && adapter.getItemCount() != 0 && !isEvent) {
+                            JUtils.Toast("全部订单加载完成!");
+                        }
+                        isEvent = false;
                     }
+                    b.xrv.loadMoreComplete();
+                    b.xrv.refreshComplete();
+                    hideIndeterminateProgressDialog();
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        b.xrv.loadMoreComplete();
-                        b.xrv.refreshComplete();
-                        hideIndeterminateProgressDialog();
-                    }
-                }));
+                @Override
+                public void onError(Throwable e) {
+                    b.xrv.loadMoreComplete();
+                    b.xrv.refreshComplete();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
