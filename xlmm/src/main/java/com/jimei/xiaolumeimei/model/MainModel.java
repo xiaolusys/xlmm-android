@@ -52,6 +52,12 @@ public class MainModel {
             .compose(new DefaultTransform<>());
     }
 
+    public Observable<PortalBean> getPortalBean(String exclude_fields) {
+        return getService()
+            .getPortalBean(exclude_fields)
+            .compose(new DefaultTransform<>());
+    }
+
     public Observable<AddressDownloadResultBean> getAddressVersionAndUrl() {
         return getService()
             .getAddressVersionAndUrl()

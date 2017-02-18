@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.entities.VersionBean;
 import java.util.List;
 
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -29,6 +30,10 @@ public interface MainService {
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean();
+
+    @GET("/rest/v1/portal")
+    Observable<PortalBean> getPortalBean(
+        @Query("exclude_fields") String exclude_fields);
 
     @GET("/rest/v1/districts/latest_version")
     Observable<AddressDownloadResultBean> getAddressVersionAndUrl();

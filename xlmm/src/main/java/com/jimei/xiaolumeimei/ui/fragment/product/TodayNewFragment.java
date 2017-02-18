@@ -1,6 +1,7 @@
 package com.jimei.xiaolumeimei.ui.fragment.product;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -8,8 +9,9 @@ import com.jimei.library.widget.banner.SliderLayout;
 import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
+import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CustomLinearSnapHelper;
+import com.jimei.xiaolumeimei.adapter.CustomSnapHelper;
 import com.jimei.xiaolumeimei.adapter.MainProductAdapter;
 import com.jimei.xiaolumeimei.adapter.MainTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
@@ -17,10 +19,12 @@ import com.jimei.xiaolumeimei.databinding.FragmentTodayNewBinding;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.model.MainModel;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +34,8 @@ import java.util.Map;
  */
 
 public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBinding>
-    implements ScrollableHelper.ScrollableContainer {
+    implements ScrollableHelper.ScrollableContainer, SwipeRefreshLayout.OnRefreshListener,
+    ScrollableLayout.OnScrollListener {
 
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private Map<String, String> map = new HashMap<>();
@@ -54,31 +59,55 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
     @Override
     public void initData() {
         data = new ArrayList<>();
-        addSubscription(MainModel.getInstance()
-            .getPortalBean()
+        MainModel instance = MainModel.getInstance();
+        addSubscription(instance
+            .getPortalBean("activitys,categorys")
             .subscribe(portalBean -> {
                 initSliderLayout(portalBean);
                 hideIndeterminateProgressDialog();
+                if (b.swipeLayout.isRefreshing()) {
+                    b.swipeLayout.setRefreshing(false);
+                }
             }, e -> {
                 e.printStackTrace();
                 hideIndeterminateProgressDialog();
+                if (b.swipeLayout.isRefreshing()) {
+                    b.swipeLayout.setRefreshing(false);
+                }
             }));
-        addSubscription(MainModel.getInstance()
+        addSubscription(instance
             .getMainTodayList()
             .subscribe(list -> {
                 data.addAll(list);
                 mainTabAdapter.updateWithClear(list);
-                mainProductAdapter.updateWithClear(list.get(0).getItems());
+                int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                int position = 0;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getHour() <= hour) {
+                        position = i;
+                    }
+                }
+                mainTabAdapter.setCurrentPosition(position);
+                b.recyclerTab.scrollToPosition(position);
+                mainProductAdapter.updateWithClear(list.get(position).getItems());
             }, Throwable::printStackTrace));
     }
 
     @Override
+    public void setListener() {
+        b.swipeLayout.setOnRefreshListener(this);
+        b.layout.setOnScrollListener(this);
+    }
+
+    @Override
     protected void initViews() {
+        b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
         b.recyclerProduct.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
         mainProductAdapter = new MainProductAdapter(mActivity);
         b.recyclerProduct.setAdapter(mainProductAdapter);
 
-        b.recyclerTab.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false));
+        LinearLayoutManager manager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
+        b.recyclerTab.setLayoutManager(manager);
         mainTabAdapter = new MainTabAdapter(mActivity) {
             @Override
             public void itemClick(int position) {
@@ -86,7 +115,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
             }
         };
         b.recyclerTab.setAdapter(mainTabAdapter);
-        CustomLinearSnapHelper mLinearSnapHelper = new CustomLinearSnapHelper(mainTabAdapter);
+        CustomSnapHelper mLinearSnapHelper = new CustomSnapHelper(mainTabAdapter);
         mLinearSnapHelper.attachToRecyclerView(b.recyclerTab);
         b.layout.getHelper().setCurrentScrollableContainer(this);
     }
@@ -128,4 +157,18 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         return b.recyclerProduct;
     }
 
+    @Override
+    public void onRefresh() {
+        initData();
+    }
+
+    @Override
+    public void onScroll(int currentY, int maxY) {
+        ((MainActivity) mActivity).setTabLayoutMarginTop((double) currentY / b.slider.getHeight());
+        if (currentY > 0) {
+            b.swipeLayout.setEnabled(false);
+        } else {
+            b.swipeLayout.setEnabled(true);
+        }
+    }
 }

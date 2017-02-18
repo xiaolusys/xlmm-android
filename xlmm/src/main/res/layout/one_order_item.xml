@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:background="@color/white"
-    android:orientation="horizontal"
-    android:padding="8dp">
+              android:layout_width="match_parent"
+              android:layout_height="100dp"
+              android:background="@color/white"
+              android:orientation="horizontal"
+              android:padding="8dp">
 
     <RelativeLayout
         android:id="@+id/img_layout"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"/>
 
     </RelativeLayout>
 
@@ -36,8 +36,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:maxLines="2"
             android:textColor="@color/text_color_62"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,27 +51,27 @@
                 android:layout_height="wrap_content"
                 android:text="尺寸:"
                 android:textColor="@color/text_color_A0"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tx_good_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_A0"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:layout_marginBottom="6dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
 
@@ -79,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_62"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tx_good_num"
@@ -87,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/text_color_9B"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
         </LinearLayout>
 

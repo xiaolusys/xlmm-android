@@ -70,23 +70,23 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         CategoryBean childsBean = mData.get(position);
         holder.img.setImageResource(R.drawable.place_holder);
         holder.name.setText(childsBean.getName());
-        String picAddress = XlmmConst.XLMM_DIR + childsBean.getCid() + ".png";
+        String picAddress = XlmmConst.XLMM_DIR + "category/" + childsBean.getCid() + ".png";
         if (FileUtils.isFileExist(picAddress)) {
             holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
         } else {
             if (childsBean.getCat_pic() != null && !"".equals(childsBean.getCat_pic())) {
                 OkHttpUtils.get().url(childsBean.getCat_pic()).build()
-                        .execute(new FileCallBack(XlmmConst.XLMM_DIR, childsBean.getCid() + ".png") {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
+                    .execute(new FileCallBack(XlmmConst.XLMM_DIR + "category/", childsBean.getCid() + ".png") {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onResponse(File response, int id) {
-                                holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
-                            }
-                        });
+                        @Override
+                        public void onResponse(File response, int id) {
+                            holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
+                        }
+                    });
             }
         }
         holder.item.setOnClickListener(new NoDoubleClickListener() {

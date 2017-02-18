@@ -8,7 +8,7 @@
         android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="center_vertical|left"
         android:padding="8dp"
         android:textColor="@color/text_color_62"
         android:textSize="14sp"/>
@@ -16,8 +16,7 @@
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/item_xrv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <include layout="@layout/common_gap"/>
+        android:layout_height="wrap_content"
+        android:background="@color/white"/>
 
 </LinearLayout>

@@ -78,20 +78,20 @@ public class CategoryNameListAdapter extends BaseAdapter {
             if (cid.equals(data.get(position).getCid())) {
                 holder.tv.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                 holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
-                holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
             } else {
                 holder.tv.setTextColor(mContext.getResources().getColor(R.color.text_color_62));
-                holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
-                holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
+                holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.white));
             }
         } else if (position == 0) {
             holder.tv.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
             holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
-            holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
         } else {
             holder.tv.setTextColor(mContext.getResources().getColor(R.color.text_color_62));
-            holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
-            holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.bg_grey));
+            holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            holder.tv.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
         return convertView;
     }

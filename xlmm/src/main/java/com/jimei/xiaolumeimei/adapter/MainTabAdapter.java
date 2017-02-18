@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
         notifyDataSetChanged();
     }
 
-    void setCurrentPosition(int position) {
+    public void setCurrentPosition(int position) {
         currentPosition = position;
         notifyDataSetChanged();
     }
@@ -54,16 +55,31 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textView.setText(data.get(position).getHour() + "点热销");
+        MainTodayBean bean = data.get(position);
+        if (bean.getHour() < 10) {
+            holder.time.setText("0" + bean.getHour() + ":00");
+        } else {
+            holder.time.setText(bean.getHour() + ":00");
+        }
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if (bean.getHour() > hour) {
+            holder.textView.setText("预热中");
+        } else {
+            holder.textView.setText("抢购中");
+        }
         holder.selected.setBackgroundResource(R.color.white);
         if (position == currentPosition) {
             holder.selected.setBackgroundResource(R.color.colorAccent);
-            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            holder.time.setTextColor(context.getResources().getColor(R.color.colorAccent));
             holder.textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
             itemClick(currentPosition);
         } else {
-            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             holder.selected.setBackgroundResource(R.color.white);
+            holder.time.setTextColor(context.getResources().getColor(R.color.text_color_62));
             holder.textView.setTextColor(context.getResources().getColor(R.color.text_color_62));
         }
         holder.itemView.setOnClickListener(v -> {
@@ -82,11 +98,12 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private View selected;
-        private TextView textView;
+        private TextView textView, time;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.text);
+            time = (TextView) itemView.findViewById(R.id.time);
             selected = itemView.findViewById(R.id.selected);
         }
     }

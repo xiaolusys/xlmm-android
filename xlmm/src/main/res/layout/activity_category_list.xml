@@ -68,26 +68,27 @@
             android:id="@+id/lv"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:background="@color/bg_grey"
+            android:background="@color/white"
             android:divider="@color/bg_grey3"
             android:dividerHeight="1dp"
             android:scrollbars="none"/>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/bg_grey"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
             <com.jcodecraeer.xrecyclerview.XRecyclerView
                 android:id="@+id/xrv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
+                android:layout_height="match_parent"/>
 
             <LinearLayout
                 android:id="@+id/empty_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">

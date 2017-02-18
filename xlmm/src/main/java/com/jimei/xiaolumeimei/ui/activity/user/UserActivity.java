@@ -147,7 +147,9 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
 
     @Override
     public void onClick(View v) {
-        if (!LoginUtils.checkLoginState(this)) {
+        if (v.getId() == R.id.btn_finish) {
+            finish();
+        } else if (!LoginUtils.checkLoginState(this)) {
             Bundle bundle = new Bundle();
             bundle.putString("login", "main");
             readyGo(LoginActivity.class, bundle);
@@ -182,9 +184,6 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
                 case R.id.rl_order:
                     bundle.putInt("fragment", 1);
                     readyGo(AllOrdersActivity.class, bundle);
-                    break;
-                case R.id.btn_finish:
-                    finish();
                     break;
                 case R.id.btn_service:
                     UdeskSDKManager.getInstance().showRobotOrConversation(this);

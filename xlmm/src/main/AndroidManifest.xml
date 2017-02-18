@@ -54,6 +54,7 @@
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
             android:value="GlideModule"/>
+
         <activity
             android:name=".ui.activity.main.SplashActivity"
             android:theme="@style/AppTheme.TransparentActivity">
@@ -453,20 +454,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.xiaolumama.MamaActivity"
-            android:theme="@style/AppTheme.TransparentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data
-                    android:host="app"
-                    android:path="/v1/vip_home"
-                    android:scheme="com.jimei.xlmm"/>
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.activity.trade.CommonScanActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -500,7 +487,18 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.UserActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data
+                    android:host="app"
+                    android:path="/v1/vip_home"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <service
             android:name=".service.UpdateService"
             android:exported="false"/>

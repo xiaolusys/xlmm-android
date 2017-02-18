@@ -156,7 +156,7 @@ public class MultiImageView extends LinearLayout {
                 MAX_PER_ROW_COUNT = 3;
             }
             int rowCount =
-                    allCount / MAX_PER_ROW_COUNT + (allCount % MAX_PER_ROW_COUNT > 0 ? 1 : 0);// 行数
+                allCount / MAX_PER_ROW_COUNT + (allCount % MAX_PER_ROW_COUNT > 0 ? 1 : 0);// 行数
             for (int rowCursor = 0; rowCursor < rowCount; rowCursor++) {
                 LinearLayout rowLayout = new LinearLayout(getContext());
                 rowLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -167,7 +167,7 @@ public class MultiImageView extends LinearLayout {
                 }
 
                 int columnCount = allCount % MAX_PER_ROW_COUNT == 0 ? MAX_PER_ROW_COUNT
-                        : allCount % MAX_PER_ROW_COUNT;//每行的列数
+                    : allCount % MAX_PER_ROW_COUNT;//每行的列数
                 if (rowCursor != rowCount - 1) {
                     columnCount = MAX_PER_ROW_COUNT;
                 }
@@ -193,7 +193,7 @@ public class MultiImageView extends LinearLayout {
         if (isMultiImage) {
             imageView.setScaleType(ScaleType.CENTER_CROP);
             imageView.setLayoutParams(
-                    position % MAX_PER_ROW_COUNT == 0 ? moreParaColumnFirst : morePara);
+                position % MAX_PER_ROW_COUNT == 0 ? moreParaColumnFirst : morePara);
         } else {
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ScaleType.FIT_START);

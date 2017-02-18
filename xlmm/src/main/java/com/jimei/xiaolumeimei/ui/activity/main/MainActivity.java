@@ -5,10 +5,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
@@ -33,6 +35,7 @@ import com.jimei.xiaolumeimei.ui.fragment.product.ProductFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.TodayNewFragment;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
+import com.jimei.xiaolumeimei.widget.MainViewPager;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -52,7 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
-    ViewPager viewPager;
+    MainViewPager viewPager;
     @Bind(R.id.btn_my)
     RelativeLayout btnMy;
     @Bind(R.id.btn_car)
@@ -61,10 +64,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView textNum;
     @Bind(R.id.btn_shop)
     RelativeLayout btnShop;
+    @Bind(R.id.boutique_in)
+    TextView boutiqueIn;
     private int num = 1;
     private long firstTime = 0;
     private boolean updateFlag = true;
     private UpdateBroadReceiver mUpdateBroadReceiver;
+    private boolean showBoutique;
+    private String boutiqueUrl;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -73,6 +80,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initData() {
+        showBoutique = false;
         LoginUtils.clearCacheEveryWeek(this);
         LoginUtils.setMamaInfo(this);
         downLoadAddress();
@@ -98,8 +106,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }, Throwable::printStackTrace));
     }
 
+    private void showBoutique() {
+        showBoutique = false;
+        boutiqueIn.setVisibility(View.GONE);
+        addSubscription(MainModel.getInstance()
+            .getProfile()
+            .subscribe(userInfoBean -> {
+                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
+                    addSubscription(MamaInfoModel.getInstance()
+                        .getMamaUrl()
+                        .subscribe(mamaUrl -> {
+                            boutiqueUrl = mamaUrl.getResults().get(0).getExtra().getBoutique();
+                            showBoutique = true;
+                            boutiqueIn.setVisibility(View.VISIBLE);
+                        }));
+                }
+            }, Throwable::printStackTrace));
+    }
+
     @Override
     protected void setListener() {
+
+        boutiqueIn.setOnClickListener(this);
         searchLayout.setOnClickListener(this);
         btnMy.setOnClickListener(this);
         btnCar.setOnClickListener(this);
@@ -110,16 +138,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void initViews() {
         setSwipeBackEnable(false);
         List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(TodayNewFragment.newInstance("今日上新"));
-        fragments.add(ProductFragment.newInstance(3, "健康美食"));
-        fragments.add(ProductFragment.newInstance(5, "母婴玩具"));
-        fragments.add(ProductFragment.newInstance(7, "美妆护肤"));
-        fragments.add(ProductFragment.newInstance(8, "温暖家居"));
-        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
-        viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(fragments.size());
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        fragments.add(TodayNewFragment.newInstance("精品推荐"));
+        addSubscription(MainModel.getInstance()
+            .getPortalBean("activitys,posters")
+            .subscribe(portalBean -> {
+                List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
+                if (categorys != null && categorys.size() > 0) {
+                    for (int i = 0; i < categorys.size(); i++) {
+                        PortalBean.CategorysBean bean = categorys.get(i);
+                        fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
+                    }
+                    BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
+                    viewPager.setAdapter(mAdapter);
+                    viewPager.setOffscreenPageLimit(fragments.size());
+                    tabLayout.setupWithViewPager(viewPager);
+                    tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                }
+            }, Throwable::printStackTrace));
+    }
+
+    public void setTabLayoutMarginTop(double percent) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, tabLayout.getHeight());
+        if (percent > 0) {
+            viewPager.setScrollable(false);
+            double height = percent * tabLayout.getHeight();
+            params.setMargins(0, (int) -height, 0, 0);
+            tabLayout.setLayoutParams(params);
+        } else {
+            viewPager.setScrollable(true);
+            params.setMargins(0, 0, 0, 0);
+
+        }
+        tabLayout.setLayoutParams(params);
     }
 
     @Override
@@ -152,32 +203,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     carBundle.putString("login", "main");
                     readyGo(LoginActivity.class, carBundle);
                 } else {
-                    showIndeterminateProgressDialog(false);
-                    addSubscription(MainModel.getInstance()
-                        .getProfile()
-                        .subscribe(userInfoBean -> {
-                            if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
-                                addSubscription(MamaInfoModel.getInstance()
-                                    .getMamaUrl()
-                                    .subscribe(mamaUrl -> {
-                                        String boutique = mamaUrl.getResults().get(0).getExtra().getBoutique();
-                                        hideIndeterminateProgressDialog();
-                                        JumpUtils.jumpToWebViewWithCookies(MainActivity.this, boutique, -1, CommonWebViewActivity.class, false, true);
-                                    }));
-                            } else {
-                                hideIndeterminateProgressDialog();
-                                new AlertDialog.Builder(this)
-                                    .setTitle("提示")
-                                    .setMessage("您暂时不是小鹿妈妈,请关注\"小鹿美美\"公众号,获取更多信息哦!")
-                                    .setPositiveButton("确定", (dialog, which) -> dialog.dismiss())
-                                    .show();
-                            }
-                        }, e -> {
-                            e.printStackTrace();
-                            hideIndeterminateProgressDialog();
-                            JUtils.Toast("进入店铺失败，请重新点击进入!");
-                        }));
+                    if (showBoutique) {
+                        JumpUtils.jumpToWebViewWithCookies(MainActivity.this, boutiqueUrl, -1, CommonWebViewActivity.class, false, true);
+                    } else {
+                        new AlertDialog.Builder(this)
+                            .setTitle("提示")
+                            .setMessage("您暂时不是小鹿妈妈,请关注\"小鹿美美\"公众号,获取更多信息哦!")
+                            .setPositiveButton("确定", (dialog, which) -> dialog.dismiss())
+                            .show();
+                    }
                 }
+                break;
+            case R.id.boutique_in:
+                JumpUtils.jumpToWebViewWithCookies(MainActivity.this, boutiqueUrl, -1, CommonWebViewActivity.class, false, true);
                 break;
             default:
                 break;
@@ -251,7 +289,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 @Override
                                 public void onResponse(File response, int id) {
                                     FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-                                    FileUtils.saveCategoryImg(XlmmConst.CATEGORY_JSON);
+//                                    FileUtils.saveCategoryImg(XlmmConst.CATEGORY_JSON);
                                 }
                             });
                     }
@@ -300,12 +338,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-
     @Override
     public void initContentView() {
         setContentView(getContentViewLayoutID());
     }
-
 
     @Override
     public boolean isNeedShow() {
@@ -338,6 +374,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         showCartsNum();
+        showBoutique();
     }
 
     @Override
