@@ -13,12 +13,12 @@ import android.view.View;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.StatusBarUtil;
 import com.jimei.library.widget.loading.VaryViewHelperController;
-import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
 import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
 import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
 import com.jimei.library.widget.swipeback.SwipeBackLayout;
 import com.jimei.library.widget.swipeback.Utils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.widget.loading.WisdomLoading;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -49,7 +49,7 @@ public abstract class BaseActivity extends AutoLayoutActivity
      */
     protected Context mContext = null;
     protected CompositeSubscription mCompositeSubscription;
-    protected XlmmLoadingDialog loadingdialog;
+    protected WisdomLoading wisdomLoading;
     public VaryViewHelperController mVaryViewHelperController;
     private SwipeBackActivityHelper mHelper;
 
@@ -258,20 +258,25 @@ public abstract class BaseActivity extends AutoLayoutActivity
         startActivityForResult(intent, requestCode);
     }
 
-    public void showIndeterminateProgressDialog(boolean horizontal) {
-        if (loadingdialog == null) {
-            loadingdialog = XlmmLoadingDialog.create(this)
-                    .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                    .setCancellable(!horizontal)
-                    .show();
+    public void showIndeterminateProgressDialog(boolean cancelable) {
+        if (wisdomLoading == null) {
+            wisdomLoading = WisdomLoading.createDialog(this)
+                    .setCanCancel(cancelable)
+                    .start();
+        }
+    }
+
+    public void setDialogContent(String content) {
+        if (wisdomLoading != null) {
+            wisdomLoading.setContent(content);
         }
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            if (loadingdialog != null) {
-                loadingdialog.dismiss();
-                loadingdialog = null;
+            if (wisdomLoading != null) {
+                wisdomLoading.dismiss();
+                wisdomLoading = null;
             }
         } catch (Exception e) {
             e.printStackTrace();

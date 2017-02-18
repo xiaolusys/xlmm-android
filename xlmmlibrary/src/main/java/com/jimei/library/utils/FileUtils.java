@@ -997,7 +997,7 @@ public final class FileUtils {
                         String cat_pic = list.get(i).getChilds().get(j).getCat_pic();
                         final String cid = list.get(i).getChilds().get(j).getCid();
                         String picAddress = Environment.getExternalStorageDirectory().getAbsolutePath()
-                                + "/xlmm/" + cid + ".png";
+                                + "/xlmm/category/" + cid + ".png";
                         if (FileUtils.isFileExist(picAddress)) {
                             FileUtils.DeleteFile(new File(picAddress));
                         }
@@ -1005,7 +1005,7 @@ public final class FileUtils {
                                 .url(cat_pic)
                                 .build()
                                 .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath()
-                                        + "/xlmm/", cid + ".png") {
+                                        + "/xlmm/category/", cid + ".png") {
                                     @Override
                                     public void onError(Call call, Exception e, int id) {
 

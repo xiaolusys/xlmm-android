@@ -20,12 +20,11 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.ResponseResultBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -163,15 +162,15 @@ public class MamaDrawCashActivity extends BaseSwipeBackCompatActivity implements
             }
             addSubscription(MamaInfoModel.getInstance()
                     .withdraw_cash(fund_type)
-                    .subscribe(new ServiceResponse<ResponseResultBean>() {
+                    .subscribe(new ServiceResponse<ResultEntity>() {
                         @Override
-                        public void onNext(ResponseResultBean resp) {
+                        public void onNext(ResultEntity resp) {
                             EventBus.getDefault().post(new WalletEvent());
                             Intent intent = new Intent(MamaDrawCashActivity.this,
                                     MamaWithdrawCashResultActivity.class);
                             intent.putExtra("cash", fund);
                             intent.putExtra("code", resp.getCode());
-                            intent.putExtra("msg", resp.getMsg());
+                            intent.putExtra("msg", resp.getInfo());
                             startActivity(intent);
                             MamaDrawCashActivity.this.finish();
                         }

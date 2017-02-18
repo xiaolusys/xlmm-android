@@ -28,7 +28,7 @@ import butterknife.Bind;
  * <p>
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
+public class MMCarryLogActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.view_pager)
@@ -89,24 +89,4 @@ public class MMcarryLogActivity extends BaseSwipeBackCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         scrollableLayout.getHelper().setCurrentScrollableContainer((BaseLazyFragment) fragments.get(0));
     }
-
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_personal:
-//                MobclickAgent.onEvent(this, "PersonalRankID");
-//                readyGo(PersonalCarryRankActivity.class);
-//                break;
-//            default:
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_personal, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
 }

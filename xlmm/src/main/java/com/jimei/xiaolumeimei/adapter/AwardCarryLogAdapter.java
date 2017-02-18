@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
@@ -93,7 +94,7 @@ public class AwardCarryLogAdapter
             ViewUtils.loadImgToImgViewWithTransformCircle(context,
                     holder.picPath, resultsEntity.getContributorImg());
         } else {
-            holder.picPath.setImageResource(R.drawable.img_jiang);
+            Glide.with(context).load(R.drawable.img_jiang).into(holder.picPath);
         }
 
         holder.totalCash.setText(

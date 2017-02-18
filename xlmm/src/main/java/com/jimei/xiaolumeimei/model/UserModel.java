@@ -7,7 +7,6 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
-import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.LogOutBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
@@ -18,12 +17,11 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
-import com.jimei.xiaolumeimei.xlmmService.RetrofitClient;
-import com.jimei.xiaolumeimei.xlmmService.api.UserService;
+import com.jimei.xiaolumeimei.service.RetrofitClient;
+import com.jimei.xiaolumeimei.service.api.UserService;
 
 import java.util.ArrayList;
 
-import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -53,152 +51,146 @@ public class UserModel {
     //得到用户信息
     public Observable<UserInfoBean> getUserInfo() {
         return getService()
-                .getUserInfo()
-                .compose(new DefaultTransform<>());
+            .getUserInfo()
+            .compose(new DefaultTransform<>());
     }
 
     //投诉建议
     public Observable<AddressResultBean> complain(String com_type, String com_content) {
         return getService()
-                .complain(com_type, com_content, "问题反馈")
-                .compose(new DefaultTransform<>());
+            .complain(com_type, com_content, "问题反馈")
+            .compose(new DefaultTransform<>());
     }
 
     //设置昵称
     public Observable<UserBean> setNickname(int userid, NicknameBean nickname) {
         return getService()
-                .setNickname(userid, nickname)
-                .compose(new DefaultTransform<>());
+            .setNickname(userid, nickname)
+            .compose(new DefaultTransform<>());
     }
 
     public Observable<LogOutBean> customer_logout() {
         return getService()
-                .customer_logout()
-                .compose(new DefaultTransform<>());
+            .customer_logout()
+            .compose(new DefaultTransform<>());
     }
 
     //得到用户积分记录信息
     public Observable<CoinHistoryListBean> getCoinHisList(String page) {
         return getService()
-                .getCoinHisList(page)
-                .compose(new DefaultTransform<>());
+            .getCoinHisList(page)
+            .compose(new DefaultTransform<>());
     }
 
     //获取优惠券
     public Observable<ArrayList<CouponEntity>> getCouponList(int status) {
         return getService()
-                .getCouponList(status)
-                .compose(new DefaultTransform<>());
+            .getCouponList(status)
+            .compose(new DefaultTransform<>());
     }
 
     //获取优惠券
     public Observable<ArrayList<CouponEntity>> getCouponList(int status, int coupon_type) {
         return getService()
-                .getCouponList(status, coupon_type)
-                .compose(new DefaultTransform<>());
+            .getCouponList(status, coupon_type)
+            .compose(new DefaultTransform<>());
     }
 
     //购物车选择优惠券
     public Observable<CouponSelectEntity> getCouponSelectEntity(String cart_ids) {
         return getService()
-                .getCouponSelectEntity(cart_ids)
-                .compose(new DefaultTransform<>());
+            .getCouponSelectEntity(cart_ids)
+            .compose(new DefaultTransform<>());
     }
 
     //微信登录
     public Observable<CodeBean> wxapp_login(String noncestr, String timestamp, String sign,
                                             String headimgurl, String nickname, String openid, String unionid) {
         return getService()
-                .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid, "android")
-                .compose(new DefaultTransform<>());
+            .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid, "android")
+            .compose(new DefaultTransform<>());
     }
 
     //判断用户是否需要绑定
     public Observable<NeedSetInfoBean> need_set_info() {
         return getService()
-                .need_set_info()
-                .compose(new DefaultTransform<>());
+            .need_set_info()
+            .compose(new DefaultTransform<>());
     }
 
     //get push useraccount
     public Observable<UserAccountBean> getUserAccount(String platform, String regid, String device_id) {
         return getService()
-                .getUserAccount(platform, regid, device_id)
-                .compose(new DefaultTransform<>());
+            .getUserAccount(platform, regid, device_id)
+            .compose(new DefaultTransform<>());
     }
 
     //get 微信公众号验证信息
     public Observable<WxPubAuthInfo> getWxPubAuthInfo() {
         return getService()
-                .getWxPubAuthInfo()
-                .compose(new DefaultTransform<>());
+            .getWxPubAuthInfo()
+            .compose(new DefaultTransform<>());
     }
 
     //普通用户提现
     public Observable<UserWithdrawResult> user_withdraw_cash(String amount, String verify_code) {
         return getService()
-                .user_withdraw_cash(amount, verify_code)
-                .compose(new DefaultTransform<>());
+            .user_withdraw_cash(amount, verify_code)
+            .compose(new DefaultTransform<>());
     }
 
 
     public Observable<ResultEntity> getVerifyCode() {
         return getService()
-                .getVerifyCode()
-                .compose(new DefaultTransform<>());
+            .getVerifyCode()
+            .compose(new DefaultTransform<>());
     }
 
     //发送验证码
     public Observable<CodeBean> getCodeBean(String mobile, String action) {
         return getService()
-                .send_code(mobile, action)
-                .compose(new DefaultTransform<>());
+            .send_code(mobile, action)
+            .compose(new DefaultTransform<>());
     }
 
     //验证码验证
     public Observable<CodeBean> verify_code(String mobile, String action, String code) {
         return getService()
-                .verify_code(mobile, action, code, "android")
-                .compose(new DefaultTransform<>());
+            .verify_code(mobile, action, code, "android")
+            .compose(new DefaultTransform<>());
     }
 
     //设置账号密码
     public Observable<CodeBean> reset_password(String mobile, String password1, String password2, String code) {
         return getService()
-                .reset_password(mobile, password1, password2, code)
-                .compose(new DefaultTransform<>());
+            .reset_password(mobile, password1, password2, code)
+            .compose(new DefaultTransform<>());
     }
 
     //用户账号密码登录
     public Observable<CodeBean> passwordlogin(String username, String password, String next) {
         return getService()
-                .passwordlogin(username, password, next, "android")
-                .compose(new DefaultTransform<>());
+            .passwordlogin(username, password, next, "android")
+            .compose(new DefaultTransform<>());
     }
 
     public Observable<CodeBean> openDebug(String debug_secret) {
         return getService()
-                .openDebug(debug_secret)
-                .compose(new DefaultTransform<>());
-    }
-
-    public Observable<Response<GetCouponbean>> getCouPon() {
-        return getService()
-                .getCouPon()
-                .compose(new DefaultTransform<>());
+            .openDebug(debug_secret)
+            .compose(new DefaultTransform<>());
     }
 
     //得到用户信息
     public Observable<BudgetDetailBean> budGetDetailBean(String page) {
         return getService()
-                .budGetDetailBean(page)
-                .compose(new DefaultTransform<>());
+            .budGetDetailBean(page)
+            .compose(new DefaultTransform<>());
     }
 
     public Observable<VersionBean> getVersion() {
         return getService()
-                .getVersion()
-                .compose(new DefaultTransform<>());
+            .getVersion()
+            .compose(new DefaultTransform<>());
     }
 
 }

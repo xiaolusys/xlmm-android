@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
 import com.jimei.library.utils.JUtils;
@@ -16,9 +15,9 @@ import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -88,11 +87,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.go_main:
-                Bundle bundle = new Bundle();
-                bundle.putString("flag", "main");
-                Intent intent1 = new Intent(this, TabActivity.class);
-                intent1.putExtras(bundle);
-                startActivity(intent1);
+                readyGo(MainActivity.class);
                 break;
             case R.id.confirm:
                 if (ids.size() > 0) {
@@ -118,34 +113,34 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
 
     public void setPriceText() {
         addSubscription(CartsModel.getInstance()
-                .getCartsInfoList(getIds())
-                .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-                    @Override
-                    public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                        if (cartsPayinfoBean != null) {
-                            b.totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
-                            b.confirmLayout.setVisibility(View.VISIBLE);
-                        }
+            .getCartsInfoList(getIds())
+            .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+                @Override
+                public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                    if (cartsPayinfoBean != null) {
+                        b.totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
+                        b.confirmLayout.setVisibility(View.VISIBLE);
                     }
-                }));
+                }
+            }));
     }
 
     private void refreshHisCartList() {
         addSubscription(CartsModel.getInstance()
-                .getCartsHisList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                    @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
-                        cartHisList.clear();
-                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
-                            cartHisList.addAll(cartsInfoBeen);
-                            cartHisAdapter.notifyDataSetChanged();
-                            b.tvLine.setVisibility(View.VISIBLE);
-                        } else {
-                            b.tvLine.setVisibility(View.GONE);
-                        }
+            .getCartsHisList()
+            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                @Override
+                public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                    cartHisList.clear();
+                    if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                        cartHisList.addAll(cartsInfoBeen);
+                        cartHisAdapter.notifyDataSetChanged();
+                        b.tvLine.setVisibility(View.VISIBLE);
+                    } else {
+                        b.tvLine.setVisibility(View.GONE);
                     }
-                }));
+                }
+            }));
     }
 
     public void removeCartList(CartsInfoBean cartsInfoBean) {
@@ -161,21 +156,21 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
 
     private void refreshIds() {
         addSubscription(CartsModel.getInstance()
-                .getCartsList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                    @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
-                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
-                            ids.clear();
-                            for (int i = 0; i < cartsInfoBeen.size(); i++) {
-                                ids.add(cartsInfoBeen.get(i).getId());
-                            }
-                            setPriceText();
-                        } else {
-                            ids.clear();
+            .getCartsList()
+            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                @Override
+                public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                    if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                        ids.clear();
+                        for (int i = 0; i < cartsInfoBeen.size(); i++) {
+                            ids.add(cartsInfoBeen.get(i).getId());
                         }
+                        setPriceText();
+                    } else {
+                        ids.clear();
                     }
-                }));
+                }
+            }));
     }
 
     public void removeHistory(CartsInfoBean cartsInfoBean) {
@@ -193,29 +188,29 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     public void refreshCartList() {
         showIndeterminateProgressDialog(false);
         addSubscription(CartsModel.getInstance()
-                .getCartsList()
-                .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                    @Override
-                    public void onNext(List<CartsInfoBean> cartsInfoBeen) {
-                        cartList.clear();
-                        if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
-                            cartList.addAll(cartsInfoBeen);
-                            b.emptyContent.setVisibility(View.GONE);
-                            cartListAdapter.notifyDataSetChanged();
-                            ids.clear();
-                            for (int i = 0; i < cartsInfoBeen.size(); i++) {
-                                ids.add(cartsInfoBeen.get(i).getId());
-                            }
-                            setPriceText();
-                        } else {
-                            b.emptyContent.setVisibility(View.VISIBLE);
-                            b.totalPrice.setText("¥0");
-                            b.confirmLayout.setVisibility(View.GONE);
+            .getCartsList()
+            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+                @Override
+                public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                    cartList.clear();
+                    if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                        cartList.addAll(cartsInfoBeen);
+                        b.emptyContent.setVisibility(View.GONE);
+                        cartListAdapter.notifyDataSetChanged();
+                        ids.clear();
+                        for (int i = 0; i < cartsInfoBeen.size(); i++) {
+                            ids.add(cartsInfoBeen.get(i).getId());
                         }
-                        b.sv.scrollTo(0, 0);
-                        hideIndeterminateProgressDialog();
+                        setPriceText();
+                    } else {
+                        b.emptyContent.setVisibility(View.VISIBLE);
+                        b.totalPrice.setText("¥0");
+                        b.confirmLayout.setVisibility(View.GONE);
                     }
-                }));
+                    b.sv.scrollTo(0, 0);
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Override

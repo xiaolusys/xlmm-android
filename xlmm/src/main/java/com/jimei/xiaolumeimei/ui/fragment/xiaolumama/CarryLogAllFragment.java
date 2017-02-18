@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.adapter.CarryLogAllAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 
@@ -85,7 +85,7 @@ public class CarryLogAllFragment extends BaseLazyFragment {
         xRecyclerView.setPullRefreshEnabled(false);
         xRecyclerView.setLoadingMoreEnabled(true);
 
-        adapter = new CarryLogAllAdapter();
+        adapter = new CarryLogAllAdapter(mActivity);
         xRecyclerView.setAdapter(adapter);
 
         xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

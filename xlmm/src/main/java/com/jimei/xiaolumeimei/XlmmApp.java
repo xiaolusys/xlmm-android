@@ -10,7 +10,7 @@ import com.facebook.stetho.Stetho;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.receiver.mipush.XiaoMiMessageReceiver;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 
@@ -51,7 +51,7 @@ public class XlmmApp extends MultiDexApplication {
         if (shouldInit()) {
             JUtils.Log("XlmmApp", "reg xiaomi push");
             MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID,
-                    XlmmConst.XIAOMI_APP_KEY);
+                XlmmConst.XIAOMI_APP_KEY);
         }
         if (handler == null) {
             handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
@@ -82,7 +82,7 @@ public class XlmmApp extends MultiDexApplication {
         @Override
         public void uncaughtException(Thread thread, Throwable ex) {
             ex.printStackTrace();
-            Intent intent = new Intent(XlmmApp.this, TabActivity.class);
+            Intent intent = new Intent(XlmmApp.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             XlmmApp.this.startActivity(intent);
             android.os.Process.killProcess(android.os.Process.myPid());

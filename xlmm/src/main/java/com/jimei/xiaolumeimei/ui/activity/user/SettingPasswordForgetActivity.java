@@ -13,8 +13,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
 import butterknife.Bind;
 import rx.Subscription;
@@ -88,7 +88,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
                     public void onNext(CodeBean bean) {
                         JUtils.Toast(bean.getMsg());
                         if (bean.getRcode() == 0) {
-                            Intent intent = new Intent(mContext, TabActivity.class);
+                            Intent intent = new Intent(mContext, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }

@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.loading.VaryViewHelperController;
-import com.jimei.library.widget.loadingdialog.XlmmLoadingDialog;
+import com.jimei.xiaolumeimei.widget.loading.WisdomLoading;
 import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;
@@ -27,7 +27,7 @@ public abstract class BaseFragment extends Fragment {
     private boolean isVisible = false;
     public boolean isInitView = false;
     private boolean isFirstLoad = true;
-    private XlmmLoadingDialog loadingdialog;
+    private WisdomLoading wisdomLoading;
     public VaryViewHelperController mVaryViewHelperController;
 
     @Override
@@ -120,20 +120,25 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroyView();
     }
 
-    public void showIndeterminateProgressDialog(boolean horizontal) {
-        if (loadingdialog == null) {
-            loadingdialog = XlmmLoadingDialog.create(mActivity)
-                    .setStyle(XlmmLoadingDialog.Style.SPIN_INDETERMINATE)
-                    .setCancellable(!horizontal)
-                    .show();
+    public void showIndeterminateProgressDialog(boolean cancelable) {
+        if (wisdomLoading == null) {
+            wisdomLoading = WisdomLoading.createDialog(mActivity)
+                    .setCanCancel(cancelable)
+                    .start();
+        }
+    }
+
+    public void setDialogContent(String content) {
+        if (wisdomLoading != null) {
+            wisdomLoading.setContent(content);
         }
     }
 
     public void hideIndeterminateProgressDialog() {
         try {
-            if (loadingdialog != null) {
-                loadingdialog.dismiss();
-                loadingdialog = null;
+            if (wisdomLoading != null) {
+                wisdomLoading.dismiss();
+                wisdomLoading = null;
             }
         } catch (Exception e) {
             e.printStackTrace();

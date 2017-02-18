@@ -44,9 +44,9 @@ import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.utils.pay.PayUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.util.JumpUtils;
+import com.jimei.xiaolumeimei.util.pay.PayUtils;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -475,7 +475,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
         }
         tv_app_discount.setText("-" + (double) (Math.round(appcut * 100)) / 100);
         extraBudget.setText("¥" + budgetCash);
-        if (coinCash > 0) {
+        if (coinCash > 0 && (layout.getVisibility() != View.VISIBLE)) {
             coinLayout.setVisibility(View.VISIBLE);
             coinLine.setVisibility(View.VISIBLE);
             coinExtra.setText("" + coinCash);
@@ -688,11 +688,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                 }
             } else {
 
-                if (isAlipay && !isBudget && !isWx&&!isCoin) {
+                if (isAlipay && !isBudget && !isWx && !isCoin) {
                     pay_extras = APP_PAY + appcut + ";";
                     payV2(ALIPAY, (paymentInfo + real_use_yue + real_use_coin) + "", pay_extras, jieshengjine + "");
                 }
-                if (isWx && !isAlipay && !isBudget&&!isCoin) {
+                if (isWx && !isAlipay && !isBudget && !isCoin) {
                     pay_extras = APP_PAY + appcut + ";";
                     payV2(WX, (paymentInfo + real_use_yue + real_use_coin) + "", pay_extras, jieshengjine + "");
                 }

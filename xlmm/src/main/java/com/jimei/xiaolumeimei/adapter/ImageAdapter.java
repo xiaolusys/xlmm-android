@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class ImageAdapter extends PagerAdapter {
 
-    private List<String> datas = new ArrayList<String>();
+    private List<String> datas = new ArrayList<>();
     private LayoutInflater inflater;
     private Context context;
     private Activity activity;
@@ -57,25 +57,24 @@ public class ImageAdapter extends PagerAdapter {
             final ImageView imageView = (ImageView) view.findViewById(R.id.image);
             final ProgressBar loading = new ProgressBar(context);
             FrameLayout.LayoutParams loadingLayoutParams =
-                    new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             loadingLayoutParams.gravity = Gravity.CENTER;
             loading.setLayoutParams(loadingLayoutParams);
             ((FrameLayout) view).addView(loading);
             String imgurl = datas.get(position);
             if (imgurl.startsWith("code")) {
                 imgurl = imgurl.substring(4);
-            } else {
-                imgurl = imgurl + "?imageMogr2/thumbnail/350/format/jpg/quality/70";
             }
             Glide.with(context).load(imgurl)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT).crossFade().into(new GlideDrawableImageViewTarget(imageView) {
-                @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                    super.onResourceReady(resource, animation);
-                    loading.setVisibility(View.GONE);
-                }
-            });
+                .diskCacheStrategy(DiskCacheStrategy.RESULT).crossFade()
+                .into(new GlideDrawableImageViewTarget(imageView) {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                        super.onResourceReady(resource, animation);
+                        loading.setVisibility(View.GONE);
+                    }
+                });
             imageView.setOnClickListener(v -> activity.finish());
             container.addView(view, 0);
         }

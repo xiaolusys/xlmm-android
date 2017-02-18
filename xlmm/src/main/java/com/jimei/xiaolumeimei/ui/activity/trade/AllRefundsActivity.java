@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +15,8 @@ import com.jimei.xiaolumeimei.adapter.AllRefundsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.model.TradeModel;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
 import java.util.List;
 
@@ -94,9 +93,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_jump:
-                Bundle bundle = new Bundle();
-                bundle.putString("flag", "main");
-                readyGo(TabActivity.class, bundle);
+                readyGo(MainActivity.class);
                 finish();
                 break;
         }

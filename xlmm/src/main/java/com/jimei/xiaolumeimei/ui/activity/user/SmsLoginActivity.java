@@ -22,24 +22,18 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.entities.GetCouponbean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.entities.event.CollectChangeEvent;
-import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.main.ActivityWebViewActivity;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.utils.JumpUtils;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
+import com.jimei.xiaolumeimei.util.JumpUtils;
+import com.jimei.xiaolumeimei.util.LoginUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
-import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 
 /**
@@ -48,7 +42,7 @@ import rx.Subscriber;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class SmsLoginActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
+    implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
 
     @Bind(R.id.register_name)
     ClearEditText registerName;
@@ -104,13 +98,13 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                             getCheckCode.setClickable(false);
                             getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
                             addSubscription(UserModel.getInstance()
-                                    .getCodeBean(mobile, "sms_login")
-                                    .subscribe(new ServiceResponse<CodeBean>() {
-                                        @Override
-                                        public void onNext(CodeBean codeBean) {
-                                            JUtils.Toast(codeBean.getMsg());
-                                        }
-                                    }));
+                                .getCodeBean(mobile, "sms_login")
+                                .subscribe(new ServiceResponse<CodeBean>() {
+                                    @Override
+                                    public void onNext(CodeBean codeBean) {
+                                        JUtils.Toast(codeBean.getMsg());
+                                    }
+                                }));
                         }).unsafeSubscribe(new Subscriber<Integer>() {
                             @Override
                             public void onCompleted() {
@@ -143,110 +137,73 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                 String invalid_code = checkcode.getText().toString().trim();
                 if (checkInput(mobile, invalid_code)) {
                     addSubscription(UserModel.getInstance()
-                            .verify_code(mobile, "sms_login", invalid_code)
-                            .subscribe(new ServiceResponse<CodeBean>() {
-                                @Override
-                                public void onNext(CodeBean codeBean) {
-                                    int code = codeBean.getRcode();
-                                    JUtils.Toast(codeBean.getMsg());
-                                    if (code == 0) {
-                                        EventBus.getDefault().post(new SetMiPushEvent());
-                                        addSubscription(UserModel.getInstance()
-                                                .need_set_info()
-                                                .subscribe(new ServiceResponse<NeedSetInfoBean>() {
-                                                    @Override
-                                                    public void onNext(NeedSetInfoBean needSetInfoBean) {
-                                                        super.onNext(needSetInfoBean);
-                                                        int codeInfo = needSetInfoBean.getCode();
-                                                        if (0 == codeInfo) {
-                                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                                            EventBus.getDefault().post(new CollectChangeEvent());
-                                                            EventBus.getDefault().post(new CartEvent());
-                                                            String login = null;
-                                                            if (null != getIntent()
-                                                                    && getIntent().getExtras() != null) {
-                                                                login = getIntent().getExtras().getString("login");
-                                                                actlink = getIntent().getExtras().getString("actlink");
-                                                                title = getIntent().getExtras().getString("title");
-                                                                id = getIntent().getExtras().getInt("id");
-                                                            }
+                        .verify_code(mobile, "sms_login", invalid_code)
+                        .subscribe(new ServiceResponse<CodeBean>() {
+                            @Override
+                            public void onNext(CodeBean codeBean) {
+                                int code = codeBean.getRcode();
+                                JUtils.Toast(codeBean.getMsg());
+                                if (code == 0) {
+                                    addSubscription(UserModel.getInstance()
+                                        .need_set_info()
+                                        .subscribe(new ServiceResponse<NeedSetInfoBean>() {
+                                            @Override
+                                            public void onNext(NeedSetInfoBean needSetInfoBean) {
+                                                super.onNext(needSetInfoBean);
+                                                int codeInfo = needSetInfoBean.getCode();
+                                                if (0 == codeInfo) {
+                                                    LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                                                    EventBus.getDefault().post(new CartEvent());
+                                                    String login = null;
+                                                    if (null != getIntent()
+                                                        && getIntent().getExtras() != null) {
+                                                        login = getIntent().getExtras().getString("login");
+                                                        actlink = getIntent().getExtras().getString("actlink");
+                                                        title = getIntent().getExtras().getString("title");
+                                                        id = getIntent().getExtras().getInt("id");
+                                                    }
 
-                                                            if (null != login) {
-                                                                if (login.equals("push_jump")) {
-                                                                    JumpUtils.push_jump_proc(SmsLoginActivity.this, actlink);
-                                                                    finish();
-                                                                } else if (login.equals("productdetail")) {
-                                                                    Intent intent = new Intent(mContext, ProductDetailActivity.class);
-                                                                    Bundle bundle = new Bundle();
-                                                                    bundle.putInt("model_id", id);
-                                                                    intent.putExtras(bundle);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                } else if (login.equals("h5")) {
-                                                                    Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                                                    SharedPreferences sharedPreferences =
-                                                                            getSharedPreferences("xlmmCookiesAxiba",
-                                                                                    Context.MODE_PRIVATE);
-                                                                    String cookies = sharedPreferences.getString("cookiesString", "");
-                                                                    String domain = sharedPreferences.getString("cookiesDomain", "");
-                                                                    Bundle bundle = new Bundle();
-                                                                    bundle.putString("cookies", cookies);
-                                                                    bundle.putString("domain", domain);
-                                                                    bundle.putString("actlink", actlink);
-                                                                    intent.putExtras(bundle);
-                                                                    startActivity(intent);
-                                                                    finish();
-                                                                } else if (login.equals("goactivity")) {
-                                                                    JumpUtils.jumpToWebViewWithCookies(mContext, actlink, id,
-                                                                            ActivityWebViewActivity.class, title);
-                                                                    finish();
-                                                                } else if (login.equals("getCoupon")) {
-                                                                    addSubscription(UserModel.getInstance()
-                                                                            .getCouPon()
-                                                                            .subscribe(new ServiceResponse<Response<GetCouponbean>>() {
-                                                                                @Override
-                                                                                public void onNext(
-                                                                                        Response<GetCouponbean> getCouponbeanResponse) {
-                                                                                    if (getCouponbeanResponse != null) {
-                                                                                        if (getCouponbeanResponse.isSuccessful()) {
-                                                                                            JUtils.Toast(getCouponbeanResponse.body().getInfo());
-                                                                                            finish();
-                                                                                        }
-                                                                                    }
-                                                                                }
-
-                                                                                @Override
-                                                                                public void onError(Throwable e) {
-                                                                                    super.onError(e);
-                                                                                    if (e instanceof HttpException) {
-                                                                                        JUtils.Toast("优惠券领取失败");
-                                                                                    }
-                                                                                }
-                                                                            }));
-                                                                } else if (login.equals("car")) {
-                                                                    Bundle carBundle = new Bundle();
-                                                                    carBundle.putString("flag", "car");
-                                                                    readyGoThenKill(TabActivity.class, carBundle);
-                                                                } else if (login.equals("collect")) {
-                                                                    Bundle carBundle = new Bundle();
-                                                                    carBundle.putString("flag", "collect");
-                                                                    readyGoThenKill(TabActivity.class, carBundle);
-                                                                } else if (login.equals("my")) {
-                                                                    Bundle carBundle = new Bundle();
-                                                                    carBundle.putString("flag", "my");
-                                                                    readyGoThenKill(TabActivity.class, carBundle);
-                                                                } else {
-                                                                    finish();
-                                                                }
-                                                            }
+                                                    if (null != login) {
+                                                        if (login.equals("push_jump")) {
+                                                            JumpUtils.push_jump_proc(SmsLoginActivity.this, actlink);
+                                                            finish();
+                                                        } else if (login.equals("productdetail")) {
+                                                            Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putInt("model_id", id);
+                                                            intent.putExtras(bundle);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else if (login.equals("h5")) {
+                                                            Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+                                                            SharedPreferences sharedPreferences =
+                                                                getSharedPreferences("xlmmCookiesAxiba",
+                                                                    Context.MODE_PRIVATE);
+                                                            String cookies = sharedPreferences.getString("cookiesString", "");
+                                                            String domain = sharedPreferences.getString("cookiesDomain", "");
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("cookies", cookies);
+                                                            bundle.putString("domain", domain);
+                                                            bundle.putString("actlink", actlink);
+                                                            intent.putExtras(bundle);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else if (login.equals("car")) {
+                                                            readyGoThenKill(CartActivity.class);
+                                                        } else if (login.equals("my")) {
+                                                            readyGoThenKill(UserActivity.class);
                                                         } else {
-                                                            JUtils.Toast(needSetInfoBean.getInfo());
+                                                            finish();
                                                         }
                                                     }
-                                                }));
-                                    }
+                                                } else {
+                                                    JUtils.Toast(needSetInfoBean.getInfo());
+                                                }
+                                            }
+                                        }));
                                 }
-                            }));
+                            }
+                        }));
                 }
 
                 break;

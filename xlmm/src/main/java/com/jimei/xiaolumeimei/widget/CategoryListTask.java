@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
-import com.jimei.xiaolumeimei.adapter.CategoryListAdapter;
+import com.jimei.xiaolumeimei.adapter.CategoryNameListAdapter;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 
@@ -22,9 +22,9 @@ import java.util.List;
 
 public class CategoryListTask extends AsyncTask<String, Integer, List<CategoryBean>> {
 
-    private CategoryListAdapter adapter;
+    private CategoryNameListAdapter adapter;
 
-    public CategoryListTask(CategoryListAdapter adapter) {
+    public CategoryListTask(CategoryNameListAdapter adapter) {
         this.adapter = adapter;
     }
 

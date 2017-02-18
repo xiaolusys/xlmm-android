@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12px"
             android:textColor="@color/text_color_B4"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/msg"
@@ -22,9 +22,10 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="12px"
             android:layout_marginTop="4dp"
-            android:textColor="@color/text_color_62"
             android:ellipsize="end"
-            android:textSize="14sp" />
+            android:maxLines="2"
+            android:textColor="@color/text_color_62"
+            android:textSize="14sp"/>
     </LinearLayout>
 
 

@@ -8,7 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
-import com.jimei.xiaolumeimei.adapter.CategoryAdapter;
+import com.jimei.xiaolumeimei.adapter.CategoryItemAdapter;
+import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 
@@ -24,16 +25,19 @@ import java.util.List;
 
 public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>> {
 
-    private CategoryAdapter adapter;
+    private CategoryItemAdapter adapter;
     private LinearLayout mLinearLayout;
+    private BaseActivity activity;
 
-    public CategoryTask(CategoryAdapter adapter) {
-        this.adapter = adapter;
-    }
-
-    public CategoryTask(CategoryAdapter adapter, LinearLayout linearLayout) {
+    public CategoryTask(CategoryItemAdapter adapter, LinearLayout linearLayout) {
         this.adapter = adapter;
         mLinearLayout = linearLayout;
+    }
+
+    public CategoryTask(CategoryItemAdapter adapter, LinearLayout linearLayout, BaseActivity activity) {
+        this.adapter = adapter;
+        mLinearLayout = linearLayout;
+        this.activity = activity;
     }
 
     @Override
@@ -82,9 +86,10 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
             adapter.updateWithClear(list);
         } else {
             adapter.clear();
-            if (mLinearLayout!=null) {
-                mLinearLayout.setVisibility(View.VISIBLE);
-            }
+            mLinearLayout.setVisibility(View.VISIBLE);
+        }
+        if (activity != null) {
+            activity.hideIndeterminateProgressDialog();
         }
     }
 }

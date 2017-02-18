@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.adapter;
 
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,11 +14,9 @@ public class MyPagerAdapter extends PagerAdapter {
 
 
     private ArrayList<ImageView> mListViews;
-    private ViewPager mViewPager;
 
-    public MyPagerAdapter(ArrayList<ImageView> mListViews, ViewPager viewPager) {
+    public MyPagerAdapter(ArrayList<ImageView> mListViews) {
         this.mListViews = mListViews;
-        mViewPager = viewPager;
     }
 
     @Override
@@ -34,18 +31,6 @@ public class MyPagerAdapter extends PagerAdapter {
         return mListViews.get(position);
     }
 
-//    @Override
-//    public void finishUpdate(ViewGroup container) {
-//        if (mListViews.size() == 1) {
-//            return;
-//        }
-//        int position = mViewPager.getCurrentItem();
-//        if (position == 0) {
-//            mViewPager.setCurrentItem((mListViews.size() - 2), false);
-//        } else if (position == mListViews.size() - 1) {
-//            mViewPager.setCurrentItem(1, false);
-//        }
-//    }
 
     @Override
     public int getCount() {

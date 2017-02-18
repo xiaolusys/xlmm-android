@@ -20,10 +20,10 @@ import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.ui.activity.main.CompanyInfoActivity;
-import com.jimei.xiaolumeimei.utils.LoginUtils;
+import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
-import com.jimei.xiaolumeimei.xlmmService.ServiceResponse;
-import com.jimei.xiaolumeimei.xlmmService.UpdateService;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.service.UpdateService;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
