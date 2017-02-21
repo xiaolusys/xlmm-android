@@ -34,7 +34,6 @@ import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaChooseActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaVisitorActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MamaWalletActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 
@@ -138,7 +137,6 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         b.visitLayout.setOnClickListener(this);
         b.orderLayout.setOnClickListener(this);
         b.fundLayout.setOnClickListener(this);
-        b.llWallet.setOnClickListener(this);
         b.llIncome.setOnClickListener(this);
         b.llVisit.setOnClickListener(this);
         b.llOrder.setOnClickListener(this);
@@ -236,10 +234,6 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
                     bundle.putString("carrylogMoney", carryLogMoney);
                     bundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
                     readyGo(MMCarryLogActivity.class, bundle);
-                    break;
-                case R.id.ll_wallet:
-                    bundle.putDouble("cash", mCashValue);
-                    readyGo(MamaWalletActivity.class, bundle);
                     break;
                 case R.id.ll_income:
                     bundle.putString("carrylogMoney", carryLogMoney);
@@ -403,7 +397,6 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         }
         b.tvId.setText("ID:" + fortune.getMamaId());
         b.tvMamaName.setText(fortune.getMamaLevelDisplay());
-        b.tvCashValue.setText(fortune.getCashValue() + "元");
         b.tvCarryValue.setText(fortune.getCarryValue() + "元");
         b.tvOrder.setText(fortune.getOrderNum() + "个");
         b.tvFans.setText(fortune.getFansNum() + "个");

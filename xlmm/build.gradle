@@ -70,8 +70,8 @@ android {
 
         targetSdkVersion 25
 
-        versionCode 20170218
-        versionName "2.0.0"
+        versionCode 20170221
+        versionName "2.0.1"
 
         multiDexEnabled = true
 
@@ -172,7 +172,7 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "xlmm",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-//
+
 //        Fir {
 //            manifestPlaceholders = [CHANNEL_NAME: "Fir",
 //                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]

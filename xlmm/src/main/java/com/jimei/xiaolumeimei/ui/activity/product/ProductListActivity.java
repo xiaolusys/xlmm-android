@@ -1,11 +1,8 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -74,7 +71,7 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
     @Override
     protected void initViews() {
         b.title.setName(title);
-        GridLayoutManager manager = new GridLayoutManager(this,2);
+        GridLayoutManager manager = new GridLayoutManager(this, 2);
         b.xrv.setLayoutManager(manager);
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
@@ -101,24 +98,6 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_category, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.category:
-                Intent intent = new Intent(this, CategoryListActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void refreshData(String cid, boolean clear) {
         this.cid = cid;
         b.emptyLayout.setVisibility(View.GONE);
@@ -128,28 +107,28 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
             page = 1;
         }
         addSubscription(ProductModel.getInstance()
-                .getCategoryProductList(cid, page, order_by)
-                .subscribe(bean -> {
-                            List<ProductListBean.ResultsBean> results = bean.getResults();
-                            if (results != null && results.size() > 0) {
-                                mProductListAdapter.update(results);
-                            } else {
-                                b.emptyLayout.setVisibility(View.VISIBLE);
-                            }
-                            next = bean.getNext();
-                            if (next != null && !"".equals(next)) {
-                                page++;
-                            }
-                            hideIndeterminateProgressDialog();
-                            b.xrv.loadMoreComplete();
-                            b.xrv.refreshComplete();
-                        }, e -> {
-                            hideIndeterminateProgressDialog();
-                            b.xrv.loadMoreComplete();
-                            b.xrv.refreshComplete();
-                            JUtils.Toast("数据加载有误!");
-                        }
-                ));
+            .getCategoryProductList(cid, page, order_by)
+            .subscribe(bean -> {
+                    List<ProductListBean.ResultsBean> results = bean.getResults();
+                    if (results != null && results.size() > 0) {
+                        mProductListAdapter.update(results);
+                    } else {
+                        b.emptyLayout.setVisibility(View.VISIBLE);
+                    }
+                    next = bean.getNext();
+                    if (next != null && !"".equals(next)) {
+                        page++;
+                    }
+                    hideIndeterminateProgressDialog();
+                    b.xrv.loadMoreComplete();
+                    b.xrv.refreshComplete();
+                }, e -> {
+                    hideIndeterminateProgressDialog();
+                    b.xrv.loadMoreComplete();
+                    b.xrv.refreshComplete();
+                    JUtils.Toast("数据加载有误!");
+                }
+            ));
     }
 
     @Override

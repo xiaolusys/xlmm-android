@@ -10,7 +10,7 @@
             android:id="@+id/xrv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="-6dp" />
+            android:layout_marginTop="-6dp"/>
 
         <RelativeLayout
             android:id="@+id/empty_layout"
@@ -26,7 +26,7 @@
                 android:layout_height="182px"
                 android:layout_marginLeft="265px"
                 android:layout_marginTop="250px"
-                android:src="@drawable/ic_emptyinfo" />
+                android:src="@drawable/ic_emptyinfo"/>
 
             <TextView
                 android:id="@+id/tx_info"
@@ -39,7 +39,7 @@
                 android:foregroundGravity="center"
                 android:gravity="center"
                 android:text="亲，您暂时还没有订单哦~快去看看吧！"
-                android:textSize="12sp" />
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/tx2"
@@ -50,7 +50,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="再不抢购，就卖光啦~~"
-                android:textSize="12sp" />
+                android:textSize="12sp"/>
 
             <Button
                 android:id="@+id/btn_jump"
@@ -63,7 +63,7 @@
                 android:background="@drawable/shape_res"
                 android:gravity="center"
                 android:text="快去抢购"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorAccent"/>
 
         </RelativeLayout>
     </FrameLayout>

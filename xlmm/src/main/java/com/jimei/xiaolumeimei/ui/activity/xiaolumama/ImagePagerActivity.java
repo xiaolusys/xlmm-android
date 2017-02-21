@@ -77,8 +77,8 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
                 view.setBackgroundResource(R.drawable.selector_guide_bg);
                 view.setSelected(i == startPos);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        getResources().getDimensionPixelSize(R.dimen.gudieview_width),
-                        getResources().getDimensionPixelSize(R.dimen.gudieview_heigh));
+                    getResources().getDimensionPixelSize(R.dimen.gudieview_width),
+                    getResources().getDimensionPixelSize(R.dimen.gudieview_heigh));
                 layoutParams.setMargins(10, 0, 10, 0);
                 guideGroup.addView(view, layoutParams);
                 guideViewList.add(view);

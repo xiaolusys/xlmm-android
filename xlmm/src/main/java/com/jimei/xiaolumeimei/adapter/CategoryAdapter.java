@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -68,11 +67,11 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CategoryBean childsBean = mData.get(position);
-        holder.img.setImageResource(R.drawable.place_holder);
+        Glide.with(context).load(R.drawable.place_holder).crossFade().into(holder.img);
         holder.name.setText(childsBean.getName());
         String picAddress = XlmmConst.XLMM_DIR + "category/" + childsBean.getCid() + ".png";
         if (FileUtils.isFileExist(picAddress)) {
-            holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
+            Glide.with(context).load(new File(picAddress)).crossFade().into(holder.img);
         } else {
             if (childsBean.getCat_pic() != null && !"".equals(childsBean.getCat_pic())) {
                 OkHttpUtils.get().url(childsBean.getCat_pic()).build()
@@ -84,7 +83,7 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
 
                         @Override
                         public void onResponse(File response, int id) {
-                            holder.img.setImageBitmap(BitmapFactory.decodeFile(picAddress));
+                            Glide.with(context).load(new File(picAddress)).crossFade().into(holder.img);
                         }
                     });
             }
@@ -98,9 +97,6 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
                 bundle.putString("title", childsBean.getName());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
-                if (context instanceof CategoryListActivity) {
-                    ((CategoryListActivity) context).finish();
-                }
             }
         });
     }

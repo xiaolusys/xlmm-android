@@ -84,7 +84,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LoginUtils.clearCacheEveryWeek(this);
         LoginUtils.setMamaInfo(this);
         downLoadAddress();
-        downLoadCategory();
         setTopic();
         checkVersion();
     }
@@ -119,14 +118,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             boutiqueUrl = mamaUrl.getResults().get(0).getExtra().getBoutique();
                             showBoutique = true;
                             boutiqueIn.setVisibility(View.VISIBLE);
-                        }));
+                        }, Throwable::printStackTrace));
                 }
             }, Throwable::printStackTrace));
     }
 
     @Override
     protected void setListener() {
-
         boutiqueIn.setOnClickListener(this);
         searchLayout.setOnClickListener(this);
         btnMy.setOnClickListener(this);
@@ -168,7 +166,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             viewPager.setScrollable(true);
             params.setMargins(0, 0, 0, 0);
-
         }
         tabLayout.setLayoutParams(params);
     }
@@ -266,35 +263,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             }
         }
-    }
-
-    private void downLoadCategory() {
-        addSubscription(MainModel.getInstance()
-            .getCategoryDown()
-            .subscribe(categoryDownBean -> {
-                if (categoryDownBean != null) {
-                    String downloadUrl = categoryDownBean.getDownload_url();
-                    String sha1 = categoryDownBean.getSha1();
-                    if (!FileUtils.isCategorySame(getApplicationContext(), sha1)
-                        || !FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-                        if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
-                            FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
-                        }
-                        OkHttpUtils.get().url(downloadUrl).build()
-                            .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                }
-
-                                @Override
-                                public void onResponse(File response, int id) {
-                                    FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-//                                    FileUtils.saveCategoryImg(XlmmConst.CATEGORY_JSON);
-                                }
-                            });
-                    }
-                }
-            }, Throwable::printStackTrace));
     }
 
     private void downLoadAddress() {

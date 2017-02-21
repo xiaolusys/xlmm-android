@@ -817,8 +817,9 @@
                             android:background="@color/white"
                             android:orientation="horizontal">
 
+
                             <LinearLayout
-                                android:id="@+id/ll_wallet"
+                                android:id="@+id/ll_order"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="18dp"
@@ -833,7 +834,7 @@
                                     <ImageView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:src="@drawable/icon_vip_wallet"/>
+                                        android:src="@drawable/icon_vip_order"/>
 
                                 </RelativeLayout>
 
@@ -846,12 +847,12 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="我的提现"
+                                        android:text="订单记录"
                                         android:textColor="@color/text_color_26"
                                         android:textSize="16sp"/>
 
                                     <TextView
-                                        android:id="@+id/tv_cash_value"
+                                        android:id="@+id/tv_order"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="6dp"
@@ -977,64 +978,6 @@
                                 android:background="@color/bg_grey"/>
 
                             <LinearLayout
-                                android:id="@+id/ll_order"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="18dp"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
-
-                                <RelativeLayout
-                                    android:layout_width="90px"
-                                    android:layout_height="match_parent"
-                                    android:gravity="left|center_vertical">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/icon_vip_order"/>
-
-                                </RelativeLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center_vertical"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="订单记录"
-                                        android:textColor="@color/text_color_26"
-                                        android:textSize="16sp"/>
-
-                                    <TextView
-                                        android:id="@+id/tv_order"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="6dp"
-                                        android:textColor="@color/text_color_9B"
-                                        android:textSize="12sp"/>
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp"
-                            android:background="@color/bg_grey"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="130px"
-                            android:background="@color/white"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
                                 android:id="@+id/ll_fans"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -1078,17 +1021,6 @@
                                 </LinearLayout>
 
                             </LinearLayout>
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:background="@color/bg_grey"/>
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="18dp"
-                                android:layout_weight="1"/>
 
                         </LinearLayout>
 

@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
 import com.jimei.xiaolumeimei.entities.event.WalletEvent;
 import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DrawCashResultActivity;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;

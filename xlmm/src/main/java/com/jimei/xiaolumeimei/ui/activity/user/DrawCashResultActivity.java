@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
+package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,7 +50,7 @@ public class DrawCashResultActivity extends BaseSwipeBackCompatActivity implemen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail:
-                Intent intent = new Intent(this, MamaDrawCashDetailActivity.class);
+                Intent intent = new Intent(this, DrawCashDetailActivity.class);
                 intent.putExtras(extras);
                 startActivity(intent);
                 break;

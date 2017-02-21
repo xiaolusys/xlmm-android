@@ -1,6 +1,10 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -11,8 +15,8 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CategoryNameListAdapter;
 import com.jimei.xiaolumeimei.adapter.CategoryItemAdapter;
+import com.jimei.xiaolumeimei.adapter.CategoryNameListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
@@ -69,6 +73,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         adapter = new CategoryItemAdapter(this);
         mXRecyclerView.setAdapter(adapter);
         if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
+            showIndeterminateProgressDialog(false);
             addSubscription(MainModel.getInstance()
                 .getCategoryDown()
                 .subscribe(categoryDownBean -> {
@@ -82,6 +87,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                             .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
+                                    hideIndeterminateProgressDialog();
                                 }
 
                                 @Override
@@ -89,10 +95,14 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                                     FileUtils.saveCategoryFile(getApplicationContext(), sha1);
                                     new CategoryListTask(mCategoryNameListAdapter).execute();
                                     new CategoryTask(adapter, emptyLayout).execute("");
+                                    hideIndeterminateProgressDialog();
                                 }
                             });
                     }
-                }, Throwable::printStackTrace));
+                }, e -> {
+                    e.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }));
         } else {
             new CategoryListTask(mCategoryNameListAdapter).execute();
             new CategoryTask(adapter, emptyLayout).execute("");
@@ -127,7 +137,15 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                 finish();
                 break;
             case R.id.search_layout:
-                readyGo(SearchActivity.class);
+                Pair<View, String> finishPair = new Pair<>(finishLayout, "finish");//haderIv是头像控件
+                Pair<View, String> searchPair = new Pair<>(searchLayout, "search");//nameTv是名字控件
+                Intent intent = new Intent(this, SearchActivity.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this,
+                        finishPair, searchPair).toBundle());
+                } else {
+                    readyGo(SearchActivity.class);
+                }
                 break;
             default:
                 break;

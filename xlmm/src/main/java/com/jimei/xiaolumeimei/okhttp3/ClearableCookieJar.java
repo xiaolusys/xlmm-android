@@ -18,7 +18,7 @@ package com.jimei.xiaolumeimei.okhttp3;
 
 import okhttp3.CookieJar;
 
-public interface ClearableCookieJar extends CookieJar {
+interface ClearableCookieJar extends CookieJar {
 
     void clear();
 }

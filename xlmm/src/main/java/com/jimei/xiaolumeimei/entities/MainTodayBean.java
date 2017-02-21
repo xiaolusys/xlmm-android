@@ -47,7 +47,7 @@ public class MainTodayBean {
         private String name;
         private int hour;
         private ProfitBean profit;
-        private int price;
+        private double price;
         private String pic;
         private String start_time;
 
@@ -83,11 +83,11 @@ public class MainTodayBean {
             this.profit = profit;
         }
 
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(double price) {
             this.price = price;
         }
 
@@ -113,22 +113,22 @@ public class MainTodayBean {
              * min : 10
              */
 
-            private int max;
-            private int min;
+            private double max;
+            private double min;
 
-            public int getMax() {
+            public double getMax() {
                 return max;
             }
 
-            public void setMax(int max) {
+            public void setMax(double max) {
                 this.max = max;
             }
 
-            public int getMin() {
+            public double getMin() {
                 return min;
             }
 
-            public void setMin(int min) {
+            public void setMin(double min) {
                 this.min = min;
             }
         }

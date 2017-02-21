@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.Bind;
 
 public class CoinActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, ScrollableHelper.ScrollableContainer, AbsListView.OnScrollListener {
+    implements View.OnClickListener, ScrollableHelper.ScrollableContainer, AbsListView.OnScrollListener {
     String TAG = "CoinActivity";
     @Bind(R.id.btn_jump)
     Button btn_jump;
@@ -72,25 +72,25 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     protected void initData() {
         showIndeterminateProgressDialog(false);
         addSubscription(MainModel.getInstance()
-                .getProfile()
-                .subscribe(userInfoBean -> {
-                    tx_point.setText("" + userInfoBean.getXiaoluCoin());
-                }, throwable -> {
-                    hideIndeterminateProgressDialog();
-                }));
+            .getProfile()
+            .subscribe(userInfoBean -> {
+                tx_point.setText("" + userInfoBean.getXiaoluCoin());
+            }, throwable -> {
+                hideIndeterminateProgressDialog();
+            }));
         addSubscription(UserModel.getInstance()
-                .getCoinHisList("1")
-                .subscribe(historyListBean -> {
-                    List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
-                    if (0 == result.size()) {
-                        rlayout_order_empty.setVisibility(View.VISIBLE);
-                    } else {
-                        mPointAdapter.update(result);
-                    }
-                    hideIndeterminateProgressDialog();
-                }, throwable -> {
-                    hideIndeterminateProgressDialog();
-                }));
+            .getCoinHisList("1")
+            .subscribe(historyListBean -> {
+                List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
+                if (0 == result.size()) {
+                    rlayout_order_empty.setVisibility(View.VISIBLE);
+                } else {
+                    mPointAdapter.update(result);
+                }
+                hideIndeterminateProgressDialog();
+            }, throwable -> {
+                hideIndeterminateProgressDialog();
+            }));
     }
 
     @Override
@@ -112,18 +112,18 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE && flag) {
             addSubscription(UserModel.getInstance()
-                    .getCoinHisList(page + "")
-                    .subscribe(new ServiceResponse<CoinHistoryListBean>() {
-                        @Override
-                        public void onNext(CoinHistoryListBean historyListBean) {
-                            List<CoinHistoryListBean.ResultsBean> results = historyListBean.getResults();
-                            page++;
-                            mPointAdapter.update(results);
-                            if ("".equals(historyListBean.getNext()) || historyListBean.getNext() == null) {
-                                JUtils.Toast("没有更多的数据了");
-                            }
+                .getCoinHisList(page + "")
+                .subscribe(new ServiceResponse<CoinHistoryListBean>() {
+                    @Override
+                    public void onNext(CoinHistoryListBean historyListBean) {
+                        List<CoinHistoryListBean.ResultsBean> results = historyListBean.getResults();
+                        page++;
+                        mPointAdapter.update(results);
+                        if ("".equals(historyListBean.getNext()) || historyListBean.getNext() == null) {
+                            JUtils.Toast("没有更多的数据了");
                         }
-                    }));
+                    }
+                }));
             flag = false;
         }
     }

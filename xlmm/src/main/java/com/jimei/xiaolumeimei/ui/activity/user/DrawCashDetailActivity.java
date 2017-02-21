@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
+package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.jimei.xiaolumeimei.model.UserModel;
 
 import butterknife.Bind;
 
-public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
+public class DrawCashDetailActivity extends BaseSwipeBackCompatActivity {
     @Bind(R.id.tv_money_draw)
     TextView drawMoneyTv;
     @Bind(R.id.date_1)
@@ -96,7 +96,7 @@ public class MamaDrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.activity_mama_draw_cash_detail;
+        return R.layout.activity_draw_cash_detail;
     }
 
 }

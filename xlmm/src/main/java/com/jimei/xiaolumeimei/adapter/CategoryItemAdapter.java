@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -69,9 +68,6 @@ public class CategoryItemAdapter extends XRecyclerView.Adapter<CategoryItemAdapt
             bundle.putString("title", bean.getName());
             intent.putExtras(bundle);
             mContext.startActivity(intent);
-            if (mContext instanceof CategoryListActivity) {
-                ((CategoryListActivity) mContext).finish();
-            }
         });
         GridLayoutManager manager = new GridLayoutManager(mContext, 3);
         holder.xrv.setLayoutManager(manager);
