@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.banner.SliderLayout;
 import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
@@ -40,7 +41,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private Map<String, String> map = new HashMap<>();
     private MainTabAdapter mainTabAdapter;
-    private List<MainTodayBean> data;
+    private List<MainTodayBean> data = new ArrayList<>();
     private MainProductAdapter mainProductAdapter;
 
     public static TodayNewFragment newInstance(String title) {
@@ -58,7 +59,6 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public void initData() {
-        data = new ArrayList<>();
         MainModel instance = MainModel.getInstance();
         addSubscription(instance
             .getPortalBean("activitys,categorys")
@@ -69,7 +69,6 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                     b.swipeLayout.setRefreshing(false);
                 }
             }, e -> {
-                e.printStackTrace();
                 hideIndeterminateProgressDialog();
                 if (b.swipeLayout.isRefreshing()) {
                     b.swipeLayout.setRefreshing(false);
@@ -78,6 +77,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         addSubscription(instance
             .getMainTodayList()
             .subscribe(list -> {
+                data.clear();
                 data.addAll(list);
                 mainTabAdapter.updateWithClear(list);
                 int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -90,7 +90,12 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                 mainTabAdapter.setCurrentPosition(position);
                 b.recyclerTab.scrollToPosition(position);
                 mainProductAdapter.updateWithClear(list.get(position).getItems());
-            }, Throwable::printStackTrace));
+            }, e -> {
+                hideIndeterminateProgressDialog();
+                if (b.swipeLayout.isRefreshing()) {
+                    b.swipeLayout.setRefreshing(false);
+                }
+            }));
     }
 
     @Override
@@ -111,7 +116,11 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         mainTabAdapter = new MainTabAdapter(mActivity) {
             @Override
             public void itemClick(int position) {
-                mainProductAdapter.updateWithClear(data.get(position).getItems());
+                if (data.size() > position) {
+                    mainProductAdapter.updateWithClear(data.get(position).getItems());
+                } else {
+                    JUtils.Toast("数据加载失败,请下拉刷新后重试!");
+                }
             }
         };
         b.recyclerTab.setAdapter(mainTabAdapter);

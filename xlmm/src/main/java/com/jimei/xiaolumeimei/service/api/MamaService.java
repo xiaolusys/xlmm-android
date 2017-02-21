@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.service.api;
 
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
-import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
@@ -50,12 +49,6 @@ public interface MamaService {
     Observable<MamaFansBean> getMamaFans(
         @Query("page") String page);
 
-    @FormUrlEncoded
-    @POST("/rest/v1/pmt/cashout/noaudit_cashout")
-    Observable<ResultEntity> getNoauditCashout(
-        @Field("amount") double amount,
-        @Field("verify_code") String verify_code);
-
     //获取访客列表
     @GET("/rest/v2/mama/visitor")
     Observable<MMVisitorsBean> getMamaVisitor(
@@ -84,9 +77,6 @@ public interface MamaService {
 
     @GET("/rest/v2/categorys")
     Observable<List<CategoryBean>> getCategory();
-
-    @GET("/rest/v2/cashout_policy")
-    Observable<CashoutPolicy> getCashoutPolicy();
 
     @GET("/rest/v2/modelproducts/product_choice")
     Observable<ChooseListBean> getChooseList(

@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.model;
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
-import com.jimei.xiaolumeimei.entities.CashoutPolicy;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickcarryBean;
@@ -69,13 +68,6 @@ public class MamaInfoModel {
             .compose(new DefaultTransform<>());
     }
 
-    //妈妈小额提现
-    public Observable<ResultEntity> getNoauditCashout(double amount, String verify_code) {
-        return getService()
-            .getNoauditCashout(amount, verify_code)
-            .compose(new DefaultTransform<>());
-    }
-
     //得到妈妈访客列表
     public Observable<MMVisitorsBean> getMamaVisitor(int page) {
         return getService()
@@ -114,12 +106,6 @@ public class MamaInfoModel {
     public Observable<List<CategoryBean>> getCategory() {
         return getService()
             .getCategory()
-            .compose(new DefaultTransform<>());
-    }
-
-    public Observable<CashoutPolicy> getCashoutPolicy() {
-        return getService()
-            .getCashoutPolicy()
             .compose(new DefaultTransform<>());
     }
 

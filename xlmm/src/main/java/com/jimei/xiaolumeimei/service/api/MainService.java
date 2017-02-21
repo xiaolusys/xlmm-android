@@ -29,9 +29,6 @@ public interface MainService {
     Observable<CartsNumResultBean> show_carts_num();
 
     @GET("/rest/v1/portal")
-    Observable<PortalBean> getPortalBean();
-
-    @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean(
         @Query("exclude_fields") String exclude_fields);
 

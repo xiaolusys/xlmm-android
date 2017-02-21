@@ -18,13 +18,15 @@ public class CustomSnapHelper extends LinearSnapHelper {
     @Override
     public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
         int position = super.findTargetSnapPosition(layoutManager, velocityX, velocityY);
-        if (position > 0 && position < adapter.getItemCount()) {
+        if (position >= 0 && position < adapter.getItemCount()) {
             adapter.setCurrentPosition(position);
         } else {
             View curView = findSnapView(layoutManager);
             if (curView != null) {
                 int curPosition = layoutManager.getPosition(curView);
-                adapter.setCurrentPosition(curPosition);
+                if (curPosition < adapter.getItemCount() && curPosition >= 0) {
+                    adapter.setCurrentPosition(curPosition);
+                }
             }
         }
         return position;

@@ -58,12 +58,15 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
         holder.profit.setText("利润: ¥" + bean.getProfit().getMin() + " ~ ¥" + bean.getProfit().getMax());
         holder.itemView.setOnClickListener(view -> {
             MobclickAgent.onEvent(context, "click_product");
-            int modelId = Integer.parseInt(bean.getModel_id());
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("model_id", modelId);
-            intent.putExtras(bundle);
-            context.startActivity(intent);
+            try {
+                int modelId = Integer.parseInt(bean.getModel_id().trim());
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("model_id", modelId);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            } catch (Exception ignored) {
+            }
         });
     }
 
