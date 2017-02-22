@@ -27,6 +27,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="4dp"
+        android:textSize="16dp"
         android:text="跳过  3"/>
 
 </RelativeLayout>

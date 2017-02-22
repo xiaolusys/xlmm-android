@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_color_32"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold"/>
 
     <TextView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="@color/text_color_9B"
-        android:textSize="13sp"/>
+        android:textSize="13dp"/>
 
     <TextView
         android:id="@+id/contentTv"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:textColor="@color/text_color_32"
-        android:textSize="15sp"/>
+        android:textSize="15dp"/>
     <!-- 不同的地方 -->
     <ViewStub
         android:id="@+id/view_stub"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textColor="@color/text_color_9B"
-            android:textSize="13sp"/>
+            android:textSize="13dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textColor="@color/text_color_9B"
-            android:textSize="13sp"/>
+            android:textSize="13dp"/>
     </LinearLayout>
 
     <Button
@@ -84,5 +84,5 @@
         android:background="@drawable/shape_chooselist"
         android:text="立即分享"
         android:textColor="@color/colorPrimary"
-        android:textSize="15sp"/>
+        android:textSize="15dp"/>
 </LinearLayout>

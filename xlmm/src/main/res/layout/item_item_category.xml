@@ -11,7 +11,7 @@
         android:gravity="center_vertical|left"
         android:padding="8dp"
         android:textColor="@color/text_color_62"
-        android:textSize="14sp"/>
+        android:textSize="14dp"/>
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/item_xrv"

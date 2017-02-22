@@ -30,7 +30,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="最近两周访客记录"
                 android:textColor="#626262"
-                android:textSize="15sp"/>
+                android:textSize="15dp"/>
 
             <TextView
                 android:id="@+id/tv_count"
@@ -39,7 +39,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorPrimary"
-                android:textSize="35sp"/>
+                android:textSize="35dp"/>
 
         </LinearLayout>
 

@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class AwardCarryLogAdapter
-        extends RecyclerView.Adapter<AwardCarryLogAdapter.CarryLogListVH> {
+    extends RecyclerView.Adapter<AwardCarryLogAdapter.CarryLogListVH> {
 
     private Context context;
     private List<AwardCarryBean.ResultsEntity> mList;
@@ -64,7 +64,7 @@ public class AwardCarryLogAdapter
     @Override
     public CarryLogListVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v =
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.item_carryloglist, parent, false);
+            LayoutInflater.from(parent.getContext()).inflate(R.layout.item_carryloglist, parent, false);
         return new CarryLogListVH(v);
     }
 
@@ -78,7 +78,7 @@ public class AwardCarryLogAdapter
                 showCategory(holder);
             } else {
                 boolean theCategoryOfLastEqualsToThis =
-                        mList.get(position - 1).getmDate_field().equals(mList.get(position).getmDate_field());
+                    mList.get(position - 1).getmDate_field().equals(mList.get(position).getmDate_field());
                 if (!theCategoryOfLastEqualsToThis) {
                     showCategory(holder);
                 } else {
@@ -92,13 +92,13 @@ public class AwardCarryLogAdapter
         holder.shoptime.setText(resultsEntity.getmDate_field());
         if (null != resultsEntity.getContributorImg()) {
             ViewUtils.loadImgToImgViewWithTransformCircle(context,
-                    holder.picPath, resultsEntity.getContributorImg());
+                holder.picPath, resultsEntity.getContributorImg());
         } else {
             Glide.with(context).load(R.drawable.img_jiang).into(holder.picPath);
         }
 
         holder.totalCash.setText(
-                "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+            "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
         holder.tichengCash.setText("+" + (float) (Math.round(resultsEntity.getCarryNum() * 100)) / 100);
 

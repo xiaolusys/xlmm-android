@@ -322,9 +322,6 @@
             android:name=".ui.activity.user.WaitSendAddressActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.trade.RedBagActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MMFansActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity

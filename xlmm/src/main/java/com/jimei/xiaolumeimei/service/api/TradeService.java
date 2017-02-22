@@ -7,7 +7,6 @@ import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
-import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
@@ -155,11 +154,6 @@ public interface TradeService {
         @Query("rid") int rid,
         @Query("packetid") String packetid,
         @Query("company_name") String company_name);
-
-    @FormUrlEncoded
-    @POST("/rest/v2/sharecoupon/create_order_share")
-    Observable<RedBagBean> getRedBag(
-        @Field("uniq_id") String uniq_id);
 
     @GET("/rest/v1/address/get_logistic_companys")
     Observable<List<LogisticCompany>> getLogisticCompany(

@@ -62,18 +62,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         MainModel instance = MainModel.getInstance();
         addSubscription(instance
             .getPortalBean("activitys,categorys")
-            .subscribe(portalBean -> {
-                initSliderLayout(portalBean);
-                hideIndeterminateProgressDialog();
-                if (b.swipeLayout.isRefreshing()) {
-                    b.swipeLayout.setRefreshing(false);
-                }
-            }, e -> {
-                hideIndeterminateProgressDialog();
-                if (b.swipeLayout.isRefreshing()) {
-                    b.swipeLayout.setRefreshing(false);
-                }
-            }));
+            .subscribe(this::initSliderLayout, Throwable::printStackTrace));
         addSubscription(instance
             .getMainTodayList()
             .subscribe(list -> {
@@ -90,11 +79,9 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                 mainTabAdapter.setCurrentPosition(position);
                 b.recyclerTab.scrollToPosition(position);
                 mainProductAdapter.updateWithClear(list.get(position).getItems());
+                hideIndeterminateProgressDialog();
             }, e -> {
                 hideIndeterminateProgressDialog();
-                if (b.swipeLayout.isRefreshing()) {
-                    b.swipeLayout.setRefreshing(false);
-                }
             }));
     }
 
@@ -168,6 +155,8 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public void onRefresh() {
+        b.swipeLayout.setRefreshing(false);
+        showIndeterminateProgressDialog(false);
         initData();
     }
 

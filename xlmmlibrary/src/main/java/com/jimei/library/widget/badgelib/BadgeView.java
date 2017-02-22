@@ -65,7 +65,7 @@ public class BadgeView extends TextView {
     }
 
     public void setTextSizeOff(int num) {
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, num);
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, num);
     }
 
     public void setBackground(int dipRadius, int badgeColor) {

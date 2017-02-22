@@ -291,9 +291,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView2() {
         setView1();
         textView2.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         imageView2.setImageResource(R.drawable.status_black);
         iView.setImageResource(R.drawable.state_in);
         lineImage.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -302,9 +302,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView4() {
         setView3();
         textView4.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView5.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         imageView4.setImageResource(R.drawable.status_black);
         imageView5.setImageResource(R.drawable.state_in);
         lineImage5.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -314,11 +314,11 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView3() {
         setView2();
         textView.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView3.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView4.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         iView.setImageResource(R.drawable.status_black);
         imageView3.setImageResource(R.drawable.status_black);
         imageView4.setImageResource(R.drawable.state_in);
@@ -328,9 +328,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     private void setView1() {
         textView1.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView2.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         imageView1.setImageResource(R.drawable.status_black);
         imageView2.setImageResource(R.drawable.state_in);
         lineImage2.setBackgroundColor(getResources().getColor(R.color.text_color_32));

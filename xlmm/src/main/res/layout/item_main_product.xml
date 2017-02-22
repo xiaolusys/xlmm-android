@@ -39,7 +39,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/text_color_4A"
-                android:textSize="14sp"/>
+                android:textSize="14dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/text_color_88"
-                android:textSize="12sp"/>
+                android:textSize="12dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
-                android:textSize="14sp"/>
+                android:textSize="14dp"/>
 
         </LinearLayout>
 

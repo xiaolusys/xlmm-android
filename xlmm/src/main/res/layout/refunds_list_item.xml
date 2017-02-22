@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10px"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
         <View
             android:layout_width="0dp"
@@ -45,7 +45,7 @@
             android:layout_marginLeft="10px"
             android:layout_marginRight="12dp"
             android:textColor="@color/colorAccent"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
     </LinearLayout>
 
     <include layout="@layout/common_gap" />
@@ -86,14 +86,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:textColor="@color/text_color_62"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_B4"
-                android:textSize="13sp" />
+                android:textSize="13dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="13sp" />
+                    android:textSize="13dp" />
 
                 <TextView
                     android:id="@+id/refund"
@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="13sp" />
+                    android:textSize="13dp" />
 
             </LinearLayout>
 

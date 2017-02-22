@@ -40,7 +40,7 @@
                         android:gravity="center"
                         android:text="全部"
                         android:textColor="@color/text_color_4A"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <ImageView
                         android:id="@+id/img"
@@ -61,7 +61,7 @@
                     android:gravity="center"
                     android:text="佣金排序"
                     android:textColor="@color/text_color_4A"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/tv_sale"
@@ -71,7 +71,7 @@
                     android:gravity="center"
                     android:text="销量排序"
                     android:textColor="@color/text_color_4A"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
             </LinearLayout>
 
             <include layout="@layout/common_gap" />

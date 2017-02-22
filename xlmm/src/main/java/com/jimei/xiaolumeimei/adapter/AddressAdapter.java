@@ -56,11 +56,11 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         View view;
         if (viewType == 0) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_default_address, parent, false);
+                .inflate(R.layout.item_default_address, parent, false);
             return new AddressDefaultVH(view);
         } else if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_add, parent, false);
+                .inflate(R.layout.item_add, parent, false);
             return new AddressVH(view);
         }
 
@@ -76,40 +76,40 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             defaultVH.receiverMobile.setText(addressBean.getReceiverMobile());
             defaultVH.receiverAddress.setText(addressBean.getReceiverState()
-                    + ""
-                    + addressBean.getReceiverCity()
-                    + ""
-                    + addressBean.getReceiverDistrict()
-                    + ""
-                    + addressBean.getReceiverAddress());
+                + ""
+                + addressBean.getReceiverCity()
+                + ""
+                + addressBean.getReceiverDistrict()
+                + ""
+                + addressBean.getReceiverAddress());
             defaultVH.receiverName.setText(addressBean.getReceiverName());
 
             ((AddressDefaultVH) holder).card.setOnClickListener(v -> setBundle(addressBean));
 
             ((AddressDefaultVH) holder).card.setOnLongClickListener(
-                    v -> {
-                        new AlertDialog.Builder(context)
-                                .setTitle("删除地址")
-                                .setMessage("您确定要删除吗？")
-                                .setPositiveButton("确定", (dialog, which) -> {
-                                    AddressModel.getInstance()
-                                            .delete_address(addressBean.getId())
-                                            .subscribe(new ServiceResponse<AddressResultBean>() {
-                                                @Override
-                                                public void onNext(AddressResultBean addressResultBean) {
-                                                    if (addressResultBean != null
-                                                            && addressResultBean.isRet()) {
-                                                        removeAt(position);
-                                                    }
-                                                }
-                                            });
-                                    dialog.dismiss();
-                                })
-                                .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                                .show();
+                v -> {
+                    new AlertDialog.Builder(context)
+                        .setTitle("删除地址")
+                        .setMessage("您确定要删除吗？")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            AddressModel.getInstance()
+                                .delete_address(addressBean.getId())
+                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                                    @Override
+                                    public void onNext(AddressResultBean addressResultBean) {
+                                        if (addressResultBean != null
+                                            && addressResultBean.isRet()) {
+                                            removeAt(position);
+                                        }
+                                    }
+                                });
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                        .show();
 
-                        return false;
-                    });
+                    return false;
+                });
         } else if (holder instanceof AddressVH) {
 
             AddressVH addressVH = (AddressVH) holder;
@@ -118,36 +118,36 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             addressVH.receiverMobile.setText(addressBean.getReceiverMobile());
             addressVH.receiverAddress.setText(addressBean.getReceiverState()
-                    + ""
-                    + addressBean.getReceiverCity()
-                    + ""
-                    + addressBean.getReceiverDistrict()
-                    + ""
-                    + addressBean.getReceiverAddress());
+                + ""
+                + addressBean.getReceiverCity()
+                + ""
+                + addressBean.getReceiverDistrict()
+                + ""
+                + addressBean.getReceiverAddress());
             addressVH.receiverName.setText(addressBean.getReceiverName());
 
             ((AddressVH) holder).card.setOnClickListener(v -> setBundle(addressBean));
 
             ((AddressVH) holder).card.setOnLongClickListener(v -> {
                 new AlertDialog.Builder(context)
-                        .setTitle("删除地址")
-                        .setMessage("您确定要删除吗？")
-                        .setPositiveButton("确定", (dialog, which) -> {
-                            AddressModel.getInstance()
-                                    .delete_address(addressBean.getId())
-                                    .subscribe(new ServiceResponse<AddressResultBean>() {
-                                        @Override
-                                        public void onNext(AddressResultBean addressResultBean) {
-                                            if (addressResultBean != null && addressResultBean.isRet()) {
-                                                removeAt(position);
-                                            }
-                                        }
-                                    });
+                    .setTitle("删除地址")
+                    .setMessage("您确定要删除吗？")
+                    .setPositiveButton("确定", (dialog, which) -> {
+                        AddressModel.getInstance()
+                            .delete_address(addressBean.getId())
+                            .subscribe(new ServiceResponse<AddressResultBean>() {
+                                @Override
+                                public void onNext(AddressResultBean addressResultBean) {
+                                    if (addressResultBean != null && addressResultBean.isRet()) {
+                                        removeAt(position);
+                                    }
+                                }
+                            });
 
-                            dialog.dismiss();
-                        }).
-                        setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                        .show();
+                        dialog.dismiss();
+                    }).
+                    setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                    .show();
                 return false;
             });
         }
@@ -164,8 +164,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         bundle.putString("id", addressBean.getId());
         bundle.putString("mobile", addressBean.getReceiverMobile());
         bundle.putString("address1", addressBean.getReceiverState()
-                + addressBean.getReceiverCity()
-                + addressBean.getReceiverDistrict());
+            + addressBean.getReceiverCity()
+            + addressBean.getReceiverDistrict());
         bundle.putString("address2", addressBean.getReceiverAddress());
         bundle.putBoolean("isDefaultX", addressBean.isDefaultX());
         bundle.putString("idNo", addressBean.getmIdentificationNo());

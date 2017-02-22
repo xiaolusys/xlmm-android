@@ -46,7 +46,7 @@
             android:paddingRight="20dp"
             android:text="精品汇"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:visibility="gone"/>
 
     </RelativeLayout>
@@ -151,11 +151,26 @@
                     android:paddingLeft="2dp"
                     android:paddingRight="2dp"
                     android:textColor="@color/white"
-                    android:textSize="8sp"
+                    android:textSize="8dp"
                     android:visibility="gone"/>
             </RelativeLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/reload_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_common_white"
+            android:paddingBottom="8dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="8dp"
+            android:text="重新加载"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

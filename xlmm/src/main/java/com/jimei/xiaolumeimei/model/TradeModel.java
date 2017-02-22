@@ -9,7 +9,6 @@ import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
-import com.jimei.xiaolumeimei.entities.RedBagBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
 import com.jimei.xiaolumeimei.entities.ResultBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
@@ -180,13 +179,6 @@ public class TradeModel {
     public Observable<LogisticsBean> getRefundLogistic(int rid, String packetid, String company_name) {
         return getService()
             .getRefundLogistic(rid, packetid, company_name)
-            .compose(new DefaultTransform<>());
-    }
-
-    //获取红包
-    public Observable<RedBagBean> getRedBag(String uniq_id) {
-        return getService()
-            .getRedBag(uniq_id)
             .compose(new DefaultTransform<>());
     }
 

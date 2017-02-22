@@ -25,7 +25,7 @@
             android:hint="请输入手机号"
             android:inputType="phone"
             android:maxLength="11"
-            android:paddingLeft="20sp"
+            android:paddingLeft="20dp"
             android:textCursorDrawable="@drawable/color_cursor" />
 
         <include layout="@layout/common_gap" />
@@ -89,7 +89,7 @@
                 android:gravity="center"
                 android:text="向右滑动验证"
                 android:textColor="@color/text_color_88"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <View
                 android:id="@+id/view_first"

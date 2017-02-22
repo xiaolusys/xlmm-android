@@ -2,6 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -429,6 +431,11 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     oks.setText(shareModel.getDesc() + shareModel.getShare_link());
                     oks.setImageUrl(shareModel.getShare_img());
                     oks.setUrl(shareModel.getShare_link());
+                    Bitmap enableLogo =
+                        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
+                    String label = "复制链接";
+                    View.OnClickListener listener = view -> JUtils.copyToClipboard(shareModel.getShare_link() + "");
+                    oks.setCustomerLogo(enableLogo, label, listener);
                     oks.setShareContentCustomizeCallback(new ShareContentCustom(
                         shareModel.getDesc() + shareModel.getShare_link()));
                     oks.show(this);

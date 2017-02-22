@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.umeng.analytics.MobclickAgent;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,11 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
         MainTodayBean.ItemsBean bean = data.get(position);
         ViewUtils.loadImgToImgView(context, holder.image, bean.getPic());
         holder.name.setText(bean.getName());
-        holder.price.setText("售价: ¥" + bean.getPrice());
-        holder.profit.setText("利润: ¥" + bean.getProfit().getMin() + " ~ ¥" + bean.getProfit().getMax());
+        String price = new DecimalFormat("#.0").format(bean.getPrice());
+        holder.price.setText("售价: ¥" + price);
+        String min = new DecimalFormat("#.0").format(bean.getProfit().getMin());
+        String max = new DecimalFormat("#.0").format(bean.getProfit().getMax());
+        holder.profit.setText("利润: ¥" + min + " ~ ¥" + max);
         holder.itemView.setOnClickListener(view -> {
             MobclickAgent.onEvent(context, "click_product");
             try {

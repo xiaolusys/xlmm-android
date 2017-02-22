@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12px"
             android:textColor="@color/text_color_B4"
-            android:textSize="12sp"/>
+            android:textSize="12dp"/>
 
         <TextView
             android:id="@+id/msg"
@@ -25,7 +25,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="@color/text_color_62"
-            android:textSize="14sp"/>
+            android:textSize="14dp"/>
     </LinearLayout>
 
 

@@ -97,16 +97,17 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
             }
             String userAgentString = b.wbView.getSettings().getUserAgentString();
             b.wbView.getSettings().setUserAgentString(userAgentString +
-                    "; xlmm/" + BuildConfig.VERSION_NAME + ";");
+                "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             b.wbView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
             b.wbView.getSettings().setJavaScriptEnabled(true);
             b.wbView.addJavascriptInterface(new AndroidJsBridge((BaseActivity) mActivity)
-                    , "AndroidBridge");
+                , "AndroidBridge");
             b.wbView.getSettings().setAllowFileAccess(true);
             b.wbView.getSettings().setAppCacheEnabled(true);
             b.wbView.getSettings().setDomStorageEnabled(true);
             b.wbView.getSettings().setDatabaseEnabled(true);
             b.wbView.getSettings().setUseWideViewPort(true);
+            b.wbView.getSettings().setTextZoom(100);
             b.wbView.setDrawingCacheEnabled(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
@@ -152,8 +153,8 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
                                          JsResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("提示")
-                            .setMessage(message)
-                            .setPositiveButton("确定", null);
+                        .setMessage(message)
+                        .setPositiveButton("确定", null);
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsAlert", "keyCode==" + keyCode + "event=" + event);
                         return true;
@@ -173,9 +174,9 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
                                            final JsResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("提示")
-                            .setMessage(message)
-                            .setPositiveButton("确定", (dialog, which) -> result.confirm())
-                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                        .setMessage(message)
+                        .setPositiveButton("确定", (dialog, which) -> result.confirm())
+                        .setNeutralButton("取消", (dialog, which) -> result.cancel());
                     builder.setOnCancelListener(dialog -> result.cancel());
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsConfirm", "keyCode==" + keyCode + "event=" + event);
@@ -194,8 +195,8 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
                     et.setSingleLine();
                     et.setText(defaultValue);
                     builder.setView(et)
-                            .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
-                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                        .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
+                        .setNeutralButton("取消", (dialog, which) -> result.cancel());
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsPrompt", "keyCode==" + keyCode + "event=" + event);
                         return true;

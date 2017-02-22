@@ -54,7 +54,7 @@
             android:layout_alignParentTop="true"
             android:text=""
             android:layout_marginLeft="20px"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:layout_toRightOf="@id/pic_path"
             android:textColor="@color/colorAccent" />
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20px"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:layout_toRightOf="@id/tv_status"
             android:textColor="@color/b9" />
 
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20px"
-            android:textSize="13sp"
+            android:textSize="13dp"
             android:layout_toRightOf="@id/time_nick"
             android:textColor="@color/b9" />
 
@@ -98,6 +98,6 @@
             android:layout_centerVertical="true"
             android:textColor="#626262"
             android:text=""
-            android:textSize="20sp"/>
+            android:textSize="20dp"/>
     </RelativeLayout>
 </LinearLayout>

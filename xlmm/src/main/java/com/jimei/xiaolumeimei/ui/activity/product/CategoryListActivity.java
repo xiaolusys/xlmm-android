@@ -61,7 +61,6 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         mCategoryNameListAdapter = new CategoryNameListAdapter(this);
         mListView.setAdapter(mCategoryNameListAdapter);
 
-
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mXRecyclerView.setLayoutManager(manager);
         mXRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);

@@ -70,7 +70,7 @@ android {
 
         targetSdkVersion 25
 
-        versionCode 20170221
+        versionCode 20170222
         versionName "2.0.1"
 
         multiDexEnabled = true

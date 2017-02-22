@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +67,9 @@ public class CoinHisListAdapter extends BaseAdapter {
         holder.logTime.setText(bean.getCreated().replace("T", " "));
         holder.info.setText(bean.getSubject());
         if ("收入".equals(bean.getIro_type())) {
-            holder.value.setText("+" + (bean.getAmount() / 100));
+            holder.value.setText("+" + new DecimalFormat("#.00").format(bean.getAmount() / 100));
         } else if ("支出".equals(bean.getIro_type())) {
-            holder.value.setText("-" + (bean.getAmount() / 100));
+            holder.value.setText("-" + new DecimalFormat("#.00").format(bean.getAmount() / 100));
         }
         return convertView;
     }

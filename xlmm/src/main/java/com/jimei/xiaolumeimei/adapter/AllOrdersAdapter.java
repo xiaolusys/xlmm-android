@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.ui.activity.trade.OrderDetailActivity;
 import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,8 @@ public class AllOrdersAdapter extends RecyclerView.Adapter<AllOrdersAdapter.View
         adapter.setId(mList.get(position).getId());
         holder.listView.setAdapter(adapter);
         holder.statusTv.setText(mList.get(position).getStatusDisplay());
-        holder.paymentTv.setText(mList.get(position).getPayment() + "");
+        String payment = new DecimalFormat("#.00").format(mList.get(position).getPayment());
+        holder.paymentTv.setText(payment);
     }
 
     @Override

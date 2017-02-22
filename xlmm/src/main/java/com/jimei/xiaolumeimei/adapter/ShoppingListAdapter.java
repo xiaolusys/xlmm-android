@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.OrderLogisticActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class ShoppingListAdapter
         holder.getStatusDisplay.setText(resultsEntity.getStatus_display());
         holder.wxordernick.setText(resultsEntity.getContributor_nick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
-        holder.totalMoneyTv.setText("实付" + resultsEntity.getOrder_value());
+        holder.totalMoneyTv.setText("实付" + new DecimalFormat("#.0").format(resultsEntity.getOrder_value()));
         if (resultsEntity.getCarry_type() == 2) {
             holder.flagTv.setText("APP");
             holder.flagRl.setVisibility(View.VISIBLE);

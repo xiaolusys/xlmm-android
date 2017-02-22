@@ -26,7 +26,7 @@ import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
-import static android.util.TypedValue.COMPLEX_UNIT_SP;
+import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 
 /**
  * Created by wisdom on 17/1/10.
@@ -59,7 +59,7 @@ public class SearchActivity extends BaseMVVMActivity<ActivitySearchBinding> impl
                             layoutParams.setMargins(12, 12, 12, 12);
                             textView.setLayoutParams(layoutParams);
                             textView.setTextColor(getResources().getColor(R.color.text_color_62));
-                            textView.setTextSize(COMPLEX_UNIT_SP, 14);
+                            textView.setTextSize(COMPLEX_UNIT_DIP, 14);
                             textView.setBackgroundResource(R.drawable.search_tag_bg);
                             textView.setOnClickListener(v -> {
                                 b.et.setText(content);

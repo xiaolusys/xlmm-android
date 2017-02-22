@@ -66,6 +66,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     RelativeLayout btnShop;
     @Bind(R.id.boutique_in)
     TextView boutiqueIn;
+    @Bind(R.id.reload_text)
+    TextView reloadText;
     private int num = 1;
     private long firstTime = 0;
     private boolean updateFlag = true;
@@ -80,7 +82,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
         showBoutique = false;
+        List<BaseFragment> fragments = new ArrayList<>();
+        fragments.add(TodayNewFragment.newInstance("精品推荐"));
+        addSubscription(MainModel.getInstance()
+            .getPortalBean("activitys,posters")
+            .subscribe(portalBean -> {
+                List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
+                if (categorys != null && categorys.size() > 0) {
+                    for (int i = 0; i < categorys.size(); i++) {
+                        PortalBean.CategorysBean bean = categorys.get(i);
+                        fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
+                    }
+                    BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
+                    viewPager.setAdapter(mAdapter);
+                    viewPager.setOffscreenPageLimit(fragments.size());
+                    tabLayout.setupWithViewPager(viewPager);
+                    tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                }
+                hideIndeterminateProgressDialog();
+            }, e -> {
+                e.printStackTrace();
+                hideIndeterminateProgressDialog();
+                reloadText.setVisibility(View.VISIBLE);
+            }));
         LoginUtils.clearCacheEveryWeek(this);
         LoginUtils.setMamaInfo(this);
         downLoadAddress();
@@ -130,29 +156,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnMy.setOnClickListener(this);
         btnCar.setOnClickListener(this);
         btnShop.setOnClickListener(this);
+        reloadText.setOnClickListener(this);
     }
 
     @Override
     protected void initViews() {
         setSwipeBackEnable(false);
-        List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(TodayNewFragment.newInstance("精品推荐"));
-        addSubscription(MainModel.getInstance()
-            .getPortalBean("activitys,posters")
-            .subscribe(portalBean -> {
-                List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
-                if (categorys != null && categorys.size() > 0) {
-                    for (int i = 0; i < categorys.size(); i++) {
-                        PortalBean.CategorysBean bean = categorys.get(i);
-                        fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
-                    }
-                    BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
-                    viewPager.setAdapter(mAdapter);
-                    viewPager.setOffscreenPageLimit(fragments.size());
-                    tabLayout.setupWithViewPager(viewPager);
-                    tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-                }
-            }, Throwable::printStackTrace));
     }
 
     public void setTabLayoutMarginTop(double percent) {
@@ -213,6 +222,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.boutique_in:
                 JumpUtils.jumpToWebViewWithCookies(MainActivity.this, boutiqueUrl, -1, CommonWebViewActivity.class, false, true);
+                break;
+            case R.id.reload_text:
+                reloadText.setVisibility(View.GONE);
+                initData();
+                showCartsNum();
                 break;
             default:
                 break;

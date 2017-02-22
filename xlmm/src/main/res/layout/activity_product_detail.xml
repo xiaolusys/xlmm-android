@@ -59,7 +59,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:textColor="@color/text_color_4A"
-                                        android:textSize="16sp" />
+                                        android:textSize="16dp" />
 
                                 </LinearLayout>
 
@@ -86,14 +86,14 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:textColor="@color/text_color_32"
-                                            android:textSize="35sp" />
+                                            android:textSize="35dp" />
 
                                         <TextView
                                             android:id="@+id/sale_price"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:textColor="@color/text_color_A0"
-                                            android:textSize="14sp" />
+                                            android:textSize="14dp" />
 
                                     </LinearLayout>
 
@@ -101,22 +101,6 @@
                                         android:layout_width="0dp"
                                         android:layout_height="1dp"
                                         android:layout_weight="1" />
-
-                                    <!--<LinearLayout-->
-                                        <!--android:id="@+id/collect_layout"-->
-                                        <!--android:layout_width="wrap_content"-->
-                                        <!--android:layout_height="wrap_content"-->
-                                        <!--android:gravity="center_vertical"-->
-                                        <!--android:orientation="horizontal">-->
-
-                                        <!--<ImageView-->
-                                            <!--android:id="@+id/collect_img"-->
-                                            <!--android:layout_width="wrap_content"-->
-                                            <!--android:layout_height="wrap_content"-->
-                                            <!--android:layout_margin="15dp"-->
-                                            <!--android:src="@drawable/icon_collect_false" />-->
-
-                                    <!--</LinearLayout>-->
 
                                 </LinearLayout>
 
@@ -139,7 +123,7 @@
                                         android:layout_marginLeft="32px"
                                         android:text="精品商品"
                                         android:textColor="@color/text_color_4A"
-                                        android:textSize="14sp" />
+                                        android:textSize="14dp" />
 
                                     <View
                                         android:layout_width="0dp"
@@ -152,7 +136,7 @@
                                         android:layout_marginRight="32px"
                                         android:text="前往购券>>"
                                         android:textColor="@color/colorAccent"
-                                        android:textSize="14sp" />
+                                        android:textSize="14dp" />
 
 
                                 </LinearLayout>
@@ -177,7 +161,7 @@
                                         android:layout_marginLeft="32px"
                                         android:text="剩余时间:"
                                         android:textColor="@color/text_color_4A"
-                                        android:textSize="14sp" />
+                                        android:textSize="14dp" />
 
                                     <View
                                         android:layout_width="0dp"
@@ -190,7 +174,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="32px"
                                         android:textColor="@color/text_color_4A"
-                                        android:textSize="16sp" />
+                                        android:textSize="16dp" />
 
                                     <TextView
                                         android:id="@+id/text_not_sale"
@@ -199,7 +183,7 @@
                                         android:layout_marginRight="32px"
                                         android:text="暂未上架"
                                         android:textColor="@color/text_color_4A"
-                                        android:textSize="14sp"
+                                        android:textSize="14dp"
                                         android:visibility="gone" />
                                 </LinearLayout>
 
@@ -237,7 +221,7 @@
                                         android:layout_marginTop="6px"
                                         android:text="商品参数"
                                         android:textColor="@color/text_color_32"
-                                        android:textSize="16sp"
+                                        android:textSize="16dp"
                                         android:textStyle="bold" />
 
                                 </LinearLayout>
@@ -288,7 +272,7 @@
                     android:paddingBottom="30px"
                     android:text="商品详情"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -372,7 +356,7 @@
                         android:minWidth="24px"
                         android:text="1"
                         android:textColor="@color/white"
-                        android:textSize="9sp"
+                        android:textSize="9dp"
                         android:visibility="gone" />
                 </RelativeLayout>
 
@@ -397,7 +381,7 @@
                             android:gravity="center"
                             android:singleLine="true"
                             android:textColor="@color/colorAccent"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:visibility="invisible" />
 
                         <TextView
@@ -409,7 +393,7 @@
                             android:gravity="center"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:visibility="invisible" />
                     </LinearLayout>
 
@@ -421,7 +405,7 @@
                         android:gravity="center"
                         android:text="加入购物车"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="15dp" />
 
                 </FrameLayout>
             </LinearLayout>

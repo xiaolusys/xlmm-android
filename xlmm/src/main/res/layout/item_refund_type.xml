@@ -22,14 +22,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_color_62"
-            android:textSize="15sp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/refund_tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_color_9B"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
     </LinearLayout>
 
     <RadioButton

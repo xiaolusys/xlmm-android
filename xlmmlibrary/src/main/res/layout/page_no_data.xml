@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:text="暂无数据"
         android:textColor="#B6B6B6"
-        android:textSize="15dip"/>
+        android:textSize="15dp"/>
 
 </LinearLayout>

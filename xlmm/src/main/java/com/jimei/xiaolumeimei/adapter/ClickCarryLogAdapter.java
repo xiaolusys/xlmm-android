@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class ClickCarryLogAdapter
-        extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
+    extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
 
 
     private List<ClickcarryBean.ResultsEntity> mList;
@@ -64,7 +64,7 @@ public class ClickCarryLogAdapter
     @Override
     public CarryLogListVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_carryloglist, parent, false);
+            .inflate(R.layout.item_carryloglist, parent, false);
         return new CarryLogListVH(v);
     }
 
@@ -78,7 +78,7 @@ public class ClickCarryLogAdapter
                 showCategory(holder);
             } else {
                 boolean theCategoryOfLastEqualsToThis =
-                        mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
+                    mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
                 if (!theCategoryOfLastEqualsToThis) {
                     showCategory(holder);
                 } else {
@@ -92,10 +92,10 @@ public class ClickCarryLogAdapter
         holder.shoptime.setText(resultsEntity.getDateField());
         Glide.with(context).load(R.drawable.img_yellowreturn).into(holder.picPath);
         holder.totalCash.setText(
-                "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+            "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
         holder.tichengCash.setText(
-                "+" + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
+            "+" + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
 
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
         holder.wxordernick.setText(resultsEntity.getCarryDescription());

@@ -70,14 +70,14 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
         holder.selected.setBackgroundResource(R.color.white);
         if (position == currentPosition) {
             holder.selected.setBackgroundResource(R.color.colorAccent);
-            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             holder.time.setTextColor(context.getResources().getColor(R.color.colorAccent));
             holder.textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
             itemClick(currentPosition);
         } else {
-            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             holder.selected.setBackgroundResource(R.color.white);
             holder.time.setTextColor(context.getResources().getColor(R.color.text_color_62));
             holder.textView.setTextColor(context.getResources().getColor(R.color.text_color_62));

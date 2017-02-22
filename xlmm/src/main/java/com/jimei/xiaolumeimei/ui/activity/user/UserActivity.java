@@ -2,9 +2,15 @@ package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
@@ -61,12 +67,12 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
     private String shareLink;
     private String shopLink;
     private String msgUrl;
-    private double mCashValue;
     private int orderNum;
     private String carryLogMoney;
     private String hisConfirmedCashOut;
     private int mCurrent_dp_turns_num;
     private String fansUrl;
+    private int count;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -78,7 +84,22 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         return b.layout;
     }
 
+    private void setIcon(int id, ImageView imageView) {
+        Drawable drawable;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawable = getDrawable(id);
+        } else {
+            drawable = getResources().getDrawable(id);
+        }
+        assert drawable != null;
+        int rgb = Color.rgb((int) (Math.random() * 256),
+            (int) (Math.random() * 256), (int) (Math.random() * 256));
+        drawable.setColorFilter(new PorterDuffColorFilter(rgb, PorterDuff.Mode.SRC_IN));
+        imageView.setImageDrawable(drawable);
+    }
+
     protected void init() {
+        count = 1;
         showIndeterminateProgressDialog(true);
         mamaFlag = false;
         if (LoginUtils.checkLoginState(this)) {
@@ -126,6 +147,7 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         b.rlRefund.setOnClickListener(this);
         b.rlOrder.setOnClickListener(this);
         b.llShop.setOnClickListener(this);
+        b.llVipDesc.setOnClickListener(this);
 
         b.btnFinish.setOnClickListener(this);
         b.btnService.setOnClickListener(this);
@@ -190,6 +212,20 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
                     if (shopLink != null && !"".equals(shopLink)) {
                         JumpUtils.jumpToWebViewWithCookies(this, shopLink, -1,
                             MMStoreWebViewActivity.class);
+                    }
+                    break;
+                case R.id.ll_vip_desc:
+                    if (count > 3) {
+                        setIcon(R.drawable.drawer_pay, b.payImg);
+                        setIcon(R.drawable.drawer_car, b.waitImg);
+                        setIcon(R.drawable.drawer_refund, b.refundImg);
+                        setIcon(R.drawable.drawer_order, b.orderImg);
+                        setIcon(R.drawable.icon_vip_share, b.imgShare);
+                        setIcon(R.drawable.icon_vip_push, b.imgPush);
+                        setIcon(R.drawable.icon_vip_choose, b.imgChoose);
+                        setIcon(R.drawable.icon_vip_shop, b.imgInvite);
+                    } else {
+                        count++;
                     }
                     break;
                 case R.id.ll_push:
@@ -389,7 +425,6 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
 
     private void initFortune(MamaFortune mamaFortune) {
         MamaFortune.MamaFortuneBean fortune = mamaFortune.getMamaFortune();
-        mCashValue = fortune.getCashValue();
         orderNum = fortune.getOrderNum();
         carryLogMoney = fortune.getCarryValue() + "";
         if (fortune.getExtraInfo() != null) {
