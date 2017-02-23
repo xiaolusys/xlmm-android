@@ -1,6 +1,8 @@
 package com.jimei.xiaolumeimei.ui.fragment.product;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -12,7 +14,6 @@ import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CustomSnapHelper;
 import com.jimei.xiaolumeimei.adapter.MainProductAdapter;
 import com.jimei.xiaolumeimei.adapter.MainTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
@@ -22,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
+import com.jimei.xiaolumeimei.widget.OnScrollCallback;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -36,13 +38,23 @@ import java.util.Map;
 
 public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBinding>
     implements ScrollableHelper.ScrollableContainer, SwipeRefreshLayout.OnRefreshListener,
-    ScrollableLayout.OnScrollListener {
+    ScrollableLayout.OnScrollListener, OnScrollCallback {
 
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private Map<String, String> map = new HashMap<>();
     private MainTabAdapter mainTabAdapter;
     private List<MainTodayBean> data = new ArrayList<>();
     private MainProductAdapter mainProductAdapter;
+    private int width;
+    private int scrollCount;
+    private int state;
+    private int moveX;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mainTabAdapter.setCurrentPosition(msg.what);
+        }
+    };
 
     public static TodayNewFragment newInstance(String title) {
         Bundle args = new Bundle();
@@ -70,15 +82,16 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                 data.addAll(list);
                 mainTabAdapter.updateWithClear(list);
                 int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                int position = 0;
+                b.recyclerTab.scrollBy(-scrollCount * width, 0);
+                scrollCount = 0;
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).getHour() <= hour) {
-                        position = i;
+                        scrollCount = i;
                     }
                 }
-                mainTabAdapter.setCurrentPosition(position);
-                b.recyclerTab.scrollToPosition(position);
-                mainProductAdapter.updateWithClear(list.get(position).getItems());
+                mainTabAdapter.setCurrentPosition(scrollCount + 2);
+                b.recyclerTab.scrollBy(scrollCount * width, 0);
+                mainProductAdapter.updateWithClear(list.get(scrollCount).getItems());
                 hideIndeterminateProgressDialog();
             }, e -> {
                 hideIndeterminateProgressDialog();
@@ -89,10 +102,12 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
     public void setListener() {
         b.swipeLayout.setOnRefreshListener(this);
         b.layout.setOnScrollListener(this);
+        b.recyclerTab.setOnScrollCallback(this);
     }
 
     @Override
     protected void initViews() {
+        width = JUtils.getScreenWidth() / 5;
         b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
         b.recyclerProduct.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
         mainProductAdapter = new MainProductAdapter(mActivity);
@@ -102,17 +117,13 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         b.recyclerTab.setLayoutManager(manager);
         mainTabAdapter = new MainTabAdapter(mActivity) {
             @Override
-            public void itemClick(int position) {
-                if (data.size() > position) {
-                    mainProductAdapter.updateWithClear(data.get(position).getItems());
-                } else {
-                    JUtils.Toast("数据加载失败,请下拉刷新后重试!");
-                }
+            public void itemClick(int count, int position) {
+                scrollCount += count;
+                b.recyclerTab.scrollBy(count * width, 0);
+                mainProductAdapter.updateWithClear(data.get(position).getItems());
             }
         };
         b.recyclerTab.setAdapter(mainTabAdapter);
-        CustomSnapHelper mLinearSnapHelper = new CustomSnapHelper(mainTabAdapter);
-        mLinearSnapHelper.attachToRecyclerView(b.recyclerTab);
         b.layout.getHelper().setCurrentScrollableContainer(this);
     }
 
@@ -167,6 +178,56 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
             b.swipeLayout.setEnabled(false);
         } else {
             b.swipeLayout.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onStateChanged(int state) {
+        this.state = state;
+        if (state == 1) {
+            moveX = 0;
+        }
+        if (state == 0) {
+            int lastMoveX;
+            if (moveX > 0 && moveX >= width / 2) {
+                scrollCount += 1;
+                lastMoveX = width - moveX;
+            } else if (moveX < 0 && moveX <= -width / 2) {
+                scrollCount -= 1;
+                lastMoveX = -width - moveX;
+            } else {
+                lastMoveX = -moveX;
+            }
+            b.recyclerTab.scrollBy(lastMoveX, 0);
+            if (scrollCount < 0) {
+                scrollCount = 0;
+            } else if (scrollCount > data.size() - 1) {
+                scrollCount = data.size() - 1;
+            }
+            mainTabAdapter.setCurrentPosition(scrollCount + 2);
+            mainProductAdapter.updateWithClear(data.get(scrollCount).getItems());
+        }
+        JUtils.Log("State:::" + state);
+    }
+
+    @Override
+    public void onScroll(int dx) {
+        JUtils.Log("Left :<<" + dx);
+        if (state > 0) {
+            moveX += dx;
+            if (moveX / width != 0) {
+                scrollCount += moveX / width;
+                moveX = moveX % width;
+            }
+            if (moveX > 0 && moveX >= width / 2) {
+                Message msg = new Message();
+                msg.what = scrollCount + 3;
+                handler.sendMessage(msg);
+            } else if (moveX < 0 && moveX <= -width / 2) {
+                Message msg = new Message();
+                msg.what = scrollCount + 1;
+                handler.sendMessage(msg);
+            }
         }
     }
 }
