@@ -13,14 +13,9 @@ import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
-import com.jimei.xiaolumeimei.entities.ResponseResultBean;
-import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.SaveTimeBean;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
 
 import java.util.List;
@@ -29,7 +24,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -39,10 +33,6 @@ import rx.Observable;
  */
 
 public interface MamaService {
-
-    @GET("/rest/v1/pmt/cashout")
-    Observable<WithdrawCashHisBean> getWithdrawCashHis(
-        @Query("page") String page);
 
     //获取粉丝列表
     @GET("/rest/v2/mama/fans")
@@ -54,23 +44,6 @@ public interface MamaService {
     Observable<MMVisitorsBean> getMamaVisitor(
         @Query("recent") int recent,
         @Query("page") int page);
-
-    //创建提款单信息
-    @FormUrlEncoded
-    @POST("/rest/v1/pmt/cashout")
-    Observable<ResultEntity> withdraw_cash(
-        @Field("choice") String fund_type);
-
-    @FormUrlEncoded
-    @POST("/rest/v2/mmcashout/cash_out_2_budget")
-    Observable<ResultEntity> toWallet(
-        @Field("value") String value);
-
-    //cancel提款单信息
-    @FormUrlEncoded
-    @POST("/rest/v1/pmt/cashout/cancal_cashout")
-    Observable<ResponseResultBean> cancel_withdraw_cash(
-        @Field("id") String id);
 
     @GET("/rest/v2/mama/fortune")
     Observable<MamaFortune> getMamaFortune();
@@ -109,10 +82,6 @@ public interface MamaService {
 
     @GET("/rest/v2/mama/message/self_list")
     Observable<MamaSelfListBean> getMaMaselfList();
-
-    //获取用户信息
-    @GET("/rest/v1/users/profile")
-    Observable<UserInfoBean> getUserInfo();
 
     @GET("/rest/v2/mama/dailystats")
     Observable<RecentCarryBean> getRecentCarry(
@@ -157,9 +126,6 @@ public interface MamaService {
 
     @GET("/rest/v2/qrcode/get_wxpub_qrcode")
     Observable<WxQrcode> getWxCode();
-
-    @GET("/rest/v1/portal")
-    Observable<PortalBean> getPortalBean();
 
     @FormUrlEncoded
     @PATCH("/rest/v1/pmt/ninepic/{id}")

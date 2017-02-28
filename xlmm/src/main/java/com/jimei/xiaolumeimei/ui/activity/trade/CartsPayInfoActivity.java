@@ -38,15 +38,14 @@ import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.pay.PayUtils;
-import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -1091,9 +1090,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
             addressDetails.setText(addressDetailsSelect);
             addr_id = addr_idSelect;
         } else {
-            addSubscription(AddressModel.getInstance()
-                .getAddressList()
-                .subscribe(new ServiceResponse<List<AddressBean>>() {
+            addSubscription(XlmmApp.getAddressInteractor(this)
+                .getAddressList(new ServiceResponse<List<AddressBean>>() {
                     @Override
                     public void onNext(List<AddressBean> list) {
                         super.onNext(list);

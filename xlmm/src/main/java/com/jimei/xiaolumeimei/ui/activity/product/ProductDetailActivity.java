@@ -42,6 +42,7 @@ import com.jimei.library.widget.CountDownView;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.TagTextView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MyPagerAdapter;
 import com.jimei.xiaolumeimei.adapter.SkuColorAdapter;
 import com.jimei.xiaolumeimei.adapter.SkuSizeAdapter;
@@ -50,14 +51,12 @@ import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductDetailBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
-import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
@@ -77,12 +76,10 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import rx.Observable;
 
 public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding>
     implements View.OnClickListener, Animation.AnimationListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
-    private ShareModelBean shareModel;
     private ProductDetailBean productDetail;
     private int cart_num = 0;
     private boolean isAlive;
@@ -228,27 +225,30 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        addSubscription(Observable.mergeDelayError(
-            ProductModel.getInstance().getProductDetail(model_id),
-            ProductModel.getInstance().getShareModel(model_id),
-            CartsModel.getInstance().show_carts_num())
-            .subscribe(o -> {
-                if (o instanceof ProductDetailBean) {
-                    productDetail = (ProductDetailBean) o;
-                    fillDataToView((ProductDetailBean) o);
-                } else if (o instanceof ShareModelBean) {
-                    shareModel = (ShareModelBean) o;
-                } else if (o instanceof CartsNumResultBean) {
-                    cart_num = ((CartsNumResultBean) o).getResult();
+        addSubscription(XlmmApp.getProductInteractor(this)
+            .getProductDetail(model_id, new ServiceResponse<ProductDetailBean>() {
+                @Override
+                public void onNext(ProductDetailBean productDetailBean) {
+                    productDetail = productDetailBean;
+                    fillDataToView(productDetailBean);
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
+        addSubscription(
+            CartsModel.getInstance().show_carts_num()
+                .subscribe(cartsNumResultBean -> {
+                    cart_num = cartsNumResultBean.getResult();
                     b.tvCart.setText(cart_num + "");
                     if (cart_num > 0) {
                         b.tvCart.setVisibility(View.VISIBLE);
                     }
-                }
-            }, e -> {
-                e.printStackTrace();
-                hideIndeterminateProgressDialog();
-            }, this::hideIndeterminateProgressDialog));
+                }, Throwable::printStackTrace));
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {
@@ -423,23 +423,37 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 this.finish();
                 break;
             case R.id.share:
-                if (shareModel != null) {
-                    OnekeyShare oks = new OnekeyShare();
-                    oks.disableSSOWhenAuthorize();
-                    oks.setTitle(shareModel.getTitle());
-                    oks.setTitleUrl(shareModel.getShare_link());
-                    oks.setText(shareModel.getDesc() + shareModel.getShare_link());
-                    oks.setImageUrl(shareModel.getShare_img());
-                    oks.setUrl(shareModel.getShare_link());
-                    Bitmap enableLogo =
-                        BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
-                    String label = "复制链接";
-                    View.OnClickListener listener = view -> JUtils.copyToClipboard(shareModel.getShare_link() + "");
-                    oks.setCustomerLogo(enableLogo, label, listener);
-                    oks.setShareContentCustomizeCallback(new ShareContentCustom(
-                        shareModel.getDesc() + shareModel.getShare_link()));
-                    oks.show(this);
-                }
+                showIndeterminateProgressDialog(false);
+                addSubscription(XlmmApp.getProductInteractor(this)
+                    .getShareModel(model_id, new ServiceResponse<ShareModelBean>() {
+                        @Override
+                        public void onNext(ShareModelBean shareModel) {
+                            OnekeyShare oks = new OnekeyShare();
+                            oks.disableSSOWhenAuthorize();
+                            oks.setTitle(shareModel.getTitle());
+                            oks.setTitleUrl(shareModel.getShare_link());
+                            oks.setText(shareModel.getDesc() + shareModel.getShare_link());
+                            oks.setImageUrl(shareModel.getShare_img());
+                            oks.setUrl(shareModel.getShare_link());
+                            Bitmap enableLogo =
+                                BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
+                            View.OnClickListener listener = view -> {
+                                JUtils.copyToClipboard(shareModel.getShare_link() + "");
+                                JUtils.Toast("已复制链接");
+                            };
+                            oks.setCustomerLogo(enableLogo, "复制链接", listener);
+                            oks.setShareContentCustomizeCallback(new ShareContentCustom(
+                                shareModel.getDesc() + shareModel.getShare_link()));
+                            oks.show(ProductDetailActivity.this);
+                            hideIndeterminateProgressDialog();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            JUtils.Toast("分享失败,请点击重试!");
+                            hideIndeterminateProgressDialog();
+                        }
+                    }));
                 break;
             case R.id.boutique_layout:
                 if (productDetail.getBuy_coupon_url() != null && !"".equals(productDetail.getBuy_coupon_url())) {

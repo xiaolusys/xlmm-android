@@ -14,13 +14,14 @@ import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.library.widget.scrolllayout.ScrollableLayout;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MainProductAdapter;
 import com.jimei.xiaolumeimei.adapter.MainTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentTodayNewBinding;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.model.MainModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.widget.OnScrollCallback;
@@ -71,30 +72,39 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public void initData() {
-        MainModel instance = MainModel.getInstance();
-        addSubscription(instance
-            .getPortalBean("activitys,categorys")
-            .subscribe(this::initSliderLayout, Throwable::printStackTrace));
-        addSubscription(instance
-            .getMainTodayList()
-            .subscribe(list -> {
-                data.clear();
-                data.addAll(list);
-                mainTabAdapter.updateWithClear(list);
-                int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                b.recyclerTab.scrollBy(-scrollCount * width, 0);
-                scrollCount = 0;
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getHour() <= hour) {
-                        scrollCount = i;
-                    }
+        addSubscription(XlmmApp.getMainInteractor(mActivity)
+            .getPortalBean("activitys,categorys", new ServiceResponse<PortalBean>() {
+                @Override
+                public void onNext(PortalBean portalBean) {
+                    initSliderLayout(portalBean);
                 }
-                mainTabAdapter.setCurrentPosition(scrollCount + 2);
-                b.recyclerTab.scrollBy(scrollCount * width, 0);
-                mainProductAdapter.updateWithClear(list.get(scrollCount).getItems());
-                hideIndeterminateProgressDialog();
-            }, e -> {
-                hideIndeterminateProgressDialog();
+            }));
+        addSubscription(XlmmApp.getMainInteractor(mActivity)
+            .getMainTodayList(new ServiceResponse<List<MainTodayBean>>() {
+                @Override
+                public void onNext(List<MainTodayBean> list) {
+                    data.clear();
+                    data.addAll(list);
+                    mainTabAdapter.updateWithClear(list);
+                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                    b.recyclerTab.scrollBy(-scrollCount * width, 0);
+                    scrollCount = 0;
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).getHour() <= hour) {
+                            scrollCount = i;
+                        }
+                    }
+                    mainTabAdapter.setCurrentPosition(scrollCount + 2);
+                    b.recyclerTab.scrollBy(scrollCount * width, 0);
+                    mainProductAdapter.updateWithClear(list.get(scrollCount).getItems());
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }
             }));
     }
 
@@ -139,6 +149,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
             map.put(posters.get(i).getPic_link(), posters.get(i).getApp_link());
         }
         if (b.slider != null) {
+            b.slider.stopAutoCycle();
             b.slider.removeAllSliders();
         }
         for (String name : map.keySet()) {
@@ -157,6 +168,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         }
         b.slider.setPresetIndicator(SliderLayout.PresetIndicators.Left_Bottom);
         b.slider.setDuration(3000);
+        b.slider.startAutoCycle();
     }
 
     @Override

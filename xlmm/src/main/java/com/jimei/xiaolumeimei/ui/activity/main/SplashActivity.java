@@ -7,14 +7,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 
 import com.bumptech.glide.Glide;
 import com.jimei.library.rx.RxCountDown;
+import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.NetUtil;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.model.ActivityModel;
+import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.entities.StartBean;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;
@@ -27,8 +29,6 @@ import rx.Subscription;
 public class SplashActivity extends AppCompatActivity {
 
     private Subscription mSubscribe;
-    private int mWidthPixels;
-    private int mHeightPixels;
     private String mPicture;
 
     @Override
@@ -38,28 +38,20 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         MobclickAgent.setDebugMode(true);
         ViewUtils.setWindowStatus(this);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        mWidthPixels = displayMetrics.widthPixels;
-        mHeightPixels = displayMetrics.heightPixels;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         PackageManager pm = getPackageManager();
         boolean permission = (PackageManager.PERMISSION_GRANTED ==
             pm.checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", getPackageName()));
-        mSubscribe = ActivityModel.getInstance()
-            .getStartAds()
-            .subscribe(startBean -> {
-                if (startBean != null) {
+        mSubscribe = XlmmApp.getActivityInteractor(this)
+            .getStartAds(new ServiceResponse<StartBean>() {
+                @Override
+                public void onNext(StartBean startBean) {
                     mPicture = startBean.getPicture();
                     if (mPicture != null && !"".equals(mPicture)) {
-                        Glide.with(SplashActivity.this).load(mPicture).downloadOnly(mWidthPixels, mHeightPixels);
+                        Glide.with(SplashActivity.this).load(mPicture).downloadOnly(
+                            JUtils.getScreenWidth(), JUtils.getScreenHeightWithStatusBar());
                     }
                 }
-            }, Throwable::printStackTrace);
+            });
         if (permission) {
             RxCountDown.countdown(2).subscribe(integer -> {
                 if (integer == 0) {

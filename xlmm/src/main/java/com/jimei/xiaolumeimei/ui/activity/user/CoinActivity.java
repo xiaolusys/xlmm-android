@@ -12,10 +12,11 @@ import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CoinHisListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
-import com.jimei.xiaolumeimei.model.MainModel;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
@@ -71,12 +72,17 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        addSubscription(MainModel.getInstance()
-            .getProfile()
-            .subscribe(userInfoBean -> {
-                tx_point.setText("" + userInfoBean.getXiaoluCoin());
-            }, throwable -> {
-                hideIndeterminateProgressDialog();
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getProfile(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean userInfoBean) {
+                    tx_point.setText("" + userInfoBean.getXiaoluCoin());
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    hideIndeterminateProgressDialog();
+                }
             }));
         addSubscription(UserModel.getInstance()
             .getCoinHisList("1")

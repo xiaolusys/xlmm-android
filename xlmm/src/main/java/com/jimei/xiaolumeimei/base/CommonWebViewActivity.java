@@ -24,7 +24,6 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -37,10 +36,10 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-import com.jimei.xiaolumeimei.model.ActivityModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.util.pay.PayUtils;
 import com.mob.tools.utils.UIHandler;
@@ -58,7 +57,6 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.
@@ -71,16 +69,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     @Bind(R.id.layout)
     LinearLayout layout;
 
-    public ValueCallback<Uri> mUploadMessage;
-    public ValueCallback<Uri[]> mUploadMessageForAndroid5;
-
-    public final static int FILECHOOSER_RESULTCODE = 1;
-    public final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
-
     private static final int MSG_ACTION_CCALLBACK = 2;
     public WebView mWebView;
     LinearLayout ll_actwebview;
-    private Bitmap bitmap;
     private ProgressBar mProgressBar;
     private String cookies;
     private String actlink;
@@ -89,7 +80,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private String sessionid;
     private int id;
     public XlmmTitleView titleView;
-    private AndroidJsBridge mAndroidJsBridge;
 
     @Override
     protected void initData() {
@@ -164,7 +154,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
             mWebView.getSettings().setJavaScriptEnabled(true);
-            mAndroidJsBridge = new AndroidJsBridge(this);
+            AndroidJsBridge mAndroidJsBridge = new AndroidJsBridge(this);
             mWebView.addJavascriptInterface(mAndroidJsBridge, "AndroidBridge");
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setAllowFileAccess(true);
@@ -247,28 +237,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     dialog.show();
                     return true;
                 }
-
-//                //扩展浏览器上传文件
-//                //3.0++版本
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                //3.0--版本
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                // For Android > 5.0
-//                public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg,
-//                                                 WebChromeClient.FileChooserParams fileChooserParams) {
-//                    openFileChooserImplForAndroid5(uploadMsg);
-//                    return true;
-//                }
             });
             mWebView.setWebViewClient(new WebViewClient() {
 
@@ -309,24 +277,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == FILECHOOSER_RESULTCODE) {
-//            if (null == mUploadMessage)
-//                return;
-//            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-//            mUploadMessage.onReceiveValue(result);
-//            mUploadMessage = null;
-//
-//        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
-//            if (null == mUploadMessageForAndroid5)
-//                return;
-//            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
-//            if (result != null) {
-//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
-//            } else {
-//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
-//            }
-//            mUploadMessageForAndroid5 = null;
-//        } else
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result");
@@ -339,7 +289,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             break;
                         case "success":
                             JUtils.Toast("支付成功！");
-//                            successJump(mAndroidJsBridge.getTid());
                             finish();
                             break;
                         default:
@@ -389,16 +338,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-
-    public void setActlink(String actlink) {
-        this.actlink = actlink;
-    }
-
-
-    public String getActlink() {
-        return actlink;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -429,26 +368,16 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             mWebView.destroy();
             mWebView = null;
         }
-
-        if (bitmap != null) {
-            bitmap.recycle();
-        }
     }
 
     public void syncCookie(Context context) {
-
         try {
             CookieSyncManager.createInstance(context);
-
             CookieManager cookieManager = CookieManager.getInstance();
-
             cookieManager.removeSessionCookie();// 移除
             cookieManager.removeAllCookie();
-
             cookieManager.setAcceptCookie(true);
-
             cookieManager.setCookie(domain, cookies);
-
             CookieSyncManager.getInstance().sync();
         } catch (Exception e) {
             e.printStackTrace();
@@ -491,45 +420,36 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.arg1) {
-            case 1: {
-                // 分享成功回调
+            case 1:
                 MobclickAgent.onEvent(mContext, "share_success");
                 JUtils.Toast("分享成功");
-            }
-            break;
-            case 2: {
-                // 分享失败回调
+                break;
+            case 2:
                 HashMap<String, String> map = new HashMap<>();
                 map.put("error", msg.obj.toString());
                 MobclickAgent.onEvent(mContext, "share_failed", map);
                 MobclickAgent.onEvent(mContext, "share_failed");
                 JUtils.Toast("分享失败");
-            }
-            break;
-            case 3: {
-                // 分享取消回调
+                break;
+            case 3:
                 MobclickAgent.onEvent(mContext, "share_cancel");
                 JUtils.Toast("分享已取消");
-            }
-            break;
+                break;
         }
         return false;
     }
 
     public void get_party_share_content(String id) {
-        Subscription subscribe = ActivityModel.getInstance()
-            .get_party_share_content(id)
-            .subscribe(new ServiceResponse<ActivityBean>() {
+        addSubscription(XlmmApp.getActivityInteractor(this)
+            .get_party_share_content(id, new ServiceResponse<ActivityBean>() {
                 @Override
                 public void onNext(ActivityBean activityBean) {
-
                     if (null != activityBean) {
                         partyShareInfo = activityBean;
                         partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
                     }
                 }
-            });
-        addSubscription(subscribe);
+            }));
     }
 
     protected void share_shopping(String title, String sharelink, String desc, String shareimg) {
@@ -558,9 +478,11 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         oks.setUrl(partyShareInfo.getShareLink());
         Bitmap enableLogo =
             BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
-        String label = "复制链接";
-        View.OnClickListener listener = v -> JUtils.copyToClipboard(partyShareInfo.getShareLink() + "");
-        oks.setCustomerLogo(enableLogo, label, listener);
+        View.OnClickListener listener = v -> {
+            JUtils.copyToClipboard(partyShareInfo.getShareLink() + "");
+            JUtils.Toast("已复制链接");
+        };
+        oks.setCustomerLogo(enableLogo, "复制链接", listener);
         oks.setShareContentCustomizeCallback(
             new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
         oks.setCallback(this);

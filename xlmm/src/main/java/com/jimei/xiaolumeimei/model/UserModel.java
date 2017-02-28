@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.model;
 
 import com.jimei.library.rx.DefaultTransform;
-import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
@@ -52,13 +51,6 @@ public class UserModel {
     public Observable<UserInfoBean> getUserInfo() {
         return getService()
             .getUserInfo()
-            .compose(new DefaultTransform<>());
-    }
-
-    //投诉建议
-    public Observable<AddressResultBean> complain(String com_type, String com_content) {
-        return getService()
-            .complain(com_type, com_content, "问题反馈")
             .compose(new DefaultTransform<>());
     }
 

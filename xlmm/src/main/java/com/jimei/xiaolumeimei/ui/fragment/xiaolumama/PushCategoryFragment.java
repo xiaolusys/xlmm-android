@@ -7,12 +7,14 @@ import android.view.View;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MainCategoryAdapter;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentPushCategoryBinding;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
@@ -35,24 +37,29 @@ public class PushCategoryFragment extends BaseBindingFragment<FragmentPushCatego
 
     @Override
     public void initData() {
-        addSubscription(MamaInfoModel.getInstance()
-                .getPortalBean()
-                .subscribe(portalBean -> {
+        addSubscription(XlmmApp.getMainInteractor(mActivity)
+            .getPortalBean("activitys,posters", new ServiceResponse<PortalBean>() {
+                @Override
+                public void onNext(PortalBean portalBean) {
                     List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
                     mMainCategoryAdapter.updateWithClear(categorys);
                     b.scrollableLayout.setVisibility(View.VISIBLE);
                     hideIndeterminateProgressDialog();
-                }, throwable -> {
-                    throwable.printStackTrace();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
                     hideIndeterminateProgressDialog();
-                }));
+                }
+            }));
         addSubscription(MamaInfoModel.getInstance()
-                .getNinePicByOrdering()
-                .subscribe(ninePicBean -> {
-                    if (ninePicBean != null) {
-                        mNinePicAdapter.update(ninePicBean);
-                    }
-                }, Throwable::printStackTrace));
+            .getNinePicByOrdering()
+            .subscribe(ninePicBean -> {
+                if (ninePicBean != null) {
+                    mNinePicAdapter.update(ninePicBean);
+                }
+            }, Throwable::printStackTrace));
     }
 
     @Override

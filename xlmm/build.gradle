@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'AndResGuard'
 
 def releaseTime() {
@@ -70,7 +71,7 @@ android {
 
         targetSdkVersion 25
 
-        versionCode 20170223
+        versionCode 20170224
         versionName "2.0.1"
 
         multiDexEnabled = true
@@ -257,4 +258,7 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Core-2.7.8.jar')
     compile files('libs/ShareSDK-Wechat-Moments-2.7.8.jar')
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
+    compile 'com.google.dagger:dagger:2.0.2'
+    provided 'com.google.dagger:dagger-compiler:2.0.2'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 }

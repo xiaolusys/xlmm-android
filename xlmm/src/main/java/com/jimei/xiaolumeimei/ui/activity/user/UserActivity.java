@@ -16,6 +16,7 @@ import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -27,7 +28,6 @@ import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
-import com.jimei.xiaolumeimei.model.MainModel;
 import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
@@ -103,9 +103,8 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         showIndeterminateProgressDialog(true);
         mamaFlag = false;
         if (LoginUtils.checkLoginState(this)) {
-            addSubscription(MainModel.getInstance()
-                .getProfile()
-                .subscribe(new ServiceResponse<UserInfoBean>() {
+            addSubscription(XlmmApp.getMainInteractor(this)
+                .getProfile(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         fillDataToView(userInfoBean);

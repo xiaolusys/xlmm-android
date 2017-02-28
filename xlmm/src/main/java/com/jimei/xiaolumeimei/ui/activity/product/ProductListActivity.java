@@ -10,12 +10,13 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivityProductListBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
@@ -106,9 +107,10 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
             mProductListAdapter.clear();
             page = 1;
         }
-        addSubscription(ProductModel.getInstance()
-            .getCategoryProductList(cid, page, order_by)
-            .subscribe(bean -> {
+        addSubscription(XlmmApp.getProductInteractor(this)
+            .getCategoryProductList(cid, page, order_by, new ServiceResponse<ProductListBean>() {
+                @Override
+                public void onNext(ProductListBean bean) {
                     List<ProductListBean.ResultsBean> results = bean.getResults();
                     if (results != null && results.size() > 0) {
                         mProductListAdapter.update(results);
@@ -122,13 +124,16 @@ public class ProductListActivity extends BaseMVVMActivity<ActivityProductListBin
                     hideIndeterminateProgressDialog();
                     b.xrv.loadMoreComplete();
                     b.xrv.refreshComplete();
-                }, e -> {
+                }
+
+                @Override
+                public void onError(Throwable e) {
                     hideIndeterminateProgressDialog();
                     b.xrv.loadMoreComplete();
                     b.xrv.refreshComplete();
                     JUtils.Toast("数据加载有误!");
                 }
-            ));
+            }));
     }
 
     @Override

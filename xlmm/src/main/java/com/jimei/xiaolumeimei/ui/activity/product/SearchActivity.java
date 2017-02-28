@@ -16,12 +16,12 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivitySearchBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.SearchHistoryBean;
-import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
@@ -42,9 +42,8 @@ public class SearchActivity extends BaseMVVMActivity<ActivitySearchBinding> impl
     @Override
     protected void initData() {
         b.flowLayout.removeAllViews();
-        addSubscription(ProductModel.getInstance()
-            .getSearchHistory()
-            .subscribe(new ServiceResponse<SearchHistoryBean>() {
+        addSubscription(XlmmApp.getProductInteractor(this)
+            .getSearchHistory(new ServiceResponse<SearchHistoryBean>() {
                 @Override
                 public void onNext(SearchHistoryBean searchHistoryBean) {
                     List<SearchHistoryBean.ResultsBean> results = searchHistoryBean.getResults();
@@ -129,11 +128,10 @@ public class SearchActivity extends BaseMVVMActivity<ActivitySearchBinding> impl
                 initData();
                 break;
             case R.id.delete:
-                addSubscription(ProductModel.getInstance()
-                    .clearSearch()
-                    .subscribe(new ServiceResponse<Object>() {
+                addSubscription(XlmmApp.getProductInteractor(this)
+                    .clearSearch(new ServiceResponse<Object>() {
                         @Override
-                        public void onNext(Object object) {
+                        public void onNext(Object o) {
                             initData();
                         }
                     }));
@@ -205,30 +203,35 @@ public class SearchActivity extends BaseMVVMActivity<ActivitySearchBinding> impl
             adapter.clear();
             page = 1;
         }
-        addSubscription(ProductModel.getInstance()
-            .searchProduct(searchStr, page)
-            .subscribe(bean -> {
-                List<ProductListBean.ResultsBean> results = bean.getResults();
-                if (results != null && results.size() > 0) {
-                    adapter.update(results);
-                    b.xrv.setVisibility(View.VISIBLE);
-                    b.emptyLayout.setVisibility(View.GONE);
-                } else {
-                    b.emptyLayout.setVisibility(View.VISIBLE);
-                    b.xrv.setVisibility(View.GONE);
+        addSubscription(XlmmApp.getProductInteractor(this)
+            .searchProduct(searchStr, page, new ServiceResponse<ProductListBean>() {
+                @Override
+                public void onNext(ProductListBean bean) {
+                    List<ProductListBean.ResultsBean> results = bean.getResults();
+                    if (results != null && results.size() > 0) {
+                        adapter.update(results);
+                        b.xrv.setVisibility(View.VISIBLE);
+                        b.emptyLayout.setVisibility(View.GONE);
+                    } else {
+                        b.emptyLayout.setVisibility(View.VISIBLE);
+                        b.xrv.setVisibility(View.GONE);
+                    }
+                    next = bean.getNext();
+                    if (next != null && !"".equals(next)) {
+                        page++;
+                    }
+                    hideIndeterminateProgressDialog();
+                    b.xrv.loadMoreComplete();
+                    b.xrv.refreshComplete();
                 }
-                next = bean.getNext();
-                if (next != null && !"".equals(next)) {
-                    page++;
+
+                @Override
+                public void onError(Throwable e) {
+                    hideIndeterminateProgressDialog();
+                    b.xrv.loadMoreComplete();
+                    b.xrv.refreshComplete();
+                    JUtils.Toast("数据加载有误!");
                 }
-                hideIndeterminateProgressDialog();
-                b.xrv.loadMoreComplete();
-                b.xrv.refreshComplete();
-            }, e -> {
-                hideIndeterminateProgressDialog();
-                b.xrv.loadMoreComplete();
-                b.xrv.refreshComplete();
-                JUtils.Toast("数据加载有误!");
             }));
     }
 }

@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.service.api;
 
-import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
@@ -37,14 +36,6 @@ public interface UserService {
     //获取用户信息
     @GET("/rest/v1/users/profile")
     Observable<UserInfoBean> getUserInfo();
-
-    //投诉建议
-    @FormUrlEncoded
-    @POST("/rest/v1/complain")
-    Observable<AddressResultBean> complain(
-        @Field("com_type") String com_type,
-        @Field("com_content") String com_content,
-        @Field("com_title") String com_title);
 
     //设置用户昵称
     @PATCH("/rest/v1/users/{id}")

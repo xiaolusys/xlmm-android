@@ -9,11 +9,11 @@ import android.widget.LinearLayout;
 
 import com.jimei.library.widget.RecyclerViewDivider;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.AddressAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
-import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,7 +30,7 @@ import butterknife.Bind;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class AddressActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
 
     @Bind(R.id.address_recyclerView)
     RecyclerView addressRecyclerView;
@@ -52,17 +52,16 @@ public class AddressActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        addSubscription(AddressModel.getInstance()
-                .getAddressList()
-                .subscribe(new ServiceResponse<List<AddressBean>>() {
-                    @Override
-                    public void onNext(List<AddressBean> list) {
-                        super.onNext(list);
-                        if (list != null) {
-                            adapter.updateWithClear(list);
-                        }
+        addSubscription(XlmmApp.getAddressInteractor(this)
+            .getAddressList(new ServiceResponse<List<AddressBean>>() {
+                @Override
+                public void onNext(List<AddressBean> list) {
+                    super.onNext(list);
+                    if (list != null) {
+                        adapter.updateWithClear(list);
                     }
-                }));
+                }
+            }));
     }
 
     @Override

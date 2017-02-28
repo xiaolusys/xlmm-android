@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.ui.activity.user.ChangeAddressActivity;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.user.ChangeAddressActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -92,9 +92,8 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         .setTitle("删除地址")
                         .setMessage("您确定要删除吗？")
                         .setPositiveButton("确定", (dialog, which) -> {
-                            AddressModel.getInstance()
-                                .delete_address(addressBean.getId())
-                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                            XlmmApp.getAddressInteractor(context)
+                                .delete_address(addressBean.getId(), new ServiceResponse<AddressResultBean>() {
                                     @Override
                                     public void onNext(AddressResultBean addressResultBean) {
                                         if (addressResultBean != null
@@ -133,17 +132,16 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .setTitle("删除地址")
                     .setMessage("您确定要删除吗？")
                     .setPositiveButton("确定", (dialog, which) -> {
-                        AddressModel.getInstance()
-                            .delete_address(addressBean.getId())
-                            .subscribe(new ServiceResponse<AddressResultBean>() {
+                        XlmmApp.getAddressInteractor(context)
+                            .delete_address(addressBean.getId(), new ServiceResponse<AddressResultBean>() {
                                 @Override
                                 public void onNext(AddressResultBean addressResultBean) {
-                                    if (addressResultBean != null && addressResultBean.isRet()) {
+                                    if (addressResultBean != null
+                                        && addressResultBean.isRet()) {
                                         removeAt(position);
                                     }
                                 }
                             });
-
                         dialog.dismiss();
                     }).
                     setNegativeButton("取消", (dialog, which) -> dialog.dismiss())

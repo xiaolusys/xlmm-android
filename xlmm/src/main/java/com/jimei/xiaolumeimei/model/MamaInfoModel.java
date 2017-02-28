@@ -14,14 +14,9 @@ import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
-import com.jimei.xiaolumeimei.entities.ResponseResultBean;
-import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.SaveTimeBean;
-import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.WithdrawCashHisBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.service.RetrofitClient;
 import com.jimei.xiaolumeimei.service.api.MamaService;
@@ -54,13 +49,6 @@ public class MamaInfoModel {
         return single_model;
     }
 
-    //得到提现历史
-    public Observable<WithdrawCashHisBean> getWithdrawCashHis(String page) {
-        return getService()
-            .getWithdrawCashHis(page)
-            .compose(new DefaultTransform<>());
-    }
-
     //得到妈妈粉丝列表
     public Observable<MamaFansBean> getMamaFans(String page) {
         return getService()
@@ -72,27 +60,6 @@ public class MamaInfoModel {
     public Observable<MMVisitorsBean> getMamaVisitor(int page) {
         return getService()
             .getMamaVisitor(14, page)
-            .compose(new DefaultTransform<>());
-    }
-
-    //创建提款单信息
-    public Observable<ResultEntity> withdraw_cash(String fund_type) {
-        return getService()
-            .withdraw_cash(fund_type)
-            .compose(new DefaultTransform<>());
-    }
-
-    //转账到小鹿钱包
-    public Observable<ResultEntity> toWallet(String value) {
-        return getService()
-            .toWallet(value)
-            .compose(new DefaultTransform<>());
-    }
-
-    //cancel提款单信息
-    public Observable<ResponseResultBean> cancel_withdraw_cash(String id) {
-        return getService()
-            .cancel_withdraw_cash(id)
             .compose(new DefaultTransform<>());
     }
 
@@ -148,11 +115,6 @@ public class MamaInfoModel {
             .compose(new DefaultTransform<>());
     }
 
-    public Observable<UserInfoBean> getUserInfo() {
-        return getService()
-            .getUserInfo()
-            .compose(new DefaultTransform<>());
-    }
 
     public Observable<RecentCarryBean> getRecentCarry(String from, String days) {
         return getService()
@@ -224,12 +186,6 @@ public class MamaInfoModel {
     public Observable<WxQrcode> getWxCode() {
         return getService()
             .getWxCode()
-            .compose(new DefaultTransform<>());
-    }
-
-    public Observable<PortalBean> getPortalBean() {
-        return getService()
-            .getPortalBean()
             .compose(new DefaultTransform<>());
     }
 
