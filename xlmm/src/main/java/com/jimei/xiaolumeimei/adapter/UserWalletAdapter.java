@@ -63,9 +63,9 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
             holder.tvStatus.setText("待确定");
         }
         if (0 == resultsEntity.getBudgetType()) {
-            holder.tvMoneychange.setText("+ " + new DecimalFormat("#.00").format(resultsEntity.getBudegetDetailCash()) + "元  ");
+            holder.tvMoneychange.setText("+ " + new DecimalFormat("0.00").format(resultsEntity.getBudegetDetailCash()) + "元  ");
         } else if (1 == resultsEntity.getBudgetType()) {
-            holder.tvMoneychange.setText("- " + new DecimalFormat("#.00").format(resultsEntity.getBudegetDetailCash()) + "元  ");
+            holder.tvMoneychange.setText("- " + new DecimalFormat("0.00").format(resultsEntity.getBudegetDetailCash()) + "元  ");
         }
         bindOnClickListener(holder.itemView, position);
     }

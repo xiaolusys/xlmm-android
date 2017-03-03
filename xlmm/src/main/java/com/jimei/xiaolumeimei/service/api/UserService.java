@@ -5,14 +5,14 @@ import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 import com.jimei.xiaolumeimei.entities.CouponEntity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
-import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.LogoutBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.NicknameBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
+import com.jimei.xiaolumeimei.entities.UserWithDrawResult;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
 
@@ -39,12 +39,12 @@ public interface UserService {
 
     //设置用户昵称
     @PATCH("/rest/v1/users/{id}")
-    Observable<UserBean> setNickname(
+    Observable<UserBean> setNickName(
         @Path("id") int id,
         @Body NicknameBean nickname);
 
     @POST("/rest/v1/users/customer_logout")
-    Observable<LogOutBean> customer_logout();
+    Observable<LogoutBean> customerLogout();
 
     //获取用户积分记录信息
     @GET("/rest/v2/xiaolucoin/history")
@@ -69,7 +69,7 @@ public interface UserService {
 
     @FormUrlEncoded
     @POST("/rest/v2/weixinapplogin")
-    Observable<CodeBean> wxapp_login(
+    Observable<CodeBean> wxappLogin(
         @Query("noncestr") String noncestr,
         @Query("timestamp") String timestamp,
         @Query("sign") String sign,
@@ -80,7 +80,7 @@ public interface UserService {
         @Field("devtype") String devtype);
 
     @GET("/rest/v1/users/need_set_info")
-    Observable<NeedSetInfoBean> need_set_info();
+    Observable<NeedSetInfoBean> needSetInfo();
 
     //get push useraccount
     @FormUrlEncoded
@@ -96,7 +96,7 @@ public interface UserService {
     //创建提款信息
     @FormUrlEncoded
     @POST("/rest/v1/users/budget_cash_out")
-    Observable<UserWithdrawResult> user_withdraw_cash(
+    Observable<UserWithDrawResult> userWithDrawCash(
         @Field("cashout_amount") String amount,
         @Field("verify_code") String verify_code);
 
@@ -106,14 +106,14 @@ public interface UserService {
     //发送验证码
     @FormUrlEncoded
     @POST("/rest/v2/send_code")
-    Observable<CodeBean> send_code(
+    Observable<CodeBean> getCodeBean(
         @Field("mobile") String mobile,
         @Field("action") String action);
 
     //验证码验证
     @FormUrlEncoded
     @POST("/rest/v2/verify_code")
-    Observable<CodeBean> verify_code(
+    Observable<CodeBean> verifyCode(
         @Field("mobile") String mobile,
         @Field("action") String action,
         @Field("verify_code") String code,
@@ -122,7 +122,7 @@ public interface UserService {
     //设置账号密码
     @FormUrlEncoded
     @POST("/rest/v2/reset_password")
-    Observable<CodeBean> reset_password(
+    Observable<CodeBean> resetPassword(
         @Field("mobile") String mobile,
         @Field("password1") String password1,
         @Field("password2") String password2,
@@ -131,7 +131,7 @@ public interface UserService {
     //用户账号密码
     @FormUrlEncoded
     @POST("/rest/v2/passwordlogin")
-    Observable<CodeBean> passwordlogin(
+    Observable<CodeBean> passwordLogin(
         @Field("username") String username,
         @Field("password") String password,
         @Field("next") String next,
@@ -144,8 +144,8 @@ public interface UserService {
 
 
     @GET("/rest/v1/users/get_budget_detail")
-    Observable<BudgetDetailBean> budGetDetailBean(
-        @Query("page") String page);
+    Observable<BudgetDetailBean> budgetDetailBean(
+        @Query("page") int page);
 
     @GET("/sale/apprelease/newversion")
     Observable<VersionBean> getVersion();

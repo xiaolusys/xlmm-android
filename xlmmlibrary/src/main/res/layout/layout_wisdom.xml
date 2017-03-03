@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <com.jimei.xiaolumeimei.widget.loading.WisdomView
+    <com.jimei.library.widget.loading.WisdomView
         android:id="@+id/wisdom_view"
         android:layout_width="100dp"
         android:layout_height="100dp" />

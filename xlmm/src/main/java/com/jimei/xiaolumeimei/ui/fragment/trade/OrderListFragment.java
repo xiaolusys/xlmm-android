@@ -10,12 +10,12 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.AllOrdersAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentOrderListBinding;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
@@ -116,9 +116,8 @@ public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBind
 
 
     private void loadMoreData() {
-        addSubscription(TradeModel.getInstance()
-            .getOrderList(type, page)
-            .subscribe(new ServiceResponse<AllOrdersBean>() {
+        addSubscription(XlmmApp.getTradeInteractor(mActivity)
+            .getOrderList(type, page, new ServiceResponse<AllOrdersBean>() {
                 @Override
                 public void onNext(AllOrdersBean allOrdersBean) {
                     if (allOrdersBean != null) {

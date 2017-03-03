@@ -18,12 +18,12 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.entities.UserWithdrawResult;
+import com.jimei.xiaolumeimei.entities.UserWithDrawResult;
 import com.jimei.xiaolumeimei.entities.event.WalletEvent;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.Bind;
 
 public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
-        implements SmoothCheckBox.OnCheckedChangeListener, TextWatcher, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    implements SmoothCheckBox.OnCheckedChangeListener, TextWatcher, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = UserDrawCashActivity.class.getSimpleName();
     @Bind(R.id.tv_money)
     TextView moneyTv;
@@ -82,26 +82,25 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        addSubscription(UserModel.getInstance()
-                .getUserInfo()
-                .subscribe(new ServiceResponse<UserInfoBean>() {
-                    @Override
-                    public void onNext(UserInfoBean userNewBean) {
-                        if (userNewBean != null) {
-                            if (null != userNewBean.getUserBudget()) {
-                                money = userNewBean.getUserBudget().getBudgetCash();
-                                minMoney = userNewBean.getUserBudget().getCashOutLimit();
-                            }
-                            moneyTv.setText((float) (Math.round(money * 100)) / 100 + "元");
-                            if (userNewBean.getIsAttentionPublic() == 1) {
-                                bindFlag = true;
-                            } else {
-                                bindBtn.setVisibility(View.VISIBLE);
-                            }
-                            nickNameTv.setText(userNewBean.getNick());
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getUserInfo(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean userNewBean) {
+                    if (userNewBean != null) {
+                        if (null != userNewBean.getUserBudget()) {
+                            money = userNewBean.getUserBudget().getBudgetCash();
+                            minMoney = userNewBean.getUserBudget().getCashOutLimit();
                         }
+                        moneyTv.setText((float) (Math.round(money * 100)) / 100 + "元");
+                        if (userNewBean.getIsAttentionPublic() == 1) {
+                            bindFlag = true;
+                        } else {
+                            bindBtn.setVisibility(View.VISIBLE);
+                        }
+                        nickNameTv.setText(userNewBean.getNick());
                     }
-                }));
+                }
+            }));
         mCountDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -253,40 +252,39 @@ public class UserDrawCashActivity extends BaseSwipeBackCompatActivity
                 break;
             case R.id.tv_rule:
                 new AlertDialog.Builder(this)
-                        .setTitle("提现提示")
-                        .setMessage("默认最低提现金额为8.88元，根据推广活动会调整此最低提现金额，目前最低提现金额为"
-                                + minMoney + "元。不提现时零钱可以购物消费。")
-                        .setPositiveButton("确认", (dialog, which) -> dialog.dismiss())
-                        .show();
+                    .setTitle("提现提示")
+                    .setMessage("默认最低提现金额为8.88元，根据推广活动会调整此最低提现金额，目前最低提现金额为"
+                        + minMoney + "元。不提现时零钱可以购物消费。")
+                    .setPositiveButton("确认", (dialog, which) -> dialog.dismiss())
+                    .show();
                 break;
             case R.id.btn_code:
                 codeBtn.setClickable(false);
                 codeBtn.setEnabled(false);
                 mCountDownTimer.start();
-                addSubscription(UserModel.getInstance()
-                        .getVerifyCode()
-                        .subscribe(new ServiceResponse<ResultEntity>() {
-                            @Override
-                            public void onNext(ResultEntity resultEntity) {
-                                JUtils.Toast(resultEntity.getInfo());
-                            }
+                addSubscription(XlmmApp.getUserInteractor(this)
+                    .getVerifyCode(new ServiceResponse<ResultEntity>() {
+                        @Override
+                        public void onNext(ResultEntity resultEntity) {
+                            JUtils.Toast(resultEntity.getInfo());
+                        }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                JUtils.Toast("获取验证码失败");
-                            }
-                        }));
+                        @Override
+                        public void onError(Throwable e) {
+                            JUtils.Toast("获取验证码失败");
+                        }
+                    }));
                 break;
         }
     }
 
     private void drawCash(double fund) {
         drawCashBtn.setClickable(false);
-        addSubscription(UserModel.getInstance()
-                .user_withdraw_cash(Double.toString(fund), codeEt.getText().toString())
-                .subscribe(new ServiceResponse<UserWithdrawResult>() {
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .userWithDrawCash(Double.toString(fund), codeEt.getText().toString(),
+                new ServiceResponse<UserWithDrawResult>() {
                     @Override
-                    public void onNext(UserWithdrawResult resp) {
+                    public void onNext(UserWithDrawResult resp) {
                         EventBus.getDefault().post(new WalletEvent());
                         switch (resp.getCode()) {
                             case 0:

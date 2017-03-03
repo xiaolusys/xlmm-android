@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.adapter.CoinHisListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
@@ -84,18 +83,23 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
                     hideIndeterminateProgressDialog();
                 }
             }));
-        addSubscription(UserModel.getInstance()
-            .getCoinHisList("1")
-            .subscribe(historyListBean -> {
-                List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
-                if (0 == result.size()) {
-                    rlayout_order_empty.setVisibility(View.VISIBLE);
-                } else {
-                    mPointAdapter.update(result);
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getCoinHisList("1", new ServiceResponse<CoinHistoryListBean>() {
+                @Override
+                public void onNext(CoinHistoryListBean historyListBean) {
+                    List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
+                    if (0 == result.size()) {
+                        rlayout_order_empty.setVisibility(View.VISIBLE);
+                    } else {
+                        mPointAdapter.update(result);
+                    }
+                    hideIndeterminateProgressDialog();
                 }
-                hideIndeterminateProgressDialog();
-            }, throwable -> {
-                hideIndeterminateProgressDialog();
+
+                @Override
+                public void onError(Throwable e) {
+                    hideIndeterminateProgressDialog();
+                }
             }));
     }
 
@@ -117,9 +121,8 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE && flag) {
-            addSubscription(UserModel.getInstance()
-                .getCoinHisList(page + "")
-                .subscribe(new ServiceResponse<CoinHistoryListBean>() {
+            addSubscription(XlmmApp.getUserInteractor(this)
+                .getCoinHisList(page + "", new ServiceResponse<CoinHistoryListBean>() {
                     @Override
                     public void onNext(CoinHistoryListBean historyListBean) {
                         List<CoinHistoryListBean.ResultsBean> results = historyListBean.getResults();

@@ -95,7 +95,6 @@ public class OderCarryLogAdapter
         }
 
         holder.shoptime.setText(resultsEntity.getDate_field());
-        //holder.picPath.setImageResource(R.drawable.carrylog_image);
 
         if (TextUtils.isEmpty(resultsEntity.getContributor_img())) {
             Glide.with(mContext)

@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.widget;
+package com.jimei.library.widget;
 
 /**
  * Created by wisdom on 17/2/23.

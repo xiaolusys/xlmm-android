@@ -26,18 +26,18 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
-import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -341,9 +341,8 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     }
 
     private void receive_goods(int id) {
-        TradeModel.getInstance()
-            .receiveGoods(id)
-            .subscribe(new ServiceResponse<UserBean>() {
+        XlmmApp.getTradeInteractor(context)
+            .receiveGoods(id, new ServiceResponse<UserBean>() {
                 @Override
                 public void onNext(UserBean userBean) {
                     Log.d(TAG, "returncode " + userBean.getCode());

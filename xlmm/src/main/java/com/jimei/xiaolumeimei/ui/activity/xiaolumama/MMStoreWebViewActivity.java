@@ -3,9 +3,9 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.view.MenuItem;
 
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
@@ -27,32 +27,32 @@ public class MMStoreWebViewActivity extends CommonWebViewActivity {
     @Override
     protected void initData() {
         super.initData();
-        MamaInfoModel.getInstance()
-                .getShareShopping()
-                .subscribe(new ServiceResponse<MMShoppingBean>() {
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getShareShopping()
+            .subscribe(new ServiceResponse<MMShoppingBean>() {
 
-                    @Override
-                    public void onNext(MMShoppingBean mmShoppingBean) {
+                @Override
+                public void onNext(MMShoppingBean mmShoppingBean) {
 
-                        if (null != mmShoppingBean) {
-                            try {
-                                title = mmShoppingBean.getShopInfo().getName();
-                                sharelink = mmShoppingBean.getShopInfo().getShopLink();
-                                shareimg = mmShoppingBean.getShopInfo().getThumbnail();
-                                desc = mmShoppingBean.getShopInfo().getDesc();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                    if (null != mmShoppingBean) {
+                        try {
+                            title = mmShoppingBean.getShopInfo().getName();
+                            sharelink = mmShoppingBean.getShopInfo().getShopLink();
+                            shareimg = mmShoppingBean.getShopInfo().getThumbnail();
+                            desc = mmShoppingBean.getShopInfo().getDesc();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                });
+                }
+            }));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_share) {
             share_shopping(title, sharelink, desc, shareimg);
-            MobclickAgent.onEvent(this,"Mama_shop_share");
+            MobclickAgent.onEvent(this, "Mama_shop_share");
         }
         return true;
     }

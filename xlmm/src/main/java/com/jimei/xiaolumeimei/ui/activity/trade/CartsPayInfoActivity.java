@@ -37,9 +37,7 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
@@ -198,9 +196,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void downLoadCartsInfo() {
-        addSubscription(CartsModel.getInstance()
-            .getCartsPayInfoListV2(ids)
-            .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsPayInfoListV2(ids, new ServiceResponse<CartsPayinfoBean>() {
                 @Override
                 public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                     if (cartsPayinfoBean != null) {
@@ -212,7 +209,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
                             logisticsCompanysesString.add(list.getName());
                         }
-
                         budgetCash =
                             (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
                                 + "";
@@ -308,9 +304,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void downLoadCartsInfoWithout() {
-        addSubscription(CartsModel.getInstance()
-            .getCartsPayInfoListV2(ids)
-            .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsPayInfoListV2(ids, new ServiceResponse<CartsPayinfoBean>() {
                 @Override
                 public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                     if (cartsPayinfoBean != null) {
@@ -903,54 +898,54 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     private void payV2(String pay_method, String paymentprice_v2, String pay_extrasaa,
                        String discount_fee_price) {
         showIndeterminateProgressDialog(false);
-        addSubscription(TradeModel.getInstance()
-            .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag)
-            .subscribe(new ServiceResponse<PayInfoBean>() {
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .shoppingCartCreateV2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
+                discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag,
+                new ServiceResponse<PayInfoBean>() {
 
-                @Override
-                public void onCompleted() {
-                    super.onCompleted();
-                    hideIndeterminateProgressDialog();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    super.onError(e);
-                    e.printStackTrace();
-                    hideIndeterminateProgressDialog();
-                }
-
-                @Override
-                public void onNext(PayInfoBean payInfoBean) {
-                    EventBus.getDefault().post(new CartEvent());
-                    if (null != payInfoBean && payInfoBean.getTrade() != null) {
-                        order_id = payInfoBean.getTrade().getId();
-                        order_no = payInfoBean.getTrade().getTid();
-                        JUtils.Log(TAG, payInfoBean.toString());
-                        Gson gson = new Gson();
-                        JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
-                        if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel()
-                            .equals("budget"))) {
-                            if (payInfoBean.getCode() > 0) {
-                                JUtils.Toast(payInfoBean.getInfo());
-                            } else {
-                                PayUtils.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
-                            }
-                        } else {
-                            if (payInfoBean.getCode() == 0) {
-                                JUtils.Toast("支付成功");
-                                hideIndeterminateProgressDialog();
-                                successJump();
-                            } else {
-                                JUtils.Toast(payInfoBean.getInfo());
-                            }
-                        }
-                    } else if (null != payInfoBean) {
-                        JUtils.Toast(payInfoBean.getInfo());
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        hideIndeterminateProgressDialog();
                     }
-                }
-            }));
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        e.printStackTrace();
+                        hideIndeterminateProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(PayInfoBean payInfoBean) {
+                        EventBus.getDefault().post(new LoginEvent());
+                        if (null != payInfoBean && payInfoBean.getTrade() != null) {
+                            order_id = payInfoBean.getTrade().getId();
+                            order_no = payInfoBean.getTrade().getTid();
+                            JUtils.Log(TAG, payInfoBean.toString());
+                            Gson gson = new Gson();
+                            JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
+                            if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel()
+                                .equals("budget"))) {
+                                if (payInfoBean.getCode() > 0) {
+                                    JUtils.Toast(payInfoBean.getInfo());
+                                } else {
+                                    PayUtils.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
+                                }
+                            } else {
+                                if (payInfoBean.getCode() == 0) {
+                                    JUtils.Toast("支付成功");
+                                    hideIndeterminateProgressDialog();
+                                    successJump();
+                                } else {
+                                    JUtils.Toast(payInfoBean.getInfo());
+                                }
+                            }
+                        } else if (null != payInfoBean) {
+                            JUtils.Toast(payInfoBean.getInfo());
+                        }
+                    }
+                }));
     }
 
     @Override
@@ -1034,9 +1029,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
     private void successJump() {
         if (mFlag) {
-            addSubscription(TradeModel.getInstance()
-                .getTeamBuyBean(order_no)
-                .subscribe(new ServiceResponse<TeamBuyBean>() {
+            addSubscription(XlmmApp.getTradeInteractor(this)
+                .getTeamBuyBean(order_no, new ServiceResponse<TeamBuyBean>() {
                     @Override
                     public void onNext(TeamBuyBean teamBuyBean) {
                         int id = teamBuyBean.getId();

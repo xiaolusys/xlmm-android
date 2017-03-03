@@ -16,9 +16,9 @@ import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
@@ -27,7 +27,7 @@ import butterknife.Bind;
 import rx.Subscriber;
 
 public class RegisterActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
+    implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
 
     @Bind(R.id.register_name)
     ClearEditText editTextMobile;
@@ -102,14 +102,13 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                         RxCountDown.countdown(60).doOnSubscribe(() -> {
                             getCheckCode.setClickable(false);
                             getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
-                            addSubscription(UserModel.getInstance()
-                                    .getCodeBean(mobile, "register")
-                                    .subscribe(new ServiceResponse<CodeBean>() {
-                                        @Override
-                                        public void onNext(CodeBean codeBean) {
-                                            JUtils.Toast(codeBean.getMsg());
-                                        }
-                                    }));
+                            addSubscription(XlmmApp.getUserInteractor(RegisterActivity.this)
+                                .getCodeBean(mobile, "register", new ServiceResponse<CodeBean>() {
+                                    @Override
+                                    public void onNext(CodeBean codeBean) {
+                                        JUtils.Toast(codeBean.getMsg());
+                                    }
+                                }));
                         }).subscribe(new Subscriber<Integer>() {
                             @Override
                             public void onCompleted() {
@@ -137,24 +136,23 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                 mobile = editTextMobile.getText().toString().trim();
                 String invalid_code = editTextInvalid_code.getText().toString().trim();
                 if (checkInput(mobile, invalid_code)) {
-                    addSubscription(UserModel.getInstance()
-                            .verify_code(mobile, "register", invalid_code)
-                            .subscribe(new ServiceResponse<CodeBean>() {
-                                @Override
-                                public void onNext(CodeBean codeBean) {
-                                    if (codeBean != null) {
-                                        int result = codeBean.getRcode();
-                                        if (result == 0) {
-                                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                            LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            JUtils.Toast(codeBean.getMsg());
-                                        }
+                    addSubscription(XlmmApp.getUserInteractor(RegisterActivity.this)
+                        .verifyCode(mobile, "register", invalid_code, new ServiceResponse<CodeBean>() {
+                            @Override
+                            public void onNext(CodeBean codeBean) {
+                                if (codeBean != null) {
+                                    int result = codeBean.getRcode();
+                                    if (result == 0) {
+                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                        LoginUtils.saveLoginSuccess(true, getApplicationContext());
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        JUtils.Toast(codeBean.getMsg());
                                     }
                                 }
-                            }));
+                            }
+                        }));
                 }
                 break;
         }

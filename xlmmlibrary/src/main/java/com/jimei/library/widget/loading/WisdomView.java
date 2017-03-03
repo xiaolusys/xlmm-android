@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.widget.loading;
+package com.jimei.library.widget.loading;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 
-import com.jimei.xiaolumeimei.R;
+import com.jimei.library.R;
 
 /**
  * Created by wisdom on 17/2/9.

@@ -21,9 +21,9 @@ import com.jimei.library.widget.LogImageView;
 import com.jimei.library.widget.LogMsgView;
 import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.text.DateFormat;
@@ -32,7 +32,6 @@ import java.util.Date;
 
 import butterknife.Bind;
 import okhttp3.ResponseBody;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/22.
@@ -40,7 +39,7 @@ import rx.Subscription;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
 
     String TAG = "WriteLogisticsInfoActivty";
 
@@ -127,55 +126,53 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
             }
         }
         if (flag) {
-            Subscription subscribe = TradeModel.getInstance()
-                    .getRefundLogistic(rid, packetid, company_name)
-                    .subscribe(new ServiceResponse<LogisticsBean>() {
-                        @Override
-                        public void onNext(LogisticsBean logisticsBean) {
-                            if ("".equals(logisticsBean.getName())) {
-                                logistic_name.setText("暂时无法查询物流信息,请稍后再试");
-                            } else {
-                                logistic_name.setText(logisticsBean.getName());
-                            }
-                            if ("".equals(logisticsBean.getOrder())) {
-                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                logistic_num.setText(df.format(new Date()));
-                            } else {
-                                logistic_num.setText("快递单号:  " + logisticsBean.getOrder());
-                            }
-                            if (logisticsBean.getData().size() > 0) {
-                                for (int i = 0; i < logisticsBean.getData().size(); i++) {
-                                    String content = logisticsBean.getData().get(i).getContent();
-                                    String time = logisticsBean.getData().get(i).getTime().replace("T", " ");
-                                    if (i == 0) {
-                                        tv_order_last_time.setText(time);
-                                        tv_order_last_state.setText(content);
-                                    } else {
-                                        log_image_layout.addView(new LogImageView(WriteLogisticsInfoActivty.this));
-                                        LogMsgView logMsgView = new LogMsgView(WriteLogisticsInfoActivty.this);
-                                        logMsgView.setMsg(content);
-                                        logMsgView.setTime(time);
-                                        log_msg_layout.addView(logMsgView);
-                                    }
+            addSubscription(XlmmApp.getTradeInteractor(this)
+                .getRefundLogistic(rid, packetid, company_name, new ServiceResponse<LogisticsBean>() {
+                    @Override
+                    public void onNext(LogisticsBean logisticsBean) {
+                        if ("".equals(logisticsBean.getName())) {
+                            logistic_name.setText("暂时无法查询物流信息,请稍后再试");
+                        } else {
+                            logistic_name.setText(logisticsBean.getName());
+                        }
+                        if ("".equals(logisticsBean.getOrder())) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            logistic_num.setText(df.format(new Date()));
+                        } else {
+                            logistic_num.setText("快递单号:  " + logisticsBean.getOrder());
+                        }
+                        if (logisticsBean.getData().size() > 0) {
+                            for (int i = 0; i < logisticsBean.getData().size(); i++) {
+                                String content = logisticsBean.getData().get(i).getContent();
+                                String time = logisticsBean.getData().get(i).getTime().replace("T", " ");
+                                if (i == 0) {
+                                    tv_order_last_time.setText(time);
+                                    tv_order_last_state.setText(content);
+                                } else {
+                                    log_image_layout.addView(new LogImageView(WriteLogisticsInfoActivty.this));
+                                    LogMsgView logMsgView = new LogMsgView(WriteLogisticsInfoActivty.this);
+                                    logMsgView.setMsg(content);
+                                    logMsgView.setTime(time);
+                                    log_msg_layout.addView(logMsgView);
                                 }
-                            } else {
-                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                tv_order_last_time.setText(df.format(new Date()));
-                                tv_order_last_state.setText("暂时无法查询物流信息,请稍后再试");
                             }
-                            logisticLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            tv_order_last_time.setText(df.format(new Date()));
+                            tv_order_last_state.setText("暂时无法查询物流信息,请稍后再试");
                         }
+                        logisticLayout.setVisibility(View.VISIBLE);
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            JUtils.Toast("暂时无法查询物流信息,请稍后再试");
-                            logistic_name.setText("物流公司: " + company_name);
-                            logistic_num.setText("物流单号: " + packetid);
-                            msgLayout.setVisibility(View.GONE);
-                            logisticLayout.setVisibility(View.VISIBLE);
-                        }
-                    });
-            addSubscription(subscribe);
+                    @Override
+                    public void onError(Throwable e) {
+                        JUtils.Toast("暂时无法查询物流信息,请稍后再试");
+                        logistic_name.setText("物流公司: " + company_name);
+                        logistic_num.setText("物流单号: " + packetid);
+                        msgLayout.setVisibility(View.GONE);
+                        logisticLayout.setVisibility(View.VISIBLE);
+                    }
+                }));
         }
     }
 
@@ -205,7 +202,7 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                 Log.d(TAG, "choose logistics commpay");
                 Intent intent = new Intent(WriteLogisticsInfoActivty.this,
-                        ChooseLogisticsCompanyActivity.class);
+                    ChooseLogisticsCompanyActivity.class);
 
                 Log.d(TAG, " to ChooseLogisticsCompanyActivity");
                 startActivityForResult(intent, 1);
@@ -246,48 +243,41 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
     }
 
     private void commit_logistics_info() {
-        Log.i(TAG, "commit_logistics_info goods_id  "
-                + goods_id
-                + " "
-                + company
-                + " "
-                + et_logistics_number.getText().toString().trim());
+        Log.i(TAG, "commitLogisticsInfo goods_id  "
+            + goods_id
+            + " "
+            + company
+            + " "
+            + et_logistics_number.getText().toString().trim());
 
         if ((company == null) || (company.isEmpty())
-                || (et_logistics_number.getText().toString().trim() == null)
-                || (et_logistics_number.getText().toString().trim().isEmpty())) {
+            || (et_logistics_number.getText().toString().trim() == null)
+            || (et_logistics_number.getText().toString().trim().isEmpty())) {
             JUtils.Toast("提交物流信息为空，请重试！");
             return;
         }
 
-        Subscription subscription = TradeModel.getInstance()
-                .commit_logistics_info(goods_id, company,
-                        et_logistics_number.getText().toString().trim())
-                .subscribe(new ServiceResponse<ResponseBody>() {
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .commitLogisticsInfo(goods_id, company, et_logistics_number.getText().toString().trim(),
+                new ServiceResponse<ResponseBody>() {
                     @Override
                     public void onNext(ResponseBody resp) {
                         JUtils.Toast("提交物流信息成功，收货后我们会尽快为您处理退款！");
-                        Log.i(TAG, "commit_logistics_info " + resp.toString());
+                        Log.i(TAG, "commitLogisticsInfo " + resp.toString());
                         Intent intent = new Intent(WriteLogisticsInfoActivty.this,
-                                RefundDetailActivity.class);
+                            RefundDetailActivity.class);
                         intent.putExtra("flag", true);
                         setResult(0, intent);
                         finish();
                     }
 
                     @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Log.e(TAG, " error:commit_logistics_info " + e.toString());
+                        Log.e(TAG, " error:commitLogisticsInfo " + e.toString());
                         JUtils.Toast("提交信息失败，请重试！");
                         super.onError(e);
                     }
-                });
-        addSubscription(subscription);
+                }));
     }
 }

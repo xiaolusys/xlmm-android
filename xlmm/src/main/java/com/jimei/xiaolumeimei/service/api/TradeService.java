@@ -32,12 +32,12 @@ public interface TradeService {
 
     //获取所有订单
     @GET("/rest/v2/trades")
-    Observable<AllOrdersBean> getAllOdersList(
+    Observable<AllOrdersBean> getAllOrdersList(
         @Query("page") int page);
 
     @FormUrlEncoded
     @POST("/rest/v2/trades/shoppingcart_create")
-    Observable<PayInfoBean> shoppingcart_create_v2(
+    Observable<PayInfoBean> shoppingCartCreateV2(
         @Field("cart_ids") String cart_ids,
         @Field("addr_id") String addr_id,
         @Field("channel") String channel,
@@ -52,7 +52,7 @@ public interface TradeService {
 
     @FormUrlEncoded
     @POST("/rest/v2/trades/shoppingcart_create")
-    Observable<PayInfoBean> shoppingcart_create_v2(
+    Observable<PayInfoBean> shoppingCartCreateV2(
         @Field("cart_ids") String cart_ids,
         @Field("addr_id") String addr_id,
         @Field("channel") String channel,
@@ -79,7 +79,7 @@ public interface TradeService {
 
     //获取所有退货订单
     @GET("/rest/v1/refunds")
-    Observable<AllRefundsBean> getAllRedundsList(
+    Observable<AllRefundsBean> getAllRefundsList(
         @Query("page") int page);
 
     //获取所有待支付订单
@@ -110,7 +110,7 @@ public interface TradeService {
     //创建退款单接口
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
-    Observable<RefundMsgBean> refund_create(
+    Observable<RefundMsgBean> refundCreate(
         @Field("id") int goods_id,
         @Field("reason") int reason,
         @Field("num") int num,
@@ -122,7 +122,7 @@ public interface TradeService {
     //创建退款单接口
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
-    Observable<RefundMsgBean> refund_create(
+    Observable<RefundMsgBean> refundCreate(
         @Field("id") int goods_id,
         @Field("reason") int reason,
         @Field("num") int num,
@@ -136,7 +136,7 @@ public interface TradeService {
     //添加退款物流信息
     @FormUrlEncoded
     @POST("/rest/v1/refunds")
-    Observable<ResponseBody> commit_logistics_info(
+    Observable<ResponseBody> commitLogisticsInfo(
         @Field("id") int goods_id,
         @Field("modify") int type,
         @Field("company") String company,
@@ -144,7 +144,7 @@ public interface TradeService {
 
     //获取物流信息
     @GET("/rest/v1/wuliu/get_wuliu_by_packetid")
-    Observable<LogisticsBean> get_logistics_by_packagetid(
+    Observable<LogisticsBean> getLogisticsByPacketId(
         @Query("packetid") String packetid,
         @Query("company_code") String company_code);
 

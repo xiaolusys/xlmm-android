@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class ShoppingListAdapter
-        extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListVH> {
+    extends RecyclerView.Adapter<ShoppingListAdapter.ShoppingListVH> {
 
 
     private static final java.lang.String TAG = ShoppingListAdapter.class.getSimpleName();
@@ -61,7 +61,7 @@ public class ShoppingListAdapter
     @Override
     public ShoppingListVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_shoppinglist, parent, false);
+            .inflate(R.layout.item_shoppinglist, parent, false);
         return new ShoppingListVH(v);
     }
 
@@ -74,8 +74,8 @@ public class ShoppingListAdapter
                 showCategory(holder);
             } else {
                 boolean theCategoryOfLastEqualsToThis = mList.get(position - 1)
-                        .getDate_field()
-                        .equals(mList.get(position).getDate_field());
+                    .getDate_field()
+                    .equals(mList.get(position).getDate_field());
                 if (!theCategoryOfLastEqualsToThis) {
                     showCategory(holder);
                 } else {
@@ -89,18 +89,17 @@ public class ShoppingListAdapter
         holder.shoptime.setText(resultsEntity.getDate_field());
         if (TextUtils.isEmpty(resultsEntity.getSku_img())) {
             Glide.with(mContext)
-                    .load(R.mipmap.ic_launcher)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    //.placeholder(R.drawable.place_holder)
-                    .centerCrop()
-                    .into(holder.picPath);
+                .load(R.drawable.place_holder)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(holder.picPath);
         } else {
             ViewUtils.loadImgToImgView(mContext, holder.picPath, resultsEntity.getSku_img());
         }
         holder.getStatusDisplay.setText(resultsEntity.getStatus_display());
         holder.wxordernick.setText(resultsEntity.getContributor_nick());
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
-        holder.totalMoneyTv.setText("实付" + new DecimalFormat("#.0").format(resultsEntity.getOrder_value()));
+        holder.totalMoneyTv.setText("实付" + new DecimalFormat("0.0").format(resultsEntity.getOrder_value()));
         if (resultsEntity.getCarry_type() == 2) {
             holder.flagTv.setText("APP");
             holder.flagRl.setVisibility(View.VISIBLE);
@@ -111,9 +110,9 @@ public class ShoppingListAdapter
             holder.flagRl.setVisibility(View.GONE);
         }
         holder.tichengCash.setText(
-                "收益" + (float) (Math.round(resultsEntity.getCarry_num() * 100)) / 100);
+            "收益" + (float) (Math.round(resultsEntity.getCarry_num() * 100)) / 100);
         holder.totalCash.setText(
-                "总收益 " + (float) (Math.round(resultsEntity.getToday_carry() * 100)) / 100);
+            "总收益 " + (float) (Math.round(resultsEntity.getToday_carry() * 100)) / 100);
         if ("确定收益".equals(resultsEntity.getStatus_display())) {
             holder.content.setOnClickListener(v -> {
                 Intent intent = new Intent(mContext, OrderLogisticActivity.class);

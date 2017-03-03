@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
@@ -20,7 +20,7 @@ import com.jimei.xiaolumeimei.util.LoginUtils;
 import butterknife.Bind;
 
 public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
     String TAG = "EditPasswordForgetActivity";
     @Bind(R.id.set_password)
     EditText etPassword;
@@ -80,47 +80,32 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
 
     private void changePassword(String username, String valid_code, String password1,
                                 String password2) {
-        UserModel.getInstance()
-                .reset_password(username, password1, password2, valid_code)
-                .subscribe(new ServiceResponse<CodeBean>() {
-                    @Override
-                    public void onNext(CodeBean codeBean) {
-                        Log.d(TAG, "user.getCode() "
-                                + codeBean.getRcode()
-                                + ", user.getResult() "
-                                + codeBean.getMsg());
-                        if (codeBean.getRcode() == 0) {
-                            UserModel.getInstance()
-                                    .passwordlogin(username, password1, null)
-                                    .subscribe(new ServiceResponse<CodeBean>() {
-                                        @Override
-                                        public void onNext(CodeBean codeBean1) {
-                                            Log.d(TAG, "user.getCode() "
-                                                    + codeBean1.getRcode()
-                                                    + ", user.getResult() "
-                                                    + codeBean1.getMsg());
-                                            if (codeBean1.getRcode() == 0) {
-                                                LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
-                                                        password1);
-                                                JUtils.Toast("密码重置成功,登录成功");
-                                                Intent intent = new Intent(mContext, MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else {
-                                                JUtils.Toast(codeBean1.getMsg());
-                                            }
-                                        }
-                                    });
-                        } else {
-                            JUtils.Toast("修改失败");
-                        }
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .resetPassword(username, password1, password2, valid_code, new ServiceResponse<CodeBean>() {
+                @Override
+                public void onNext(CodeBean codeBean) {
+                    if (codeBean.getRcode() == 0) {
+                        addSubscription(XlmmApp.getUserInteractor(EditPasswordForgetActivity.this)
+                            .passwordLogin(username, password1, null, new ServiceResponse<CodeBean>() {
+                                @Override
+                                public void onNext(CodeBean codeBean1) {
+                                    if (codeBean1.getRcode() == 0) {
+                                        LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
+                                            password1);
+                                        JUtils.Toast("密码重置成功,登录成功");
+                                        Intent intent = new Intent(mContext, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        JUtils.Toast(codeBean1.getMsg());
+                                    }
+                                }
+                            }));
+                    } else {
+                        JUtils.Toast("修改失败");
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-                });
+                }
+            }));
     }
 
     private boolean checkInputSame(String pass1, String pass2) {

@@ -12,13 +12,13 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ChooseAdapter;
 import com.jimei.xiaolumeimei.adapter.ChooseListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityMamaChooseBinding;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 public class MamaChooseActivity extends BaseMVVMActivity<ActivityMamaChooseBinding> implements
-        View.OnClickListener, PopupWindow.OnDismissListener {
+    View.OnClickListener, PopupWindow.OnDismissListener {
 
     public static final String COMMISSION = "rebet_amount";//佣金
     public static final String SALES = "sale_num";//销量
@@ -50,18 +50,17 @@ public class MamaChooseActivity extends BaseMVVMActivity<ActivityMamaChooseBindi
     @Override
     protected void initData() {
         page = 1;
-        addSubscription(MamaInfoModel.getInstance()
-                .getCategory()
-                .subscribe(new ServiceResponse<List<CategoryBean>>() {
-                    @Override
-                    public void onNext(List<CategoryBean> categoryBeanList) {
-                        for (int i = 0; i < categoryBeanList.size(); i++) {
-                            cidList.add(categoryBeanList.get(i).getCid());
-                            nameList.add(categoryBeanList.get(i).getName());
-                        }
-                        chooseAdapter.updateWithClear(nameList);
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getCategory(new ServiceResponse<List<CategoryBean>>() {
+                @Override
+                public void onNext(List<CategoryBean> categoryBeanList) {
+                    for (int i = 0; i < categoryBeanList.size(); i++) {
+                        cidList.add(categoryBeanList.get(i).getCid());
+                        nameList.add(categoryBeanList.get(i).getName());
                     }
-                }));
+                    chooseAdapter.updateWithClear(nameList);
+                }
+            }));
         loadData(true);
     }
 
@@ -114,7 +113,7 @@ public class MamaChooseActivity extends BaseMVVMActivity<ActivityMamaChooseBindi
         };
         recyclerView.setAdapter(chooseAdapter);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.choose_pop_bg));
         popupWindow.setOnDismissListener(this);
     }
@@ -140,36 +139,35 @@ public class MamaChooseActivity extends BaseMVVMActivity<ActivityMamaChooseBindi
         if (isClear) {
             showIndeterminateProgressDialog(false);
         }
-        addSubscription(MamaInfoModel.getInstance()
-                .getChooseList(page, sort_field, cid, reverse)
-                .subscribe(new ServiceResponse<ChooseListBean>() {
-                    @Override
-                    public void onNext(ChooseListBean chooseListBean) {
-                        List<ChooseListBean.ResultsBean> results = chooseListBean.getResults();
-                        next = chooseListBean.getNext();
-                        if (results != null) {
-                            if (isClear) {
-                                adapter.updateWithClear(results);
-                            } else {
-                                adapter.update(results);
-                            }
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getChooseList(page, sort_field, cid, reverse, new ServiceResponse<ChooseListBean>() {
+                @Override
+                public void onNext(ChooseListBean chooseListBean) {
+                    List<ChooseListBean.ResultsBean> results = chooseListBean.getResults();
+                    next = chooseListBean.getNext();
+                    if (results != null) {
+                        if (isClear) {
+                            adapter.updateWithClear(results);
+                        } else {
+                            adapter.update(results);
                         }
-                        if (next != null && !"".equals(next)) {
-                            page++;
-                        }
-                        b.rvChoose.loadMoreComplete();
-                        b.rvChoose.refreshComplete();
-                        hideIndeterminateProgressDialog();
                     }
+                    if (next != null && !"".equals(next)) {
+                        page++;
+                    }
+                    b.rvChoose.loadMoreComplete();
+                    b.rvChoose.refreshComplete();
+                    hideIndeterminateProgressDialog();
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        b.rvChoose.loadMoreComplete();
-                        b.rvChoose.refreshComplete();
-                        hideIndeterminateProgressDialog();
-                        JUtils.Toast("数据加载有误!");
-                    }
-                }));
+                @Override
+                public void onError(Throwable e) {
+                    b.rvChoose.loadMoreComplete();
+                    b.rvChoose.refreshComplete();
+                    hideIndeterminateProgressDialog();
+                    JUtils.Toast("数据加载有误!");
+                }
+            }));
     }
 
     @Override

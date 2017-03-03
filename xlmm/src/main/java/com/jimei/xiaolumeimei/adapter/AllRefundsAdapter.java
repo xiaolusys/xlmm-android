@@ -79,9 +79,9 @@ public class AllRefundsAdapter extends RecyclerView.Adapter<AllRefundsAdapter.Vi
         ViewUtils.loadImgToImgView(context, holder.good, entity.getPic_path());
         holder.name.setText(entity.getTitle());
         holder.size.setText("尺寸:" + entity.getSku_name());
-        holder.payment.setText("交易金额:" + new DecimalFormat("#.00").format(entity.getPayment()) +
+        holder.payment.setText("交易金额:" + new DecimalFormat("0.00").format(entity.getPayment()) +
             "x" + entity.getRefund_num());
-        holder.refund.setText("退款金额:" + new DecimalFormat("#.00").format(entity.getRefund_fee()) +
+        holder.refund.setText("退款金额:" + new DecimalFormat("0.00").format(entity.getRefund_fee()) +
             "x" + entity.getRefund_num());
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(context, RefundDetailActivity.class);

@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.widget;
+package com.jimei.library.widget;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -14,14 +14,12 @@ public class MainViewPager extends ViewPager {
 
     public MainViewPager(Context context) {
         super(context);
+        setScrollable(true);
     }
 
     public MainViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public boolean isScrollable() {
-        return scrollable;
+        setScrollable(true);
     }
 
     public void setScrollable(boolean scrollable) {
@@ -30,19 +28,12 @@ public class MainViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (!scrollable) {
-            return false;
-        } else {
-            return super.onTouchEvent(ev);
-        }
+        return scrollable && super.onTouchEvent(ev);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {
-        if (!scrollable)
-            return false;
-        else
-            return super.onInterceptTouchEvent(arg0);
+        return scrollable && super.onInterceptTouchEvent(arg0);
     }
 
 }

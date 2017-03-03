@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.loading.VaryViewHelperController;
-import com.jimei.xiaolumeimei.widget.loading.WisdomLoading;
+import com.jimei.library.widget.loading.WisdomLoading;
 import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;

@@ -4,7 +4,7 @@ import com.jimei.xiaolumeimei.entities.AwardCarryBean;
 import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
-import com.jimei.xiaolumeimei.entities.ClickcarryBean;
+import com.jimei.xiaolumeimei.entities.ClickCarryBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
@@ -37,7 +37,7 @@ public interface MamaService {
     //获取粉丝列表
     @GET("/rest/v2/mama/fans")
     Observable<MamaFansBean> getMamaFans(
-        @Query("page") String page);
+        @Query("page") int page);
 
     //获取访客列表
     @GET("/rest/v2/mama/visitor")
@@ -81,7 +81,7 @@ public interface MamaService {
         @Query("version") String version);
 
     @GET("/rest/v2/mama/message/self_list")
-    Observable<MamaSelfListBean> getMaMaselfList();
+    Observable<MamaSelfListBean> getMaMaSelfList();
 
     @GET("/rest/v2/mama/dailystats")
     Observable<RecentCarryBean> getRecentCarry(
@@ -105,24 +105,24 @@ public interface MamaService {
 
     @GET("/rest/v2/mama/carry")
     Observable<CarryLogListBean> getMamaAllCarryLogs(
-        @Query("page") String page);
+        @Query("page") int page);
 
     @GET("/rest/v2/mama/ordercarry")
     Observable<OderCarryBean> getMamaAllOderCarryLogs(
-        @Query("page") String page);
+        @Query("page") int page);
 
     @GET("/rest/v2/mama/ordercarry")
-    Observable<OderCarryBean> getMamaAllOderCarryLogs(
+    Observable<OderCarryBean> getMamaAllOder(
         @Query("carry_type") String carry_type,
         @Query("page") int page);
 
     @GET("/rest/v2/mama/awardcarry")
     Observable<AwardCarryBean> getMamaAllAwardCarryLogs(
-        @Query("page") String page);
+        @Query("page") int page);
 
     @GET("/rest/v2/mama/clickcarry")
-    Observable<ClickcarryBean> getMamaAllClickCarryLogs(
-        @Query("page") String page);
+    Observable<ClickCarryBean> getMamaAllClickCarryLogs(
+        @Query("page") int page);
 
     @GET("/rest/v2/qrcode/get_wxpub_qrcode")
     Observable<WxQrcode> getWxCode();

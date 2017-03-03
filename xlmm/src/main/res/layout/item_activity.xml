@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout"
               android:layout_width="match_parent"
-              android:layout_height="90dp"
+              android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <ImageView
+    <com.jimei.library.widget.ActivityImageView
         android:id="@+id/img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"/>
 
 </LinearLayout>

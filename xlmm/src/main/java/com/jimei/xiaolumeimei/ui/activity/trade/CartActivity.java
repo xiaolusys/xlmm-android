@@ -7,14 +7,14 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.library.widget.ScrollLinearLayoutManager;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CartHistoryAdapter;
 import com.jimei.xiaolumeimei.adapter.CartListAdapter;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityCartBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
@@ -112,9 +112,8 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     public void setPriceText() {
-        addSubscription(CartsModel.getInstance()
-            .getCartsInfoList(getIds())
-            .subscribe(new ServiceResponse<CartsPayinfoBean>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsPayInfoList(getIds(), new ServiceResponse<CartsPayinfoBean>() {
                 @Override
                 public void onNext(CartsPayinfoBean cartsPayinfoBean) {
                     if (cartsPayinfoBean != null) {
@@ -126,9 +125,8 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     private void refreshHisCartList() {
-        addSubscription(CartsModel.getInstance()
-            .getCartsHisList()
-            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsHisList(new ServiceResponse<List<CartsInfoBean>>() {
                 @Override
                 public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                     cartHisList.clear();
@@ -155,9 +153,8 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     private void refreshIds() {
-        addSubscription(CartsModel.getInstance()
-            .getCartsList()
-            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
                 @Override
                 public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                     if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
@@ -187,9 +184,8 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
 
     public void refreshCartList() {
         showIndeterminateProgressDialog(false);
-        addSubscription(CartsModel.getInstance()
-            .getCartsList()
-            .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
                 @Override
                 public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                     cartList.clear();
@@ -220,7 +216,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reLoadData(CartEvent event) {
+    public void reLoadData(LoginEvent event) {
         initData();
     }
 }

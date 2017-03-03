@@ -25,7 +25,7 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.databinding.FragmentBasewebviewBinding;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 
 import org.greenrobot.eventbus.EventBus;
@@ -256,7 +256,7 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().post(new CartEvent());
+        EventBus.getDefault().post(new LoginEvent());
         if (b.llActwebview != null) {
             b.llActwebview.removeView(b.wbView);
         }

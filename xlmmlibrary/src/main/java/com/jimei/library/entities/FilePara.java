@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.entities;
+package com.jimei.library.entities;
 
 /**
  * Created by wulei on 2016/2/4.

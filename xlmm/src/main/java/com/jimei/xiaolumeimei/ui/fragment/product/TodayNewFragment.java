@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.jimei.library.utils.JUtils;
+import com.jimei.library.widget.OnScrollCallback;
 import com.jimei.library.widget.banner.SliderLayout;
 import com.jimei.library.widget.banner.SliderTypes.BaseSliderView;
 import com.jimei.library.widget.banner.SliderTypes.DefaultSliderView;
@@ -21,11 +22,15 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentTodayNewBinding;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
-import com.jimei.xiaolumeimei.widget.OnScrollCallback;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,6 +77,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public void initData() {
+        showIndeterminateProgressDialog(false);
         addSubscription(XlmmApp.getMainInteractor(mActivity)
             .getPortalBean("activitys,categorys", new ServiceResponse<PortalBean>() {
                 @Override
@@ -117,6 +123,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     protected void initViews() {
+        EventBus.getDefault().register(this);
         width = JUtils.getScreenWidth() / 5;
         b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
         b.recyclerProduct.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
@@ -131,6 +138,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                 scrollCount += count;
                 b.recyclerTab.scrollBy(count * width, 0);
                 mainProductAdapter.updateWithClear(data.get(position).getItems());
+                b.recyclerProduct.scrollToPosition(0);
             }
         };
         b.recyclerTab.setAdapter(mainTabAdapter);
@@ -179,7 +187,6 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
     @Override
     public void onRefresh() {
         b.swipeLayout.setRefreshing(false);
-        showIndeterminateProgressDialog(false);
         initData();
     }
 
@@ -218,6 +225,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
             }
             mainTabAdapter.setCurrentPosition(scrollCount + 2);
             mainProductAdapter.updateWithClear(data.get(scrollCount).getItems());
+            b.recyclerProduct.scrollToPosition(0);
         }
         JUtils.Log("State:::" + state);
     }
@@ -241,5 +249,16 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                 handler.sendMessage(msg);
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reLoadData(LoginEvent event) {
+        initData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 }

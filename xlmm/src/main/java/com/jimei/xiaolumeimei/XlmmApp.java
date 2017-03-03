@@ -11,9 +11,13 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.module.ActivityInteractor;
 import com.jimei.xiaolumeimei.module.AddressInteractor;
+import com.jimei.xiaolumeimei.module.CartsInteractor;
 import com.jimei.xiaolumeimei.module.InteractorModule;
 import com.jimei.xiaolumeimei.module.MainInteractor;
 import com.jimei.xiaolumeimei.module.ProductInteractor;
+import com.jimei.xiaolumeimei.module.TradeInteractor;
+import com.jimei.xiaolumeimei.module.UserInteractor;
+import com.jimei.xiaolumeimei.module.VipInteractor;
 import com.jimei.xiaolumeimei.receiver.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -98,6 +102,22 @@ public class XlmmApp extends MultiDexApplication {
 
     public static AddressInteractor getAddressInteractor(Context context) {
         return XlmmApp.get(context).component().getAddressInteractor();
+    }
+
+    public static CartsInteractor getCartsInteractor(Context context) {
+        return XlmmApp.get(context).component().getCartsInteractor();
+    }
+
+    public static UserInteractor getUserInteractor(Context context) {
+        return XlmmApp.get(context).component().getUserInteractor();
+    }
+
+    public static VipInteractor getVipInteractor(Context context) {
+        return XlmmApp.get(context).component().getVipInteractor();
+    }
+
+    public static TradeInteractor getTradeInteractor(Context context) {
+        return XlmmApp.get(context).component().getTradeInteractor();
     }
 
     //异常退出的时候,自动重启

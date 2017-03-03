@@ -6,9 +6,13 @@ package com.jimei.xiaolumeimei;
 
 import com.jimei.xiaolumeimei.module.ActivityInteractor;
 import com.jimei.xiaolumeimei.module.AddressInteractor;
+import com.jimei.xiaolumeimei.module.CartsInteractor;
 import com.jimei.xiaolumeimei.module.InteractorModule;
 import com.jimei.xiaolumeimei.module.MainInteractor;
 import com.jimei.xiaolumeimei.module.ProductInteractor;
+import com.jimei.xiaolumeimei.module.TradeInteractor;
+import com.jimei.xiaolumeimei.module.UserInteractor;
+import com.jimei.xiaolumeimei.module.VipInteractor;
 
 import javax.inject.Singleton;
 
@@ -30,4 +34,12 @@ public interface AppComponent {
     ProductInteractor getProductInteractor();
 
     AddressInteractor getAddressInteractor();
+
+    CartsInteractor getCartsInteractor();
+
+    UserInteractor getUserInteractor();
+
+    VipInteractor getVipInteractor();
+
+    TradeInteractor getTradeInteractor();
 }

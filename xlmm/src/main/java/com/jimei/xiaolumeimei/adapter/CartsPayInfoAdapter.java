@@ -77,7 +77,7 @@ public class CartsPayInfoAdapter
         holder.setText(R.id.title, cartListEntity.getTitle());
         holder.setText(R.id.tx_good_size, "尺码:" + cartListEntity.getSkuName());
         holder.setText(R.id.tv_num, "x" + cartListEntity.getNum() + "");
-        holder.setText(R.id.price_tv, "¥" + new DecimalFormat("#.00").format(cartListEntity.getPrice()));
+        holder.setText(R.id.price_tv, "¥" + new DecimalFormat("0.00").format(cartListEntity.getPrice()));
         return holder.getConvertView();
     }
 }

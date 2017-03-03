@@ -15,12 +15,12 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.entities.LogOutBean;
-import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.util.LoginUtils;
+import com.jimei.xiaolumeimei.entities.LogoutBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import butterknife.Bind;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by itxuye on 16/5/9.
  */
 public class DebugActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+    implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     @Bind(R.id.edit_debug)
     EditText editDebug;
@@ -105,48 +105,46 @@ public class DebugActivity extends BaseSwipeBackCompatActivity
             textDebug = editDebug.getText().toString().trim();
             textPass = editPass.getText().toString().trim();
 
-            UserModel.getInstance()
-                    .openDebug(textPass)
-                    .subscribe(new ServiceResponse<CodeBean>() {
-                        @Override
-                        public void onNext(CodeBean codeBean) {
-                            if (null != codeBean) {
-                                if (codeBean.getRcode() == 0) {
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("BASE_URL", textDebug);
-                                    boolean isPut = editor.commit();
-                                    if (isPut) {
-                                        final String finalAccount =
-                                                LoginUtils.getUserAccount(getApplicationContext());
-                                        UserModel.getInstance()
-                                                .customer_logout()
-                                                .subscribe(new ServiceResponse<LogOutBean>() {
-                                                    @Override
-                                                    public void onNext(LogOutBean responseBody) {
-                                                        super.onNext(responseBody);
-                                                        if (responseBody.getCode() == 0) {
-                                                            JUtils.Toast("成功进入debug模式");
-                                                            if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                                                                MiPushClient.unsetUserAccount(getApplicationContext(),
-                                                                        finalAccount, null);
-                                                            }
-
-                                                            LoginUtils.delLoginInfo(getApplicationContext());
-                                                            Intent intent =
-                                                                    new Intent(DebugActivity.this, SplashActivity.class);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                            startActivity(intent);
-                                                            Process.killProcess(Process.myPid());
-                                                            System.exit(1);
-                                                        }
+            addSubscription(XlmmApp.getUserInteractor(this)
+                .openDebug(textPass, new ServiceResponse<CodeBean>() {
+                    @Override
+                    public void onNext(CodeBean codeBean) {
+                        if (null != codeBean) {
+                            if (codeBean.getRcode() == 0) {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("BASE_URL", textDebug);
+                                boolean isPut = editor.commit();
+                                if (isPut) {
+                                    final String finalAccount =
+                                        LoginUtils.getUserAccount(getApplicationContext());
+                                    addSubscription(XlmmApp.getUserInteractor(DebugActivity.this)
+                                        .customerLogout(new ServiceResponse<LogoutBean>() {
+                                            @Override
+                                            public void onNext(LogoutBean responseBody) {
+                                                super.onNext(responseBody);
+                                                if (responseBody.getCode() == 0) {
+                                                    JUtils.Toast("成功进入debug模式");
+                                                    if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
+                                                        MiPushClient.unsetUserAccount(getApplicationContext(),
+                                                            finalAccount, null);
                                                     }
-                                                });
-                                    }
+
+                                                    LoginUtils.delLoginInfo(getApplicationContext());
+                                                    Intent intent =
+                                                        new Intent(DebugActivity.this, SplashActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(intent);
+                                                    Process.killProcess(Process.myPid());
+                                                    System.exit(1);
+                                                }
+                                            }
+                                        }));
                                 }
-                                JUtils.Toast(codeBean.getMsg());
                             }
+                            JUtils.Toast(codeBean.getMsg());
                         }
-                    });
+                    }
+                }));
         }
     }
 

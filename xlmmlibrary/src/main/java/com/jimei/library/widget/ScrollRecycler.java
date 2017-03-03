@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.widget;
+package com.jimei.library.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

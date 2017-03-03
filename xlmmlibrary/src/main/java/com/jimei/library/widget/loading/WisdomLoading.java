@@ -1,4 +1,4 @@
-package com.jimei.xiaolumeimei.widget.loading;
+package com.jimei.library.widget.loading;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.jimei.xiaolumeimei.R;
+import com.jimei.library.R;
+
 
 /**
  * Created by wisdom on 17/2/8.

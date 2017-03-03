@@ -44,9 +44,7 @@ import com.jimei.library.R;
 import com.jimei.library.widget.glidemoudle.CropCircleTransformation;
 import com.jimei.library.widget.glidemoudle.GlideRoundTransform;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -75,8 +73,8 @@ public final class ViewUtils {
         ListAdapter adapter;
         int adapterCount;
         if (view != null
-                && (adapter = view.getAdapter()) != null
-                && (adapterCount = adapter.getCount()) > 0) {
+            && (adapter = view.getAdapter()) != null
+            && (adapterCount = adapter.getCount()) > 0) {
             height += view.getDividerHeight() * (adapterCount - 1);
         }
         return height;
@@ -121,7 +119,7 @@ public final class ViewUtils {
             View item = adapter.getView(i, null, view);
             if (item instanceof ViewGroup) {
                 item.setLayoutParams(
-                        new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                    new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             }
             item.measure(0, 0);
             height += item.getMeasuredHeight();
@@ -151,17 +149,6 @@ public final class ViewUtils {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = height;
     }
-
-    // /**
-    // * set GistView height which is calculated by {@link #
-    // getGridViewHeightBasedOnChildren(GridView)}
-    // *
-    // * @param view
-    // * @return
-    // */
-    // public static void setGridViewHeightBasedOnChildren(GridView view) {
-    // setViewHeight(view, getGridViewHeightBasedOnChildren(view));
-    // }
 
     /**
      * set ListView height which is calculated by
@@ -217,7 +204,7 @@ public final class ViewUtils {
             View child = parent.getChildAt(i);
             Class<? extends View> childsClass = child.getClass();
             if ((includeSubClass && filter.isAssignableFrom(childsClass)) || (!includeSubClass
-                    && childsClass == filter)) {
+                && childsClass == filter)) {
                 descendedViewList.add(filter.cast(child));
             }
             if (child instanceof ViewGroup) {
@@ -232,19 +219,19 @@ public final class ViewUtils {
      */
     public static boolean isTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+            & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     public static void loadImgToImgView(Context context, ImageView img, String picPath) {
         if (null == picPath) return;
         if (picPath.contains("wx.qlogo.cn")
-                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-                || picPath.contains("mmbiz.qlogo.cn")) {
+            || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+            || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                    .load(picPath)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .into(img);
+                .load(picPath)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .centerCrop()
+                .into(img);
         } else {
             String head_img;
             Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
@@ -254,42 +241,39 @@ public final class ViewUtils {
                 String[] temp = picPath.split(group + "/");
                 if (temp.length > 1) {
                     try {
-                        head_img = "http://"
-                                + group
-                                + "/"
-                                + URLEncoder.encode(temp[1], "utf-8")
-                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                        head_img = "http://" + group + "/" + temp[1] +
+                            "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
                         Glide.with(context)
-                                .load(head_img)
-                                .thumbnail(0.1f)
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .centerCrop()
-                                .into(img);
-                    } catch (UnsupportedEncodingException e) {
+                            .load(head_img)
+                            .thumbnail(0.1f)
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .centerCrop()
+                            .into(img);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             } else {
                 Glide.with(context)
-                        .load(picPath)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .centerCrop()
-                        .into(img);
+                    .load(picPath)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
             }
         }
     }
 
     public static void loadImgToImgView(Context context, ImageView img, String picPath, int radius) {
         if (null == picPath) return;
-        if (picPath.contains("mmbiz.qlogo.cn") || picPath.contains("wx.qlogo.cn") || picPath.contains(
-                "7xogkj.com1.z0.glb.clouddn.com")) {
+        if (picPath.contains("mmbiz.qlogo.cn") || picPath.contains("wx.qlogo.cn") ||
+            picPath.contains("7xogkj.com1.z0.glb.clouddn.com")) {
             Glide.with(context)
-                    .load(picPath)
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .transform(new GlideRoundTransform(context, radius))
-                    .into(img);
+                .load(picPath)
+                .thumbnail(0.1f)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .centerCrop()
+                .transform(new GlideRoundTransform(context, radius))
+                .into(img);
         } else {
             String head_img;
             Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
@@ -298,31 +282,24 @@ public final class ViewUtils {
                 String group = m.group();
                 String[] temp = picPath.split(group + "/");
                 if (temp.length > 1) {
-                    try {
-                        head_img = "http://"
-                                + group
-                                + "/"
-                                + URLEncoder.encode(temp[1], "utf-8")
-                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
-                        Glide.with(context)
-                                .load(head_img)
-                                .thumbnail(0.1f)
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .centerCrop()
-                                .transform(new GlideRoundTransform(context, radius))
-                                .into(img);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Glide.with(context)
-                        .load(picPath)
+                    head_img = "http://" + group + "/" + temp[1] +
+                        "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                    Glide.with(context)
+                        .load(head_img)
                         .thumbnail(0.1f)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .centerCrop()
                         .transform(new GlideRoundTransform(context, radius))
                         .into(img);
+                }
+            } else {
+                Glide.with(context)
+                    .load(picPath)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .transform(new GlideRoundTransform(context, radius))
+                    .into(img);
             }
         }
     }
@@ -330,15 +307,13 @@ public final class ViewUtils {
     public static void loadImgToImgViewWithTransformCircle(Context context, ImageView img,
                                                            String picPath) {
         if (null == picPath) return;
-
-        if (picPath.contains("wx.qlogo.cn")
-                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-                || picPath.contains("mmbiz.qlogo.cn")) {
+        if (picPath.contains("wx.qlogo.cn") || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+            || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                    .load(picPath)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .bitmapTransform(new CropCircleTransformation(context))
-                    .into(img);
+                .load(picPath)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .bitmapTransform(new CropCircleTransformation(context))
+                .into(img);
         } else {
             String head_img;
             Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
@@ -347,27 +322,20 @@ public final class ViewUtils {
                 String group = m.group();
                 String[] temp = picPath.split(group + "/");
                 if (temp.length > 1) {
-                    try {
-                        head_img = "http://"
-                                + group
-                                + "/"
-                                + URLEncoder.encode(temp[1], "utf-8")
-                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
-                        Glide.with(context)
-                                .load(head_img)
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .bitmapTransform(new CropCircleTransformation(context))
-                                .into(img);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Glide.with(context)
-                        .load(picPath)
+                    head_img = "http://" + group + "/" + temp[1] +
+                        "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                    Glide.with(context)
+                        .load(head_img)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .bitmapTransform(new CropCircleTransformation(context))
                         .into(img);
+                }
+            } else {
+                Glide.with(context)
+                    .load(picPath)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .into(img);
             }
         }
     }
@@ -375,15 +343,14 @@ public final class ViewUtils {
     public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
                                                        String picPath) {
         if (null == picPath) return;
-        if (picPath.contains("wx.qlogo.cn")
-                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-                || picPath.contains("mmbiz.qlogo.cn")) {
+        if (picPath.contains("wx.qlogo.cn") || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+            || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                    .load(picPath)
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .into(img);
+                .load(picPath)
+                .thumbnail(0.1f)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .centerCrop()
+                .into(img);
         } else {
             String head_img;
             Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
@@ -392,30 +359,23 @@ public final class ViewUtils {
                 String group = m.group();
                 String[] temp = picPath.split(group + "/");
                 if (temp.length > 1) {
-                    try {
-                        head_img = "http://"
-                                + group
-                                + "/"
-                                + URLEncoder.encode(temp[1], "utf-8")
-                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
-                        Glide.with(context)
-                                .load(head_img)
-                                .thumbnail(0.1f)
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .centerCrop()
-                                .placeholder(R.drawable.place_holder)
-                                .into(img);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Glide.with(context)
-                        .load(picPath)
+                    head_img = "http://" + group + "/" + temp[1] +
+                        "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80";
+                    Glide.with(context)
+                        .load(head_img)
                         .thumbnail(0.1f)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .centerCrop()
+                        .placeholder(R.drawable.place_holder)
                         .into(img);
+                }
+            } else {
+                Glide.with(context)
+                    .load(picPath)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
             }
         }
     }
@@ -423,15 +383,14 @@ public final class ViewUtils {
     public static void loadImgToImgViewWithWaterMark(Context context, ImageView img,
                                                      String picPath, String watermark_op) {
         if (null == picPath) return;
-        if (picPath.contains("wx.qlogo.cn")
-                || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
-                || picPath.contains("mmbiz.qlogo.cn")) {
+        if (picPath.contains("wx.qlogo.cn") || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
+            || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)
-                    .load(picPath)
-                    .thumbnail(0.1f)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .into(img);
+                .load(picPath)
+                .thumbnail(0.1f)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .centerCrop()
+                .into(img);
         } else {
             String head_img;
             Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
@@ -440,30 +399,23 @@ public final class ViewUtils {
                 String group = m.group();
                 String[] temp = picPath.split(group + "/");
                 if (temp.length > 1) {
-                    try {
-                        head_img = "http://"
-                                + group
-                                + "/"
-                                + URLEncoder.encode(temp[1], "utf-8")
-                                + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80/" + watermark_op;
-                        Glide.with(context)
-                                .load(head_img)
-                                .thumbnail(0.1f)
-                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                .centerCrop()
-                                .placeholder(R.drawable.place_holder)
-                                .into(img);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Glide.with(context)
-                        .load(picPath)
+                    head_img = "http://" + group + "/" + temp[1] +
+                        "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/80/" + watermark_op;
+                    Glide.with(context)
+                        .load(head_img)
                         .thumbnail(0.1f)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .centerCrop()
+                        .placeholder(R.drawable.place_holder)
                         .into(img);
+                }
+            } else {
+                Glide.with(context)
+                    .load(picPath)
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .centerCrop()
+                    .into(img);
             }
         }
     }
@@ -485,7 +437,7 @@ public final class ViewUtils {
         }
 
         LayoutParams layoutParams =
-                new LayoutParams((int) width, (int) height);
+            new LayoutParams((int) width, (int) height);
 
         return layoutParams;
     }
@@ -495,14 +447,14 @@ public final class ViewUtils {
         //4.4版本及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
         //5.0版本及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.getDecorView()
-                    .setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                .setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         }

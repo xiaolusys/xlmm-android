@@ -14,7 +14,7 @@ import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
+import com.jimei.library.widget.NoDoubleClickListener;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -83,8 +83,8 @@ public class ProductListAdapter extends XRecyclerView.Adapter<ProductListAdapter
             ViewUtils.loadImgToImgViewWithPlaceholder(context, holder.image, resultsBean.getHead_img());
         }
         holder.name.setText(resultsBean.getName());
-        holder.agentPrice.setText("¥" + new DecimalFormat("#.00").format(resultsBean.getLowest_agent_price()));
-        holder.stdSalePrice.setText("/¥" + new DecimalFormat("#.00").format(resultsBean.getLowest_std_sale_price()));
+        holder.agentPrice.setText("¥" + new DecimalFormat("0.00").format(resultsBean.getLowest_agent_price()));
+        holder.stdSalePrice.setText("/¥" + new DecimalFormat("0.00").format(resultsBean.getLowest_std_sale_price()));
         holder.card.setOnClickListener(
                 new NoDoubleClickListener() {
                     @Override

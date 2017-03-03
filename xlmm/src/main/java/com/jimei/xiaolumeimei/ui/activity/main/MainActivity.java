@@ -28,7 +28,6 @@ import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.service.UpdateService;
@@ -36,11 +35,12 @@ import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.UserActivity;
+import com.jimei.xiaolumeimei.ui.fragment.product.ActivityFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.ProductFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.TodayNewFragment;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
-import com.jimei.xiaolumeimei.widget.MainViewPager;
+import com.jimei.library.widget.MainViewPager;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -73,6 +73,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView boutiqueIn;
     @Bind(R.id.reload_text)
     TextView reloadText;
+    @Bind(R.id.btn_layout)
+    LinearLayout btnLayout;
     private int num = 1;
     private long firstTime = 0;
     private boolean updateFlag = true;
@@ -88,9 +90,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getWxCode(new ServiceResponse<>()));
         showBoutique = false;
         List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(TodayNewFragment.newInstance("精品推荐"));
+        fragments.add(TodayNewFragment.newInstance("今日特卖"));
+        fragments.add(ActivityFragment.newInstance("精品活动"));
         addSubscription(XlmmApp.getMainInteractor(this)
             .getPortalBean("activitys,posters", new ServiceResponse<PortalBean>() {
                 @Override
@@ -151,7 +156,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void onNext(UserInfoBean userInfoBean) {
                     if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
-                        addSubscription(MamaInfoModel.getInstance()
+                        addSubscription(XlmmApp.getVipInteractor(MainActivity.this)
                             .getMamaUrl()
                             .subscribe(mamaUrl -> {
                                 boutiqueUrl = mamaUrl.getResults().get(0).getExtra().getBoutique();
@@ -186,9 +191,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             double height = percent * tabLayout.getHeight();
             params.setMargins(0, (int) -height, 0, 0);
             tabLayout.setLayoutParams(params);
+            if (percent == 1) {
+                btnLayout.setVisibility(View.GONE);
+            } else {
+                btnLayout.setVisibility(View.VISIBLE);
+            }
         } else {
             viewPager.setScrollable(true);
             params.setMargins(0, 0, 0, 0);
+            btnLayout.setVisibility(View.VISIBLE);
         }
         tabLayout.setLayoutParams(params);
     }

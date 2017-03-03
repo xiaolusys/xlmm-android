@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ClickcarryBean;
+import com.jimei.xiaolumeimei.entities.ClickCarryBean;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ClickCarryLogAdapter
     extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
 
 
-    private List<ClickcarryBean.ResultsEntity> mList;
+    private List<ClickCarryBean.ResultsEntity> mList;
     private Context context;
 
     public ClickCarryLogAdapter(Context context) {
@@ -37,13 +37,13 @@ public class ClickCarryLogAdapter
         this.context = context;
     }
 
-    public void updateWithClear(List<ClickcarryBean.ResultsEntity> list) {
+    public void updateWithClear(List<ClickCarryBean.ResultsEntity> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<ClickcarryBean.ResultsEntity> list) {
+    public void update(List<ClickCarryBean.ResultsEntity> list) {
 
         mList.addAll(list);
         notifyDataSetChanged();
@@ -71,7 +71,7 @@ public class ClickCarryLogAdapter
     @Override
     public void onBindViewHolder(CarryLogListVH holder, int position) {
 
-        ClickcarryBean.ResultsEntity resultsEntity = mList.get(position);
+        ClickCarryBean.ResultsEntity resultsEntity = mList.get(position);
 
         try {
             if (position == 0) {

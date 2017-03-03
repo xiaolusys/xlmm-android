@@ -18,16 +18,15 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.databinding.ActivitySettingBinding;
 import com.jimei.xiaolumeimei.entities.UserAccountBean;
 import com.jimei.xiaolumeimei.entities.VersionBean;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.service.UpdateService;
 import com.jimei.xiaolumeimei.ui.activity.main.CompanyInfoActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.jimei.xiaolumeimei.widget.VersionManager;
-import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.service.UpdateService;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
-        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @Override
     protected void initViews() {
@@ -90,23 +89,22 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     }
 
     private void update() {
-        UserModel.getInstance()
-                .getVersion()
-                .subscribe(new ServiceResponse<VersionBean>() {
-                    @Override
-                    public void onNext(VersionBean versionBean) {
-                        VersionManager versionManager = VersionManager.newInstance(versionBean.getVersion_code(),
-                                "最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo(), true);
-                        versionManager.setPositiveListener(v -> {
-                            Intent intent = new Intent(SettingActivity.this, UpdateService.class);
-                            intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, versionBean.getDownload_link());
-                            SettingActivity.this.startService(intent);
-                            versionManager.getDialog().dismiss();
-                            JUtils.Toast("应用正在后台下载!");
-                        });
-                        versionManager.checkVersion(SettingActivity.this);
-                    }
-                });
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getVersion(new ServiceResponse<VersionBean>() {
+                @Override
+                public void onNext(VersionBean versionBean) {
+                    VersionManager versionManager = VersionManager.newInstance(versionBean.getVersion_code(),
+                        "最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo(), true);
+                    versionManager.setPositiveListener(v -> {
+                        Intent intent = new Intent(SettingActivity.this, UpdateService.class);
+                        intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, versionBean.getDownload_link());
+                        SettingActivity.this.startService(intent);
+                        versionManager.getDialog().dismiss();
+                        JUtils.Toast("应用正在后台下载!");
+                    });
+                    versionManager.checkVersion(SettingActivity.this);
+                }
+            }));
     }
 
     void updateCache() {
@@ -117,18 +115,18 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!b.openNoticeA.isChecked()) {
             new AlertDialog.Builder(this)
-                    .setTitle("关闭推送")
-                    .setMessage("关闭推送可能错过重要通知哦\n" + "\n您确定要关闭推送吗?")
-                    .setPositiveButton("确定", (dialog, which) -> {
-                        MiPushClient.unregisterPush(getApplicationContext());
-                        LoginUtils.deleteIsMipushOk(SettingActivity.this);
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                        b.openNoticeA.setChecked(true);
-                        dialog.dismiss();
-                    })
-                    .show();
+                .setTitle("关闭推送")
+                .setMessage("关闭推送可能错过重要通知哦\n" + "\n您确定要关闭推送吗?")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    MiPushClient.unregisterPush(getApplicationContext());
+                    LoginUtils.deleteIsMipushOk(SettingActivity.this);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("取消", (dialog, which) -> {
+                    b.openNoticeA.setChecked(true);
+                    dialog.dismiss();
+                })
+                .show();
         } else {
             try {
                 setPushUserAccount(getApplicationContext(), MiPushClient.getRegId(getApplicationContext()));
@@ -140,14 +138,12 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
 
     public void setPushUserAccount(Context context, String mRegId) {
         MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID,
-                XlmmConst.XIAOMI_APP_KEY);
+            XlmmConst.XIAOMI_APP_KEY);
         try {
-            //register xiaomi push
-            UserModel.getInstance()
-                    .getUserAccount("android", mRegId,
-                            Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
-                                    Settings.Secure.ANDROID_ID))
-                    .subscribe(new ServiceResponse<UserAccountBean>() {
+            addSubscription(XlmmApp.getUserInteractor(this)
+                .getUserAccount("android", mRegId,
+                    Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(), Settings.Secure.ANDROID_ID),
+                    new ServiceResponse<UserAccountBean>() {
                         @Override
                         public void onNext(UserAccountBean user) {
                             LoginUtils.saveMipushOk(context, true);
@@ -165,7 +161,7 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                             super.onError(e);
                             LoginUtils.deleteIsMipushOk(context);
                         }
-                    });
+                    }));
         } catch (Exception e) {
             e.printStackTrace();
         }
