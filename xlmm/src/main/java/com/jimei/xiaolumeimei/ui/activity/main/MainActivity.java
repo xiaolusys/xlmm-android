@@ -251,6 +251,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.reload_text:
                 reloadText.setVisibility(View.GONE);
                 initData();
+                showBoutique();
                 showCartsNum();
                 break;
             default:
@@ -386,8 +387,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        showCartsNum();
-        showBoutique();
+        if (LoginUtils.checkLoginState(this)) {
+            showCartsNum();
+            showBoutique();
+        } else {
+            textNum.setVisibility(View.GONE);
+            boutiqueIn.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

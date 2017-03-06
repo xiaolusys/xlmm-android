@@ -73,8 +73,8 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
 
         adapter = new CategoryItemAdapter(this);
         mXRecyclerView.setAdapter(adapter);
+        showIndeterminateProgressDialog(false);
         if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-            showIndeterminateProgressDialog(false);
             addSubscription(XlmmApp.getMainInteractor(this)
                 .getCategoryDown(new ServiceResponse<CategoryDownBean>() {
                     @Override
@@ -96,8 +96,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                                     public void onResponse(File response, int id) {
                                         FileUtils.saveCategoryFile(getApplicationContext(), sha1);
                                         new CategoryListTask(mCategoryNameListAdapter).execute();
-                                        new CategoryTask(adapter, emptyLayout).execute("");
-                                        hideIndeterminateProgressDialog();
+                                        new CategoryTask(adapter, emptyLayout,CategoryListActivity.this).execute("");
                                     }
                                 });
                         }
@@ -111,7 +110,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                 }));
         } else {
             new CategoryListTask(mCategoryNameListAdapter).execute();
-            new CategoryTask(adapter, emptyLayout).execute("");
+            new CategoryTask(adapter, emptyLayout,this).execute("");
         }
     }
 
