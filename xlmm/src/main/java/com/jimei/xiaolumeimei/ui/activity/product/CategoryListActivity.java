@@ -1,6 +1,10 @@
 package com.jimei.xiaolumeimei.ui.activity.product;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -11,12 +15,14 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.adapter.CategoryNameListAdapter;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CategoryItemAdapter;
+import com.jimei.xiaolumeimei.adapter.CategoryNameListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.model.MainModel;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.widget.CategoryListTask;
 import com.jimei.xiaolumeimei.widget.CategoryTask;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -57,7 +63,6 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         mCategoryNameListAdapter = new CategoryNameListAdapter(this);
         mListView.setAdapter(mCategoryNameListAdapter);
 
-
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mXRecyclerView.setLayoutManager(manager);
         mXRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -68,34 +73,44 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
 
         adapter = new CategoryItemAdapter(this);
         mXRecyclerView.setAdapter(adapter);
+        showIndeterminateProgressDialog(false);
         if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-            addSubscription(MainModel.getInstance()
-                .getCategoryDown()
-                .subscribe(categoryDownBean -> {
-                    if (categoryDownBean != null) {
-                        String downloadUrl = categoryDownBean.getDownload_url();
-                        String sha1 = categoryDownBean.getSha1();
-                        if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
-                            FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
-                        }
-                        OkHttpUtils.get().url(downloadUrl).build()
-                            .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                }
+            addSubscription(XlmmApp.getMainInteractor(this)
+                .getCategoryDown(new ServiceResponse<CategoryDownBean>() {
+                    @Override
+                    public void onNext(CategoryDownBean categoryDownBean) {
+                        if (categoryDownBean != null) {
+                            String downloadUrl = categoryDownBean.getDownload_url();
+                            String sha1 = categoryDownBean.getSha1();
+                            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
+                                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
+                            }
+                            OkHttpUtils.get().url(downloadUrl).build()
+                                .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
+                                        hideIndeterminateProgressDialog();
+                                    }
 
-                                @Override
-                                public void onResponse(File response, int id) {
-                                    FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-                                    new CategoryListTask(mCategoryNameListAdapter).execute();
-                                    new CategoryTask(adapter, emptyLayout).execute("");
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(File response, int id) {
+                                        FileUtils.saveCategoryFile(getApplicationContext(), sha1);
+                                        new CategoryListTask(mCategoryNameListAdapter).execute();
+                                        new CategoryTask(adapter, emptyLayout,CategoryListActivity.this).execute("");
+                                    }
+                                });
+                        }
                     }
-                }, Throwable::printStackTrace));
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
         } else {
             new CategoryListTask(mCategoryNameListAdapter).execute();
-            new CategoryTask(adapter, emptyLayout).execute("");
+            new CategoryTask(adapter, emptyLayout,this).execute("");
         }
     }
 
@@ -127,7 +142,15 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                 finish();
                 break;
             case R.id.search_layout:
-                readyGo(SearchActivity.class);
+                Pair<View, String> finishPair = new Pair<>(finishLayout, "finish");//haderIv是头像控件
+                Pair<View, String> searchPair = new Pair<>(searchLayout, "search");//nameTv是名字控件
+                Intent intent = new Intent(this, SearchActivity.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this,
+                        finishPair, searchPair).toBundle());
+                } else {
+                    readyGo(SearchActivity.class);
+                }
                 break;
             default:
                 break;

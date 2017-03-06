@@ -9,10 +9,12 @@ import android.widget.ListView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.NinePicAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ import butterknife.Bind;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class MMNinePicActivity extends BaseSwipeBackCompatActivity
-        implements SwipeRefreshLayout.OnRefreshListener {
+    implements SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.circleLv)
     ListView circleLv;
@@ -47,7 +49,18 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        loadData();
+        if (mCodeLink == null || "".equals(mCodeLink)) {
+            addSubscription(XlmmApp.getVipInteractor(this)
+                .getWxCode(new ServiceResponse<WxQrcode>() {
+                    @Override
+                    public void onNext(WxQrcode wxQrcode) {
+                        mCodeLink = wxQrcode.getQrcode_link();
+                        loadData();
+                    }
+                }));
+        } else {
+            loadData();
+        }
     }
 
     @Override
@@ -58,13 +71,31 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     private void loadData() {
         showIndeterminateProgressDialog(false);
         if (mModel_id == -1) {
-            addSubscription(MamaInfoModel.getInstance()
-                    .getNinePic(mSale_category)
-                    .subscribe(this::doWhileSuccess, this::doWhileFail));
+            addSubscription(XlmmApp.getVipInteractor(this)
+                .getNinePic(mSale_category, new ServiceResponse<List<NinePicBean>>() {
+                    @Override
+                    public void onNext(List<NinePicBean> list) {
+                        doWhileSuccess(list);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        doWhileFail(e);
+                    }
+                }));
         } else {
-            addSubscription(MamaInfoModel.getInstance()
-                    .getNinePicByModelId(mModel_id)
-                    .subscribe(this::doWhileSuccess, this::doWhileFail));
+            addSubscription(XlmmApp.getVipInteractor(this)
+                .getNinePicByModelId(mModel_id, new ServiceResponse<List<NinePicBean>>() {
+                    @Override
+                    public void onNext(List<NinePicBean> list) {
+                        doWhileSuccess(list);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        doWhileFail(e);
+                    }
+                }));
         }
     }
 
@@ -90,7 +121,7 @@ public class MMNinePicActivity extends BaseSwipeBackCompatActivity
     protected void getBundleExtras(Bundle extras) {
         mSale_category = extras.getInt("sale_category", -1);
         mModel_id = extras.getInt("model_id", -1);
-        mCodeLink = extras.getString("codeLink");
+        mCodeLink = extras.getString("codeLink", "");
     }
 
     @Override

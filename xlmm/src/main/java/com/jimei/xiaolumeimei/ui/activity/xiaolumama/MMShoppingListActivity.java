@@ -12,10 +12,10 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ShoppingListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
@@ -66,7 +66,7 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     private void initRecyclerView() {
         shoppinglistXry.setLayoutManager(new LinearLayoutManager(this));
         shoppinglistXry.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+            new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         shoppinglistXry.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         shoppinglistXry.setPullRefreshEnabled(false);
         shoppinglistXry.setLoadingMoreEnabled(true);
@@ -87,24 +87,23 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     private void loadMoreData() {
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaAllOderCarryLogs(page)
-                .subscribe(new ServiceResponse<OderCarryBean>() {
-                    @Override
-                    public void onNext(OderCarryBean shoppingListBean) {
-                        if (shoppingListBean != null) {
-                            adapter.update(shoppingListBean.getResults());
-                            if (shoppingListBean.getNext() != null) {
-                                page++;
-                            } else {
-                                JUtils.Toast("没有更多了");
-                                shoppinglistXry.setLoadingMoreEnabled(false);
-                            }
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getMamaAllOder(page, new ServiceResponse<OderCarryBean>() {
+                @Override
+                public void onNext(OderCarryBean shoppingListBean) {
+                    if (shoppingListBean != null) {
+                        adapter.update(shoppingListBean.getResults());
+                        if (shoppingListBean.getNext() != null) {
+                            page++;
+                        } else {
+                            JUtils.Toast("没有更多了");
+                            shoppinglistXry.setLoadingMoreEnabled(false);
                         }
-                        shoppinglistXry.loadMoreComplete();
-                        hideIndeterminateProgressDialog();
                     }
-                }));
+                    shoppinglistXry.loadMoreComplete();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Override

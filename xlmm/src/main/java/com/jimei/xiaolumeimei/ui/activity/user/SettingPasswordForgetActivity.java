@@ -10,17 +10,16 @@ import android.widget.LinearLayout;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
     String TAG = "SettingPasswordForgetActivity";
     @Bind(R.id.set_password)
     EditText etPassword;
@@ -32,7 +31,6 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
     LinearLayout layout;
     String mobile;
     String valid_code;
-    private Subscription subscribe;
 
     @Override
     protected void setListener() {
@@ -81,24 +79,18 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
 
     private void changePassword(String mobile, String valid_code, String password1,
                                 String password2) {
-        subscribe = UserModel.getInstance()
-                .reset_password(mobile, password1, password2, valid_code)
-                .subscribe(new ServiceResponse<CodeBean>() {
-                    @Override
-                    public void onNext(CodeBean bean) {
-                        JUtils.Toast(bean.getMsg());
-                        if (bean.getRcode() == 0) {
-                            Intent intent = new Intent(mContext, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .resetPassword(mobile, password1, password2, valid_code, new ServiceResponse<CodeBean>() {
+                @Override
+                public void onNext(CodeBean bean) {
+                    JUtils.Toast(bean.getMsg());
+                    if (bean.getRcode() == 0) {
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-                });
+                }
+            }));
     }
 
     private boolean checkInputSame(String pass1, String pass2) {
@@ -107,13 +99,5 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
             return false;
         }
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (subscribe != null && subscribe.isUnsubscribed()) {
-            subscribe.unsubscribe();
-        }
     }
 }

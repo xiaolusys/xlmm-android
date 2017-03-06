@@ -18,9 +18,9 @@ import com.github.yoojia.zxing.qrcode.Encoder;
 import com.jimei.library.utils.BitmapUtil;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.WxPubAuthInfo;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
@@ -29,7 +29,7 @@ import butterknife.Bind;
  * Created by wulei on 2016/2/4.
  */
 public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
     String TAG = "WxPubTwoDimenCodeActivity";
     @Bind(R.id.img_2dimen)
     ImageView img_2dimen;
@@ -61,28 +61,27 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
     protected void initData() {
         final int dimension = 400;
         mEncoder = new Encoder.Builder().setBackgroundColor(0xFFFFFF) // 指定背景颜色，默认为白色
-                .setCodeColor(0xFF000000) // 指定编码块颜色，默认为黑色
-                .setOutputBitmapWidth(dimension) // 生成图片宽度
-                .setOutputBitmapHeight(dimension) // 生成图片高度
-                .setOutputBitmapPadding(0) // 设置为没有白边
-                .build();
-        addSubscription(UserModel.getInstance()
-                .getWxPubAuthInfo()
-                .subscribe(new ServiceResponse<WxPubAuthInfo>() {
-                    @Override
-                    public void onNext(WxPubAuthInfo wxpub) {
-                        if (wxpub != null) {
-                            JUtils.Log(TAG, "wxPubAuthInfo:" + wxpub.toString());
-                            wxPubAuthInfo = wxpub;
-                            bitmap = mEncoder.encode(wxpub.getAuthLink());
-                            bitmap = getNewBitMap(bitmap, wxpub.getAuthMsg());
-                            if (!"".equals(wxpub.getAuthMsg())) {
-                                JUtils.Toast(wxpub.getAuthMsg());
-                            }
-                            img_2dimen.setImageBitmap(bitmap);
+            .setCodeColor(0xFF000000) // 指定编码块颜色，默认为黑色
+            .setOutputBitmapWidth(dimension) // 生成图片宽度
+            .setOutputBitmapHeight(dimension) // 生成图片高度
+            .setOutputBitmapPadding(0) // 设置为没有白边
+            .build();
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getWxPubAuthInfo(new ServiceResponse<WxPubAuthInfo>() {
+                @Override
+                public void onNext(WxPubAuthInfo wxpub) {
+                    if (wxpub != null) {
+                        JUtils.Log(TAG, "wxPubAuthInfo:" + wxpub.toString());
+                        wxPubAuthInfo = wxpub;
+                        bitmap = mEncoder.encode(wxpub.getAuthLink());
+                        bitmap = getNewBitMap(bitmap, wxpub.getAuthMsg());
+                        if (!"".equals(wxpub.getAuthMsg())) {
+                            JUtils.Toast(wxpub.getAuthMsg());
                         }
+                        img_2dimen.setImageBitmap(bitmap);
                     }
-                }));
+                }
+            }));
     }
 
     @Override
@@ -101,11 +100,11 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
 
     private void save_2dimencode() {
         String fileName = Environment.getExternalStorageDirectory()
-                + "/"
-                + Environment.DIRECTORY_DCIM
-                + "/Camera/"
-                + getResources().getString(R.string.wxpub_2dimen_pic_name)
-                + ".jpg";
+            + "/"
+            + Environment.DIRECTORY_DCIM
+            + "/Camera/"
+            + getResources().getString(R.string.wxpub_2dimen_pic_name)
+            + ".jpg";
         JUtils.Log(TAG, "filename:" + fileName);
         if (null != bitmap) {
             BitmapUtil.saveBitmap(bitmap, fileName);
@@ -128,7 +127,7 @@ public class WxPubTwoDimenCodeActivity extends BaseSwipeBackCompatActivity
         textPaint.setAntiAlias(true);
         textPaint.setTextSize(30.0F);
         StaticLayout sl = new StaticLayout(text, textPaint, newBitmap.getWidth() - 8,
-                Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+            Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         canvas.translate(6, 410);
         sl.draw(canvas);
         return newBitmap;

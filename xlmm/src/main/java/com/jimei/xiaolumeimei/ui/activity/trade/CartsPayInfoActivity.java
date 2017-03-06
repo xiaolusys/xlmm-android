@@ -37,16 +37,13 @@ import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
 import com.jimei.xiaolumeimei.entities.TeamBuyBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.AddressModel;
-import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.user.AddAddressActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.AddressSelectActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.SelectCouponActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.pay.PayUtils;
-import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -64,7 +61,7 @@ import static com.jimei.xiaolumeimei.R.id.adress;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener,
-        SmoothCheckBox.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener {
+    SmoothCheckBox.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener {
     private static final int REQUEST_CODE_COUPON = 2;
     private static final int REQUEST_CODE_ADDRESS = 3;
     private static final String APP_PAY = "pid:1:value:";
@@ -199,242 +196,239 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void downLoadCartsInfo() {
-        addSubscription(CartsModel.getInstance()
-                .getCartsPayInfoListV2(ids)
-                .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-                    @Override
-                    public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                        if (cartsPayinfoBean != null) {
-                            JUtils.Log(TAG, cartsPayinfoBean.toString());
-                            mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
-                            goodNum = cartsPayinfoBean.getCartList().get(0).getNum();
-                            cart_ids = cartsPayinfoBean.getCartIds();
-                            logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
-                            for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
-                                logisticsCompanysesString.add(list.getName());
-                            }
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsPayInfoListV2(ids, new ServiceResponse<CartsPayinfoBean>() {
+                @Override
+                public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                    if (cartsPayinfoBean != null) {
+                        JUtils.Log(TAG, cartsPayinfoBean.toString());
+                        mAdapter.updateWithClear(cartsPayinfoBean.getCartList());
+                        goodNum = cartsPayinfoBean.getCartList().get(0).getNum();
+                        cart_ids = cartsPayinfoBean.getCartIds();
+                        logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
+                        for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
+                            logisticsCompanysesString.add(list.getName());
+                        }
+                        budgetCash =
+                            (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
+                                + "";
+                        payment = (double) (Math.round(
+                            (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                                - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
 
-                            budgetCash =
-                                    (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
-                                            + "";
-                            payment = (double) (Math.round(
-                                    (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                                            - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
+                        paymentInfo = (double) (Math.round(
+                            (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                                - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
+                        post_fee =
+                            (double) (Math.round(cartsPayinfoBean.getPostFee() * 100)) / 100 + "";
+                        discount_fee =
+                            (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100)) / 100
+                                + "";
+                        JUtils.Log(TAG, "discount_fee" + discount_fee);
+                        discount_feeInfo = cartsPayinfoBean.getDiscountFee();
+                        total_fee = cartsPayinfoBean.getTotalFee() + "";
+                        uuid = cartsPayinfoBean.getUuid();
 
-                            paymentInfo = (double) (Math.round(
-                                    (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                                            - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
-                            post_fee =
-                                    (double) (Math.round(cartsPayinfoBean.getPostFee() * 100)) / 100 + "";
-                            discount_fee =
-                                    (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100)) / 100
-                                            + "";
-                            JUtils.Log(TAG, "discount_fee" + discount_fee);
-                            discount_feeInfo = cartsPayinfoBean.getDiscountFee();
-                            total_fee = cartsPayinfoBean.getTotalFee() + "";
-                            uuid = cartsPayinfoBean.getUuid();
+                        JUtils.Log(TAG, "post-fee" + post_fee);
+                        JUtils.Log(TAG, "payment" + paymentInfo);
+                        JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
+                        JUtils.Log(TAG, "已节省" + discount_fee);
 
-                            JUtils.Log(TAG, "post-fee" + post_fee);
-                            JUtils.Log(TAG, "payment" + paymentInfo);
-                            JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
-                            JUtils.Log(TAG, "已节省" + discount_fee);
+                        postFee.setText("¥" + post_fee);
 
-                            postFee.setText("¥" + post_fee);
+                        if (null != cartsPayinfoBean.getmPayExtras()) {
+                            List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
+                                cartsPayinfoBean.getmPayExtras();
 
-                            if (null != cartsPayinfoBean.getmPayExtras()) {
-                                List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
-                                        cartsPayinfoBean.getmPayExtras();
+                            for (int i = 0; i < payExtrasEntityApps.size(); i++) {
+                                //优惠券
+                                if (payExtrasEntityApps.get(i).getPid() == 2) {
+                                    if (payExtrasEntityApps.get(i).getUseCouponAllowed() == 1) {
 
-                                for (int i = 0; i < payExtrasEntityApps.size(); i++) {
-                                    //优惠券
-                                    if (payExtrasEntityApps.get(i).getPid() == 2) {
-                                        if (payExtrasEntityApps.get(i).getUseCouponAllowed() == 1) {
+                                        coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
 
-                                            coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
-
-                                            if (isCoupon) {
-                                                pay_extras = "pid:"
-                                                        + payExtrasEntityApps.get(i).getValue()
-                                                        + ":couponid:"
-                                                        + coupon_id
-                                                        + ":value:"
-                                                        + coupon_price
-                                                        + ";";
-
-                                                continue;
-                                            } else {
-                                                coupon_price = 0;
-                                            }
-                                        } else {
-                                            tv_coupon.setText("无可用优惠券");
-                                            coupon_layout.setOnClickListener(null);
-                                            pay_extras = "";
-                                            coupon_price = 0;
-                                        }
-                                    }
-
-                                    //app支付立减两元
-                                    if (payExtrasEntityApps.get(i).getPid() == 1) {
-
-                                        appcut = payExtrasEntityApps.get(i).getValue();
-
-                                        pay_extras += "pid:"
-                                                + payExtrasEntityApps.get(i).getPid()
-                                                + ":value:"
+                                        if (isCoupon) {
+                                            pay_extras = "pid:"
                                                 + payExtrasEntityApps.get(i).getValue()
+                                                + ":couponid:"
+                                                + coupon_id
+                                                + ":value:"
+                                                + coupon_price
                                                 + ";";
 
-                                        continue;
-                                    }
-
-                                    //使用钱包
-                                    if (payExtrasEntityApps.get(i).getPid() == 3) {
-                                        try {
-                                            yue = payExtrasEntityApps.get(i).getValue();
-                                            JUtils.Log(TAG, yue + ":yue");
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
+                                            continue;
+                                        } else {
+                                            coupon_price = 0;
                                         }
+                                    } else {
+                                        tv_coupon.setText("无可用优惠券");
+                                        coupon_layout.setOnClickListener(null);
+                                        pay_extras = "";
+                                        coupon_price = 0;
                                     }
-
                                 }
+
+                                //app支付立减两元
+                                if (payExtrasEntityApps.get(i).getPid() == 1) {
+
+                                    appcut = payExtrasEntityApps.get(i).getValue();
+
+                                    pay_extras += "pid:"
+                                        + payExtrasEntityApps.get(i).getPid()
+                                        + ":value:"
+                                        + payExtrasEntityApps.get(i).getValue()
+                                        + ";";
+
+                                    continue;
+                                }
+
+                                //使用钱包
+                                if (payExtrasEntityApps.get(i).getPid() == 3) {
+                                    try {
+                                        yue = payExtrasEntityApps.get(i).getValue();
+                                        JUtils.Log(TAG, yue + ":yue");
+                                    } catch (NullPointerException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
                             }
-                            calcAllPrice();
-                        } else {
-                            JUtils.Toast("商品已过期,请重新选购");
-                            readyGoThenKill(CartActivity.class);
                         }
+                        calcAllPrice();
+                    } else {
+                        JUtils.Toast("商品已过期,请重新选购");
+                        readyGoThenKill(CartActivity.class);
                     }
-                }));
+                }
+            }));
     }
 
     private void downLoadCartsInfoWithout() {
-        addSubscription(CartsModel.getInstance()
-                .getCartsPayInfoListV2(ids)
-                .subscribe(new ServiceResponse<CartsPayinfoBean>() {
-                    @Override
-                    public void onNext(CartsPayinfoBean cartsPayinfoBean) {
-                        if (cartsPayinfoBean != null) {
-                            List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
-                            for (int i = 0; i < cartList.size(); i++) {
-                                if (cartList.get(i).is_bonded_goods()) {
-                                    idFlag = true;
-                                    checkIdNo();
-                                    break;
-                                }
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .getCartsPayInfoListV2(ids, new ServiceResponse<CartsPayinfoBean>() {
+                @Override
+                public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                    if (cartsPayinfoBean != null) {
+                        List<CartsPayinfoBean.CartListEntity> cartList = cartsPayinfoBean.getCartList();
+                        for (int i = 0; i < cartList.size(); i++) {
+                            if (cartList.get(i).is_bonded_goods()) {
+                                idFlag = true;
+                                checkIdNo();
+                                break;
                             }
-                            for (int i = 0; i < cartList.size(); i++) {
-                                if (cartList.get(i).getProduct_type() != 1) {
-                                    layout.setVisibility(View.VISIBLE);
-                                }
+                        }
+                        for (int i = 0; i < cartList.size(); i++) {
+                            if (cartList.get(i).getProduct_type() != 1) {
+                                layout.setVisibility(View.VISIBLE);
                             }
-                            JUtils.Log(TAG, cartsPayinfoBean.toString());
-                            mAdapter.updateWithClear(cartList);
-                            goodNum = cartList.get(0).getNum();
-                            cart_ids = cartsPayinfoBean.getCartIds();
-                            logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
-                            for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
-                                logisticsCompanysesString.add(list.getName());
-                            }
+                        }
+                        JUtils.Log(TAG, cartsPayinfoBean.toString());
+                        mAdapter.updateWithClear(cartList);
+                        goodNum = cartList.get(0).getNum();
+                        cart_ids = cartsPayinfoBean.getCartIds();
+                        logisticsCompanyses.addAll(cartsPayinfoBean.getLogisticsCompanyses());
+                        for (CartsPayinfoBean.LogisticsCompanys list : logisticsCompanyses) {
+                            logisticsCompanysesString.add(list.getName());
+                        }
 
-                            tvWuliu.setText(logisticsCompanyses.get(0).getName());
-                            code = logisticsCompanyses.get(0).getId();
+                        tvWuliu.setText(logisticsCompanyses.get(0).getName());
+                        code = logisticsCompanyses.get(0).getId();
 
-                            budgetCash =
-                                    (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
-                                            + "";
-                            payment = (double) (Math.round(
-                                    (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                                            - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
+                        budgetCash =
+                            (double) (Math.round(cartsPayinfoBean.getBudget_cash() * 100)) / 100
+                                + "";
+                        payment = (double) (Math.round(
+                            (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                                - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
 
-                            paymentInfo = (double) (Math.round(
-                                    (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
-                                            - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
-                            post_fee =
-                                    (double) (Math.round(cartsPayinfoBean.getPostFee() * 100)) / 100 + "";
-                            discount_fee =
-                                    (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100)) / 100
-                                            + "";
-                            JUtils.Log(TAG, "discount_fee" + discount_fee);
-                            discount_feeInfo = cartsPayinfoBean.getDiscountFee();
-                            total_fee = cartsPayinfoBean.getTotalFee() + "";
-                            uuid = cartsPayinfoBean.getUuid();
+                        paymentInfo = (double) (Math.round(
+                            (cartsPayinfoBean.getTotalFee() + cartsPayinfoBean.getPostFee()
+                                - cartsPayinfoBean.getDiscountFee()) * 100)) / 100;
+                        post_fee =
+                            (double) (Math.round(cartsPayinfoBean.getPostFee() * 100)) / 100 + "";
+                        discount_fee =
+                            (float) (Math.round((cartsPayinfoBean.getDiscountFee()) * 100)) / 100
+                                + "";
+                        JUtils.Log(TAG, "discount_fee" + discount_fee);
+                        discount_feeInfo = cartsPayinfoBean.getDiscountFee();
+                        total_fee = cartsPayinfoBean.getTotalFee() + "";
+                        uuid = cartsPayinfoBean.getUuid();
 
-                            JUtils.Log(TAG, "post-fee" + post_fee);
-                            JUtils.Log(TAG, "payment" + paymentInfo);
-                            JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
-                            JUtils.Log(TAG, "已节省" + discount_fee);
+                        JUtils.Log(TAG, "post-fee" + post_fee);
+                        JUtils.Log(TAG, "payment" + paymentInfo);
+                        JUtils.Log(TAG, "合计" + (cartsPayinfoBean.getTotalFee()));
+                        JUtils.Log(TAG, "已节省" + discount_fee);
 
-                            postFee.setText("¥" + post_fee);
+                        postFee.setText("¥" + post_fee);
 
-                            if (null != cartsPayinfoBean.getmPayExtras()) {
-                                List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
-                                        cartsPayinfoBean.getmPayExtras();
+                        if (null != cartsPayinfoBean.getmPayExtras()) {
+                            List<CartsPayinfoBean.payExtrasEntityApp> payExtrasEntityApps =
+                                cartsPayinfoBean.getmPayExtras();
 
-                                for (int i = 0; i < payExtrasEntityApps.size(); i++) {
-                                    //优惠券
-                                    if (payExtrasEntityApps.get(i).getPid() == 2) {
-                                        if (payExtrasEntityApps.get(i).getUseCouponAllowed() == 1) {
+                            for (int i = 0; i < payExtrasEntityApps.size(); i++) {
+                                //优惠券
+                                if (payExtrasEntityApps.get(i).getPid() == 2) {
+                                    if (payExtrasEntityApps.get(i).getUseCouponAllowed() == 1) {
 
-                                            coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
+                                        coupon_layout.setOnClickListener(CartsPayInfoActivity.this);
 
-                                            if (isCoupon) {
-                                                pay_extras = "pid:"
-                                                        + payExtrasEntityApps.get(i).getValue()
-                                                        + ":couponid:"
-                                                        + coupon_id
-                                                        + ":value:"
-                                                        + coupon_price
-                                                        + ";";
-
-                                                continue;
-                                            } else {
-                                                coupon_price = 0;
-                                            }
-                                        } else {
-                                            tv_coupon.setText("无可用优惠券");
-                                            coupon_layout.setOnClickListener(null);
-                                            pay_extras = "";
-                                            coupon_price = 0;
-                                        }
-                                    }
-
-                                    //app支付立减两元
-                                    if (payExtrasEntityApps.get(i).getPid() == 1) {
-
-                                        appcut = payExtrasEntityApps.get(i).getValue();
-
-                                        pay_extras += "pid:"
-                                                + payExtrasEntityApps.get(i).getPid()
-                                                + ":value:"
+                                        if (isCoupon) {
+                                            pay_extras = "pid:"
                                                 + payExtrasEntityApps.get(i).getValue()
+                                                + ":couponid:"
+                                                + coupon_id
+                                                + ":value:"
+                                                + coupon_price
                                                 + ";";
 
-                                        continue;
-                                    }
-
-                                    //使用钱包
-                                    if (payExtrasEntityApps.get(i).getPid() == 3) {
-                                        try {
-                                            yue = payExtrasEntityApps.get(i).getValue();
-                                            JUtils.Log(TAG, yue + ":yue");
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
+                                            continue;
+                                        } else {
+                                            coupon_price = 0;
                                         }
-                                    }
-
-                                    if (payExtrasEntityApps.get(i).getPid() == 4) {
-                                        coinCash = payExtrasEntityApps.get(i).getValue();
+                                    } else {
+                                        tv_coupon.setText("无可用优惠券");
+                                        coupon_layout.setOnClickListener(null);
+                                        pay_extras = "";
+                                        coupon_price = 0;
                                     }
                                 }
+
+                                //app支付立减两元
+                                if (payExtrasEntityApps.get(i).getPid() == 1) {
+
+                                    appcut = payExtrasEntityApps.get(i).getValue();
+
+                                    pay_extras += "pid:"
+                                        + payExtrasEntityApps.get(i).getPid()
+                                        + ":value:"
+                                        + payExtrasEntityApps.get(i).getValue()
+                                        + ";";
+
+                                    continue;
+                                }
+
+                                //使用钱包
+                                if (payExtrasEntityApps.get(i).getPid() == 3) {
+                                    try {
+                                        yue = payExtrasEntityApps.get(i).getValue();
+                                        JUtils.Log(TAG, yue + ":yue");
+                                    } catch (NullPointerException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                if (payExtrasEntityApps.get(i).getPid() == 4) {
+                                    coinCash = payExtrasEntityApps.get(i).getValue();
+                                }
                             }
-                            calcAllPrice();
-                        } else {
-                            JUtils.Toast("商品已过期,请重新选购");
-                            readyGoThenKill(CartActivity.class);
                         }
+                        calcAllPrice();
+                    } else {
+                        JUtils.Toast("商品已过期,请重新选购");
+                        readyGoThenKill(CartActivity.class);
                     }
-                }));
+                }
+            }));
     }
 
     private void calcAllPrice() {
@@ -508,10 +502,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
         mAdapter = new CartsPayInfoAdapter(this, list);
         payInfoListView.setAdapter(mAdapter);
         dialog = new AlertDialog.Builder(this)
-                .setTitle("购买条款")
-                .setMessage(getResources().getString(R.string.buy_rule))
-                .setPositiveButton("同意", (dialog1, which) -> dialog1.dismiss())
-                .create();
+            .setTitle("购买条款")
+            .setMessage(getResources().getString(R.string.buy_rule))
+            .setPositiveButton("同意", (dialog1, which) -> dialog1.dismiss())
+            .create();
         scb.setCanClickable(true);
     }
 
@@ -532,11 +526,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                 MobclickAgent.onEvent(this, "PayId");
                 if (idFlag && !IdCardChecker.isValidatedAllIdcard(idNo)) {
                     new AlertDialog.Builder(this)
-                            .setTitle("提示")
-                            .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
-                            .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
-                            .setCancelable(false)
-                            .show();
+                        .setTitle("提示")
+                        .setMessage("订单中包含进口保税区发货商品,根据海关监管要求,需要提供收货人身份证号码." +
+                            "此信息加密保存,只用于此订单海关通关,请点击收货地址填写身份证号码.")
+                        .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                        .setCancelable(false)
+                        .show();
                 } else {
                     xlmmPayWithDialog();
                 }
@@ -574,66 +569,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                 if (!isAlipay && !isWx && !isBudget && !isCoin) {
                     if (paymentInfo == 0) {
                         pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";";
-                        payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
-                                (jieshengjine) + "");
-                    } else {
-                        JUtils.Toast("优惠券金额不足,可以选择其它混合支付");
-                    }
-                } else if (isBudget && !isAlipay && !isWx && !isCoin) {
-                    if (paymentInfo == 0) {
-                        pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";"
-                                + BUDGET_PAY
-                                + yue
-                                + ";";
-
-                        JUtils.Log(TAG, pay_extras);
-                        payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
-                                (jieshengjine) + "");
-                    } else {
-                        JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
-                    }
-                } else if (!isBudget && !isAlipay && !isWx) {
-                    if (paymentInfo == 0) {
-                        pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";"
-                                + COIN_PAY
-                                + real_use_coin
-                                + ";";
-
-                        JUtils.Log(TAG, pay_extras);
-                        payV2(BUDGET, paymentInfo + real_use_coin + "", pay_extras,
-                                (jieshengjine) + "");
-                    } else {
-                        JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
-                    }
-                } else {
-                    pay_extras = "pid:"
                             + 2
                             + ":couponid:"
                             + coupon_id
@@ -643,36 +578,96 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                             + APP_PAY
                             + appcut
                             + ";";
+                        payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
+                            (jieshengjine) + "");
+                    } else {
+                        JUtils.Toast("优惠券金额不足,可以选择其它混合支付");
+                    }
+                } else if (isBudget && !isAlipay && !isWx && !isCoin) {
+                    if (paymentInfo == 0) {
+                        pay_extras = "pid:"
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";"
+                            + BUDGET_PAY
+                            + yue
+                            + ";";
+
+                        JUtils.Log(TAG, pay_extras);
+                        payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
+                            (jieshengjine) + "");
+                    } else {
+                        JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
+                    }
+                } else if (!isBudget && !isAlipay && !isWx) {
+                    if (paymentInfo == 0) {
+                        pay_extras = "pid:"
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";"
+                            + COIN_PAY
+                            + real_use_coin
+                            + ";";
+
+                        JUtils.Log(TAG, pay_extras);
+                        payV2(BUDGET, paymentInfo + real_use_coin + "", pay_extras,
+                            (jieshengjine) + "");
+                    } else {
+                        JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
+                    }
+                } else {
+                    pay_extras = "pid:"
+                        + 2
+                        + ":couponid:"
+                        + coupon_id
+                        + ":value:"
+                        + coupon_price
+                        + ";"
+                        + APP_PAY
+                        + appcut
+                        + ";";
                     if (isBudget) {
                         pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";"
-                                + BUDGET_PAY
-                                + yue
-                                + ";";
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";"
+                            + BUDGET_PAY
+                            + yue
+                            + ";";
                         channel = BUDGET;
                     }
                     if (isCoin) {
                         pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";"
-                                + COIN_PAY
-                                + real_use_coin
-                                + ";";
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";"
+                            + COIN_PAY
+                            + real_use_coin
+                            + ";";
                         channel = COIN;
                     }
                     if (paymentInfo != 0) {
@@ -684,7 +679,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     }
 
                     payV2(channel, (paymentInfo + real_use_yue) + "", pay_extras,
-                            (jieshengjine) + "");
+                        (jieshengjine) + "");
                 }
             } else {
 
@@ -713,7 +708,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         }
                         pay_extras = APP_PAY + appcut + ";" + BUDGET_PAY + yue + ";";
                         payV2(channel, (paymentInfo + real_use_yue) + "", pay_extras,
-                                jieshengjine + "");
+                            jieshengjine + "");
                     }
                 }
 
@@ -732,7 +727,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         }
                         pay_extras = APP_PAY + appcut + ";" + COIN_PAY + coinCash + ";";
                         payV2(channel, (paymentInfo + real_use_coin) + "", pay_extras,
-                                jieshengjine + "");
+                            jieshengjine + "");
                     }
                 }
             }
@@ -754,17 +749,17 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     if (paymentInfo == 0) {
                         setConfirmClickAble();
                         pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";";
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";";
                         payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
-                                (jieshengjine) + "");
+                            (jieshengjine) + "");
                     } else {
                         //JUtils.Toast("优惠券金额不足,可以选择其它混合支付");
                         new MyDialog(this).show();
@@ -773,20 +768,20 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     if (paymentInfo == 0) {
                         setConfirmClickAble();
                         pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";"
-                                + BUDGET_PAY
-                                + yue
-                                + ";";
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";"
+                            + BUDGET_PAY
+                            + yue
+                            + ";";
                         payV2(BUDGET, paymentInfo + real_use_yue + "", pay_extras,
-                                (jieshengjine) + "");
+                            (jieshengjine) + "");
                     } else {
                         //JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
                         new MyDialog(this).show();
@@ -795,20 +790,20 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     if (paymentInfo == 0) {
                         setConfirmClickAble();
                         pay_extras = "pid:"
-                                + 2
-                                + ":couponid:"
-                                + coupon_id
-                                + ":value:"
-                                + coupon_price
-                                + ";"
-                                + APP_PAY
-                                + appcut
-                                + ";"
-                                + COIN_PAY
-                                + real_use_coin
-                                + ";";
+                            + 2
+                            + ":couponid:"
+                            + coupon_id
+                            + ":value:"
+                            + coupon_price
+                            + ";"
+                            + APP_PAY
+                            + appcut
+                            + ";"
+                            + COIN_PAY
+                            + real_use_coin
+                            + ";";
                         payV2(BUDGET, paymentInfo + real_use_coin + "", pay_extras,
-                                (jieshengjine) + "");
+                            (jieshengjine) + "");
                     } else {
                         //JUtils.Toast("金额不足,可以选择下面一种支付方式混合支付");
                         new MyDialog(this).show();
@@ -817,12 +812,12 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     pay_extras = "pid:2:couponid:" + coupon_id + ":value:" + coupon_price + ";" + APP_PAY + appcut + ";";
                     if (isBudget) {
                         pay_extras = "pid:2:couponid:" + coupon_id + ":value:" + coupon_price + ";"
-                                + APP_PAY + appcut + ";" + BUDGET_PAY + yue + ";";
+                            + APP_PAY + appcut + ";" + BUDGET_PAY + yue + ";";
                         channel = BUDGET;
                     }
                     if (isCoin) {
                         pay_extras = "pid:2:couponid:" + coupon_id + ":value:" + coupon_price + ";"
-                                + APP_PAY + appcut + ";" + COIN_PAY + real_use_coin + ";";
+                            + APP_PAY + appcut + ";" + COIN_PAY + real_use_coin + ";";
                         channel = COIN;
                     }
                     if (paymentInfo == 0) {
@@ -858,7 +853,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                             channel = BUDGET;
                             pay_extras = APP_PAY + appcut + ";" + BUDGET_PAY + yue + ";";
                             payV2(channel, (paymentInfo + real_use_yue) + "", pay_extras,
-                                    jieshengjine + "");
+                                jieshengjine + "");
                         } else {
                             if (isAlipay) {
                                 channel = ALIPAY;
@@ -880,7 +875,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                             channel = COIN;
                             pay_extras = APP_PAY + appcut + ";" + COIN_PAY + real_use_coin + ";";
                             payV2(channel, (paymentInfo + real_use_coin) + "", pay_extras,
-                                    jieshengjine + "");
+                                jieshengjine + "");
                         } else {
                             if (isAlipay) {
                                 channel = ALIPAY;
@@ -903,10 +898,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     private void payV2(String pay_method, String paymentprice_v2, String pay_extrasaa,
                        String discount_fee_price) {
         showIndeterminateProgressDialog(false);
-        addSubscription(TradeModel.getInstance()
-                .shoppingcart_create_v2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                        discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag)
-                .subscribe(new ServiceResponse<PayInfoBean>() {
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .shoppingCartCreateV2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
+                discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag,
+                new ServiceResponse<PayInfoBean>() {
 
                     @Override
                     public void onCompleted() {
@@ -923,7 +918,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
                     @Override
                     public void onNext(PayInfoBean payInfoBean) {
-                        EventBus.getDefault().post(new CartEvent());
+                        EventBus.getDefault().post(new LoginEvent());
                         if (null != payInfoBean && payInfoBean.getTrade() != null) {
                             order_id = payInfoBean.getTrade().getId();
                             order_no = payInfoBean.getTrade().getTid();
@@ -931,7 +926,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                             Gson gson = new Gson();
                             JUtils.Log(TAG, gson.toJson(payInfoBean.getCharge()));
                             if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel()
-                                    .equals("budget"))) {
+                                .equals("budget"))) {
                                 if (payInfoBean.getCode() > 0) {
                                     JUtils.Toast(payInfoBean.getInfo());
                                 } else {
@@ -1034,41 +1029,35 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
     private void successJump() {
         if (mFlag) {
-            addSubscription(TradeModel.getInstance()
-                    .getTeamBuyBean(order_no)
-                    .subscribe(new ServiceResponse<TeamBuyBean>() {
-                        @Override
-                        public void onNext(TeamBuyBean teamBuyBean) {
-                            int id = teamBuyBean.getId();
-                            SharedPreferences preferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
-                            String baseUrl = "https://m.xiaolumeimei.com/mall/order/spell/group/" + id + "?from_page=order_commit";
-                            if (!TextUtils.isEmpty(preferences.getString("BASE_URL", ""))) {
-                                baseUrl = "https://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id + "?from_page=order_commit";
-                            }
-                            JumpUtils.jumpToWebViewWithCookies(mContext,
-                                    baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
-                            finish();
+            addSubscription(XlmmApp.getTradeInteractor(this)
+                .getTeamBuyBean(order_no, new ServiceResponse<TeamBuyBean>() {
+                    @Override
+                    public void onNext(TeamBuyBean teamBuyBean) {
+                        int id = teamBuyBean.getId();
+                        SharedPreferences preferences = XlmmApp.getmContext().getSharedPreferences("APICLIENT", Context.MODE_PRIVATE);
+                        String baseUrl = "https://m.xiaolumeimei.com/mall/order/spell/group/" + id + "?from_page=order_commit";
+                        if (!TextUtils.isEmpty(preferences.getString("BASE_URL", ""))) {
+                            baseUrl = "https://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + id + "?from_page=order_commit";
                         }
+                        JumpUtils.jumpToWebViewWithCookies(mContext,
+                            baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
+                        finish();
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            if (order_id != -1) {
-                                Intent intent = new Intent(CartsPayInfoActivity.this, OrderDetailActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putInt("orderinfo", order_id);
-                                bundle.putString("source", CartsPayInfoActivity.class.getSimpleName());
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            }
-                            finish();
+                    @Override
+                    public void onError(Throwable e) {
+                        if (order_id != -1) {
+                            Intent intent = new Intent(CartsPayInfoActivity.this, OrderDetailActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("orderinfo", order_id);
+                            bundle.putString("source", CartsPayInfoActivity.class.getSimpleName());
+                            intent.putExtras(bundle);
+                            startActivity(intent);
                         }
-                    }));
+                        finish();
+                    }
+                }));
         } else {
-//            Intent intent = new Intent(CartsPayInfoActivity.this, RedBagActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("tid", order_no);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
             Intent intent = new Intent(this, AllOrdersActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt("fragment", 3);
@@ -1095,45 +1084,31 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
             addressDetails.setText(addressDetailsSelect);
             addr_id = addr_idSelect;
         } else {
-            addSubscription(AddressModel.getInstance()
-                    .getAddressList()
-                    .subscribe(new ServiceResponse<List<AddressBean>>() {
-                        @Override
-                        public void onNext(List<AddressBean> list) {
-                            super.onNext(list);
-                            if (list != null && chooseAddress != null) {
-                                chooseAddress.setVisibility(View.INVISIBLE);
+            addSubscription(XlmmApp.getAddressInteractor(this)
+                .getAddressList(new ServiceResponse<List<AddressBean>>() {
+                    @Override
+                    public void onNext(List<AddressBean> list) {
+                        super.onNext(list);
+                        if (list != null && chooseAddress != null) {
+                            chooseAddress.setVisibility(View.INVISIBLE);
 
-                                name.setVisibility(View.VISIBLE);
-                                phone.setVisibility(View.VISIBLE);
-                                addressDetails.setVisibility(View.VISIBLE);
-                                AddressBean addressBean = list.get(0);
-                                addressId = addressBean.getId();
-                                addr_id = addressBean.getId();
-                                JUtils.Log(TAG, addr_id + "addr_id");
-                                name.setText(addressBean.getReceiverName());
-                                phone.setText(addressBean.getReceiverMobile());
-                                idNo = addressBean.getmIdentificationNo();
-                                checkIdNo();
-                                addressDetails.setText(addressBean.getReceiverState()
-                                        + addressBean.getReceiverCity()
-                                        + addressBean.getReceiverDistrict()
-                                        + addressBean.getReceiverAddress());
-                                isHaveAddress = true;
-                            } else {
-                                if (chooseAddress != null) {
-                                    chooseAddress.setVisibility(View.VISIBLE);
-                                }
-                                name.setVisibility(View.INVISIBLE);
-                                phone.setVisibility(View.INVISIBLE);
-                                addressDetails.setVisibility(View.INVISIBLE);
-                                isHaveAddress = false;
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            super.onError(e);
+                            name.setVisibility(View.VISIBLE);
+                            phone.setVisibility(View.VISIBLE);
+                            addressDetails.setVisibility(View.VISIBLE);
+                            AddressBean addressBean = list.get(0);
+                            addressId = addressBean.getId();
+                            addr_id = addressBean.getId();
+                            JUtils.Log(TAG, addr_id + "addr_id");
+                            name.setText(addressBean.getReceiverName());
+                            phone.setText(addressBean.getReceiverMobile());
+                            idNo = addressBean.getmIdentificationNo();
+                            checkIdNo();
+                            addressDetails.setText(addressBean.getReceiverState()
+                                + addressBean.getReceiverCity()
+                                + addressBean.getReceiverDistrict()
+                                + addressBean.getReceiverAddress());
+                            isHaveAddress = true;
+                        } else {
                             if (chooseAddress != null) {
                                 chooseAddress.setVisibility(View.VISIBLE);
                             }
@@ -1142,7 +1117,20 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                             addressDetails.setVisibility(View.INVISIBLE);
                             isHaveAddress = false;
                         }
-                    }));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        if (chooseAddress != null) {
+                            chooseAddress.setVisibility(View.VISIBLE);
+                        }
+                        name.setVisibility(View.INVISIBLE);
+                        phone.setVisibility(View.INVISIBLE);
+                        addressDetails.setVisibility(View.INVISIBLE);
+                        isHaveAddress = false;
+                    }
+                }));
         }
     }
 
@@ -1181,11 +1169,11 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     private void checkIdNo() {
         if (idFlag && !IdCardChecker.isValidatedAllIdcard(idNo)) {
             new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
-                    .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
-                    .setCancelable(false)
-                    .show();
+                .setTitle("提示")
+                .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
+                .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                .setCancelable(false)
+                .show();
         }
     }
 
@@ -1248,7 +1236,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
             }
 
             listView.setAdapter(new ArrayAdapter<>(CartsPayInfoActivity.this,
-                    android.R.layout.simple_list_item_1, logisticsCompanysesString));
+                android.R.layout.simple_list_item_1, logisticsCompanysesString));
 
             listView.setOnItemClickListener((parent, view, position1, id) -> {
                 code = logisticsCompanyses.get(position1).getId();

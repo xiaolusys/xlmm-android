@@ -53,7 +53,7 @@ public class ChooseListAdapter extends RecyclerView.Adapter<ChooseListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_chooselist, parent, false);
+            .inflate(R.layout.item_chooselist, parent, false);
         return new ViewHolder(view);
     }
 
@@ -63,17 +63,17 @@ public class ChooseListAdapter extends RecyclerView.Adapter<ChooseListAdapter.Vi
         holder.name.setText(bean.getName());
         holder.lockNum.setText(bean.getSale_num_desc());
         ViewUtils.loadImgToImgView(mContext, holder.imageChooselist,
-                bean.getPic_path());
+            bean.getPic_path());
         holder.agentPrice.setText(
-                "¥" + (float) (Math.round(bean.getLowest_agent_price() * 100)) / 100);
+            "¥" + (float) (Math.round(bean.getLowest_agent_price() * 100)) / 100);
         holder.stdSalePrice.setText(
-                "/¥" + (float) (Math.round(bean.getLowest_std_sale_price() * 100)) / 100);
+            "/¥" + (float) (Math.round(bean.getLowest_std_sale_price() * 100)) / 100);
         if (bean.is_boutique()) {
-            holder.rebetAmount.setText(bean.getElite_level_prices().getElite_level_price()+"");
+            holder.rebetAmount.setText(bean.getElite_level_prices().getElite_level_price() + "");
             holder.vip.setText("");
-            holder.vipMoney.setText(bean.getElite_level_prices().getNext_elite_level_price()+"");
+            holder.vipMoney.setText(bean.getElite_level_prices().getNext_elite_level_price() + "");
             holder.descText.setText("购买价格");
-        }else {
+        } else {
             holder.rebetAmount.setText("你的" + bean.getRebet_amount_desc());
             holder.vip.setText(bean.getLevel_info().getNext_agencylevel_desc());
             holder.vipMoney.setText(bean.getNext_rebet_amount_desc());

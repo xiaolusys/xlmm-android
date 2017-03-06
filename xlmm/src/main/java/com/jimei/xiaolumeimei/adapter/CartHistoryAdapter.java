@@ -12,14 +12,14 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
-import com.jimei.xiaolumeimei.model.CartsModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
-import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
+import com.jimei.library.widget.NoDoubleClickListener;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -73,30 +73,29 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
                 protected void onNoDoubleClick(View v) {
                     MobclickAgent.onEvent(mActivity, "ReAddCartsID");
                     helper.showIndeterminateProgressDialog(false);
-                    helper.addSubscription(CartsModel.getInstance()
+                    helper.addSubscription(XlmmApp.getCartsInteractor(mActivity)
                         .rebuy(cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
-                            cartsInfoBean.getId() + "")
-                        .subscribe(new ServiceResponse<CartsHisBean>() {
-                            @Override
-                            public void onNext(CartsHisBean cartsHisBean) {
-                                helper.hideIndeterminateProgressDialog();
-                                if (null != cartsHisBean) {
-                                    if (cartsHisBean.getCode() == 0) {
-                                        helper.removeHistory(cartsInfoBean);
-                                        helper.refreshCartList();
-                                    } else {
-                                        JUtils.Toast(cartsHisBean.getInfo());
+                            cartsInfoBean.getId() + "", new ServiceResponse<CartsHisBean>() {
+                                @Override
+                                public void onNext(CartsHisBean cartsHisBean) {
+                                    helper.hideIndeterminateProgressDialog();
+                                    if (null != cartsHisBean) {
+                                        if (cartsHisBean.getCode() == 0) {
+                                            helper.removeHistory(cartsInfoBean);
+                                            helper.refreshCartList();
+                                        } else {
+                                            JUtils.Toast(cartsHisBean.getInfo());
+                                        }
                                     }
                                 }
-                            }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                super.onError(e);
-                                JUtils.Toast("重新购买失败,商品可能已下架");
-                                helper.hideIndeterminateProgressDialog();
-                            }
-                        }));
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                    JUtils.Toast("重新购买失败,商品可能已下架");
+                                    helper.hideIndeterminateProgressDialog();
+                                }
+                            }));
                 }
             }
         );

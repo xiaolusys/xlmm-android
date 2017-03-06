@@ -11,7 +11,7 @@
         android:text="填写快递名称"
         android:gravity="center"
         android:textColor="@color/colorAccent"
-        android:textSize="20sp"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
     <EditText

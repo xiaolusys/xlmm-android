@@ -26,18 +26,18 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.UserBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyRefundActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.ApplyReturnGoodsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.LogisticsActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
-import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,12 +90,12 @@ public class OrderGoodsListAdapter extends BaseAdapter {
         int refund_state = data.get(position).getRefund_status();
         convertView = LayoutInflater.from(context).inflate(R.layout.item_order_detail_include_proc, null);
         if ((state == XlmmConst.ORDER_STATE_PAYED) ||
-                (state == XlmmConst.ORDER_STATE_SENDED) ||
-                (state == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
+            (state == XlmmConst.ORDER_STATE_SENDED) ||
+            (state == XlmmConst.ORDER_STATE_CONFIRM_RECEIVE)) {
             setBtnInfo(convertView, state, refund_state,
-                    data.get(position).isKill_title(), data.get(position));
+                data.get(position).isKill_title(), data.get(position));
             setBtnListener(convertView, state, refund_state, data.get(position).getId(),
-                    data.get(position), position);
+                data.get(position), position);
         } else {
             convertView.findViewById(R.id.rl_info).setVisibility(View.GONE);
         }
@@ -131,15 +131,15 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     ((TextView) convertView.findViewById(R.id.tx_order_crtstate)).setText(assign_status_display);
                 }
                 if ((orderDetailEntity.getPackage_orders().get(i).getBook_time() != null)
-                        && orderDetailEntity.getPackage_orders().get(i).getAssign_time() == null
-                        && orderDetailEntity.getPackage_orders().get(i).getWeight_time() == null
-                        && orderDetailEntity.getOrders().get(position).getStatus() == 2) {
+                    && orderDetailEntity.getPackage_orders().get(i).getAssign_time() == null
+                    && orderDetailEntity.getPackage_orders().get(i).getWeight_time() == null
+                    && orderDetailEntity.getOrders().get(position).getStatus() == 2) {
                     Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
                     btn.setOnClickListener(v -> new AlertDialog.Builder(context)
-                            .setCancelable(true)
-                            .setMessage("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
-                            .setPositiveButton("确认", (dialog, which) -> dialog.dismiss())
-                            .show());
+                        .setCancelable(true)
+                        .setMessage("您的订单已经向工厂订货，暂不支持退款，请您耐心等待，在收货确认签收后申请退货，如有疑问请咨询小鹿美美公众号或客服4008235355。")
+                        .setPositiveButton("确认", (dialog, which) -> dialog.dismiss())
+                        .show());
                 }
                 final int finalI = i;
                 textLogistic.setVisibility(View.VISIBLE);
@@ -176,7 +176,7 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     }
 
     private void setBtnInfo(View convertView, int state, int refund_state, boolean kill_title
-            , AllOrdersBean.ResultsEntity.OrdersEntity entity) {
+        , AllOrdersBean.ResultsEntity.OrdersEntity entity) {
         Log.d(TAG, " setBtnInfo" + state + " " + refund_state);
 
         Button btn = (Button) convertView.findViewById(R.id.btn_order_proc);
@@ -303,14 +303,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                     //confirm receive goods
                     Log.d(TAG, "confirm receive goods ");
                     new AlertDialog.Builder(context)
-                            .setTitle("提示")
-                            .setMessage("是否确认签收产品？")
-                            .setPositiveButton("确认", (dialog, which) -> {
-                                receive_goods(goods_id);
-                                dialog.dismiss();
-                            })
-                            .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                            .show();
+                        .setTitle("提示")
+                        .setMessage("是否确认签收产品？")
+                        .setPositiveButton("确认", (dialog, which) -> {
+                            receive_goods(goods_id);
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                        .show();
                 });
                 break;
             }
@@ -326,9 +326,9 @@ public class OrderGoodsListAdapter extends BaseAdapter {
                             bundle.putInt("position", position);
                             intent.putExtras(bundle);
                             Log.d(TAG, "transfer good  "
-                                    + goods_info.getId()
-                                    + " to "
-                                    + "ApplyReturnGoodsActivity");
+                                + goods_info.getId()
+                                + " to "
+                                + "ApplyReturnGoodsActivity");
                             context.startActivity(intent);
                             context.finish();
                         });
@@ -341,15 +341,14 @@ public class OrderGoodsListAdapter extends BaseAdapter {
     }
 
     private void receive_goods(int id) {
-        TradeModel.getInstance()
-                .receiveGoods(id)
-                .subscribe(new ServiceResponse<UserBean>() {
-                    @Override
-                    public void onNext(UserBean userBean) {
-                        Log.d(TAG, "returncode " + userBean.getCode());
-                        context.finish();
-                    }
-                });
+        XlmmApp.getTradeInteractor(context)
+            .receiveGoods(id, new ServiceResponse<UserBean>() {
+                @Override
+                public void onNext(UserBean userBean) {
+                    Log.d(TAG, "returncode " + userBean.getCode());
+                    context.finish();
+                }
+            });
     }
 
 }

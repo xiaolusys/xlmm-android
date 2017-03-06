@@ -44,7 +44,7 @@
                     android:singleLine="true"
                     android:text="推送通知"
                     android:textColor="@color/primary_text"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/secondary_text"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/open_notice_a"

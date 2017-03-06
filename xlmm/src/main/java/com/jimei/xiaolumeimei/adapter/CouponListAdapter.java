@@ -90,7 +90,7 @@ public class CouponListAdapter extends BaseAdapter {
             holder.rl.setBackgroundResource(R.drawable.bg_img_dcoupon);
         }
         double coupon_value = mList.get(position).getCoupon_value();
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("0.00");
         double format = Double.parseDouble(df.format(coupon_value));
         if (Math.round(format * 100) % 100 == 0) {
             holder.tv_coupon_value.setText("￥" + Math.round(format * 100) / 100);

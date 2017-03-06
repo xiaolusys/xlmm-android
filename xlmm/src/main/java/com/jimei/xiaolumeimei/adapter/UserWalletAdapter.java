@@ -14,6 +14,7 @@ import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletDetailActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
     @Override
     public UserWalletVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_userwallet, parent, false);
+            .inflate(R.layout.item_userwallet, parent, false);
         AutoUtils.autoSize(view);
         return new UserWalletVH(view);
     }
@@ -62,9 +63,9 @@ public class UserWalletAdapter extends RecyclerView.Adapter<UserWalletAdapter.Us
             holder.tvStatus.setText("待确定");
         }
         if (0 == resultsEntity.getBudgetType()) {
-            holder.tvMoneychange.setText("+ " + resultsEntity.getBudegetDetailCash() + "元  ");
+            holder.tvMoneychange.setText("+ " + new DecimalFormat("0.00").format(resultsEntity.getBudegetDetailCash()) + "元  ");
         } else if (1 == resultsEntity.getBudgetType()) {
-            holder.tvMoneychange.setText("- " + resultsEntity.getBudegetDetailCash() + "元  ");
+            holder.tvMoneychange.setText("- " + new DecimalFormat("0.00").format(resultsEntity.getBudegetDetailCash()) + "元  ");
         }
         bindOnClickListener(holder.itemView, position);
     }

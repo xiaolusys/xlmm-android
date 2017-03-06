@@ -57,7 +57,7 @@
 
         <activity
             android:name=".ui.activity.main.SplashActivity"
-            android:theme="@style/AppTheme.TransparentActivity">
+            android:theme="@style/StartTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -262,12 +262,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.xiaolumama.MamaWithdrawCashHistoryActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.xiaolumama.MamaWithdrawCashResultActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.xiaolumama.MamaVisitorActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -278,7 +272,18 @@
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.MMNinePicActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
+            android:theme="@style/AppTheme.TransparentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data
+                    android:host="app"
+                    android:path="/v1/vip_0day"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.xiaolumama.ImagePagerActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -310,13 +315,10 @@
             android:name=".ui.activity.user.UserDrawCashActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.MamaDrawCashActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.user.WalletDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.DrawCashResultActivity"
+            android:name=".ui.activity.user.DrawCashResultActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.main.DebugActivity"
@@ -325,13 +327,10 @@
             android:name=".ui.activity.user.PhoneLoginActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.MamaDrawCashDetailActivity"
+            android:name=".ui.activity.user.DrawCashDetailActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.WaitSendAddressActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.trade.RedBagActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.xiaolumama.MMFansActivity"
@@ -457,28 +456,8 @@
             android:name=".ui.activity.trade.CommonScanActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
-            android:name=".ui.activity.xiaolumama.MamaWalletActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.xiaolumama.MamaDrawSmallCashActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
             android:name=".ui.activity.product.CategoryListActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.xiaolumama.DayPushActivity"
-            android:theme="@style/AppTheme.TransparentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data
-                    android:host="app"
-                    android:path="/v1/vip_0day"
-                    android:scheme="com.jimei.xlmm"/>
-            </intent-filter>
-        </activity>
         <activity
             android:name=".ui.activity.main.AdvertisementActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -499,6 +478,7 @@
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
+
         <service
             android:name=".service.UpdateService"
             android:exported="false"/>

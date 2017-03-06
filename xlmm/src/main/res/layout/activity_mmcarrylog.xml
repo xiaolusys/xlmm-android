@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="累计收益"
-                android:textSize="15sp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/tv_num"
@@ -44,7 +44,7 @@
                 android:layout_marginTop="8dp"
                 android:text=""
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="30dp" />
 
             <TextView
                 android:id="@+id/tv_his"
@@ -54,7 +54,7 @@
                 android:layout_marginTop="8dp"
                 android:text=""
                 android:textColor="@color/darkgrey"
-                android:textSize="20px" />
+                android:textSize="10dp" />
 
             <View
                 android:layout_width="match_parent"

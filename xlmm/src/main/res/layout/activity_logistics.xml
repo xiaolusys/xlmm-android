@@ -138,7 +138,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="12px"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="12sp" />
+                                android:textSize="12dp" />
 
                             <TextView
                                 android:id="@+id/tv_order_last_state"
@@ -147,7 +147,7 @@
                                 android:layout_marginLeft="12px"
                                 android:layout_marginTop="4dp"
                                 android:textColor="@color/colorAccent"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                         </LinearLayout>
 

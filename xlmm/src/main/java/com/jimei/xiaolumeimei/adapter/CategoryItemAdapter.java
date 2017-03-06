@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,8 +10,8 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -29,10 +28,10 @@ import butterknife.ButterKnife;
 public class CategoryItemAdapter extends XRecyclerView.Adapter<CategoryItemAdapter.ViewHolder> {
 
     private List<CategoryBean> mData;
-    private Context mContext;
+    private BaseActivity mContext;
 
-    public CategoryItemAdapter(Context mContext) {
-        this.mContext = mContext;
+    public CategoryItemAdapter(BaseActivity mActivity) {
+        this.mContext = mActivity;
         mData = new ArrayList<>();
     }
 
@@ -69,9 +68,6 @@ public class CategoryItemAdapter extends XRecyclerView.Adapter<CategoryItemAdapt
             bundle.putString("title", bean.getName());
             intent.putExtras(bundle);
             mContext.startActivity(intent);
-            if (mContext instanceof CategoryListActivity) {
-                ((CategoryListActivity) mContext).finish();
-            }
         });
         GridLayoutManager manager = new GridLayoutManager(mContext, 3);
         holder.xrv.setLayoutManager(manager);

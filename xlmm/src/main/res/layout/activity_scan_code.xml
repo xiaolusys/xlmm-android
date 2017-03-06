@@ -43,7 +43,7 @@
             android:paddingTop="20dp"
             android:text="将运单号对入取景框,即可自动扫描"
             android:textColor="#b4b4b4"
-            android:textSize="14sp"/>
+            android:textSize="14dp"/>
 
         <TextView
             android:id="@+id/iv_light"
@@ -73,7 +73,7 @@
             android:layout_marginLeft="30dp"
             android:background="@drawable/shouquan_qrcode_g_gallery"
             android:clickable="true"
-            android:textSize="20sp"/>
+            android:textSize="20dp"/>
 
     </RelativeLayout>
     <!-- 扫描框中间的布局 -->

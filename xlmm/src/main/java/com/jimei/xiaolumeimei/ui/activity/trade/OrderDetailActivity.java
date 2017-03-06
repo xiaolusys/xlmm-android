@@ -37,14 +37,16 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
+import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.entities.ResultBean;
+import com.jimei.xiaolumeimei.entities.TeamBuyBean;
 import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.user.WaitSendAddressActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.pay.PayUtils;
-import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,13 +54,13 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import okhttp3.ResponseBody;
-import rx.Subscription;
 
 public class OrderDetailActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, AdapterView.OnItemClickListener {
+    implements View.OnClickListener, AdapterView.OnItemClickListener {
     String TAG = "OrderDetailActivity";
     @Bind(R.id.btn_order_pay)
     ImageView btn_order_pay;
@@ -219,9 +221,10 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     protected void initData() {
         if (order_id != -1) {
             showIndeterminateProgressDialog(false);
-            addSubscription(TradeModel.getInstance()
-                    .getOrderDetailBean(order_id)
-                    .subscribe(orderDetailBean -> {
+            addSubscription(XlmmApp.getTradeInteractor(this)
+                .getOrderDetail(order_id, new ServiceResponse<OrderDetailBean>() {
+                    @Override
+                    public void onNext(OrderDetailBean orderDetailBean) {
                         tid = orderDetailBean.getTid();
                         orderDetail = orderDetailBean;
                         fillDataToView(orderDetailBean);
@@ -234,36 +237,47 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                             logisticsRightImage.setVisibility(View.GONE);
                         }
                         Log.i(TAG, "order_id " + order_id + " " + orderDetailBean.toString());
-                        addSubscription(TradeModel.getInstance()
-                                .getLogisticCompany(order_id)
-                                .subscribe(logisticCompanies -> {
+                        addSubscription(XlmmApp.getTradeInteractor(OrderDetailActivity.this)
+                            .getLogisticCompany(order_id, new ServiceResponse<List<LogisticCompany>>() {
+                                @Override
+                                public void onNext(List<LogisticCompany> logisticCompanies) {
                                     CompanyAdapter adapter = new CompanyAdapter(logisticCompanies, getApplicationContext());
                                     listView.setAdapter(adapter);
                                     listView.setOnItemClickListener((parent, view, position, id) -> {
                                         String code = logisticCompanies.get(position).getCode();
-                                        addSubscription(TradeModel.getInstance()
-                                                .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code)
-                                                .subscribe(resultBean -> {
-                                                    switch (resultBean.getCode()) {
-                                                        case 0:
-                                                            logisticsTv.setText(logisticCompanies.get(position).getName());
-                                                            break;
+                                        addSubscription(XlmmApp.getTradeInteractor(OrderDetailActivity.this)
+                                            .changeLogisticCompany(orderDetail.getUser_adress().getId(), order_id + "", code,
+                                                new ServiceResponse<ResultBean>() {
+                                                    @Override
+                                                    public void onNext(ResultBean resultBean) {
+                                                        switch (resultBean.getCode()) {
+                                                            case 0:
+                                                                logisticsTv.setText(logisticCompanies.get(position).getName());
+                                                                break;
+                                                        }
+                                                        JUtils.Toast(resultBean.getInfo());
+                                                        dialog.dismiss();
                                                     }
-                                                    JUtils.Toast(resultBean.getInfo());
-                                                    dialog.dismiss();
-                                                }, e -> {
-                                                    JUtils.Toast(e.getMessage());
-                                                    dialog.dismiss();
+
+                                                    @Override
+                                                    public void onError(Throwable e) {
+                                                        JUtils.Toast(e.getMessage());
+                                                        dialog.dismiss();
+                                                    }
                                                 }));
                                     });
-                                }, e -> JUtils.Log(e.getMessage())));
+                                }
+                            }));
                         hideIndeterminateProgressDialog();
-                    }, e -> {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
                         JUtils.Log(e.getMessage());
                         JUtils.Toast("订单详情获取失败!");
                         hideIndeterminateProgressDialog();
-                    }));
-
+                    }
+                }));
         }
     }
 
@@ -273,17 +287,19 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         OrderDetailBean.UserAdressBean user_adress = orderDetailBean.getUser_adress();
         int status = orderDetailBean.getStatus();
         if (!"退款中".equals(orderDetailBean.getStatus_display())
-                && !"退货中".equals(orderDetailBean.getStatus_display())) {
+            && !"退货中".equals(orderDetailBean.getStatus_display())) {
             if (status == 2 || status == 3 || status == 4 || status == 5) {
                 if (orderDetailBean.getOrder_type() == 3) {
-                    addSubscription(TradeModel.getInstance()
-                            .getTeamBuyBean(orderDetailBean.getTid())
-                            .subscribe(teamBuyBean -> {
+                    addSubscription(XlmmApp.getTradeInteractor(this)
+                        .getTeamBuyBean(orderDetailBean.getTid(), new ServiceResponse<TeamBuyBean>() {
+                            @Override
+                            public void onNext(TeamBuyBean teamBuyBean) {
                                 if (teamBuyBean.getStatus() != 2) {
                                     setStatusView(status);
                                 }
                                 teamLayout.setVisibility(View.VISIBLE);
-                            }, e -> JUtils.Log(e.getMessage())));
+                            }
+                        }));
                 } else {
                     setStatusView(status);
                 }
@@ -296,14 +312,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         tx_custom_mobile.setText(user_adress.getReceiver_mobile());
         tx_custom_phone.setText(user_adress.getReceiver_phone());
         tx_custom_address.setText(user_adress.getReceiver_state()
-                + user_adress.getReceiver_city()
-                + user_adress.getReceiver_district()
-                + user_adress.getReceiver_address());
+            + user_adress.getReceiver_city()
+            + user_adress.getReceiver_district()
+            + user_adress.getReceiver_address());
         tx_order_totalfee.setText("¥" + orderDetailBean.getTotal_fee());
         tx_order_discountfee.setText("-¥" + orderDetailBean.getDiscount_fee());
         tx_order_postfee.setText("¥" + orderDetailBean.getPost_fee());
         tx_order_payment.setText("¥" + orderDetailBean.getPay_cash());
-        String format = new DecimalFormat("#.00").format(orderDetailBean.getPayment() - orderDetailBean.getPay_cash());
+        String format = new DecimalFormat("0.00").format(orderDetailBean.getPayment() - orderDetailBean.getPay_cash());
         if (format.startsWith(".")) {
             tx_order_payment2.setText("¥0" + format);
         } else {
@@ -338,11 +354,11 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         if (no == null || no.length() < 18) {
             if (bonded_goods) {
                 new AlertDialog.Builder(this)
-                        .setTitle("提示")
-                        .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
-                        .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
-                        .setCancelable(false)
-                        .show();
+                    .setTitle("提示")
+                    .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
+                    .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                    .setCancelable(false)
+                    .show();
             }
         }
         setListViewHeightBasedOnChildren(lv_goods);
@@ -474,7 +490,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     baseUrl = "https://" + preferences.getString("BASE_URL", "") + "/mall/order/spell/group/" + tid + "?from_page=order_detail";
                 }
                 JumpUtils.jumpToWebViewWithCookies(mContext,
-                        baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
+                    baseUrl, -1, CommonWebViewActivity.class, "查看拼团详情", false);
                 break;
             case R.id.btn_order_cancel:
                 JUtils.Log(TAG, "onClick cancel");
@@ -487,8 +503,8 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     bundle.putString("receiver_name", orderDetail.getUser_adress().getReceiver_name());
                     bundle.putString("mobile", orderDetail.getUser_adress().getReceiver_mobile());
                     bundle.putString("address1", orderDetail.getUser_adress().getReceiver_state()
-                            + orderDetail.getUser_adress().getReceiver_city()
-                            + orderDetail.getUser_adress().getReceiver_district());
+                        + orderDetail.getUser_adress().getReceiver_city()
+                        + orderDetail.getUser_adress().getReceiver_district());
                     bundle.putString("address2", orderDetail.getUser_adress().getReceiver_address());
                     bundle.putString("receiver_state", orderDetail.getUser_adress().getReceiver_state());
                     bundle.putString("receiver_city", orderDetail.getUser_adress().getReceiver_city());
@@ -504,14 +520,14 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
             case R.id.logistics_layout:
                 if (orderDetail != null && "已付款".equals(orderDetail.getStatus_display())) {
                     new AlertDialog.Builder(this)
-                            .setTitle("提示")
-                            .setMessage("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
-                                    "如需确认能否满足您的快递需求，请联系客服。")
-                            .setPositiveButton("确认", (dialog1, which) -> {
-                                dialog1.dismiss();
-                                dialog.show();
-                            })
-                            .show();
+                        .setTitle("提示")
+                        .setMessage("非服装类商品是由供应商直接发货，只能尽量满足您选择的快递公司，" +
+                            "如需确认能否满足您的快递需求，请联系客服。")
+                        .setPositiveButton("确认", (dialog1, which) -> {
+                            dialog1.dismiss();
+                            dialog.show();
+                        })
+                        .show();
                 }
                 break;
             case R.id.close_iv:
@@ -527,42 +543,38 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
     private void payNow(String channel) {
         showIndeterminateProgressDialog(false);
-        Subscription subscription = TradeModel.getInstance()
-                .orderPayWithChannel(order_id, channel)
-                .subscribe(new ServiceResponse<PayInfoBean>() {
-                    @Override
-                    public void onNext(PayInfoBean payInfoBean) {
-                        PayUtils.createPayment(OrderDetailActivity.this, new Gson().toJson(payInfoBean.getCharge()));
-                    }
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .orderPayWithChannel(order_id, channel, new ServiceResponse<PayInfoBean>() {
+                @Override
+                public void onNext(PayInfoBean payInfoBean) {
+                    PayUtils.createPayment(OrderDetailActivity.this, new Gson().toJson(payInfoBean.getCharge()));
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        JUtils.Toast("支付请求失败!");
-                        hideIndeterminateProgressDialog();
-                        Log.e(TAG, " error:, " + e.toString());
-                        super.onError(e);
-                    }
-                });
-        addSubscription(subscription);
+                @Override
+                public void onError(Throwable e) {
+                    JUtils.Toast("支付请求失败!");
+                    hideIndeterminateProgressDialog();
+                    Log.e(TAG, " error:, " + e.toString());
+                    super.onError(e);
+                }
+            }));
     }
 
     private void cancel_order() {
         JUtils.Log(TAG, "cancel_order " + order_id);
-        Subscription subscription = TradeModel.getInstance()
-                .delRefund(order_id)
-                .subscribe(new ServiceResponse<ResponseBody>() {
-                    @Override
-                    public void onNext(ResponseBody responseBody) {
-                        super.onNext(responseBody);
-                        try {
-                            finish();
-                            EventBus.getDefault().post(new RefreshOrderListEvent());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .delRefund(order_id, new ServiceResponse<ResponseBody>() {
+                @Override
+                public void onNext(ResponseBody responseBody) {
+                    super.onNext(responseBody);
+                    try {
+                        finish();
+                        EventBus.getDefault().post(new RefreshOrderListEvent());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
-        addSubscription(subscription);
+                }
+            }));
     }
 
     @Override
@@ -635,7 +647,7 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight
-                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+            + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
 

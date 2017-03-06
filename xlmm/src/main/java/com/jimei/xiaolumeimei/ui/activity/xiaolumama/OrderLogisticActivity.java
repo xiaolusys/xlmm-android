@@ -7,10 +7,11 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.LogImageView;
 import com.jimei.library.widget.LogMsgView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityOrderLogisticBinding;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
@@ -23,16 +24,21 @@ public class OrderLogisticActivity extends BaseMVVMActivity<ActivityOrderLogisti
         b.tvCompany.setText(company_code);
         b.tvOrder.setText(packetid);
         if (packetid != null && company_code != null &&
-                !"".equals(packetid) && !"".equals(company_code)) {
+            !"".equals(packetid) && !"".equals(company_code)) {
             showIndeterminateProgressDialog(false);
-            addSubscription(TradeModel.getInstance()
-                    .get_logistics_by_packagetid(packetid, company_code)
-                    .subscribe(this::fillDataToView,
-                            e -> {
-                                JUtils.Toast("物流查询失败，请到相应官网查询！");
-                                hideIndeterminateProgressDialog();
-                            }
-                    ));
+            addSubscription(XlmmApp.getTradeInteractor(this)
+                .getLogisticsByPacketId(packetid, company_code, new ServiceResponse<LogisticsBean>() {
+                    @Override
+                    public void onNext(LogisticsBean logisticsBean) {
+                        fillDataToView(logisticsBean);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        JUtils.Toast("物流查询失败，请到相应官网查询！");
+                        hideIndeterminateProgressDialog();
+                    }
+                }));
         } else {
             b.tvOrderLastTime.setText("暂无物流信息");
             b.start.setVisibility(View.VISIBLE);

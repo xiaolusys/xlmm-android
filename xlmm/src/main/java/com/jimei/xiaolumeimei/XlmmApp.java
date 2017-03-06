@@ -9,6 +9,15 @@ import android.support.multidex.MultiDexApplication;
 import com.facebook.stetho.Stetho;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.module.ActivityInteractor;
+import com.jimei.xiaolumeimei.module.AddressInteractor;
+import com.jimei.xiaolumeimei.module.CartsInteractor;
+import com.jimei.xiaolumeimei.module.InteractorModule;
+import com.jimei.xiaolumeimei.module.MainInteractor;
+import com.jimei.xiaolumeimei.module.ProductInteractor;
+import com.jimei.xiaolumeimei.module.TradeInteractor;
+import com.jimei.xiaolumeimei.module.UserInteractor;
+import com.jimei.xiaolumeimei.module.VipInteractor;
 import com.jimei.xiaolumeimei.receiver.mipush.XiaoMiMessageReceiver;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -22,6 +31,7 @@ import java.util.List;
  * Copyright 2015年 上海己美. All rights reser.
  */
 public class XlmmApp extends MultiDexApplication {
+    private AppComponent component;
 
     private static Context mContext;
     private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
@@ -56,6 +66,7 @@ public class XlmmApp extends MultiDexApplication {
         if (handler == null) {
             handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
         }
+        setDraggerConfig();
     }
 
     @Override
@@ -77,6 +88,38 @@ public class XlmmApp extends MultiDexApplication {
         return false;
     }
 
+    public static ActivityInteractor getActivityInteractor(Context context) {
+        return XlmmApp.get(context).component().getActivityInteractor();
+    }
+
+    public static MainInteractor getMainInteractor(Context context) {
+        return XlmmApp.get(context).component().getMainInteractor();
+    }
+
+    public static ProductInteractor getProductInteractor(Context context) {
+        return XlmmApp.get(context).component().getProductInteractor();
+    }
+
+    public static AddressInteractor getAddressInteractor(Context context) {
+        return XlmmApp.get(context).component().getAddressInteractor();
+    }
+
+    public static CartsInteractor getCartsInteractor(Context context) {
+        return XlmmApp.get(context).component().getCartsInteractor();
+    }
+
+    public static UserInteractor getUserInteractor(Context context) {
+        return XlmmApp.get(context).component().getUserInteractor();
+    }
+
+    public static VipInteractor getVipInteractor(Context context) {
+        return XlmmApp.get(context).component().getVipInteractor();
+    }
+
+    public static TradeInteractor getTradeInteractor(Context context) {
+        return XlmmApp.get(context).component().getTradeInteractor();
+    }
+
     //异常退出的时候,自动重启
     class MyUnCaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
         @Override
@@ -88,5 +131,19 @@ public class XlmmApp extends MultiDexApplication {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
         }
+    }
+
+
+    private AppComponent component() {
+        return component;
+    }
+
+    private static XlmmApp get(Context context) {
+        return (XlmmApp) context.getApplicationContext();
+    }
+
+    private void setDraggerConfig() {
+        component = DaggerAppComponent.builder().interactorModule(new InteractorModule()).build();
+        component.inject(this);
     }
 }

@@ -52,7 +52,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="请输入关键词查询商品"
-                android:textSize="12sp"/>
+                android:textSize="12dp"/>
 
         </LinearLayout>
 
@@ -76,7 +76,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_grey"
+            android:background="@color/category_bg"
             android:paddingLeft="8dp"
             android:paddingRight="8dp">
 
@@ -104,7 +104,7 @@
                     android:layout_marginTop="10dp"
                     android:text="该类别暂无商品哦!"
                     android:textColor="@color/text_color_4A"
-                    android:textSize="16sp"/>
+                    android:textSize="16dp"/>
 
             </LinearLayout>
 

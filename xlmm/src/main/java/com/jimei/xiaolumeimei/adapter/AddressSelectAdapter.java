@@ -58,11 +58,11 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         View view;
         if (viewType == 0) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_default_address_select, parent, false);
+                .inflate(R.layout.item_default_address_select, parent, false);
             return new AddressDefaultVH(view);
         } else if (viewType == 1) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_add_select, parent, false);
+                .inflate(R.layout.item_add_select, parent, false);
             return new AddressVH(view);
         }
 
@@ -84,12 +84,12 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             defaultVH.receiverMobile.setText(addressBean.getReceiverMobile());
             defaultVH.receiverAddress.setText(addressBean.getReceiverState()
-                    + ""
-                    + addressBean.getReceiverCity()
-                    + ""
-                    + addressBean.getReceiverDistrict()
-                    + ""
-                    + addressBean.getReceiverAddress());
+                + ""
+                + addressBean.getReceiverCity()
+                + ""
+                + addressBean.getReceiverDistrict()
+                + ""
+                + addressBean.getReceiverAddress());
             defaultVH.receiverName.setText(addressBean.getReceiverName());
 
             ((AddressDefaultVH) holder).card.setOnClickListener(v -> setBundle(addressBean));
@@ -109,12 +109,12 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             addressVH.receiverMobile.setText(addressBean.getReceiverMobile());
             addressVH.receiverAddress.setText(addressBean.getReceiverState()
-                    + ""
-                    + addressBean.getReceiverCity()
-                    + ""
-                    + addressBean.getReceiverDistrict()
-                    + ""
-                    + addressBean.getReceiverAddress());
+                + ""
+                + addressBean.getReceiverCity()
+                + ""
+                + addressBean.getReceiverDistrict()
+                + ""
+                + addressBean.getReceiverAddress());
             addressVH.receiverName.setText(addressBean.getReceiverName());
 
             ((AddressVH) holder).card.setOnClickListener(v -> setBundle(addressBean));
@@ -129,9 +129,9 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         intent.putExtra("addr_id", addressBean.getId());
         intent.putExtra("phone", addressBean.getReceiverMobile());
         intent.putExtra("addressDetails", addressBean.getReceiverState()
-                + addressBean.getReceiverCity()
-                + addressBean.getReceiverDistrict()
-                + addressBean.getReceiverAddress());
+            + addressBean.getReceiverCity()
+            + addressBean.getReceiverDistrict()
+            + addressBean.getReceiverAddress());
         intent.putExtra("addressId", addressBean.getId());
         intent.putExtra("idNo", addressBean.getmIdentificationNo());
         context.setResult(Activity.RESULT_OK, intent);
@@ -149,8 +149,8 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         bundle.putString("id", addressBean.getId());
         bundle.putString("mobile", addressBean.getReceiverMobile());
         bundle.putString("address1", addressBean.getReceiverState()
-                + addressBean.getReceiverCity()
-                + addressBean.getReceiverDistrict());
+            + addressBean.getReceiverCity()
+            + addressBean.getReceiverDistrict());
         bundle.putString("address2", addressBean.getReceiverAddress());
         bundle.putString("idNo", addressBean.getmIdentificationNo());
         bundle.putBoolean("isDefaultX", addressBean.isDefaultX());

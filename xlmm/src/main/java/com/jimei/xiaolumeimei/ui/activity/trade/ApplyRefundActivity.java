@@ -16,19 +16,18 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
     String TAG = "ApplyRefundActivity";
     String slect_reason[] = new String[]{"七天无理由退换", "缺货", "错拍", "没有发货", "与描述不符", "其他"};
 
@@ -115,21 +114,19 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         showIndeterminateProgressDialog(false);
-        Subscription subscribe = TradeModel.getInstance()
-                .getOrderDetailBean(id)
-                .subscribe(new ServiceResponse<OrderDetailBean>() {
-                    @Override
-                    public void onNext(OrderDetailBean orderDetailBean) {
-                        goods_info = orderDetailBean.getOrders().get(position);
-                        fillDataIntoView();
-                    }
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .getOrderDetail(id, new ServiceResponse<OrderDetailBean>() {
+                @Override
+                public void onNext(OrderDetailBean orderDetailBean) {
+                    goods_info = orderDetailBean.getOrders().get(position);
+                    fillDataIntoView();
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        JUtils.Toast("加载失败");
-                    }
-                });
-        addSubscription(subscribe);
+                @Override
+                public void onError(Throwable e) {
+                    JUtils.Toast("加载失败");
+                }
+            }));
     }
 
     private void fillDataIntoView() {
@@ -179,15 +176,15 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     JUtils.Toast("请选择退货原因！");
                 } else {
                     AlertDialog dialog = new AlertDialog.Builder(this)
-                            .setCancelable(true)
-                            .setTitle("小鹿急速退款说明")
-                            .setMessage("退款立即退到小鹿零钱账户，该退款可以用于重新购买商品或者提现。")
-                            .setPositiveButton("同意", (dialog1, which) -> {
-                                dialog1.dismiss();
-                                commit_apply();
-                            })
-                            .setNegativeButton("取消", (dialog1, which) -> dialog1.dismiss())
-                            .create();
+                        .setCancelable(true)
+                        .setTitle("小鹿急速退款说明")
+                        .setMessage("退款立即退到小鹿零钱账户，该退款可以用于重新购买商品或者提现。")
+                        .setPositiveButton("同意", (dialog1, which) -> {
+                            dialog1.dismiss();
+                            commit_apply();
+                        })
+                        .setNegativeButton("取消", (dialog1, which) -> dialog1.dismiss())
+                        .create();
                     if ("budget".equals(refund_channel)) {
                         dialog.show();
                     } else {
@@ -222,10 +219,9 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
 
     private void commit_apply() {
         showIndeterminateProgressDialog(false);
-        Subscription subscription = TradeModel.getInstance()
-                .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
-                        apply_fee, desc, proof_pic, refund_channel)
-                .subscribe(new ServiceResponse<RefundMsgBean>() {
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .refundCreate(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
+                apply_fee, desc, proof_pic, refund_channel, new ServiceResponse<RefundMsgBean>() {
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
@@ -236,33 +232,26 @@ public class ApplyRefundActivity extends BaseSwipeBackCompatActivity
                     }
 
                     @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
                     public void onError(Throwable e) {
                         hideIndeterminateProgressDialog();
                         JUtils.Toast("提交失败,请重新提交");
-                        Log.e(TAG, " error:, " + e.toString());
                         super.onError(e);
                     }
-                });
-        addSubscription(subscription);
+                }));
     }
 
     private void chooseReason() {
         new AlertDialog.Builder(this).setTitle("")
-                .setItems(slect_reason, (dialog, which) -> {
+            .setItems(slect_reason, (dialog, which) -> {
         /*
         * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
          */
-                    Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
-                    reason = slect_reason[which];
-                    et_refund_reason.setText(reason);
-                    dialog.dismiss();
-                })
-                .setNegativeButton("取消", null)
-                .show();
+                Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
+                reason = slect_reason[which];
+                et_refund_reason.setText(reason);
+                dialog.dismiss();
+            })
+            .setNegativeButton("取消", null)
+            .show();
     }
 }

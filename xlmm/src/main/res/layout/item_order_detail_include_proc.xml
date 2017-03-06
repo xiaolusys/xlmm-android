@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_color_62"
-                    android:textSize="13sp" />
+                    android:textSize="13dp" />
 
                 <TextView
                     android:id="@+id/tv_order_log"
@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:textColor="@color/text_color_9B"
-                    android:textSize="13sp" />
+                    android:textSize="13dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -71,7 +71,7 @@
                     android:layout_marginLeft="8dp"
                     android:text=""
                     android:textColor="@color/colorAccent"
-                    android:textSize="13sp" />
+                    android:textSize="13dp" />
 
                 <TextView
                     android:id="@+id/text_logistic"
@@ -86,7 +86,7 @@
                     android:paddingBottom="2dp"
                     android:text="查看物流"
                     android:textColor="@color/text_color_62"
-                    android:textSize="12sp"
+                    android:textSize="12dp"
                     android:visibility="gone"/>
 
             </LinearLayout>
@@ -127,7 +127,7 @@
                     android:gravity="center"
                     android:text="申请退款"
                     android:textColor="@color/text_color_62"
-                    android:textSize="10sp" />
+                    android:textSize="10dp" />
 
                 <Button
                     android:id="@+id/tv_order_state"
@@ -139,7 +139,7 @@
                     android:gravity="center"
                     android:text="处理中"
                     android:textColor="#F29909"
-                    android:textSize="10sp"
+                    android:textSize="10dp"
                     android:visibility="invisible" />
 
             </RelativeLayout>

@@ -12,6 +12,7 @@ import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class GoodsListAdapter extends BaseAdapter {
         AllOrdersBean.ResultsEntity.OrdersEntity bean = packageBeanList.get(position);
         ViewUtils.loadImgToImgView(context, holder.imageView, bean.getPic_path());
         holder.name.setText(bean.getTitle());
-        holder.price.setText("¥"+bean.getTotal_fee());
+        holder.price.setText("¥" + new DecimalFormat("0.00").format(bean.getTotal_fee()));
         holder.num.setText("x" + bean.getNum());
         holder.size.setText(bean.getSku_name());
         return convertView;

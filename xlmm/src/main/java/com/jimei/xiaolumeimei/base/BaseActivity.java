@@ -18,7 +18,7 @@ import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
 import com.jimei.library.widget.swipeback.SwipeBackLayout;
 import com.jimei.library.widget.swipeback.Utils;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.widget.loading.WisdomLoading;
+import com.jimei.library.widget.loading.WisdomLoading;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 

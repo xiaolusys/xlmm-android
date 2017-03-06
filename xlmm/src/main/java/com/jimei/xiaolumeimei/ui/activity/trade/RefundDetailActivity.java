@@ -18,20 +18,19 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.RoundCornerImageView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean.ResultsEntity.StatusShaftBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class RefundDetailActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
     private static final String TAG = RefundDetailActivity.class.getSimpleName();
     @Bind(R.id.tv_order_id)
     TextView orderIdTv;
@@ -146,25 +145,18 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     protected void initData() {
         JUtils.Log(TAG, "initData goods_id " + goods_id);
         showIndeterminateProgressDialog(false);
-        Subscription subscription = TradeModel.getInstance()
-                .getRefundDetailBean(goods_id)
-                .subscribe(new ServiceResponse<AllRefundsBean.ResultsEntity>() {
-                    @Override
-                    public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
-                        JUtils.Log(TAG, "getRefundDetailBean success ");
-                        refundDetail = refundDetailBean;
-                        fillDataToView(refundDetailBean);
-                        Log.i(TAG, refundDetailBean.toString());
-                        Log.i(TAG, "status " + refundDetailBean.getStatus());
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        hideIndeterminateProgressDialog();
-                        super.onCompleted();
-                    }
-                });
-        addSubscription(subscription);
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .getRefundDetailBean(goods_id, new ServiceResponse<AllRefundsBean.ResultsEntity>() {
+                @Override
+                public void onNext(AllRefundsBean.ResultsEntity refundDetailBean) {
+                    JUtils.Log(TAG, "getRefundDetailBean success ");
+                    refundDetail = refundDetailBean;
+                    fillDataToView(refundDetailBean);
+                    Log.i(TAG, refundDetailBean.toString());
+                    Log.i(TAG, "status " + refundDetailBean.getStatus());
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Override
@@ -225,7 +217,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             }
         }
         ViewUtils.loadImgToImgView(getApplicationContext(), goodImageView,
-                refundDetailBean.getPic_path());
+            refundDetailBean.getPic_path());
         goodNameTv.setText(refundDetailBean.getTitle());
         goodPriceTv.setText("¥" + refundDetailBean.getTotal_fee() + "x" + refundDetailBean.getRefund_num());
         goodSizeTv.setText("尺码：" + refundDetailBean.getSku_name());
@@ -238,7 +230,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
         if (refundDetailBean.getProof_pic() != null && refundDetailBean.getProof_pic().size() > 0) {
             for (int i = 0; i < refundDetailBean.getProof_pic().size(); i++) {
                 ViewUtils.loadImgToImgView(getApplicationContext(), images[i],
-                        refundDetailBean.getProof_pic().get(i));
+                    refundDetailBean.getProof_pic().get(i));
                 rls[i].setVisibility(View.VISIBLE);
             }
             imageLayout.setVisibility(View.VISIBLE);
@@ -252,7 +244,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
             refundLayout.setVisibility(View.GONE);
         }
         if ("拒绝退款".equals(refundDetailBean.getStatus_display()) || "没有退款".equals(refundDetailBean.getStatus_display()) ||
-                "退款关闭".equals(refundDetailBean.getStatus_display())) {
+            "退款关闭".equals(refundDetailBean.getStatus_display())) {
             statusLayout.setVisibility(View.GONE);
         } else {
             showRefundStatus(refundDetailBean);
@@ -291,9 +283,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView2() {
         setView1();
         textView2.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         imageView2.setImageResource(R.drawable.status_black);
         iView.setImageResource(R.drawable.state_in);
         lineImage.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -302,9 +294,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView4() {
         setView3();
         textView4.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView5.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView5.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         imageView4.setImageResource(R.drawable.status_black);
         imageView5.setImageResource(R.drawable.state_in);
         lineImage5.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -314,11 +306,11 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
     private void setView3() {
         setView2();
         textView.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView3.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView4.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         iView.setImageResource(R.drawable.status_black);
         imageView3.setImageResource(R.drawable.status_black);
         imageView4.setImageResource(R.drawable.state_in);
@@ -328,9 +320,9 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
 
     private void setView1() {
         textView1.setTextColor(getResources().getColor(R.color.text_color_32));
-        textView1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        textView1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         textView2.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         imageView1.setImageResource(R.drawable.status_black);
         imageView2.setImageResource(R.drawable.state_in);
         lineImage2.setBackgroundColor(getResources().getColor(R.color.text_color_32));
@@ -346,7 +338,7 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 bundle.putInt("goods_id", refundDetail.getOrder_id());
                 if (refundDetail != null) {
                     if ((refundDetail.getReturn_address() != null)
-                            && (!refundDetail.getReturn_address().isEmpty())) {
+                        && (!refundDetail.getReturn_address().isEmpty())) {
                         bundle.putString("address", refundDetail.getReturn_address());
                     }
                 }

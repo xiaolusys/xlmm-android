@@ -23,7 +23,7 @@
                 android:paddingLeft="20px"
                 android:paddingTop="12px"
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/total_cash"
@@ -34,7 +34,7 @@
                 android:paddingRight="20px"
                 android:paddingTop="12px"
                 android:textColor="#626262"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
         </RelativeLayout>
 
@@ -76,7 +76,7 @@
             android:padding="8px"
             android:singleLine="true"
             android:textColor="#626262"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
 
         <TextView
@@ -86,7 +86,7 @@
             android:layout_toRightOf="@id/wxordernick"
             android:padding="8px"
             android:textColor="@color/colorPrimary"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/time_nick"
@@ -95,7 +95,7 @@
             android:layout_alignParentRight="true"
             android:padding="8px"
             android:textColor="#A0A0A0"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
 
         <View
@@ -121,7 +121,7 @@
                 android:paddingLeft="4px"
                 android:paddingRight="4px"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="10dp" />
         </RelativeLayout>
 
         <TextView
@@ -133,7 +133,7 @@
             android:padding="8px"
             android:singleLine="true"
             android:textColor="#626262"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/ticheng_cash"
@@ -144,7 +144,7 @@
             android:padding="8px"
             android:singleLine="true"
             android:textColor="#626262"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
     </RelativeLayout>
 </LinearLayout>

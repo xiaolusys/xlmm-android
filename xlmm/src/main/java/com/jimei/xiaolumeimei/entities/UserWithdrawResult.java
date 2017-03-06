@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by wulei on 2016/2/29.
  */
-public class UserWithdrawResult {
+public class UserWithDrawResult {
 
   /**
    * qrcode :

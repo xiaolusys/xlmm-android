@@ -38,7 +38,7 @@
             android:padding="20px"
             android:text="物流配送"
             android:textColor="@color/text_color_62"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
     </RelativeLayout>
 
     <View

@@ -1,21 +1,19 @@
 package com.jimei.xiaolumeimei.ui.fragment.xiaolumama;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ClickCarryLogAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
-import com.jimei.xiaolumeimei.entities.ClickcarryBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.entities.ClickCarryBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
@@ -47,39 +45,14 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
 
     @Override
     public void initData() {
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaAllClickCarryLogs("1")
-                .subscribe(new ServiceResponse<ClickcarryBean>() {
-
-                    @Override
-                    public void onCompleted() {
-                        hideIndeterminateProgressDialog();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        hideIndeterminateProgressDialog();
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(ClickcarryBean carryLogListBean) {
-                        if (carryLogListBean != null) {
-                            adapter.update(carryLogListBean.getResults());
-                            if (null == carryLogListBean.getNext()) {
-                                xRecyclerView.setLoadingMoreEnabled(false);
-                            }
-                            JUtils.Log("carrylog", carryLogListBean.toString());
-                        }
-                    }
-                }));
+        loadMoreData(1);
     }
 
     @Override
     protected void initViews() {
         xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         xRecyclerView.addItemDecoration(
-                new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+            new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         xRecyclerView.setRefreshProgressStyle(ProgressStyle.BallPulse);
         xRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -97,7 +70,7 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
 
             @Override
             public void onLoadMore() {
-                loadMoreData(page + "", getActivity());
+                loadMoreData(page);
                 page++;
             }
         });
@@ -108,37 +81,30 @@ public class CarryLogCashbackFragment extends BaseLazyFragment {
         return R.layout.fragment_carrylogall;
     }
 
-    private void loadMoreData(String page, Context context) {
-
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaAllClickCarryLogs(page)
-                .subscribe(new ServiceResponse<ClickcarryBean>() {
-                    @Override
-                    public void onNext(ClickcarryBean carryLogListBean) {
-                        if (carryLogListBean != null) {
-                            if (null != carryLogListBean.getResults()) {
-                                adapter.update(carryLogListBean.getResults());
-                            }
-                            if (null != carryLogListBean.getNext()) {
-                            } else {
-                                Toast.makeText(context, "没有更多了", Toast.LENGTH_SHORT).show();
-                                xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                                xRecyclerView.setLoadingMoreEnabled(false);
-                                ;
-                            }
+    private void loadMoreData(int page) {
+        addSubscription(XlmmApp.getVipInteractor(mActivity)
+            .getMamaAllClickCarryLogs(page, new ServiceResponse<ClickCarryBean>() {
+                @Override
+                public void onNext(ClickCarryBean carryLogListBean) {
+                    if (carryLogListBean != null) {
+                        if (carryLogListBean.getResults() != null) {
+                            adapter.update(carryLogListBean.getResults());
+                        }
+                        if (carryLogListBean.getNext() == null) {
+                            JUtils.Toast("没有更多了");
+                            xRecyclerView.setLoadingMoreEnabled(false);
                         }
                     }
+                    xRecyclerView.loadMoreComplete();
+                    hideIndeterminateProgressDialog();
+                }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        try {
-                            xRecyclerView.post(xRecyclerView::loadMoreComplete);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }));
+                @Override
+                public void onError(Throwable e) {
+                    xRecyclerView.loadMoreComplete();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Override

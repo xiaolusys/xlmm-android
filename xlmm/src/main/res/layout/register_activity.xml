@@ -24,8 +24,8 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <com.jimei.library.widget.ClearEditText
                 android:id="@+id/register_name"
@@ -47,8 +47,8 @@
             android:background="@null"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:weightSum="3">
 
             <EditText
@@ -99,7 +99,7 @@
                 android:gravity="center"
                 android:text="向右滑动验证"
                 android:textColor="@color/text_color_88"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <View
                 android:id="@+id/view_first"

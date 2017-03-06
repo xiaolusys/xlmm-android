@@ -9,11 +9,12 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentProductBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
-import com.jimei.xiaolumeimei.model.ProductModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
 
@@ -94,9 +95,10 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
             mProductListAdapter.clear();
             page = 1;
         }
-        addSubscription(ProductModel.getInstance()
-            .getCategoryProductList(type, page)
-            .subscribe(bean -> {
+        addSubscription(XlmmApp.getProductInteractor(mActivity)
+            .getCategoryProductList(type, page, new ServiceResponse<ProductListBean>() {
+                @Override
+                public void onNext(ProductListBean bean) {
                     List<ProductListBean.ResultsBean> results = bean.getResults();
                     if (results != null && results.size() > 0) {
                         mProductListAdapter.update(results);
@@ -110,13 +112,16 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
                     hideIndeterminateProgressDialog();
                     b.xrv.loadMoreComplete();
                     b.xrv.refreshComplete();
-                }, e -> {
+                }
+
+                @Override
+                public void onError(Throwable e) {
                     hideIndeterminateProgressDialog();
                     b.xrv.loadMoreComplete();
                     b.xrv.refreshComplete();
                     JUtils.Toast("数据加载有误!");
                 }
-            ));
+            }));
     }
 
     @Override

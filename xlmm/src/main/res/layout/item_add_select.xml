@@ -14,7 +14,7 @@
         android:background="@drawable/shape_chooselist"
         android:text="修改"
         android:textColor="@color/colorPrimary"
-        android:textSize="14sp" />
+        android:textSize="14dp" />
 
     <com.jimei.library.widget.SmoothCheckBox
         android:id="@+id/scb"
@@ -39,14 +39,14 @@
             android:id="@+id/receiver_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/receiver_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
     </LinearLayout>
 

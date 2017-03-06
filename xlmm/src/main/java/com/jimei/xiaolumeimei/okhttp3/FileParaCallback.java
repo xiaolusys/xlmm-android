@@ -4,7 +4,7 @@ import android.os.Environment;
 
 import com.jimei.library.utils.CameraUtils;
 import com.jimei.library.utils.JUtils;
-import com.jimei.xiaolumeimei.entities.FilePara;
+import com.jimei.library.entities.FilePara;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public abstract class FileParaCallback extends Callback<FilePara> {
         try {
             CameraUtils.Create_MY_IMAGES_DIR();
             Target_Location = new File("" + Environment.getExternalStorageDirectory() +
-                    "/xlmm/xiaolumeimei" + "/" + CameraUtils.Get_Random_File_Name() + ".jpg");
+                "/xlmm/xiaolumeimei" + "/" + CameraUtils.Get_Random_File_Name() + ".jpg");
             JUtils.Log("FileParaCallback", "Target_Location= " + Target_Location.getAbsolutePath());
             Target_Location.createNewFile();
             OutputStream os = new FileOutputStream(Target_Location);
