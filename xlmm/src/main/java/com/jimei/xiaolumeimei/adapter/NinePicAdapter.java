@@ -19,11 +19,12 @@ import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.ninepicimagview.MultiImageView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.FilePara;
+import com.jimei.library.entities.FilePara;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.okhttp3.FileParaCallback;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.ImagePagerActivity;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
@@ -101,12 +102,12 @@ public class NinePicAdapter extends BaseAdapter {
         if (ninePicBean.getPicArry() != null && ninePicBean.getPicArry().size() > 0) {
             for (int i = 0; i < ninePicBean.getPicArry().size(); i++) {
                 String picUrl = ninePicBean.getPicArry().get(i);
-                if (picUrl !=null&&!"".equals(picUrl)
-                        && picUrl.length()>20){
+                if (picUrl != null && !"".equals(picUrl)
+                    && picUrl.length() > 20) {
                     picArray.add(picUrl);
                 }
             }
-            if (picArray.size()>0){
+            if (picArray.size() > 0) {
                 if (codeLink != null & !"".equals(codeLink)) {
                     if (ninePicBean.getPicArry().size() == 9) {
                         picArray.set(4, "code" + codeLink);
@@ -118,8 +119,8 @@ public class NinePicAdapter extends BaseAdapter {
                 holder.multiImageView.setVisibility(View.VISIBLE);
                 holder.multiImageView.setList(picArray);
                 holder.multiImageView.setOnItemClickListener((view, currentPosition) ->
-                        ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition));
-            }else {
+                    ImagePagerActivity.startImagePagerActivity(mContext, picArray, currentPosition));
+            } else {
                 holder.multiImageView.setVisibility(View.GONE);
             }
         } else {
@@ -127,31 +128,28 @@ public class NinePicAdapter extends BaseAdapter {
         }
         holder.save.setOnClickListener(v -> {
             MobclickAgent.onEvent(mContext, "NinePic_save");
-            MamaInfoModel.getInstance()
-                    .saveTime(ninePicBean.getId(), 1)
-                    .subscribe(saveTimeBean -> JUtils.Log("save" + saveTimeBean.getId()),
-                            Throwable::printStackTrace);
-            if (picArray != null) {
-                if (mContext instanceof BaseSwipeBackCompatActivity) {
-                    ((BaseSwipeBackCompatActivity) mContext).showIndeterminateProgressDialog(true);
-                }
-                RxPermissions.getInstance(mContext)
-                        .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(granted -> {
-                            if (granted) {
-                                mFiles.clear();
-                                JUtils.copyToClipboard(description);
-                                if (picArray.size() > 0) {
-                                    downloadNinepic(picArray, description);
-                                } else {
-                                    shareToWx(description);
-                                }
-                                JUtils.ToastLong("努力分享中,请稍等几秒钟...");
-                            } else {
-                                JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
-                            }
-                        }, Throwable::printStackTrace);
+            XlmmApp.getVipInteractor(mContext)
+                .saveTime(ninePicBean.getId(), 1, new ServiceResponse<>());
+            if (mContext instanceof BaseSwipeBackCompatActivity) {
+                ((BaseSwipeBackCompatActivity) mContext).showIndeterminateProgressDialog(true);
             }
+            RxPermissions.getInstance(mContext)
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(granted -> {
+                    if (granted) {
+                        mFiles.clear();
+                        JUtils.copyToClipboard(description);
+                        if (picArray.size() > 0) {
+                            downloadNinepic(picArray, description);
+                        } else {
+                            shareToWx(description);
+                        }
+                        JUtils.ToastLong("努力分享中,请稍等几秒钟...");
+                    } else {
+                        JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
+                    }
+                }, Throwable::printStackTrace);
+
         });
         return convertView;
     }
@@ -171,7 +169,7 @@ public class NinePicAdapter extends BaseAdapter {
                 }
                 fileName = str.substring(str.lastIndexOf("/"));
                 String newFileName = Environment.getExternalStorageDirectory() +
-                        CameraUtils.XLMM_IMG_PATH + fileName + ".jpg";
+                    CameraUtils.XLMM_IMG_PATH + fileName + ".jpg";
                 if (FileUtils.isFileExist(newFileName)) {
                     Uri uri = Uri.fromFile(new File(newFileName));
                     mFiles.add(uri);
@@ -187,56 +185,56 @@ public class NinePicAdapter extends BaseAdapter {
                     JUtils.Log("NinePic", "download " + str);
                     final int finalI = i;
                     OkHttpUtils.get()
-                            .url(str)
-                            .build()
-                            .execute(new FileParaCallback() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                    hideLoading();
-                                    JUtils.Toast("分享失败,请重新分享!");
-                                }
+                        .url(str)
+                        .build()
+                        .execute(new FileParaCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                hideLoading();
+                                JUtils.Toast("分享失败,请重新分享!");
+                            }
 
-                                @Override
-                                public void onResponse(FilePara response, int id) {
-                                    if (response != null) {
-                                        JUtils.Log("NinePic", "download " + finalI + " finished.");
-                                        try {
-                                            String currentStr = picArry.get(finalI);
-                                            String pic_indicate_name;
-                                            if (currentStr.contains("code")) {
-                                                if (finalI > 0) {
-                                                    currentStr = picArry.get(finalI - 1) + "code";
-                                                } else {
-                                                    currentStr = picArry.get(0) + "code";
-                                                }
+                            @Override
+                            public void onResponse(FilePara response, int id) {
+                                if (response != null) {
+                                    JUtils.Log("NinePic", "download " + finalI + " finished.");
+                                    try {
+                                        String currentStr = picArry.get(finalI);
+                                        String pic_indicate_name;
+                                        if (currentStr.contains("code")) {
+                                            if (finalI > 0) {
+                                                currentStr = picArry.get(finalI - 1) + "code";
+                                            } else {
+                                                currentStr = picArry.get(0) + "code";
                                             }
-                                            pic_indicate_name = currentStr.substring(currentStr.lastIndexOf("/"));
-                                            String newName = Environment.getExternalStorageDirectory() +
-                                                    CameraUtils.XLMM_IMG_PATH + pic_indicate_name + ".jpg";
-                                            JUtils.Log("NinePic", "newName=" + newName);
-                                            if (FileUtils.isFileExist(newName)) {
-                                                JUtils.Log("NinePic", "newName has existed,delete");
-                                                FileUtils.deleteFile(newName);
-                                            }
-                                            File file = new File(response.getFilePath());
-                                            file.renameTo(new File(newName));
-                                            Uri uri = Uri.fromFile(new File(newName));
-                                            mFiles.add(uri);
-                                            // 通知图库更新
-                                            Intent scannerIntent =
-                                                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-                                            scannerIntent.setData(uri);
-                                            mContext.sendBroadcast(scannerIntent);
-                                            if (mFiles.size() == picArry.size()) {
-                                                shareToWx(desc);
-                                            }
-                                        } catch (Exception e) {
-                                            hideLoading();
-                                            e.printStackTrace();
                                         }
+                                        pic_indicate_name = currentStr.substring(currentStr.lastIndexOf("/"));
+                                        String newName = Environment.getExternalStorageDirectory() +
+                                            CameraUtils.XLMM_IMG_PATH + pic_indicate_name + ".jpg";
+                                        JUtils.Log("NinePic", "newName=" + newName);
+                                        if (FileUtils.isFileExist(newName)) {
+                                            JUtils.Log("NinePic", "newName has existed,delete");
+                                            FileUtils.deleteFile(newName);
+                                        }
+                                        File file = new File(response.getFilePath());
+                                        file.renameTo(new File(newName));
+                                        Uri uri = Uri.fromFile(new File(newName));
+                                        mFiles.add(uri);
+                                        // 通知图库更新
+                                        Intent scannerIntent =
+                                            new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                                        scannerIntent.setData(uri);
+                                        mContext.sendBroadcast(scannerIntent);
+                                        if (mFiles.size() == picArry.size()) {
+                                            shareToWx(desc);
+                                        }
+                                    } catch (Exception e) {
+                                        hideLoading();
+                                        e.printStackTrace();
                                     }
                                 }
-                            });
+                            }
+                        });
                 }
             }
         }).start();

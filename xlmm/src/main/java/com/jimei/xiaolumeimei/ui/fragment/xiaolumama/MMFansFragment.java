@@ -4,17 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MamaFansAdapter;
 import com.jimei.xiaolumeimei.base.BaseLazyFragment;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
@@ -46,32 +45,7 @@ public class MMFansFragment extends BaseLazyFragment {
 
     @Override
     public void initData() {
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaFans("1")
-                .subscribe(new ServiceResponse<MamaFansBean>() {
-                    @Override
-                    public void onCompleted() {
-                        hideIndeterminateProgressDialog();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        hideIndeterminateProgressDialog();
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(MamaFansBean fansBeen) {
-                        if (fansBeen != null) {
-                            if (0 != fansBeen.getCount()) {
-                                mAdapter.updateWithClear(fansBeen.getResults());
-                            }
-                            if (null == fansBeen.getNext()) {
-                                xrvMamaFans.setLoadingMoreEnabled(false);
-                            }
-                        }
-                    }
-                }));
+        loadMoreData(1);
     }
 
     @Override
@@ -83,7 +57,7 @@ public class MMFansFragment extends BaseLazyFragment {
     protected void initViews() {
         xrvMamaFans.setLayoutManager(new LinearLayoutManager(mActivity));
         xrvMamaFans.addItemDecoration(
-                new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
+            new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
         xrvMamaFans.setRefreshProgressStyle(ProgressStyle.BallPulse);
         xrvMamaFans.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xrvMamaFans.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -100,36 +74,34 @@ public class MMFansFragment extends BaseLazyFragment {
 
             @Override
             public void onLoadMore() {
-                loadMoreData(pageNext + "");
+                loadMoreData(pageNext);
                 pageNext++;
-                JUtils.Log("fans", pageNext + "");
             }
         });
     }
 
-    private void loadMoreData(String page) {
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaFans(page)
-                .subscribe(new ServiceResponse<MamaFansBean>() {
-                    @Override
-                    public void onNext(MamaFansBean fansBeen) {
-                        super.onNext(fansBeen);
-                        if (fansBeen != null) {
-                            mAdapter.update(fansBeen.getResults());
-                            if (null == fansBeen.getNext()) {
-                                Toast.makeText(mActivity, "没有更多了", Toast.LENGTH_SHORT).show();
-                                xrvMamaFans.loadMoreComplete();
-                                xrvMamaFans.setLoadingMoreEnabled(false);
-                            }
+    private void loadMoreData(int page) {
+        addSubscription(XlmmApp.getVipInteractor(mActivity)
+            .getMamaFans(page, new ServiceResponse<MamaFansBean>() {
+                @Override
+                public void onNext(MamaFansBean fansBeen) {
+                    if (fansBeen != null) {
+                        mAdapter.update(fansBeen.getResults());
+                        if (fansBeen.getNext() == null) {
+                            JUtils.Toast("没有更多了");
+                            xrvMamaFans.setLoadingMoreEnabled(false);
                         }
                     }
+                    xrvMamaFans.loadMoreComplete();
+                    hideIndeterminateProgressDialog();
+                }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        xrvMamaFans.loadMoreComplete();
-                    }
-                }));
+                @Override
+                public void onError(Throwable e) {
+                    xrvMamaFans.loadMoreComplete();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Override

@@ -34,7 +34,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textColor="@color/text_color_62"
-                        android:textSize="32sp"/>
+                        android:textSize="32dp"/>
 
                     <TextView
                         android:id="@+id/title"
@@ -47,7 +47,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/text_color_62"
-                        android:textSize="12sp"/>
+                        android:textSize="12dp"/>
 
                     <TextView
                         android:id="@+id/use_fee"
@@ -60,7 +60,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/text_color_62"
-                        android:textSize="12sp"/>
+                        android:textSize="12dp"/>
 
                 </RelativeLayout>
 
@@ -74,7 +74,7 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:textColor="@color/text_color_62"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
 
             </LinearLayout>
 
@@ -109,7 +109,7 @@
                 android:singleLine="true"
                 android:text="期限"
                 android:textColor="@color/text_color_62"
-                android:textSize="11sp"/>
+                android:textSize="11dp"/>
         </LinearLayout>
 
     </RelativeLayout>

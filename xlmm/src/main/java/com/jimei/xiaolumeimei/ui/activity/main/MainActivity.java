@@ -16,26 +16,31 @@ import android.widget.TextView;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
+import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
+import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
-import com.jimei.xiaolumeimei.model.MainModel;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.service.UpdateService;
 import com.jimei.xiaolumeimei.ui.activity.product.CategoryListActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.UserActivity;
+import com.jimei.xiaolumeimei.ui.fragment.product.ActivityFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.ProductFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.TodayNewFragment;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
-import com.jimei.xiaolumeimei.widget.MainViewPager;
+import com.jimei.library.widget.MainViewPager;
 import com.jimei.xiaolumeimei.widget.VersionManager;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -66,6 +71,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     RelativeLayout btnShop;
     @Bind(R.id.boutique_in)
     TextView boutiqueIn;
+    @Bind(R.id.reload_text)
+    TextView reloadText;
+    @Bind(R.id.btn_layout)
+    LinearLayout btnLayout;
     private int num = 1;
     private long firstTime = 0;
     private boolean updateFlag = true;
@@ -80,7 +89,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initData() {
+        showIndeterminateProgressDialog(false);
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getWxCode(new ServiceResponse<>()));
         showBoutique = false;
+        List<BaseFragment> fragments = new ArrayList<>();
+        fragments.add(TodayNewFragment.newInstance("今日特卖"));
+        fragments.add(ActivityFragment.newInstance("精品活动"));
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getPortalBean("activitys,posters", new ServiceResponse<PortalBean>() {
+                @Override
+                public void onNext(PortalBean portalBean) {
+                    List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
+                    if (categorys != null && categorys.size() > 0) {
+                        for (int i = 0; i < categorys.size(); i++) {
+                            PortalBean.CategorysBean bean = categorys.get(i);
+                            fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
+                        }
+                        BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
+                        viewPager.setAdapter(mAdapter);
+                        viewPager.setOffscreenPageLimit(fragments.size());
+                        tabLayout.setupWithViewPager(viewPager);
+                        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                    }
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                    reloadText.setVisibility(View.VISIBLE);
+                }
+            }));
         LoginUtils.clearCacheEveryWeek(this);
         LoginUtils.setMamaInfo(this);
         downLoadAddress();
@@ -89,38 +130,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void showCartsNum() {
-        addSubscription(MainModel.getInstance()
-            .getCartsNum()
-            .subscribe(bean -> {
-                if (bean != null && bean.getResult() > 0) {
-                    if (bean.getResult() > 99) {
-                        textNum.setText("99+");
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getCartsNum(new ServiceResponse<CartsNumResultBean>() {
+                @Override
+                public void onNext(CartsNumResultBean bean) {
+                    if (bean != null && bean.getResult() > 0) {
+                        if (bean.getResult() > 99) {
+                            textNum.setText("99+");
+                        } else {
+                            textNum.setText("" + bean.getResult());
+                        }
+                        textNum.setVisibility(View.VISIBLE);
                     } else {
-                        textNum.setText("" + bean.getResult());
+                        textNum.setVisibility(View.GONE);
                     }
-                    textNum.setVisibility(View.VISIBLE);
-                } else {
-                    textNum.setVisibility(View.GONE);
                 }
-            }, Throwable::printStackTrace));
+            }));
     }
 
     private void showBoutique() {
         showBoutique = false;
         boutiqueIn.setVisibility(View.GONE);
-        addSubscription(MainModel.getInstance()
-            .getProfile()
-            .subscribe(userInfoBean -> {
-                if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
-                    addSubscription(MamaInfoModel.getInstance()
-                        .getMamaUrl()
-                        .subscribe(mamaUrl -> {
-                            boutiqueUrl = mamaUrl.getResults().get(0).getExtra().getBoutique();
-                            showBoutique = true;
-                            boutiqueIn.setVisibility(View.VISIBLE);
-                        }, Throwable::printStackTrace));
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getProfile(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean userInfoBean) {
+                    if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
+                        addSubscription(XlmmApp.getVipInteractor(MainActivity.this)
+                            .getMamaUrl()
+                            .subscribe(mamaUrl -> {
+                                boutiqueUrl = mamaUrl.getResults().get(0).getExtra().getBoutique();
+                                showBoutique = true;
+                                boutiqueIn.setVisibility(View.VISIBLE);
+                            }, Throwable::printStackTrace));
+                    }
                 }
-            }, Throwable::printStackTrace));
+            }));
     }
 
     @Override
@@ -130,29 +175,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnMy.setOnClickListener(this);
         btnCar.setOnClickListener(this);
         btnShop.setOnClickListener(this);
+        reloadText.setOnClickListener(this);
     }
 
     @Override
     protected void initViews() {
         setSwipeBackEnable(false);
-        List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(TodayNewFragment.newInstance("精品推荐"));
-        addSubscription(MainModel.getInstance()
-            .getPortalBean("activitys,posters")
-            .subscribe(portalBean -> {
-                List<PortalBean.CategorysBean> categorys = portalBean.getCategorys();
-                if (categorys != null && categorys.size() > 0) {
-                    for (int i = 0; i < categorys.size(); i++) {
-                        PortalBean.CategorysBean bean = categorys.get(i);
-                        fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
-                    }
-                    BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
-                    viewPager.setAdapter(mAdapter);
-                    viewPager.setOffscreenPageLimit(fragments.size());
-                    tabLayout.setupWithViewPager(viewPager);
-                    tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-                }
-            }, Throwable::printStackTrace));
     }
 
     public void setTabLayoutMarginTop(double percent) {
@@ -163,9 +191,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             double height = percent * tabLayout.getHeight();
             params.setMargins(0, (int) -height, 0, 0);
             tabLayout.setLayoutParams(params);
+            if (percent == 1) {
+                btnLayout.setVisibility(View.GONE);
+            } else {
+                btnLayout.setVisibility(View.VISIBLE);
+            }
         } else {
             viewPager.setScrollable(true);
             params.setMargins(0, 0, 0, 0);
+            btnLayout.setVisibility(View.VISIBLE);
         }
         tabLayout.setLayoutParams(params);
     }
@@ -214,35 +248,45 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.boutique_in:
                 JumpUtils.jumpToWebViewWithCookies(MainActivity.this, boutiqueUrl, -1, CommonWebViewActivity.class, false, true);
                 break;
+            case R.id.reload_text:
+                reloadText.setVisibility(View.GONE);
+                initData();
+                showBoutique();
+                showCartsNum();
+                break;
             default:
                 break;
         }
     }
 
     private void setTopic() {
-        addSubscription(MainModel.getInstance()
-            .getTopic()
-            .subscribe(userTopic -> {
-                List<String> topics = userTopic.getTopics();
-                if (topics != null) {
-                    for (int i = 0; i < topics.size(); i++) {
-                        MiPushClient.subscribe(this, topics.get(i), null);
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getTopic(new ServiceResponse<UserTopic>() {
+                @Override
+                public void onNext(UserTopic userTopic) {
+                    List<String> topics = userTopic.getTopics();
+                    if (topics != null) {
+                        for (int i = 0; i < topics.size(); i++) {
+                            MiPushClient.subscribe(MainActivity.this, topics.get(i), null);
+                        }
                     }
                 }
-            }, Throwable::printStackTrace));
+            }));
     }
 
     private void checkVersion() {
-        addSubscription(MainModel.getInstance()
-            .getVersion()
-            .subscribe(versionBean -> {
-                if (versionBean != null) {
-                    new Thread(() -> {
-                        SystemClock.sleep(2500);
-                        runOnUiThread(() -> checkVersion(versionBean));
-                    }).start();
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getVersion(new ServiceResponse<VersionBean>() {
+                @Override
+                public void onNext(VersionBean versionBean) {
+                    if (versionBean != null) {
+                        new Thread(() -> {
+                            SystemClock.sleep(2500);
+                            runOnUiThread(() -> checkVersion(versionBean));
+                        }).start();
+                    }
                 }
-            }, Throwable::printStackTrace));
+            }));
     }
 
     private void checkVersion(VersionBean versionBean) {
@@ -266,31 +310,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void downLoadAddress() {
-        addSubscription(MainModel.getInstance()
-            .getAddressVersionAndUrl()
-            .subscribe(addressDownloadResultBean -> {
-                if (addressDownloadResultBean != null) {
-                    String downloadUrl = addressDownloadResultBean.getDownloadUrl();
-                    String hash = addressDownloadResultBean.getHash();
-                    if (!FileUtils.isAddressFileHashSame(getApplicationContext(), hash) ||
-                        !FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
-                        OkHttpUtils.get().url(downloadUrl).build()
-                            .execute(new FileCallBack(XlmmConst.XLMM_DIR, "areas.json") {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                    if (FileUtils.isFolderExist(XlmmConst.XLMM_DIR + "areas.json")) {
-                                        FileUtils.deleteFile(XlmmConst.XLMM_DIR + "areas.json");
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getAddressVersionAndUrl(new ServiceResponse<AddressDownloadResultBean>() {
+                @Override
+                public void onNext(AddressDownloadResultBean addressDownloadResultBean) {
+                    if (addressDownloadResultBean != null) {
+                        String downloadUrl = addressDownloadResultBean.getDownloadUrl();
+                        String hash = addressDownloadResultBean.getHash();
+                        if (!FileUtils.isAddressFileHashSame(getApplicationContext(), hash) ||
+                            !FileUtils.isFileExist(XlmmConst.XLMM_DIR + "areas.json")) {
+                            OkHttpUtils.get().url(downloadUrl).build()
+                                .execute(new FileCallBack(XlmmConst.XLMM_DIR, "areas.json") {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
+                                        if (FileUtils.isFolderExist(XlmmConst.XLMM_DIR + "areas.json")) {
+                                            FileUtils.deleteFile(XlmmConst.XLMM_DIR + "areas.json");
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onResponse(File response, int id) {
-                                    FileUtils.saveAddressFile(getApplicationContext(), hash);
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(File response, int id) {
+                                        FileUtils.saveAddressFile(getApplicationContext(), hash);
+                                    }
+                                });
+                        }
                     }
                 }
-            }, Throwable::printStackTrace));
+            }));
     }
 
 
@@ -341,8 +387,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        showCartsNum();
-        showBoutique();
+        if (LoginUtils.checkLoginState(this)) {
+            showCartsNum();
+            showBoutique();
+        } else {
+            textNum.setVisibility(View.GONE);
+            boutiqueIn.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

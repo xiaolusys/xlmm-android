@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:textColor="@color/colorPrimary"
-                android:textSize="32sp" />
+                android:textSize="32dp" />
 
             <TextView
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="我的零钱(元)"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
         </LinearLayout>
 

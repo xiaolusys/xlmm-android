@@ -8,10 +8,10 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 
@@ -46,9 +46,10 @@ public class DrawCashDetailActivity extends BaseSwipeBackCompatActivity {
 
     @Override
     protected void initData() {
-        addSubscription(UserModel.getInstance()
-                .budGetDetailBean("1")
-                .subscribe(budgetDetailBean -> {
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .budgetDetailBean(1, new ServiceResponse<BudgetDetailBean>() {
+                @Override
+                public void onNext(BudgetDetailBean budgetDetailBean) {
                     if (budgetDetailBean.getResults().size() > 0) {
                         BudgetDetailBean.ResultsEntity entity = budgetDetailBean.getResults().get(0);
                         String str = ((int) entity.getBudegetDetailCash()) + "";
@@ -73,15 +74,16 @@ public class DrawCashDetailActivity extends BaseSwipeBackCompatActivity {
                     } else {
                         JUtils.Toast("查询失败!");
                     }
-                }, e -> JUtils.Log(e.getMessage())));
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaFortune()
-                .subscribe(mamaFortune -> {
-                    String moneyText = mamaFortune.getMamaFortune().getCashValue() + "";
-                    String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";
-                    moneyTv.setText(moneyText);
-                    activityTv.setText(activityText);
-                }, e -> JUtils.Log(e.getMessage())));
+                }
+            }));
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getMamaFortune()
+            .subscribe(mamaFortune -> {
+                String moneyText = mamaFortune.getMamaFortune().getCashValue() + "";
+                String activityText = mamaFortune.getMamaFortune().getActiveValueNum() + "";
+                moneyTv.setText(moneyText);
+                activityTv.setText(activityText);
+            }, e -> JUtils.Log(e.getMessage())));
     }
 
     @Override

@@ -8,13 +8,13 @@ import android.widget.LinearLayout;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.BaseTabAdapter;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CouponSelectEntity;
-import com.jimei.xiaolumeimei.model.UserModel;
-import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.fragment.user.SelectCouponFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,8 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        UserModel.getInstance()
-            .getCouponSelectEntity(cart_ids)
-            .subscribe(new ServiceResponse<CouponSelectEntity>() {
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getCouponSelectEntity(cart_ids, new ServiceResponse<CouponSelectEntity>() {
                 @Override
                 public void onNext(CouponSelectEntity couponSelectEntity) {
                     BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);
@@ -62,7 +61,7 @@ public class SelectCouponActivity extends BaseSwipeBackCompatActivity {
                     JUtils.Toast("获取优惠券信息失败!");
                     hideIndeterminateProgressDialog();
                 }
-            });
+            }));
     }
 
     @Override

@@ -15,12 +15,14 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CategoryItemAdapter;
 import com.jimei.xiaolumeimei.adapter.CategoryNameListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.model.MainModel;
+import com.jimei.xiaolumeimei.entities.CategoryDownBean;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.widget.CategoryListTask;
 import com.jimei.xiaolumeimei.widget.CategoryTask;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -61,7 +63,6 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
         mCategoryNameListAdapter = new CategoryNameListAdapter(this);
         mListView.setAdapter(mCategoryNameListAdapter);
 
-
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mXRecyclerView.setLayoutManager(manager);
         mXRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -72,40 +73,44 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
 
         adapter = new CategoryItemAdapter(this);
         mXRecyclerView.setAdapter(adapter);
+        showIndeterminateProgressDialog(false);
         if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-            showIndeterminateProgressDialog(false);
-            addSubscription(MainModel.getInstance()
-                .getCategoryDown()
-                .subscribe(categoryDownBean -> {
-                    if (categoryDownBean != null) {
-                        String downloadUrl = categoryDownBean.getDownload_url();
-                        String sha1 = categoryDownBean.getSha1();
-                        if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
-                            FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
-                        }
-                        OkHttpUtils.get().url(downloadUrl).build()
-                            .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                    hideIndeterminateProgressDialog();
-                                }
+            addSubscription(XlmmApp.getMainInteractor(this)
+                .getCategoryDown(new ServiceResponse<CategoryDownBean>() {
+                    @Override
+                    public void onNext(CategoryDownBean categoryDownBean) {
+                        if (categoryDownBean != null) {
+                            String downloadUrl = categoryDownBean.getDownload_url();
+                            String sha1 = categoryDownBean.getSha1();
+                            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
+                                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
+                            }
+                            OkHttpUtils.get().url(downloadUrl).build()
+                                .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
+                                        hideIndeterminateProgressDialog();
+                                    }
 
-                                @Override
-                                public void onResponse(File response, int id) {
-                                    FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-                                    new CategoryListTask(mCategoryNameListAdapter).execute();
-                                    new CategoryTask(adapter, emptyLayout).execute("");
-                                    hideIndeterminateProgressDialog();
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(File response, int id) {
+                                        FileUtils.saveCategoryFile(getApplicationContext(), sha1);
+                                        new CategoryListTask(mCategoryNameListAdapter).execute();
+                                        new CategoryTask(adapter, emptyLayout,CategoryListActivity.this).execute("");
+                                    }
+                                });
+                        }
                     }
-                }, e -> {
-                    e.printStackTrace();
-                    hideIndeterminateProgressDialog();
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        hideIndeterminateProgressDialog();
+                    }
                 }));
         } else {
             new CategoryListTask(mCategoryNameListAdapter).execute();
-            new CategoryTask(adapter, emptyLayout).execute("");
+            new CategoryTask(adapter, emptyLayout,this).execute("");
         }
     }
 

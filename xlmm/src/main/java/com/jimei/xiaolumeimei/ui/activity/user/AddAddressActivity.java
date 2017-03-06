@@ -23,11 +23,11 @@ import com.jimei.library.widget.wheelcitypicker.CityPickerDialog;
 import com.jimei.library.widget.wheelcitypicker.Util;
 import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
-import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/01/19.
@@ -48,7 +47,7 @@ import rx.Subscription;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class AddAddressActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.name)
     EditText name;
@@ -115,7 +114,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         switch (v.getId()) {
             case R.id.address:
                 InputMethodManager imm =
-                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
                 if (provinces.size() > 0) {
                     showAddressDialog();
@@ -130,10 +129,10 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 idNo = idNum.getText().toString().trim();
                 if (IdCardChecker.isValidatedAllIdcard(idNo) || !idFlag) {
                     if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                        Subscription subscribe = AddressModel.getInstance()
-                                .create_addressWithId(receiver_state, receiver_city, receiver_district,
-                                        clearaddressa, receiver_name, receiver_mobile, defaulta, idNo)
-                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                        addSubscription(XlmmApp.getAddressInteractor(this)
+                            .create_addressWithId(receiver_state, receiver_city, receiver_district,
+                                clearaddressa, receiver_name, receiver_mobile, defaulta, idNo,
+                                new ServiceResponse<AddressResultBean>() {
                                     @Override
                                     public void onNext(AddressResultBean addressResultBean) {
                                         EventBus.getDefault().post(new AddressChangeEvent());
@@ -144,8 +143,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                                             }
                                         }
                                     }
-                                });
-                        addSubscription(subscribe);
+                                }));
                     }
                 } else {
                     JUtils.Toast("请填写合法的身份证号码!");
@@ -156,14 +154,13 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
 
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, null, null, null,
-                (selectProvince, selectCity, selectCounty) -> {
-
-                    receiver_state = selectProvince != null ? selectProvince.getName() : "";
-                    receiver_district = selectCounty != null ? selectCounty.getName() : "";
-                    receiver_city = selectCity != null ? selectCity.getName() : "";
-                    city_string = receiver_state + receiver_city + receiver_district;
-                    address.setText(city_string);
-                }).show();
+            (selectProvince, selectCity, selectCounty) -> {
+                receiver_state = selectProvince != null ? selectProvince.getName() : "";
+                receiver_district = selectCounty != null ? selectCounty.getName() : "";
+                receiver_city = selectCity != null ? selectCity.getName() : "";
+                city_string = receiver_state + receiver_city + receiver_district;
+                address.setText(city_string);
+            }).show();
     }
 
     public boolean checkInput(String receivername, String mobile, String address1,

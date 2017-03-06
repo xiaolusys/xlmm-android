@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.base;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +10,9 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -27,7 +24,6 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -35,29 +31,22 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.jimei.library.utils.CameraUtils;
-import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-import com.jimei.xiaolumeimei.model.ActivityModel;
-import com.jimei.xiaolumeimei.util.pay.PayUtils;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.util.pay.PayUtils;
 import com.mob.tools.utils.UIHandler;
-import com.tbruyelle.rxpermissions.RxPermissions;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,29 +57,21 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import rx.Subscription;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
-        implements PlatformActionListener, Handler.Callback {
+public class                                                                                                           CommonWebViewActivity extends BaseSwipeBackCompatActivity
+    implements PlatformActionListener, Handler.Callback {
 
     @Bind(R.id.layout)
     LinearLayout layout;
 
-    public ValueCallback<Uri> mUploadMessage;
-    public ValueCallback<Uri[]> mUploadMessageForAndroid5;
-
-    public final static int FILECHOOSER_RESULTCODE = 1;
-    public final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
-
     private static final int MSG_ACTION_CCALLBACK = 2;
     public WebView mWebView;
     LinearLayout ll_actwebview;
-    private Bitmap bitmap;
     private ProgressBar mProgressBar;
     private String cookies;
     private String actlink;
@@ -99,7 +80,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     private String sessionid;
     private int id;
     public XlmmTitleView titleView;
-    private AndroidJsBridge mAndroidJsBridge;
 
     @Override
     protected void initData() {
@@ -171,10 +151,10 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             }
             String userAgentString = mWebView.getSettings().getUserAgentString();
             mWebView.getSettings().setUserAgentString(userAgentString +
-                    "; xlmm/" + BuildConfig.VERSION_NAME + ";");
+                "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             mWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
             mWebView.getSettings().setJavaScriptEnabled(true);
-            mAndroidJsBridge = new AndroidJsBridge(this);
+            AndroidJsBridge mAndroidJsBridge = new AndroidJsBridge(this);
             mWebView.addJavascriptInterface(mAndroidJsBridge, "AndroidBridge");
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setAllowFileAccess(true);
@@ -183,6 +163,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             mWebView.getSettings().setDomStorageEnabled(true);
             mWebView.getSettings().setDatabaseEnabled(true);
             mWebView.getSettings().setUseWideViewPort(true);
+            mWebView.getSettings().setTextZoom(100);
 
             mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             mWebView.setInitialScale(100);
@@ -208,8 +189,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                                          JsResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("提示")
-                            .setMessage(message)
-                            .setPositiveButton("确定", null);
+                        .setMessage(message)
+                        .setPositiveButton("确定", null);
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsAlert", "keyCode==" + keyCode + "event=" + event);
                         return true;
@@ -225,9 +206,9 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                                            final JsResult result) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("提示")
-                            .setMessage(message)
-                            .setPositiveButton("确定", (dialog, which) -> result.confirm())
-                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                        .setMessage(message)
+                        .setPositiveButton("确定", (dialog, which) -> result.confirm())
+                        .setNeutralButton("取消", (dialog, which) -> result.cancel());
                     builder.setOnCancelListener(dialog -> result.cancel());
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsConfirm", "keyCode==" + keyCode + "event=" + event);
@@ -246,8 +227,8 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     et.setSingleLine();
                     et.setText(defaultValue);
                     builder.setView(et)
-                            .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
-                            .setNeutralButton("取消", (dialog, which) -> result.cancel());
+                        .setPositiveButton("确定", (dialog, which) -> result.confirm(et.getText().toString()))
+                        .setNeutralButton("取消", (dialog, which) -> result.cancel());
                     builder.setOnKeyListener((dialog, keyCode, event) -> {
                         Log.v("onJsPrompt", "keyCode==" + keyCode + "event=" + event);
                         return true;
@@ -256,28 +237,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                     dialog.show();
                     return true;
                 }
-
-//                //扩展浏览器上传文件
-//                //3.0++版本
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                //3.0--版本
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                // For Android > 5.0
-//                public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg,
-//                                                 WebChromeClient.FileChooserParams fileChooserParams) {
-//                    openFileChooserImplForAndroid5(uploadMsg);
-//                    return true;
-//                }
             });
             mWebView.setWebViewClient(new WebViewClient() {
 
@@ -318,24 +277,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == FILECHOOSER_RESULTCODE) {
-//            if (null == mUploadMessage)
-//                return;
-//            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-//            mUploadMessage.onReceiveValue(result);
-//            mUploadMessage = null;
-//
-//        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
-//            if (null == mUploadMessageForAndroid5)
-//                return;
-//            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
-//            if (result != null) {
-//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
-//            } else {
-//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
-//            }
-//            mUploadMessageForAndroid5 = null;
-//        } else
         if (requestCode == PayUtils.REQUEST_CODE_PAYMENT) {
             if (resultCode == RESULT_OK) {
                 String result = intent.getExtras().getString("pay_result");
@@ -348,7 +289,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                             break;
                         case "success":
                             JUtils.Toast("支付成功！");
-//                            successJump(mAndroidJsBridge.getTid());
                             finish();
                             break;
                         default:
@@ -362,34 +302,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             }
         }
     }
-
-//    private void successJump(String tid) {
-//        Intent intent = new Intent(this, RedBagActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString("tid", tid);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
-//        finish();
-//    }
-
-//    private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
-//        mUploadMessage = uploadMsg;
-//        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-//        i.addCategory(Intent.CATEGORY_OPENABLE);
-//        i.setType("image/*");
-//        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
-//    }
-//
-//    private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
-//        mUploadMessageForAndroid5 = uploadMsg;
-//        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-//        contentSelectionIntent.setType("image/*");
-//        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-//        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-//        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
-//        startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
-//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -426,16 +338,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-
-    public void setActlink(String actlink) {
-        this.actlink = actlink;
-    }
-
-
-    public String getActlink() {
-        return actlink;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -457,7 +359,7 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
-        EventBus.getDefault().post(new CartEvent());
+        EventBus.getDefault().post(new LoginEvent());
         if (ll_actwebview != null) {
             ll_actwebview.removeView(mWebView);
         }
@@ -466,26 +368,16 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
             mWebView.destroy();
             mWebView = null;
         }
-
-        if (bitmap != null) {
-            bitmap.recycle();
-        }
     }
 
     public void syncCookie(Context context) {
-
         try {
             CookieSyncManager.createInstance(context);
-
             CookieManager cookieManager = CookieManager.getInstance();
-
             cookieManager.removeSessionCookie();// 移除
             cookieManager.removeAllCookie();
-
             cookieManager.setAcceptCookie(true);
-
             cookieManager.setCookie(domain, cookies);
-
             CookieSyncManager.getInstance().sync();
         } catch (Exception e) {
             e.printStackTrace();
@@ -528,45 +420,36 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     @Override
     public boolean handleMessage(Message msg) {
         switch (msg.arg1) {
-            case 1: {
-                // 分享成功回调
+            case 1:
                 MobclickAgent.onEvent(mContext, "share_success");
                 JUtils.Toast("分享成功");
-            }
-            break;
-            case 2: {
-                // 分享失败回调
+                break;
+            case 2:
                 HashMap<String, String> map = new HashMap<>();
                 map.put("error", msg.obj.toString());
                 MobclickAgent.onEvent(mContext, "share_failed", map);
                 MobclickAgent.onEvent(mContext, "share_failed");
                 JUtils.Toast("分享失败");
-            }
-            break;
-            case 3: {
-                // 分享取消回调
+                break;
+            case 3:
                 MobclickAgent.onEvent(mContext, "share_cancel");
                 JUtils.Toast("分享已取消");
-            }
-            break;
+                break;
         }
         return false;
     }
 
     public void get_party_share_content(String id) {
-        Subscription subscribe = ActivityModel.getInstance()
-                .get_party_share_content(id)
-                .subscribe(new ServiceResponse<ActivityBean>() {
-                    @Override
-                    public void onNext(ActivityBean activityBean) {
-
-                        if (null != activityBean) {
-                            partyShareInfo = activityBean;
-                            partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
-                        }
+        addSubscription(XlmmApp.getActivityInteractor(this)
+            .get_party_share_content(id, new ServiceResponse<ActivityBean>() {
+                @Override
+                public void onNext(ActivityBean activityBean) {
+                    if (null != activityBean) {
+                        partyShareInfo = activityBean;
+                        partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
                     }
-                });
-        addSubscription(subscribe);
+                }
+            }));
     }
 
     protected void share_shopping(String title, String sharelink, String desc, String shareimg) {
@@ -594,56 +477,16 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
         oks.setImageUrl(partyShareInfo.getShareIcon());
         oks.setUrl(partyShareInfo.getShareLink());
         Bitmap enableLogo =
-                BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
-        String label = "二维码";
-        View.OnClickListener listener = v -> saveTwoDimenCode();
-        oks.setCustomerLogo(enableLogo, label, listener);
+            BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
+        View.OnClickListener listener = v -> {
+            JUtils.copyToClipboard(partyShareInfo.getShareLink() + "");
+            JUtils.Toast("已复制链接");
+        };
+        oks.setCustomerLogo(enableLogo, "复制链接", listener);
         oks.setShareContentCustomizeCallback(
-                new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
+            new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
         oks.setCallback(this);
         oks.show(this);
-    }
-
-    public void saveTwoDimenCode() {
-        if (TextUtils.isEmpty(partyShareInfo.getShareLink())) {
-            return;
-        }
-        try {
-            bitmap = mWebView.getDrawingCache();
-            RxPermissions.getInstance(this)
-                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) {
-                            String fileName = Environment.getExternalStorageDirectory() +
-                                    CameraUtils.XLMM_IMG_PATH + "/webview_capture" + ".jpg";
-
-                            if (FileUtils.isFileExist(fileName)) {
-                                FileUtils.deleteFile(fileName);
-                            }
-
-                            try {
-                                FileOutputStream fos = new FileOutputStream(fileName);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                                fos.flush();
-                                fos.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            Uri uri = Uri.fromFile(new File(fileName));
-                            // 通知图库更新
-                            Intent scannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-                            scannerIntent.setData(uri);
-
-                            sendBroadcast(scannerIntent);
-                            Toast.makeText(this, "截取快照成功至/xlmm/xiaolumeimei", Toast.LENGTH_LONG).show();
-                        } else {
-                            JUtils.Toast("小鹿美美需要存储权限存储图片,请再次点击保存并打开权限许可.");
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     class ShareContentCustom implements ShareContentCustomizeCallback {

@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.jimei.library.widget.XlmmTitleView
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:xlmm_title="确认订单" />
@@ -73,7 +74,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:textColor="@color/text_color_62"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                             <TextView
                                 android:id="@+id/phone"
@@ -82,7 +83,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:gravity="center_vertical"
                                 android:textColor="@color/text_color_62"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
                         </LinearLayout>
 
                         <TextView
@@ -93,7 +94,7 @@
                             android:gravity="center_vertical"
                             android:singleLine="true"
                             android:textColor="@color/text_color_9B"
-                            android:textSize="13sp" />
+                            android:textSize="13dp" />
 
                     </LinearLayout>
 
@@ -128,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="物流配送"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <TextView
                         android:id="@+id/tv_wuliu"
@@ -137,7 +138,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="8dp"
                         android:layout_toLeftOf="@+id/common_icon_right_arrow1"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <ImageView
                         android:id="@+id/common_icon_right_arrow1"
@@ -177,7 +178,7 @@
                     android:layout_centerVertical="true"
                     android:text="优惠券"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/tv_coupon"
@@ -187,7 +188,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_toLeftOf="@+id/common_icon_right_arrow"
                     android:textColor="@color/text_color_9B"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <ImageView
                     android:id="@+id/common_icon_right_arrow"
@@ -215,7 +216,7 @@
                     android:layout_height="wrap_content"
                     android:text="小鹿钱包"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -228,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10px"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <com.jimei.library.widget.SmoothCheckBox
                     android:id="@+id/scb"
@@ -257,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:text="小鹿币"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -270,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10px"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <com.jimei.library.widget.SmoothCheckBox
                     android:id="@+id/coin_scb"
@@ -300,7 +301,7 @@
                     android:layout_centerVertical="true"
                     android:text="APP支付优惠"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/tv_app_discount"
@@ -310,7 +311,7 @@
                     android:layout_centerVertical="true"
                     android:text="-¥2.0"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
 
             <include layout="@layout/common_gap" />
@@ -336,7 +337,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="我已阅读并同意"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/tv_rule"
@@ -344,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:text="小鹿美美购买条款"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -375,7 +376,7 @@
                     android:gravity="center_vertical"
                     android:text="商品金额"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/total_price_all"
@@ -384,7 +385,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -400,7 +401,7 @@
                     android:gravity="center_vertical"
                     android:text="运费"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/post_fee"
@@ -409,7 +410,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
                     android:textColor="@color/text_color_62"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
             </RelativeLayout>
 
@@ -442,7 +443,7 @@
                 android:layout_height="wrap_content"
                 android:text="应付款金额"
                 android:textColor="#26262e"
-                android:textSize="13sp" />
+                android:textSize="13dp" />
 
             <TextView
                 android:id="@+id/total_price"
@@ -450,7 +451,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
 
             <TextView
@@ -459,7 +460,7 @@
                 android:layout_marginLeft="8dp"
                 android:text="已节省"
                 android:textColor="#26262e"
-                android:textSize="13sp" />
+                android:textSize="13dp" />
 
             <TextView
                 android:id="@+id/jiesheng_price"
@@ -467,7 +468,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
         </LinearLayout>
 
@@ -480,7 +481,7 @@
             android:background="@drawable/confirm_bg"
             android:text="去结算"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15dp" />
     </LinearLayout>
 
     <RelativeLayout

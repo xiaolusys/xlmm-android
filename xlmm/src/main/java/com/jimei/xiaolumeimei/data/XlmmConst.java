@@ -53,10 +53,6 @@ public class XlmmConst {
     //微信
     public static final String WX_APP_ID = "wx25fcb32689872499";
 
-    public static final int TYPE_REWARD_PERSONAL = 0;
-    public static final int TYPE_REWARD_TEAM = 1;
-
-
     public static final String XLMM_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()
             + "/xlmm/";
 

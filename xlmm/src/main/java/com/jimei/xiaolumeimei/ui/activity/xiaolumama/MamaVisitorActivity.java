@@ -3,7 +3,6 @@ package com.jimei.xiaolumeimei.ui.activity.xiaolumama;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -12,9 +11,11 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MMVisitorsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 
@@ -51,27 +52,13 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaVisitor(1)
-                .subscribe(fansBeen -> {
-                    hideIndeterminateProgressDialog();
-                    if (fansBeen != null) {
-                        countTv.setText(fansBeen.getCount() + "");
-                        if (fansBeen.getCount() != 0) {
-                            mAdapter.update(fansBeen.getResults());
-
-                        }
-                        if (fansBeen.getNext() == null) {
-                            xrv.setLoadingMoreEnabled(false);
-                        }
-                    }
-                }, e -> JUtils.Log(e.getMessage())));
+        loadMoreData(1);
     }
 
     private void initRecyclerView() {
         xrv.setLayoutManager(new LinearLayoutManager(this));
         xrv.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+            new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xrv.setPullRefreshEnabled(false);
         xrv.setLoadingMoreEnabled(true);
@@ -93,17 +80,27 @@ public class MamaVisitorActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void loadMoreData(int page) {
-        addSubscription(MamaInfoModel.getInstance()
-                .getMamaVisitor(page)
-                .subscribe(fansBeen -> {
-                    if (fansBeen != null) {
-                        mAdapter.update(fansBeen.getResults());
-                        if (null == fansBeen.getNext()) {
-                            Toast.makeText(MamaVisitorActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
+        addSubscription(XlmmApp.getVipInteractor(this)
+            .getMamaVisitor(page, new ServiceResponse<MMVisitorsBean>() {
+                @Override
+                public void onNext(MMVisitorsBean mmVisitorsBean) {
+                    if (mmVisitorsBean != null) {
+                        countTv.setText(mmVisitorsBean.getCount() + "");
+                        mAdapter.update(mmVisitorsBean.getResults());
+                        if (null == mmVisitorsBean.getNext()) {
+                            JUtils.Toast("没有更多了");
                             xrv.setLoadingMoreEnabled(false);
                         }
                     }
                     xrv.loadMoreComplete();
-                }, e -> JUtils.Log(e.getMessage())));
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    xrv.loadMoreComplete();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 }

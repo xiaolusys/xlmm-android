@@ -12,11 +12,11 @@ import com.cpoopc.scrollablelayoutlib.ScrollableHelper;
 import com.cpoopc.scrollablelayoutlib.ScrollableLayout;
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.CoinHisListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
-import com.jimei.xiaolumeimei.model.MainModel;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
@@ -71,25 +71,35 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        addSubscription(MainModel.getInstance()
-            .getProfile()
-            .subscribe(userInfoBean -> {
-                tx_point.setText("" + userInfoBean.getXiaoluCoin());
-            }, throwable -> {
-                hideIndeterminateProgressDialog();
-            }));
-        addSubscription(UserModel.getInstance()
-            .getCoinHisList("1")
-            .subscribe(historyListBean -> {
-                List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
-                if (0 == result.size()) {
-                    rlayout_order_empty.setVisibility(View.VISIBLE);
-                } else {
-                    mPointAdapter.update(result);
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getProfile(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean userInfoBean) {
+                    tx_point.setText("" + userInfoBean.getXiaoluCoin());
                 }
-                hideIndeterminateProgressDialog();
-            }, throwable -> {
-                hideIndeterminateProgressDialog();
+
+                @Override
+                public void onError(Throwable e) {
+                    hideIndeterminateProgressDialog();
+                }
+            }));
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getCoinHisList("1", new ServiceResponse<CoinHistoryListBean>() {
+                @Override
+                public void onNext(CoinHistoryListBean historyListBean) {
+                    List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
+                    if (0 == result.size()) {
+                        rlayout_order_empty.setVisibility(View.VISIBLE);
+                    } else {
+                        mPointAdapter.update(result);
+                    }
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    hideIndeterminateProgressDialog();
+                }
             }));
     }
 
@@ -111,9 +121,8 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE && flag) {
-            addSubscription(UserModel.getInstance()
-                .getCoinHisList(page + "")
-                .subscribe(new ServiceResponse<CoinHistoryListBean>() {
+            addSubscription(XlmmApp.getUserInteractor(this)
+                .getCoinHisList(page + "", new ServiceResponse<CoinHistoryListBean>() {
                     @Override
                     public void onNext(CoinHistoryListBean historyListBean) {
                         List<CoinHistoryListBean.ResultsBean> results = historyListBean.getResults();

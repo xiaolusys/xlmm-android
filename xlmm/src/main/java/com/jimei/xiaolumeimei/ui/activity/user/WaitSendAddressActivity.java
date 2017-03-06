@@ -24,10 +24,10 @@ import com.jimei.library.widget.wheelcitypicker.address.City;
 import com.jimei.library.widget.wheelcitypicker.address.County;
 import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
-import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.io.File;
@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
 
@@ -141,7 +140,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
         switch (v.getId()) {
             case R.id.address:
                 InputMethodManager imm =
-                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
 
                 if (provinces.size() > 0) {
@@ -157,10 +156,10 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 idNo = idNum.getText().toString().trim();
                 if (IdCardChecker.isValidatedAllIdcard(idNo) || !is_bonded_goods) {
                     if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                        Subscription subscribe = AddressModel.getInstance()
-                                .update_address(id, receiver_state, receiver_city, receiver_district,
-                                        clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id, idNo)
-                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                        addSubscription(XlmmApp.getAddressInteractor(this)
+                            .update_address(id, receiver_state, receiver_city, receiver_district,
+                                clearaddressa, receiver_name, receiver_mobile, null, referal_trade_id, idNo,
+                                new ServiceResponse<AddressResultBean>() {
                                     @Override
                                     public void onNext(AddressResultBean addressResultBean) {
                                         if (addressResultBean != null) {
@@ -172,8 +171,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                                             }
                                         }
                                     }
-                                });
-                        addSubscription(subscribe);
+                                }));
                     }
                 } else {
                     JUtils.Toast("请填写合法的身份证号码!");
@@ -206,13 +204,13 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
 
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, province, city, county,
-                (selectProvince, selectCity, selectCounty) -> {
-                    receiver_state = selectProvince != null ? selectProvince.getName() : "";
-                    receiver_district = selectCounty != null ? selectCounty.getName() : "";
-                    receiver_city = selectCity != null ? selectCity.getName() : "";
-                    city_string = receiver_state + receiver_city + receiver_district;
-                    address.setText(city_string);
-                }).show();
+            (selectProvince, selectCity, selectCounty) -> {
+                receiver_state = selectProvince != null ? selectProvince.getName() : "";
+                receiver_district = selectCounty != null ? selectCounty.getName() : "";
+                receiver_city = selectCity != null ? selectCity.getName() : "";
+                city_string = receiver_state + receiver_city + receiver_district;
+                address.setText(city_string);
+            }).show();
     }
 
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {

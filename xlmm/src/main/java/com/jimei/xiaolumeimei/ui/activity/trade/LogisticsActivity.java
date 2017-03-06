@@ -11,12 +11,13 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.LogImageView;
 import com.jimei.library.widget.LogMsgView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.GoodsListAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticsBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +54,21 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             String packetid = packageOrdersBean.getOut_sid();
             String company_code = packageOrdersBean.getLogistics_company().getCode();
             if (packetid != null && company_code != null &&
-                    !"".equals(packetid) && !"".equals(company_code)) {
+                !"".equals(packetid) && !"".equals(company_code)) {
                 orderTv.setText(packetid);
-                addSubscription(TradeModel.getInstance()
-                        .get_logistics_by_packagetid(packetid, company_code)
-                        .subscribe(this::fillDataToView, throwable -> {
+                addSubscription(XlmmApp.getTradeInteractor(this)
+                    .getLogisticsByPacketId(packetid, company_code, new ServiceResponse<LogisticsBean>() {
+                        @Override
+                        public void onNext(LogisticsBean logisticsBean) {
+                            fillDataToView(logisticsBean);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             fillDataToView(null);
                             JUtils.Toast("暂无物流进展!");
-                        }));
+                        }
+                    }));
             } else {
                 orderTv.setText("未揽件");
                 fillDataToView(null);
@@ -78,9 +86,10 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void fillDataToView(LogisticsBean logisticsBean) {
-        addSubscription(TradeModel.getInstance()
-                .getOrderDetailBean(id)
-                .subscribe(orderDetailBean -> {
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .getOrderDetail(id, new ServiceResponse<OrderDetailBean>() {
+                @Override
+                public void onNext(OrderDetailBean orderDetailBean) {
                     ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
                     for (int i = 0; i < orders.size(); i++) {
                         if (orders.get(i).getPackage_order_id().equals(packageOrdersBean.getId())) {
@@ -90,7 +99,8 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
                     mListView.setAdapter(new GoodsListAdapter(data, LogisticsActivity.this));
                     OrderDetailActivity.setListViewHeightBasedOnChildren(mListView);
                     hideIndeterminateProgressDialog();
-                }));
+                }
+            }));
         if (logisticsBean != null) {
             if ((logisticsBean.getData() != null) && (logisticsBean.getData().size() != 0)) {
                 List<LogisticsBean.Msg> data1 = logisticsBean.getData();

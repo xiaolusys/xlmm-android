@@ -4,7 +4,7 @@ import android.os.Environment;
 
 import com.jimei.library.utils.CameraUtils;
 import com.jimei.library.utils.JUtils;
-import com.jimei.xiaolumeimei.entities.FilePara;
+import com.jimei.library.entities.FilePara;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.File;

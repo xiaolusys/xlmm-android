@@ -1,15 +1,23 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.jimei.library.utils.DateUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -20,15 +28,15 @@ import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
-import com.jimei.xiaolumeimei.model.MainModel;
-import com.jimei.xiaolumeimei.model.MamaInfoModel;
+import com.jimei.xiaolumeimei.module.VipInteractor;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.DayPushActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMCarryLogActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShoppingListActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMStoreWebViewActivity;
@@ -61,12 +69,12 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
     private String shareLink;
     private String shopLink;
     private String msgUrl;
-    private double mCashValue;
     private int orderNum;
     private String carryLogMoney;
     private String hisConfirmedCashOut;
     private int mCurrent_dp_turns_num;
     private String fansUrl;
+    private int count;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -78,13 +86,27 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         return b.layout;
     }
 
+    private void setIcon(int id, ImageView imageView) {
+        Drawable drawable;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawable = getDrawable(id);
+        } else {
+            drawable = getResources().getDrawable(id);
+        }
+        assert drawable != null;
+        int rgb = Color.rgb((int) (Math.random() * 256),
+            (int) (Math.random() * 256), (int) (Math.random() * 256));
+        drawable.setColorFilter(new PorterDuffColorFilter(rgb, PorterDuff.Mode.SRC_IN));
+        imageView.setImageDrawable(drawable);
+    }
+
     protected void init() {
+        count = 1;
         showIndeterminateProgressDialog(true);
         mamaFlag = false;
         if (LoginUtils.checkLoginState(this)) {
-            addSubscription(MainModel.getInstance()
-                .getProfile()
-                .subscribe(new ServiceResponse<UserInfoBean>() {
+            addSubscription(XlmmApp.getMainInteractor(this)
+                .getProfile(new ServiceResponse<UserInfoBean>() {
                     @Override
                     public void onNext(UserInfoBean userInfoBean) {
                         fillDataToView(userInfoBean);
@@ -126,6 +148,7 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
         b.rlRefund.setOnClickListener(this);
         b.rlOrder.setOnClickListener(this);
         b.llShop.setOnClickListener(this);
+        b.llVipDesc.setOnClickListener(this);
 
         b.btnFinish.setOnClickListener(this);
         b.btnService.setOnClickListener(this);
@@ -192,6 +215,20 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
                             MMStoreWebViewActivity.class);
                     }
                     break;
+                case R.id.ll_vip_desc:
+                    if (count > 3) {
+                        setIcon(R.drawable.drawer_pay, b.payImg);
+                        setIcon(R.drawable.drawer_car, b.waitImg);
+                        setIcon(R.drawable.drawer_refund, b.refundImg);
+                        setIcon(R.drawable.drawer_order, b.orderImg);
+                        setIcon(R.drawable.icon_vip_share, b.imgShare);
+                        setIcon(R.drawable.icon_vip_push, b.imgPush);
+                        setIcon(R.drawable.icon_vip_choose, b.imgChoose);
+                        setIcon(R.drawable.icon_vip_shop, b.imgInvite);
+                    } else {
+                        count++;
+                    }
+                    break;
                 case R.id.ll_push:
                     SharedPreferences preferences = getSharedPreferences("push_num", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
@@ -205,7 +242,17 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
                     editor.putInt("num", mCurrent_dp_turns_num);
                     editor.apply();
                     b.pushNum.setVisibility(View.GONE);
-                    readyGo(DayPushActivity.class);
+                    addSubscription(XlmmApp.getVipInteractor(this)
+                        .getWxCode(new ServiceResponse<WxQrcode>() {
+                            @Override
+                            public void onNext(WxQrcode wxQrcode) {
+                                Intent intent = new Intent(UserActivity.this, MMNinePicActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("codeLink", wxQrcode.getQrcode_link());
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        }));
                     break;
                 case R.id.ll_choose:
                     readyGo(MamaChooseActivity.class);
@@ -335,10 +382,9 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
 
     private void getMamaData() {
         UdeskSDKManager.getInstance().initApiKey(this, XlmmConst.UDESK_URL, XlmmConst.UDESK_KEY);
-        MamaInfoModel mmInfoModel = MamaInfoModel.getInstance();
-        addSubscription(Observable.mergeDelayError(mmInfoModel.getMamaUrl(), mmInfoModel.getShareShopping(),
-            mmInfoModel.getMamaFortune(), mmInfoModel.getRecentCarry("0", "7"), mmInfoModel.getMaMaselfList(),
-            mmInfoModel.getWxCode())
+        VipInteractor vipInteractor = XlmmApp.getVipInteractor(this);
+        addSubscription(Observable.mergeDelayError(vipInteractor.getMamaUrl(), vipInteractor.getShareShopping(),
+            vipInteractor.getMamaFortune(), vipInteractor.getRecentCarry("0", "7"), vipInteractor.getMaMaSelfList())
             .subscribe(o -> {
                 if (o != null) {
                     if (o instanceof MamaUrl) {
@@ -389,7 +435,6 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
 
     private void initFortune(MamaFortune mamaFortune) {
         MamaFortune.MamaFortuneBean fortune = mamaFortune.getMamaFortune();
-        mCashValue = fortune.getCashValue();
         orderNum = fortune.getOrderNum();
         carryLogMoney = fortune.getCarryValue() + "";
         if (fortune.getExtraInfo() != null) {

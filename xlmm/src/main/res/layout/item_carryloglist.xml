@@ -54,7 +54,7 @@
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/pic_path"
             android:textColor="@color/colorAccent"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/time_nick"
@@ -64,7 +64,7 @@
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/tv_status"
             android:textColor="@color/c8c8c8"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/time_display"
@@ -74,7 +74,7 @@
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/time_nick"
             android:textColor="@color/c8c8c8"
-            android:textSize="13sp" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/wxordernick"
@@ -95,6 +95,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:textColor="#626262"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
     </RelativeLayout>
 </LinearLayout>

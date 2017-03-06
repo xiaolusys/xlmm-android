@@ -26,11 +26,11 @@ import com.jimei.library.widget.wheelcitypicker.address.City;
 import com.jimei.library.widget.wheelcitypicker.address.County;
 import com.jimei.library.widget.wheelcitypicker.address.Province;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
 import com.jimei.xiaolumeimei.entities.event.AddressChangeEvent;
-import com.jimei.xiaolumeimei.model.AddressModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,7 +50,7 @@ import butterknife.Bind;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
 
     private static final String TAG = ChangeAddressActivity.class.getSimpleName();
     @Bind(R.id.name)
@@ -150,7 +150,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
             case R.id.address:
 
                 InputMethodManager imm =
-                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mobile.getWindowToken(), 0);
                 if (provinces.size() > 0) {
                     showAddressDialog();
@@ -171,10 +171,10 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                 }
                 if (IdCardChecker.isValidatedAllIdcard(idNo) || !idFlag) {
                     if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                        addSubscription(AddressModel.getInstance()
-                                .update_addressWithId(id, receiver_state, receiver_city, receiver_district, clearaddressa,
-                                        receiver_name, receiver_mobile, defalut, idNo)
-                                .subscribe(new ServiceResponse<AddressResultBean>() {
+                        addSubscription(XlmmApp.getAddressInteractor(this)
+                            .update_addressWithId(id, receiver_state, receiver_city, receiver_district,
+                                clearaddressa, receiver_name, receiver_mobile, defalut, idNo,
+                                new ServiceResponse<AddressResultBean>() {
                                     @Override
                                     public void onNext(AddressResultBean addressResultBean) {
                                         EventBus.getDefault().post(new AddressChangeEvent());
@@ -202,24 +202,20 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-
             case R.id.action_delete:
-                addSubscription(AddressModel.getInstance()
-                        .delete_address(id)
-                        .subscribe(new ServiceResponse<AddressResultBean>() {
-                            @Override
-                            public void onNext(AddressResultBean addressResultBean) {
-                                EventBus.getDefault().post(new AddressChangeEvent());
-                                if (addressResultBean != null && addressResultBean.isRet()) {
-                                    finish();
-                                }
+                addSubscription(XlmmApp.getAddressInteractor(this)
+                    .delete_address(id, new ServiceResponse<AddressResultBean>() {
+                        @Override
+                        public void onNext(AddressResultBean addressResultBean) {
+                            EventBus.getDefault().post(new AddressChangeEvent());
+                            if (addressResultBean != null && addressResultBean.isRet()) {
+                                finish();
                             }
-                        }));
+                        }
+                    }));
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -248,13 +244,13 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
 
     private void showAddressDialog() {
         new CityPickerDialog(this, provinces, province, city, county,
-                (selectProvince, selectCity, selectCounty) -> {
-                    receiver_state = selectProvince != null ? selectProvince.getName() : "";
-                    receiver_district = selectCounty != null ? selectCounty.getName() : "";
-                    receiver_city = selectCity != null ? selectCity.getName() : "";
-                    city_string = receiver_state + receiver_city + receiver_district;
-                    address.setText(city_string);
-                }).show();
+            (selectProvince, selectCity, selectCounty) -> {
+                receiver_state = selectProvince != null ? selectProvince.getName() : "";
+                receiver_district = selectCounty != null ? selectCounty.getName() : "";
+                receiver_city = selectCity != null ? selectCity.getName() : "";
+                city_string = receiver_state + receiver_city + receiver_district;
+                address.setText(city_string);
+            }).show();
     }
 
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {

@@ -57,7 +57,7 @@
                     android:imeOptions="actionSearch"
                     android:maxLength="20"
                     android:singleLine="true"
-                    android:textSize="12sp"/>
+                    android:textSize="12dp"/>
 
                 <RelativeLayout
                     android:id="@+id/clear"
@@ -84,7 +84,7 @@
                 android:paddingRight="16dp"
                 android:text="搜索"
                 android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:textSize="16dp"/>
 
         </LinearLayout>
 
@@ -111,7 +111,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         android:text="历史搜索"
-                        android:textSize="18sp"/>
+                        android:textSize="18dp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -161,7 +161,7 @@
                     android:layout_marginTop="10dp"
                     android:text="没有找到你查询的商品哦!"
                     android:textColor="@color/text_color_4A"
-                    android:textSize="16sp"/>
+                    android:textSize="16dp"/>
 
             </LinearLayout>
 

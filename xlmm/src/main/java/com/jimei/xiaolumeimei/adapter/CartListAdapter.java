@@ -13,19 +13,21 @@ import android.widget.TextView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.model.CartsModel;
+import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
-import com.jimei.xiaolumeimei.widget.NoDoubleClickListener;
+import com.jimei.library.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Response;
 
 /**
  * Created by wisdom on 16/9/3.
@@ -76,32 +78,40 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                         .setPositiveButton("确定", (dialog, which) -> {
                             dialog.dismiss();
                             helper.showIndeterminateProgressDialog(false);
-                            helper.addSubscription(CartsModel.getInstance()
-                                .delete_carts(cartsInfoBean.getId() + "")
-                                .subscribe(responseBody -> {
-                                        if (responseBody != null) {
-                                            if (responseBody.isSuccessful()) {
+                            helper.addSubscription(XlmmApp.getCartsInteractor(mActivity)
+                                .deleteCarts(cartsInfoBean.getId() + "", new ServiceResponse<Response<CodeBean>>() {
+                                    @Override
+                                    public void onNext(Response<CodeBean> codeBeanResponse) {
+                                        if (codeBeanResponse != null) {
+                                            if (codeBeanResponse.isSuccessful()) {
                                                 helper.addHistory(cartsInfoBean);
                                                 helper.removeCartList(cartsInfoBean);
                                             } else {
-                                                JUtils.Toast(responseBody.body().getInfo());
+                                                JUtils.Toast(codeBeanResponse.body().getInfo());
                                             }
                                         } else {
                                             JUtils.Toast("操作未成功，请重新尝试");
                                         }
                                         helper.hideIndeterminateProgressDialog();
-                                    }, Throwable::printStackTrace
-                                ));
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        helper.hideIndeterminateProgressDialog();
+                                    }
+                                }));
+
                         })
                         .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                         .show();
                 } else {
                     helper.showIndeterminateProgressDialog(false);
-                    helper.addSubscription(CartsModel.getInstance()
-                        .minus_product_carts(cartsInfoBean.getId() + "")
-                        .subscribe(responseBody -> {
-                                if (responseBody != null && responseBody.isSuccessful()) {
-                                    CodeBean body = responseBody.body();
+                    helper.addSubscription(XlmmApp.getCartsInteractor(mActivity)
+                        .minusProductCarts(cartsInfoBean.getId() + "", new ServiceResponse<Response<CodeBean>>() {
+                            @Override
+                            public void onNext(Response<CodeBean> codeBeanResponse) {
+                                if (codeBeanResponse != null && codeBeanResponse.isSuccessful()) {
+                                    CodeBean body = codeBeanResponse.body();
                                     if (body != null && body.getCode() == 0) {
                                         helper.setPriceText();
                                         cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
@@ -114,8 +124,13 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                     JUtils.Toast("操作未成功，请重新尝试");
                                 }
                                 helper.hideIndeterminateProgressDialog();
-                            }, Throwable::printStackTrace
-                        ));
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                helper.hideIndeterminateProgressDialog();
+                            }
+                        }));
                 }
             }
         });
@@ -124,11 +139,12 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                 @Override
                 protected void onNoDoubleClick(View v) {
                     helper.showIndeterminateProgressDialog(false);
-                    helper.addSubscription(CartsModel.getInstance()
-                        .plus_product_carts(cartsInfoBean.getId() + "")
-                        .subscribe(responseBody -> {
-                                if (null != responseBody) {
-                                    CodeBean body = responseBody.body();
+                    helper.addSubscription(XlmmApp.getCartsInteractor(mActivity)
+                        .plusProductCarts(cartsInfoBean.getId() + "", new ServiceResponse<Response<CodeBean>>() {
+                            @Override
+                            public void onNext(Response<CodeBean> codeBeanResponse) {
+                                if (null != codeBeanResponse) {
+                                    CodeBean body = codeBeanResponse.body();
                                     if (body != null && body.getCode() == 0) {
                                         helper.setPriceText();
                                         cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
@@ -141,8 +157,13 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                     JUtils.Toast("操作未成功，请重新尝试");
                                 }
                                 helper.hideIndeterminateProgressDialog();
-                            }, Throwable::printStackTrace
-                        ));
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                helper.hideIndeterminateProgressDialog();
+                            }
+                        }));
                 }
             }
         );

@@ -23,10 +23,10 @@ public interface MainService {
 
     //获取用户信息
     @GET("/rest/v1/users/profile")
-    Observable<UserInfoBean> getUserLoginInfo();
+    Observable<UserInfoBean> getProfile();
 
     @GET("/rest/v2/carts/show_carts_num")
-    Observable<CartsNumResultBean> show_carts_num();
+    Observable<CartsNumResultBean> getCartsNum();
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean(

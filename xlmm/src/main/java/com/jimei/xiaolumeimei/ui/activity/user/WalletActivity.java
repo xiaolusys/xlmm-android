@@ -17,12 +17,12 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.DividerItemDecoration;
 import com.jimei.library.widget.MyXRecyclerView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.UserWalletAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.BudgetDetailBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.WalletEvent;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,48 +55,41 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     protected void initData() {
         page = 2;
         showIndeterminateProgressDialog(false);
-        addSubscription(UserModel.getInstance()
-                .budGetDetailBean("1")
-                .subscribe(new ServiceResponse<BudgetDetailBean>() {
-                    @Override
-                    public void onNext(BudgetDetailBean budgetdetailBean) {
-                        if ((budgetdetailBean != null)
-                                && (budgetdetailBean.getResults() != null)
-                                && (budgetdetailBean.getResults().size() > 0)) {
-                            walletRcv.setVisibility(View.VISIBLE);
-                            ll_wallet_empty.setVisibility(View.INVISIBLE);
-                            adapter.updateWithClear(budgetdetailBean.getResults());
-                            if (budgetdetailBean.getNext() == null) {
-                                walletRcv.setLoadingMoreEnabled(false);
-                            }
-                        } else {
-                            walletRcv.setVisibility(View.INVISIBLE);
-                            ll_wallet_empty.setVisibility(View.VISIBLE);
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .budgetDetailBean(1, new ServiceResponse<BudgetDetailBean>() {
+                @Override
+                public void onNext(BudgetDetailBean budgetdetailBean) {
+                    if ((budgetdetailBean != null)
+                        && (budgetdetailBean.getResults() != null)
+                        && (budgetdetailBean.getResults().size() > 0)) {
+                        walletRcv.setVisibility(View.VISIBLE);
+                        ll_wallet_empty.setVisibility(View.INVISIBLE);
+                        adapter.updateWithClear(budgetdetailBean.getResults());
+                        if (budgetdetailBean.getNext() == null) {
+                            walletRcv.setLoadingMoreEnabled(false);
                         }
-                        addSubscription(UserModel.getInstance()
-                                .getUserInfo()
-                                .subscribe(new ServiceResponse<UserInfoBean>() {
-                                    @Override
-                                    public void onNext(UserInfoBean userNewBean) {
-                                        if (userNewBean != null) {
-                                            if (null != userNewBean.getUserBudget()) {
-                                                money = userNewBean.getUserBudget().getBudgetCash();
-                                            }
-                                            tvMoney.setText((float) (Math.round(money * 100)) / 100 + "");
-                                            if (money > 0) {
-                                                ll_wallet_empty.setVisibility(View.INVISIBLE);
-                                            }
-                                        }
-                                        hideIndeterminateProgressDialog();
+                    } else {
+                        walletRcv.setVisibility(View.INVISIBLE);
+                        ll_wallet_empty.setVisibility(View.VISIBLE);
+                    }
+                    addSubscription(XlmmApp.getUserInteractor(WalletActivity.this)
+                        .getUserInfo(new ServiceResponse<UserInfoBean>() {
+                            @Override
+                            public void onNext(UserInfoBean userNewBean) {
+                                if (userNewBean != null) {
+                                    if (null != userNewBean.getUserBudget()) {
+                                        money = userNewBean.getUserBudget().getBudgetCash();
                                     }
-                                }));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                }));
+                                    tvMoney.setText((float) (Math.round(money * 100)) / 100 + "");
+                                    if (money > 0) {
+                                        ll_wallet_empty.setVisibility(View.INVISIBLE);
+                                    }
+                                }
+                                hideIndeterminateProgressDialog();
+                            }
+                        }));
+                }
+            }));
     }
 
     @Override
@@ -139,27 +132,29 @@ public class WalletActivity extends BaseSwipeBackCompatActivity {
     }
 
     private void loadMoreData(int page) {
-        JUtils.Log(TAG, "load page " + page);
-        addSubscription(UserModel.getInstance()
-                .budGetDetailBean(Integer.toString(page))
-                .subscribe(budgetDetailBean -> {
-                            if ((budgetDetailBean != null)
-                                    && (budgetDetailBean.getResults() != null)
-                                    && (budgetDetailBean.getResults().size() > 0)) {
-                                walletRcv.setVisibility(View.VISIBLE);
-                                ll_wallet_empty.setVisibility(View.INVISIBLE);
-                                adapter.update(budgetDetailBean.getResults());
-                                if (budgetDetailBean.getNext() == null) {
-                                    Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
-                                    walletRcv.setLoadingMoreEnabled(false);
-                                }
-                                walletRcv.loadMoreComplete();
-                            }
-
-                        }, e -> {
-                            walletRcv.loadMoreComplete();
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .budgetDetailBean(page, new ServiceResponse<BudgetDetailBean>() {
+                @Override
+                public void onNext(BudgetDetailBean budgetDetailBean) {
+                    if ((budgetDetailBean != null)
+                        && (budgetDetailBean.getResults() != null)
+                        && (budgetDetailBean.getResults().size() > 0)) {
+                        walletRcv.setVisibility(View.VISIBLE);
+                        ll_wallet_empty.setVisibility(View.INVISIBLE);
+                        adapter.update(budgetDetailBean.getResults());
+                        if (budgetDetailBean.getNext() == null) {
+                            Toast.makeText(WalletActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
+                            walletRcv.setLoadingMoreEnabled(false);
                         }
-                ));
+                        walletRcv.loadMoreComplete();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    walletRcv.loadMoreComplete();
+                }
+            }));
     }
 
     @Override

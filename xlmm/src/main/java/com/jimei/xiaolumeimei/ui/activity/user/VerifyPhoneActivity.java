@@ -17,16 +17,16 @@ import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.XlmmTitleView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import butterknife.Bind;
 import rx.Subscriber;
 
 public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
+    implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, TextWatcher {
     @Bind(R.id.title_view)
     XlmmTitleView titleView;
     @Bind(R.id.register_name)
@@ -108,16 +108,15 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                         RxCountDown.countdown(60).doOnSubscribe(() -> {
                             getCheckCode.setClickable(false);
                             getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
-                            addSubscription(UserModel.getInstance()
-                                    .getCodeBean(mobile, "change_pwd")
-                                    .subscribe(new ServiceResponse<CodeBean>() {
-                                        @Override
-                                        public void onNext(CodeBean codeBean) {
-                                            if (codeBean != null) {
-                                                JUtils.Toast(codeBean.getMsg());
-                                            }
+                            addSubscription(XlmmApp.getUserInteractor(VerifyPhoneActivity.this)
+                                .getCodeBean(mobile, "change_pwd", new ServiceResponse<CodeBean>() {
+                                    @Override
+                                    public void onNext(CodeBean codeBean) {
+                                        if (codeBean != null) {
+                                            JUtils.Toast(codeBean.getMsg());
                                         }
-                                    }));
+                                    }
+                                }));
                         }).subscribe(new Subscriber<Integer>() {
                             @Override
                             public void onCompleted() {
@@ -145,31 +144,30 @@ public class VerifyPhoneActivity extends BaseSwipeBackCompatActivity
                 mobile = editTextMobile.getText().toString().trim();
                 invalid_code = editTextInvalid_code.getText().toString().trim();
                 if (checkInput(mobile, invalid_code)) {
-                    addSubscription(UserModel.getInstance()
-                            .verify_code(mobile, "change_pwd", invalid_code)
-                            .subscribe(new ServiceResponse<CodeBean>() {
-                                @Override
-                                public void onNext(CodeBean codeBean) {
-                                    if (codeBean != null) {
-                                        int result = codeBean.getRcode();
-                                        JUtils.Log("修改密码", result + "");
+                    addSubscription(XlmmApp.getUserInteractor(this)
+                        .verifyCode(mobile, "change_pwd", invalid_code, new ServiceResponse<CodeBean>() {
+                            @Override
+                            public void onNext(CodeBean codeBean) {
+                                if (codeBean != null) {
+                                    int result = codeBean.getRcode();
+                                    JUtils.Log("修改密码", result + "");
 
-                                        if (result == 0) {
-                                            Intent intent = new Intent(VerifyPhoneActivity.this,
-                                                    SettingPasswordForgetActivity.class);
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("mobile", mobile);
-                                            bundle.putString("valid_code", invalid_code);
+                                    if (result == 0) {
+                                        Intent intent = new Intent(VerifyPhoneActivity.this,
+                                            SettingPasswordForgetActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("mobile", mobile);
+                                        bundle.putString("valid_code", invalid_code);
 
-                                            intent.putExtras(bundle);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            JUtils.Toast(codeBean.getMsg());
-                                        }
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        JUtils.Toast(codeBean.getMsg());
                                     }
                                 }
-                            }));
+                            }
+                        }));
                 }
                 break;
         }

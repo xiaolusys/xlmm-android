@@ -18,11 +18,11 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.ClearEditText;
 import com.jimei.library.widget.PasswordEditText;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -35,7 +35,6 @@ import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
-import rx.Subscription;
 
 public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, TextWatcher {
@@ -118,9 +117,8 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         editor.remove(login_name_value);
                     }
                     editor.apply();
-                    Subscription subscribe = UserModel.getInstance()
-                        .passwordlogin(login_name_value, login_pass_value, null)
-                        .subscribe(new ServiceResponse<CodeBean>() {
+                    addSubscription(XlmmApp.getUserInteractor(this)
+                        .passwordLogin(login_name_value, login_pass_value, null, new ServiceResponse<CodeBean>() {
                             @Override
                             public void onNext(CodeBean codeBean) {
                                 Log.d(TAG, "user.getCode() "
@@ -132,7 +130,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                                         login_name_value, login_pass_value);
                                     JUtils.Toast("登录成功!");
-                                    EventBus.getDefault().post(new CartEvent());
+                                    EventBus.getDefault().post(new LoginEvent());
                                     String login = null;
                                     if (getIntent() != null && getIntent().getExtras() != null) {
                                         login = getIntent().getExtras().getString("login");
@@ -166,7 +164,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                             intent.putExtras(bundle);
                                             startActivity(intent);
                                             finish();
-                                        }  else if (login.equals("car")) {
+                                        } else if (login.equals("car")) {
                                             readyGoThenKill(CartActivity.class);
                                         } else if (login.equals("my")) {
                                             readyGoThenKill(UserActivity.class);
@@ -185,9 +183,7 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                             public void onCompleted() {
 
                             }
-                        });
-
-                    addSubscription(subscribe);
+                        }));
                 }
                 break;
             case R.id.forgetTextView:

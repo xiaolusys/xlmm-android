@@ -19,12 +19,12 @@ import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -97,9 +97,8 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                         RxCountDown.countdown(60).doOnSubscribe(() -> {
                             getCheckCode.setClickable(false);
                             getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
-                            addSubscription(UserModel.getInstance()
-                                .getCodeBean(mobile, "sms_login")
-                                .subscribe(new ServiceResponse<CodeBean>() {
+                            addSubscription(XlmmApp.getUserInteractor(SmsLoginActivity.this)
+                                .getCodeBean(mobile, "sms_login", new ServiceResponse<CodeBean>() {
                                     @Override
                                     public void onNext(CodeBean codeBean) {
                                         JUtils.Toast(codeBean.getMsg());
@@ -136,24 +135,22 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                 mobile = registerName.getText().toString().trim();
                 String invalid_code = checkcode.getText().toString().trim();
                 if (checkInput(mobile, invalid_code)) {
-                    addSubscription(UserModel.getInstance()
-                        .verify_code(mobile, "sms_login", invalid_code)
-                        .subscribe(new ServiceResponse<CodeBean>() {
+                    addSubscription(XlmmApp.getUserInteractor(this)
+                        .verifyCode(mobile, "sms_login", invalid_code, new ServiceResponse<CodeBean>() {
                             @Override
                             public void onNext(CodeBean codeBean) {
                                 int code = codeBean.getRcode();
                                 JUtils.Toast(codeBean.getMsg());
                                 if (code == 0) {
-                                    addSubscription(UserModel.getInstance()
-                                        .need_set_info()
-                                        .subscribe(new ServiceResponse<NeedSetInfoBean>() {
+                                    addSubscription(XlmmApp.getUserInteractor(SmsLoginActivity.this)
+                                        .needSetInfo(new ServiceResponse<NeedSetInfoBean>() {
                                             @Override
                                             public void onNext(NeedSetInfoBean needSetInfoBean) {
                                                 super.onNext(needSetInfoBean);
                                                 int codeInfo = needSetInfoBean.getCode();
                                                 if (0 == codeInfo) {
                                                     LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                                    EventBus.getDefault().post(new CartEvent());
+                                                    EventBus.getDefault().post(new LoginEvent());
                                                     String login = null;
                                                     if (null != getIntent()
                                                         && getIntent().getExtras() != null) {

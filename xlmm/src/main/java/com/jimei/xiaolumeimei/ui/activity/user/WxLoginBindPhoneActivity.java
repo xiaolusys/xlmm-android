@@ -14,9 +14,10 @@ import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.CircleImageView;
 import com.jimei.library.widget.ClearEditText;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
@@ -29,7 +30,7 @@ import rx.Subscriber;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
 
     private static final String TAG = WxLoginBindPhoneActivity.class.getSimpleName();
     @Bind(R.id.headimage)
@@ -59,16 +60,18 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        UserModel.getInstance()
-                .getUserInfo()
-                .subscribe(user -> {
-                    if (user != null) {
-                        if (user.getThumbnail() != null && !"".equals(user.getThumbnail())) {
-                            ViewUtils.loadImgToImgView(WxLoginBindPhoneActivity.this, headimage, user.getThumbnail());
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getUserInfo(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean userInfoBean) {
+                    if (userInfoBean != null) {
+                        if (userInfoBean.getThumbnail() != null && !"".equals(userInfoBean.getThumbnail())) {
+                            ViewUtils.loadImgToImgView(WxLoginBindPhoneActivity.this, headimage, userInfoBean.getThumbnail());
                         }
-                        tvNickname.setText("微信账号： " + user.getNick());
+                        tvNickname.setText("微信账号： " + userInfoBean.getNick());
                     }
-                });
+                }
+            }));
     }
 
     @Override
@@ -101,14 +104,13 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                     RxCountDown.countdown(60).doOnSubscribe(() -> {
                         getCheckCode.setClickable(false);
                         getCheckCode.setBackgroundColor(Color.parseColor("#f3f3f4"));
-                        addSubscription(UserModel.getInstance()
-                                .getCodeBean(mobile, "bind")
-                                .subscribe(new ServiceResponse<CodeBean>() {
-                                    @Override
-                                    public void onNext(CodeBean codeBean) {
-                                        JUtils.Toast(codeBean.getMsg());
-                                    }
-                                }));
+                        addSubscription(XlmmApp.getUserInteractor(WxLoginBindPhoneActivity.this)
+                            .getCodeBean(mobile, "bind", new ServiceResponse<CodeBean>() {
+                                @Override
+                                public void onNext(CodeBean codeBean) {
+                                    JUtils.Toast(codeBean.getMsg());
+                                }
+                            }));
                     }).subscribe(new Subscriber<Integer>() {
                         @Override
                         public void onCompleted() {
@@ -157,19 +159,18 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
     }
 
     private void bindMobilePhone(String username, String valid_code) {
-        addSubscription(UserModel.getInstance()
-                .verify_code(username, "bind", valid_code)
-                .subscribe(new ServiceResponse<CodeBean>() {
-                    @Override
-                    public void onNext(CodeBean codeBean) {
-                        int code = codeBean.getRcode();
-                        if (0 == code) {
-                            startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
-                            finish();
-                        } else {
-                            JUtils.Toast(codeBean.getMsg());
-                        }
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .verifyCode(username, "bind", valid_code, new ServiceResponse<CodeBean>() {
+                @Override
+                public void onNext(CodeBean codeBean) {
+                    int code = codeBean.getRcode();
+                    if (0 == code) {
+                        startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        JUtils.Toast(codeBean.getMsg());
                     }
-                }));
+                }
+            }));
     }
 }

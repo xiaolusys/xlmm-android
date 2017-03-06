@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.service.api;
 
 import com.jimei.xiaolumeimei.entities.CartsHisBean;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
-import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
@@ -61,9 +60,6 @@ public interface CartsService {
     @POST("/rest/v2/carts/{id}/delete_carts")
     Observable<Response<CodeBean>> delete_carts(
         @Path("id") String id);
-
-    @GET("/rest/v2/carts/show_carts_num")
-    Observable<CartsNumResultBean> show_carts_num();
 
     //重新购买商品
     @FormUrlEncoded

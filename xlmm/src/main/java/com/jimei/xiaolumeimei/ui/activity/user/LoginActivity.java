@@ -16,12 +16,12 @@ import android.widget.LinearLayout;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.SHA1Utils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
-import com.jimei.xiaolumeimei.model.UserModel;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -40,7 +40,6 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
-import rx.Subscription;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
     implements View.OnClickListener, Handler.Callback {
@@ -73,7 +72,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     private String unionid;
     private Bundle extras;
     private String actlink;
-    private String title;
     private int id;
     private Wechat wechat;
     private String login;
@@ -126,7 +124,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
         if (null != getIntent() && getIntent().getExtras() != null) {
             login = getIntent().getExtras().getString("login");
             actlink = getIntent().getExtras().getString("actlink");
-            title = getIntent().getExtras().getString("title", "");
             id = getIntent().getExtras().getInt("id");
         }
     }
@@ -234,24 +231,21 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 JUtils.Log(TAG, "------openid---------" + openid);
                 JUtils.Log(TAG, "------unionid---------" + unionid);
 
-                Subscription subscription = UserModel.getInstance()
-                    .wxapp_login(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid)
-                    .subscribe(new ServiceResponse<CodeBean>() {
-
+                addSubscription(XlmmApp.getUserInteractor(LoginActivity.this)
+                    .wxappLogin(noncestr, timestamp, sign, headimgurl, nickname, openid, unionid, new ServiceResponse<CodeBean>() {
                         @Override
                         public void onNext(CodeBean codeBean) {
                             if (codeBean != null) {
                                 int code = codeBean.getRcode();
                                 if (0 == code) {
                                     JUtils.Toast("登录成功");
-                                    Subscription subscribe = UserModel.getInstance()
-                                        .need_set_info()
-                                        .subscribe(new ServiceResponse<NeedSetInfoBean>() {
+                                    addSubscription(XlmmApp.getUserInteractor(LoginActivity.this)
+                                        .needSetInfo(new ServiceResponse<NeedSetInfoBean>() {
                                             @Override
                                             public void onNext(NeedSetInfoBean needSetInfoBean) {
                                                 hideIndeterminateProgressDialog();
                                                 LoginUtils.saveLoginSuccess(true, getApplicationContext());
-                                                EventBus.getDefault().post(new CartEvent());
+                                                EventBus.getDefault().post(new LoginEvent());
                                                 if (needSetInfoBean.getCode() == 0) {
                                                     if (login != null) {
                                                         if (login.equals("push_jump")) {
@@ -298,8 +292,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                     finish();
                                                 }
                                             }
-                                        });
-                                    addSubscription(subscribe);
+                                        }));
                                 } else {
                                     removeWX(wechat);
                                     hideIndeterminateProgressDialog();
@@ -307,8 +300,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                 }
                             }
                         }
-                    });
-                addSubscription(subscription);
+                    }));
             }
 
             @Override

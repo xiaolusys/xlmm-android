@@ -2,6 +2,8 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -40,6 +42,7 @@ import com.jimei.library.widget.CountDownView;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.library.widget.TagTextView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.MyPagerAdapter;
 import com.jimei.xiaolumeimei.adapter.SkuColorAdapter;
 import com.jimei.xiaolumeimei.adapter.SkuSizeAdapter;
@@ -52,14 +55,14 @@ import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
 import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
-import com.jimei.xiaolumeimei.entities.event.CartEvent;
+import com.jimei.xiaolumeimei.entities.WxQrcode;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
-import com.jimei.xiaolumeimei.model.CartsModel;
-import com.jimei.xiaolumeimei.model.ProductModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -75,12 +78,11 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import rx.Observable;
+
 
 public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding>
     implements View.OnClickListener, Animation.AnimationListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
-    private ShareModelBean shareModel;
     private ProductDetailBean productDetail;
     private int cart_num = 0;
     private boolean isAlive;
@@ -208,6 +210,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         b.tvAddTeam.setOnClickListener(this);
         b.tvAddOne.setOnClickListener(this);
         b.boutiqueLayout.setOnClickListener(this);
+        b.textLayout.setOnClickListener(this);
         plusIv.setOnClickListener(this);
         minusIv.setOnClickListener(this);
         commitTv.setOnClickListener(this);
@@ -226,27 +229,32 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     @Override
     protected void initData() {
         showIndeterminateProgressDialog(false);
-        addSubscription(Observable.mergeDelayError(
-            ProductModel.getInstance().getProductDetail(model_id),
-            ProductModel.getInstance().getShareModel(model_id),
-            CartsModel.getInstance().show_carts_num())
-            .subscribe(o -> {
-                if (o instanceof ProductDetailBean) {
-                    productDetail = (ProductDetailBean) o;
-                    fillDataToView((ProductDetailBean) o);
-                } else if (o instanceof ShareModelBean) {
-                    shareModel = (ShareModelBean) o;
-                } else if (o instanceof CartsNumResultBean) {
-                    cart_num = ((CartsNumResultBean) o).getResult();
+        addSubscription(XlmmApp.getProductInteractor(this)
+            .getProductDetail(model_id, new ServiceResponse<ProductDetailBean>() {
+                @Override
+                public void onNext(ProductDetailBean productDetailBean) {
+                    productDetail = productDetailBean;
+                    fillDataToView(productDetailBean);
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    hideIndeterminateProgressDialog();
+                }
+            }));
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getCartsNum(new ServiceResponse<CartsNumResultBean>() {
+                @Override
+                public void onNext(CartsNumResultBean cartsNumResultBean) {
+                    cart_num = cartsNumResultBean.getResult();
                     b.tvCart.setText(cart_num + "");
                     if (cart_num > 0) {
                         b.tvCart.setVisibility(View.VISIBLE);
                     }
                 }
-            }, e -> {
-                e.printStackTrace();
-                hideIndeterminateProgressDialog();
-            }, this::hideIndeterminateProgressDialog));
+            }));
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {
@@ -421,17 +429,54 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 this.finish();
                 break;
             case R.id.share:
-                if (shareModel != null) {
-                    OnekeyShare oks = new OnekeyShare();
-                    oks.disableSSOWhenAuthorize();
-                    oks.setTitle(shareModel.getTitle());
-                    oks.setTitleUrl(shareModel.getShare_link());
-                    oks.setText(shareModel.getDesc() + shareModel.getShare_link());
-                    oks.setImageUrl(shareModel.getShare_img());
-                    oks.setUrl(shareModel.getShare_link());
-                    oks.setShareContentCustomizeCallback(new ShareContentCustom(
-                        shareModel.getDesc() + shareModel.getShare_link()));
-                    oks.show(this);
+                showIndeterminateProgressDialog(false);
+                addSubscription(XlmmApp.getProductInteractor(this)
+                    .getShareModel(model_id, new ServiceResponse<ShareModelBean>() {
+                        @Override
+                        public void onNext(ShareModelBean shareModel) {
+                            OnekeyShare oks = new OnekeyShare();
+                            oks.disableSSOWhenAuthorize();
+                            oks.setTitle(shareModel.getTitle());
+                            oks.setTitleUrl(shareModel.getShare_link());
+                            oks.setText(shareModel.getDesc() + shareModel.getShare_link());
+                            oks.setImageUrl(shareModel.getShare_img());
+                            oks.setUrl(shareModel.getShare_link());
+                            Bitmap enableLogo =
+                                BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
+                            View.OnClickListener listener = view -> {
+                                JUtils.copyToClipboard(shareModel.getShare_link() + "");
+                                JUtils.Toast("已复制链接");
+                            };
+                            oks.setCustomerLogo(enableLogo, "复制链接", listener);
+                            oks.setShareContentCustomizeCallback(new ShareContentCustom(
+                                shareModel.getDesc() + shareModel.getShare_link()));
+                            oks.show(ProductDetailActivity.this);
+                            hideIndeterminateProgressDialog();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            JUtils.Toast("分享失败,请点击重试!");
+                            hideIndeterminateProgressDialog();
+                        }
+                    }));
+                break;
+            case R.id.text_layout:
+                if (!LoginUtils.checkLoginState(getApplicationContext())) {
+                    jumpToLogin();
+                } else {
+                    addSubscription(XlmmApp.getVipInteractor(this)
+                        .getWxCode(new ServiceResponse<WxQrcode>() {
+                            @Override
+                            public void onNext(WxQrcode wxQrcode) {
+                                Intent intent = new Intent(ProductDetailActivity.this, MMNinePicActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("codeLink", wxQrcode.getQrcode_link());
+                                bundle.putInt("model_id", model_id);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        }));
                 }
                 break;
             case R.id.boutique_layout:
@@ -457,32 +502,33 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 if (!LoginUtils.checkLoginState(getApplicationContext())) {
                     jumpToLogin();
                 } else {
-                    addSubscription(CartsModel.getInstance()
-                        .addToCart(item_id, sku_id, num, 3)
-                        .subscribe(resultEntity -> {
-                            if (resultEntity.getCode() == 0) {
-                                CartsModel.getInstance()
-                                    .getCartsList(3)
-                                    .subscribe(new ServiceResponse<List<CartsInfoBean>>() {
-                                        @Override
-                                        public void onNext(List<CartsInfoBean> cartsinfoBeen) {
-                                            if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
-                                                String ids = cartsinfoBeen.get(0).getId() + "";
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("ids", ids);
-                                                bundle.putBoolean("flag", true);
-                                                Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
-                                                intent.putExtras(bundle);
-                                                startActivity(intent);
-                                            } else {
-                                                JUtils.Toast("购买失败!");
+                    addSubscription(XlmmApp.getCartsInteractor(this)
+                        .addToCart(item_id, sku_id, num, 3, new ServiceResponse<ResultEntity>() {
+                            @Override
+                            public void onNext(ResultEntity resultEntity) {
+                                if (resultEntity.getCode() == 0) {
+                                    addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
+                                        .getCartsList(3, new ServiceResponse<List<CartsInfoBean>>() {
+                                            @Override
+                                            public void onNext(List<CartsInfoBean> cartsinfoBeen) {
+                                                if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
+                                                    String ids = cartsinfoBeen.get(0).getId() + "";
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("ids", ids);
+                                                    bundle.putBoolean("flag", true);
+                                                    Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
+                                                    intent.putExtras(bundle);
+                                                    startActivity(intent);
+                                                } else {
+                                                    JUtils.Toast("购买失败!");
+                                                }
                                             }
-                                        }
-                                    });
-                            } else {
-                                JUtils.Toast(resultEntity.getInfo());
+                                        }));
+                                } else {
+                                    JUtils.Toast(resultEntity.getInfo());
+                                }
                             }
-                        }, Throwable::printStackTrace));
+                        }));
                 }
                 break;
             case R.id.tv_add_one:
@@ -505,30 +551,34 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             case R.id.commit:
                 if (productDetail != null) {
                     if (productDetail.getDetail_content().is_boutique()) {
-                        addSubscription(CartsModel.getInstance()
-                            .addToCart(item_id, sku_id, num, 5)
-                            .subscribe(resultEntity -> {
-                                if (resultEntity.getCode() == 0) {
-                                    CartsModel.getInstance()
-                                        .getCartsList(5)
-                                        .subscribe(cartsinfoBeen -> {
-                                            if (cartsinfoBeen != null && cartsinfoBeen.size() > 0) {
-                                                String ids = cartsinfoBeen.get(0).getId() + "";
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("ids", ids);
-                                                bundle.putBoolean("couponFlag", true);
-                                                Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
-                                                intent.putExtras(bundle);
-                                                startActivity(intent);
-                                                dialog.dismiss();
-                                            } else {
-                                                JUtils.Toast("购买失败!");
-                                            }
-                                        }, Throwable::printStackTrace);
-                                } else {
-                                    JUtils.Toast(resultEntity.getInfo());
+                        addSubscription(XlmmApp.getCartsInteractor(this)
+                            .addToCart(item_id, sku_id, num, 5, new ServiceResponse<ResultEntity>() {
+                                @Override
+                                public void onNext(ResultEntity resultEntity) {
+                                    if (resultEntity.getCode() == 0) {
+                                        addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
+                                            .getCartsList(5, new ServiceResponse<List<CartsInfoBean>>() {
+                                                @Override
+                                                public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                                                    if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                                                        String ids = cartsInfoBeen.get(0).getId() + "";
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("ids", ids);
+                                                        bundle.putBoolean("couponFlag", true);
+                                                        Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
+                                                        intent.putExtras(bundle);
+                                                        startActivity(intent);
+                                                        dialog.dismiss();
+                                                    } else {
+                                                        JUtils.Toast("购买失败!");
+                                                    }
+                                                }
+                                            }));
+                                    } else {
+                                        JUtils.Toast(resultEntity.getInfo());
+                                    }
                                 }
-                            }, Throwable::printStackTrace));
+                            }));
                     } else {
                         addToCart(true);
                     }
@@ -552,13 +602,12 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
 
     private void addToCart(boolean dismiss) {
         MobclickAgent.onEvent(this, "AddCartsID");
-        addSubscription(CartsModel.getInstance()
-            .addToCart(item_id, sku_id, num)
-            .subscribe(new ServiceResponse<ResultEntity>() {
+        addSubscription(XlmmApp.getCartsInteractor(this)
+            .addToCart(item_id, sku_id, num, new ServiceResponse<ResultEntity>() {
                 @Override
                 public void onNext(ResultEntity resultEntity) {
                     JUtils.Toast(resultEntity.getInfo());
-                    EventBus.getDefault().post(new CartEvent());
+                    EventBus.getDefault().post(new LoginEvent());
                     if (resultEntity.getCode() == 0) {
                         cart_num += num;
                         if (dismiss)

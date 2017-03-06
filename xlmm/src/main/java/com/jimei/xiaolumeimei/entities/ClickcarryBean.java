@@ -8,7 +8,7 @@ import java.util.List;
  *
  * Copyright 2016年 上海己美. All rights reserved.
  */
-public class ClickcarryBean {
+public class ClickCarryBean {
 
   /**
    * count : 2

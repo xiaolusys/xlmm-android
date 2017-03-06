@@ -16,6 +16,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.ui.activity.trade.RefundDetailActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class AllRefundsAdapter extends RecyclerView.Adapter<AllRefundsAdapter.Vi
             holder.flag.setImageResource(R.drawable.icon_return_goods_mini);
             holder.type.setText("退货退款");
         } else if ("".equals(entity.getRefund_channel())
-                || "budget".equals(entity.getRefund_channel())) {
+            || "budget".equals(entity.getRefund_channel())) {
             holder.flag.setImageResource(R.drawable.icon_fast_return_mini);
             holder.type.setText("极速退款");
         } else {
@@ -78,8 +79,10 @@ public class AllRefundsAdapter extends RecyclerView.Adapter<AllRefundsAdapter.Vi
         ViewUtils.loadImgToImgView(context, holder.good, entity.getPic_path());
         holder.name.setText(entity.getTitle());
         holder.size.setText("尺寸:" + entity.getSku_name());
-        holder.payment.setText("交易金额:" + entity.getPayment() + "x" + entity.getRefund_num());
-        holder.refund.setText("退款金额:" + entity.getRefund_fee() + "x" + entity.getRefund_num());
+        holder.payment.setText("交易金额:" + new DecimalFormat("0.00").format(entity.getPayment()) +
+            "x" + entity.getRefund_num());
+        holder.refund.setText("退款金额:" + new DecimalFormat("0.00").format(entity.getRefund_fee()) +
+            "x" + entity.getRefund_num());
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(context, RefundDetailActivity.class);
             Bundle bundle = new Bundle();

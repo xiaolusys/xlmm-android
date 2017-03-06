@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.ClickcarryBean;
+import com.jimei.xiaolumeimei.entities.ClickCarryBean;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -26,10 +26,10 @@ import butterknife.ButterKnife;
  * Copyright 2016年 上海己美. All rights reserved.
  */
 public class ClickCarryLogAdapter
-        extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
+    extends RecyclerView.Adapter<ClickCarryLogAdapter.CarryLogListVH> {
 
 
-    private List<ClickcarryBean.ResultsEntity> mList;
+    private List<ClickCarryBean.ResultsEntity> mList;
     private Context context;
 
     public ClickCarryLogAdapter(Context context) {
@@ -37,13 +37,13 @@ public class ClickCarryLogAdapter
         this.context = context;
     }
 
-    public void updateWithClear(List<ClickcarryBean.ResultsEntity> list) {
+    public void updateWithClear(List<ClickCarryBean.ResultsEntity> list) {
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void update(List<ClickcarryBean.ResultsEntity> list) {
+    public void update(List<ClickCarryBean.ResultsEntity> list) {
 
         mList.addAll(list);
         notifyDataSetChanged();
@@ -64,21 +64,21 @@ public class ClickCarryLogAdapter
     @Override
     public CarryLogListVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_carryloglist, parent, false);
+            .inflate(R.layout.item_carryloglist, parent, false);
         return new CarryLogListVH(v);
     }
 
     @Override
     public void onBindViewHolder(CarryLogListVH holder, int position) {
 
-        ClickcarryBean.ResultsEntity resultsEntity = mList.get(position);
+        ClickCarryBean.ResultsEntity resultsEntity = mList.get(position);
 
         try {
             if (position == 0) {
                 showCategory(holder);
             } else {
                 boolean theCategoryOfLastEqualsToThis =
-                        mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
+                    mList.get(position - 1).getCreated().equals(mList.get(position).getCreated());
                 if (!theCategoryOfLastEqualsToThis) {
                     showCategory(holder);
                 } else {
@@ -92,10 +92,10 @@ public class ClickCarryLogAdapter
         holder.shoptime.setText(resultsEntity.getDateField());
         Glide.with(context).load(R.drawable.img_yellowreturn).into(holder.picPath);
         holder.totalCash.setText(
-                "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
+            "总收益 " + (float) (Math.round(resultsEntity.getTodayCarry() * 100)) / 100);
 
         holder.tichengCash.setText(
-                "+" + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
+            "+" + (float) (Math.round(resultsEntity.getTotalValue() * 100)) / 100);
 
         holder.timeDisplay.setText(resultsEntity.getCreated().substring(11, 16));
         holder.wxordernick.setText(resultsEntity.getCarryDescription());

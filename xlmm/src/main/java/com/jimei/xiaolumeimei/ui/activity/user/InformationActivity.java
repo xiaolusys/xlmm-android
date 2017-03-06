@@ -10,11 +10,11 @@ import com.jimei.library.utils.ViewUtils;
 import com.jimei.library.widget.CircleImageView;
 import com.jimei.library.widget.MyPreferenceView;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
-import com.jimei.xiaolumeimei.entities.LogOutBean;
+import com.jimei.xiaolumeimei.entities.LogoutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.InformationEvent;
-import com.jimei.xiaolumeimei.model.UserModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -31,7 +31,7 @@ import butterknife.Bind;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class InformationActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
     static String nickName;
     static String mobile;
     String TAG = "InformationActivity";
@@ -86,25 +86,24 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        addSubscription(UserModel.getInstance()
-                .getUserInfo()
-                .subscribe(new ServiceResponse<UserInfoBean>() {
-                    @Override
-                    public void onNext(UserInfoBean user) {
-                        userinfo = user;
-                        nickName = userinfo.getNick();
-                        mobile = userinfo.getMobile();
-                        nickNameView.setSummary(nickName);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("nickname", nickName);
-                        bundle.putString("headimgurl", user.getThumbnail());
-                        bindPhoneView.addBundle(bundle);
-                        bindPhoneView.setSummary(
-                                mobile.substring(0, 3) + "****" + mobile.substring(7));
-                        ViewUtils.loadImgToImgView(getApplicationContext(), imgUser,
-                                user.getThumbnail());
-                    }
-                }));
+        addSubscription(XlmmApp.getUserInteractor(this)
+            .getUserInfo(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean user) {
+                    userinfo = user;
+                    nickName = userinfo.getNick();
+                    mobile = userinfo.getMobile();
+                    nickNameView.setSummary(nickName);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("nickname", nickName);
+                    bundle.putString("headimgurl", user.getThumbnail());
+                    bindPhoneView.addBundle(bundle);
+                    bindPhoneView.setSummary(
+                        mobile.substring(0, 3) + "****" + mobile.substring(7));
+                    ViewUtils.loadImgToImgView(getApplicationContext(), imgUser,
+                        user.getThumbnail());
+                }
+            }));
     }
 
     @Override
@@ -128,32 +127,30 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
         switch (v.getId()) {
             case R.id.login_out:
                 new AlertDialog.Builder(this)
-                        .setTitle("注销登录")
-                        .setMessage("您确定要退出登录吗？")
-                        .setPositiveButton("注销", (dialog, which) -> {
-                            final String finalAccount =
-                                    LoginUtils.getUserAccount(getApplicationContext());
-                            UserModel.getInstance()
-                                    .customer_logout()
-                                    .subscribe(new ServiceResponse<LogOutBean>() {
-                                        @Override
-                                        public void onNext(LogOutBean responseBody) {
-                                            super.onNext(responseBody);
-                                            if (responseBody.getCode() == 0) {
-                                                JUtils.Toast("退出成功");
-                                                if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
-                                                    MiPushClient.unsetUserAccount(getApplicationContext(),
-                                                            finalAccount, null);
-                                                }
-                                                LoginUtils.delLoginInfo(getApplicationContext());
-                                                finish();
-                                            }
+                    .setTitle("注销登录")
+                    .setMessage("您确定要退出登录吗？")
+                    .setPositiveButton("注销", (dialog, which) -> {
+                        final String finalAccount =
+                            LoginUtils.getUserAccount(getApplicationContext());
+                        addSubscription(XlmmApp.getUserInteractor(InformationActivity.this)
+                            .customerLogout(new ServiceResponse<LogoutBean>() {
+                                @Override
+                                public void onNext(LogoutBean responseBody) {
+                                    if (responseBody.getCode() == 0) {
+                                        JUtils.Toast("退出成功");
+                                        if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
+                                            MiPushClient.unsetUserAccount(getApplicationContext(),
+                                                finalAccount, null);
                                         }
-                                    });
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
-                        .show();
+                                        LoginUtils.delLoginInfo(getApplicationContext());
+                                        finish();
+                                    }
+                                }
+                            }));
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                    .show();
                 break;
 
         }

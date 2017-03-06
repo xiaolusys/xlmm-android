@@ -23,6 +23,7 @@ import com.jimei.library.utils.CameraUtils;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.data.XlmmApi;
 import com.jimei.xiaolumeimei.data.XlmmConst;
@@ -30,7 +31,6 @@ import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.QiniuTokenBean;
 import com.jimei.xiaolumeimei.entities.RefundMsgBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
@@ -40,14 +40,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import butterknife.Bind;
-import rx.Subscription;
 
 public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
 
     String TAG = "ApplyReturnGoodsActivity";
     String slect_reason[] = new String[]{
-            "七天无理由退换货", "发票问题", "与描述不符", "未收到货", "发错货/漏发", "开线/脱色/脱毛/有色差/有虫洞", "错拍", "其他原因"
+        "七天无理由退换货", "发票问题", "与描述不符", "未收到货", "发错货/漏发", "开线/脱色/脱毛/有色差/有虫洞", "错拍", "其他原因"
     };
 
     @Bind(R.id.img_good)
@@ -189,22 +188,20 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         img_delete2 = (ImageView) rl_proof_pic2.findViewById(R.id.img_delete);
         img_delete3 = (ImageView) rl_proof_pic3.findViewById(R.id.img_delete);
 
-        Subscription subscribe = TradeModel.getInstance()
-                .getOrderDetailBean(id)
-                .subscribe(new ServiceResponse<OrderDetailBean>() {
-                    @Override
-                    public void onNext(OrderDetailBean orderDetailBean) {
-                        extraBean = orderDetailBean.getExtras();
-                        goods_info = orderDetailBean.getOrders().get(position);
-                        fillDataIntoView();
-                    }
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .getOrderDetail(id, new ServiceResponse<OrderDetailBean>() {
+                @Override
+                public void onNext(OrderDetailBean orderDetailBean) {
+                    extraBean = orderDetailBean.getExtras();
+                    goods_info = orderDetailBean.getOrders().get(position);
+                    fillDataIntoView();
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        JUtils.Toast("加载失败");
-                    }
-                });
-        addSubscription(subscribe);
+                @Override
+                public void onError(Throwable e) {
+                    JUtils.Toast("加载失败");
+                }
+            }));
 
 
     }
@@ -278,17 +275,17 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
             case R.id.imgbtn_camera_pic:
                 Log.i(TAG, "camera ");
                 RxPermissions.getInstance(this)
-                        .request(Manifest.permission.CAMERA,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(granted -> {
-                            if (granted) { // Always true pre-M
-                                // I can control the camera now
-                                Image_Picker_Dialog();
-                            } else {
-                                // Oups permission denied
-                                JUtils.Toast("小鹿美美需要照相机和相册权限,请再次点击并打开权限许可.");
-                            }
-                        });
+                    .request(Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .subscribe(granted -> {
+                        if (granted) { // Always true pre-M
+                            // I can control the camera now
+                            Image_Picker_Dialog();
+                        } else {
+                            // Oups permission denied
+                            JUtils.Toast("小鹿美美需要照相机和相册权限,请再次点击并打开权限许可.");
+                        }
+                    });
 
                 break;
         }
@@ -296,65 +293,51 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
 
     private void commit_apply() {
         Log.i(TAG, "commit_apply "
-                + goods_info.getId()
-                + " "
-                + reason
-                + " "
-                + num
-                + " "
-                + apply_fee
-                + " "
-                + desc
-                + " "
-                + proof_pic);
-        Subscription subscription = TradeModel.getInstance()
-                .refund_create(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
-                        apply_fee, desc, proof_pic)
-                .subscribe(new ServiceResponse<RefundMsgBean>() {
+            + goods_info.getId()
+            + " "
+            + reason
+            + " "
+            + num
+            + " "
+            + apply_fee
+            + " "
+            + desc
+            + " "
+            + proof_pic);
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .refundCreate(goods_info.getId(), XlmmConst.get_reason_num(reason), num,
+                apply_fee, desc, proof_pic, new ServiceResponse<RefundMsgBean>() {
                     @Override
                     public void onNext(RefundMsgBean resp) {
                         JUtils.Toast(resp.getInfo());
                         Log.i(TAG, "commit_apply " + resp.toString());
                         if (resp.getCode() == 0) {
                             AlertDialog dialog = new AlertDialog.Builder(ApplyReturnGoodsActivity.this)
-                                    .setMessage(getResources().getString(R.string.refund_msg))
-                                    .setCancelable(false)
-                                    .setPositiveButton("确认", (dialog1, which) -> ApplyReturnGoodsActivity.this.finish())
-                                    .create();
+                                .setMessage(getResources().getString(R.string.refund_msg))
+                                .setCancelable(false)
+                                .setPositiveButton("确认", (dialog1, which) -> ApplyReturnGoodsActivity.this.finish())
+                                .create();
                             dialog.show();
                         } else {
                             finish();
                         }
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.e(TAG, " error:, " + e.toString());
-                        super.onError(e);
-                    }
-                });
-        addSubscription(subscription);
+                }));
     }
 
     private void chooseReason() {
         new AlertDialog.Builder(this).setTitle("")
-                .setItems(slect_reason, (dialog, which) -> {
+            .setItems(slect_reason, (dialog, which) -> {
         /*
         * ad变量用final关键字定义，因为在隐式实现的Runnable接口 的run()方法中 需要访问final变量。
          */
-                    Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
-                    reason = slect_reason[which];
-                    et_refund_reason.setText(reason);
-                    dialog.dismiss();
-                })
-                .setNegativeButton("取消", null)
-                .show();
+                Log.d(TAG, "你选择的是：" + which + ": " + slect_reason[which]);
+                reason = slect_reason[which];
+                et_refund_reason.setText(reason);
+                dialog.dismiss();
+            })
+            .setNegativeButton("取消", null)
+            .show();
     }
 
     public void Image_Picker_Dialog() {
@@ -368,15 +351,15 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
             JUtils.Log(TAG, "click item " + arrayPhotoType[which]);
             if (0 == which) {
                 CameraUtils.pictureActionIntent =
-                        new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(CameraUtils.pictureActionIntent,
-                        CameraUtils.CAMERA_PICTURE);
+                    CameraUtils.CAMERA_PICTURE);
             } else if (1 == which) {
                 CameraUtils.pictureActionIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
                 CameraUtils.pictureActionIntent.setType("image/*");
                 CameraUtils.pictureActionIntent.putExtra("return-data", true);
                 startActivityForResult(CameraUtils.pictureActionIntent,
-                        CameraUtils.GALLERY_PICTURE);
+                    CameraUtils.GALLERY_PICTURE);
             }
         });
         myAlertDialog.show();
@@ -440,8 +423,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
             if (CameraUtils.uri == null) {
                 Log.d("onActivityResult", "return uri null, get image again.");
                 CameraUtils.uri = Uri.parse(
-                        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,
-                                null));
+                    MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,
+                        null));
             }
             if (CameraUtils.uri != null) {
                 b = read_img_from_uri();
@@ -459,8 +442,8 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
 
     public File read_img_from_uri() {
         Cursor cursor = getContentResolver().query(CameraUtils.uri,
-                new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null,
-                null);
+            new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null,
+            null);
         if (cursor == null) return null;
         cursor.moveToFirst();
         // Link to the image
@@ -490,28 +473,14 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
     }
 
     private void getQiniuToken() {
-        Subscription subscription = TradeModel.getInstance()
-                .getQiniuToken()
-                .subscribe(new ServiceResponse<QiniuTokenBean>() {
-                    @Override
-                    public void onNext(QiniuTokenBean resp) {
-                        uptoken = resp.getUptoken();
-                        Log.i(TAG, "getQiniuToken " + resp.toString());
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        Log.e(TAG, " error:, " + e.toString());
-                        super.onError(e);
-                    }
-                });
-        addSubscription(subscription);
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .getQiniuToken(new ServiceResponse<QiniuTokenBean>() {
+                @Override
+                public void onNext(QiniuTokenBean resp) {
+                    uptoken = resp.getUptoken();
+                    Log.i(TAG, "getQiniuToken " + resp.toString());
+                }
+            }));
     }
 
     private void uploadFile(File file) {
@@ -534,7 +503,7 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
         uploadManager.put(file_byte, key, token, (key1, info, res) -> {
             //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
             Log.i("qiniu",
-                    "complete key=" + key1 + ", " + "info =" + info + ", " + "res " + res);
+                "complete key=" + key1 + ", " + "info =" + info + ", " + "res " + res);
         }, new UploadOptions(null, null, false, (key12, percent) -> Log.i("qiniu", "percent key=" + key12 + ": " + percent), null));
     }
 
@@ -542,13 +511,13 @@ public class ApplyReturnGoodsActivity extends BaseSwipeBackCompatActivity
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100,
-                baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+            baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         JUtils.Log(TAG, "before compressed file length " + baos.toByteArray().length / 1024);
         int options = 100;
         while (baos.toByteArray().length / 1024 > 300) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset();// 重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, options,
-                    baos);// 这里压缩options%，把压缩后的数据存放到baos中
+                baos);// 这里压缩options%，把压缩后的数据存放到baos中
             options -= 5;// 每次都减少10
             JUtils.Log(TAG, "compressed file length " + baos.toByteArray().length / 1024);
         }

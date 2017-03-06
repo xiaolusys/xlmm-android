@@ -11,10 +11,10 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.AllRefundsAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
-import com.jimei.xiaolumeimei.model.TradeModel;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 
@@ -23,7 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 
 public class AllRefundsActivity extends BaseSwipeBackCompatActivity
-        implements View.OnClickListener {
+    implements View.OnClickListener {
 
     @Bind(R.id.btn_jump)
     Button btn_jump;
@@ -100,42 +100,41 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     }
 
     private void loadMoreData() {
-        addSubscription(TradeModel.getInstance()
-                .getRefundsBean(page)
-                .subscribe(new ServiceResponse<AllRefundsBean>() {
-                    @Override
-                    public void onNext(AllRefundsBean allOrdersBean) {
-                        if (allOrdersBean != null) {
-                            List<AllRefundsBean.ResultsEntity> results = allOrdersBean.getResults();
-                            if (results.size() == 0 && page == 1) {
-                                rl_empty.setVisibility(View.VISIBLE);
-                            } else if (page == 1) {
-                                adapter.updateWithClear(results);
-                            } else {
-                                adapter.update(results);
-                            }
-                            next = allOrdersBean.getNext();
-                            if (allOrdersBean.getNext() == null && adapter.getItemCount() != 0) {
-                                JUtils.Toast("全部订单加载完成!");
-                            }
+        addSubscription(XlmmApp.getTradeInteractor(this)
+            .getRefunds(page, new ServiceResponse<AllRefundsBean>() {
+                @Override
+                public void onNext(AllRefundsBean allOrdersBean) {
+                    if (allOrdersBean != null) {
+                        List<AllRefundsBean.ResultsEntity> results = allOrdersBean.getResults();
+                        if (results.size() == 0 && page == 1) {
+                            rl_empty.setVisibility(View.VISIBLE);
+                        } else if (page == 1) {
+                            adapter.updateWithClear(results);
+                        } else {
+                            adapter.update(results);
+                        }
+                        next = allOrdersBean.getNext();
+                        if (allOrdersBean.getNext() == null && adapter.getItemCount() != 0) {
+                            JUtils.Toast("全部订单加载完成!");
                         }
                     }
+                }
 
-                    @Override
-                    public void onCompleted() {
-                        hideIndeterminateProgressDialog();
-                        xrv.loadMoreComplete();
-                        xrv.refreshComplete();
-                    }
+                @Override
+                public void onCompleted() {
+                    hideIndeterminateProgressDialog();
+                    xrv.loadMoreComplete();
+                    xrv.refreshComplete();
+                }
 
 
-                    @Override
-                    public void onError(Throwable e) {
-                        JUtils.Toast("数据加载失败");
-                        hideIndeterminateProgressDialog();
-                        xrv.loadMoreComplete();
-                        xrv.refreshComplete();
-                    }
-                }));
+                @Override
+                public void onError(Throwable e) {
+                    JUtils.Toast("数据加载失败");
+                    hideIndeterminateProgressDialog();
+                    xrv.loadMoreComplete();
+                    xrv.refreshComplete();
+                }
+            }));
     }
 }
