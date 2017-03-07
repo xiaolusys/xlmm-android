@@ -38,7 +38,7 @@ import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.ActivityBean;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.util.pay.PayUtils;
@@ -359,7 +359,7 @@ public class                                                                    
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
-        EventBus.getDefault().post(new LoginEvent());
+        EventBus.getDefault().post(new CartEvent());
         if (ll_actwebview != null) {
             ll_actwebview.removeView(mWebView);
         }

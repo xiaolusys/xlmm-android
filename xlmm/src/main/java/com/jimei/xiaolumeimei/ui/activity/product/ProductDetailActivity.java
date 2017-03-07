@@ -18,9 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
@@ -56,7 +53,7 @@ import com.jimei.xiaolumeimei.entities.ProductDetailBean;
 import com.jimei.xiaolumeimei.entities.ResultEntity;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
@@ -81,11 +78,11 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 
 public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding>
-    implements View.OnClickListener, Animation.AnimationListener {
+    implements View.OnClickListener {
     private static final String POST_URL = "?imageMogr2/format/jpg/quality/70";
     private ProductDetailBean productDetail;
     private int cart_num = 0;
-    private boolean isAlive;
+    private boolean isAlive, isBoutique;
     private Dialog dialog;
     private ImageView img, plusIv, minusIv;
     private TextView nameTv, skuTv, agentTv, saleTv, numTv, commitTv;
@@ -93,8 +90,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private int model_id, sku_id, item_id, num, current;
     private SkuSizeAdapter skuSizeAdapter;
     private LinearLayout colorLayout, sizeLayout;
-    private ProductDetailBean.TeamBuyInfo teamBuyInfo;
-    private List<ProductDetailBean.SkuInfoBean> skuInfo;
 
     @Override
     public void getIntentUrl(Uri uri) {
@@ -207,6 +202,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         b.share.setOnClickListener(this);
         b.rlCart.setOnClickListener(this);
         b.tvAdd.setOnClickListener(this);
+        b.tvBuy.setOnClickListener(this);
         b.tvAddTeam.setOnClickListener(this);
         b.tvAddOne.setOnClickListener(this);
         b.boutiqueLayout.setOnClickListener(this);
@@ -264,8 +260,8 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             b.boutiqueDriver.setVisibility(View.VISIBLE);
             b.boutiqueLayout.setVisibility(View.VISIBLE);
         }
-        teamBuyInfo = productDetailBean.getTeambuy_info();
-        skuInfo = productDetailBean.getSku_info();
+        ProductDetailBean.TeamBuyInfo teamBuyInfo = productDetailBean.getTeambuy_info();
+        List<ProductDetailBean.SkuInfoBean> skuInfo = productDetailBean.getSku_info();
         if ("will".equals(detailContent.getSale_state())) {
             b.tvAdd.setClickable(false);
             b.tvAdd.setText("即将开售");
@@ -276,20 +272,16 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             b.tvAdd.setClickable(false);
             b.tvAdd.setText("已抢光");
         } else if (teamBuyInfo != null && teamBuyInfo.isTeambuy()) {
-            AnimationSet animationSet = new AnimationSet(true);
-            float f = ((float) b.tvAddTeam.getWidth()) / b.tvAdd.getWidth();
-            ScaleAnimation scaleAnimation = new ScaleAnimation(1, f, 1, 1,
-                Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0f);
-            animationSet.addAnimation(scaleAnimation);
-            animationSet.setDuration(600);
-            animationSet.setAnimationListener(this);
-            b.tvAdd.startAnimation(animationSet);
             item_id = skuInfo.get(0).getProduct_id();
             sku_id = skuInfo.get(0).getSku_items().get(0).getSku_id();
+            b.tvAdd.setVisibility(View.GONE);
+            b.tvBuy.setVisibility(View.GONE);
+            b.tvAddOne.setVisibility(View.VISIBLE);
+            b.tvAddTeam.setVisibility(View.VISIBLE);
+            b.tvAddOne.setText("单人购  ¥" + skuInfo.get(0).getSku_items().get(0).getAgent_price());
+            b.tvAddTeam.setText(XlmmConst.numberToWord(teamBuyInfo.getTeambuy_person_num()) +
+                "人团  ¥" + teamBuyInfo.getTeambuy_price());
         } else {
-            if (detailContent.is_boutique()) {
-                b.tvAdd.setText("直接购买");
-            }
             try {
                 if (skuInfo.size() > 0) {
                     ViewUtils.loadImgToImgView(this, img, skuInfo.get(0).getProduct_img());
@@ -495,6 +487,15 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 if (!LoginUtils.checkLoginState(getApplicationContext())) {
                     jumpToLogin();
                 } else {
+                    isBoutique = false;
+                    dialog.show();
+                }
+                break;
+            case R.id.tv_buy:
+                if (!LoginUtils.checkLoginState(getApplicationContext())) {
+                    jumpToLogin();
+                } else {
+                    isBoutique = true;
                     dialog.show();
                 }
                 break;
@@ -549,39 +550,37 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
                 break;
             case R.id.commit:
-                if (productDetail != null) {
-                    if (productDetail.getDetail_content().is_boutique()) {
-                        addSubscription(XlmmApp.getCartsInteractor(this)
-                            .addToCart(item_id, sku_id, num, 5, new ServiceResponse<ResultEntity>() {
-                                @Override
-                                public void onNext(ResultEntity resultEntity) {
-                                    if (resultEntity.getCode() == 0) {
-                                        addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
-                                            .getCartsList(5, new ServiceResponse<List<CartsInfoBean>>() {
-                                                @Override
-                                                public void onNext(List<CartsInfoBean> cartsInfoBeen) {
-                                                    if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
-                                                        String ids = cartsInfoBeen.get(0).getId() + "";
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putString("ids", ids);
-                                                        bundle.putBoolean("couponFlag", true);
-                                                        Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
-                                                        intent.putExtras(bundle);
-                                                        startActivity(intent);
-                                                        dialog.dismiss();
-                                                    } else {
-                                                        JUtils.Toast("购买失败!");
-                                                    }
+                if (isBoutique) {
+                    addSubscription(XlmmApp.getCartsInteractor(this)
+                        .addToCart(item_id, sku_id, num, 5, new ServiceResponse<ResultEntity>() {
+                            @Override
+                            public void onNext(ResultEntity resultEntity) {
+                                if (resultEntity.getCode() == 0) {
+                                    addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
+                                        .getCartsList(5, new ServiceResponse<List<CartsInfoBean>>() {
+                                            @Override
+                                            public void onNext(List<CartsInfoBean> cartsInfoBeen) {
+                                                if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
+                                                    String ids = cartsInfoBeen.get(0).getId() + "";
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("ids", ids);
+                                                    bundle.putBoolean("couponFlag", true);
+                                                    Intent intent = new Intent(ProductDetailActivity.this, CartsPayInfoActivity.class);
+                                                    intent.putExtras(bundle);
+                                                    startActivity(intent);
+                                                    dialog.dismiss();
+                                                } else {
+                                                    JUtils.Toast("购买失败!");
                                                 }
-                                            }));
-                                    } else {
-                                        JUtils.Toast(resultEntity.getInfo());
-                                    }
+                                            }
+                                        }));
+                                } else {
+                                    JUtils.Toast(resultEntity.getInfo());
                                 }
-                            }));
-                    } else {
-                        addToCart(true);
-                    }
+                            }
+                        }));
+                } else {
+                    addToCart(true);
                 }
                 break;
             default:
@@ -607,7 +606,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 @Override
                 public void onNext(ResultEntity resultEntity) {
                     JUtils.Toast(resultEntity.getInfo());
-                    EventBus.getDefault().post(new LoginEvent());
+                    EventBus.getDefault().post(new CartEvent());
                     if (resultEntity.getCode() == 0) {
                         cart_num += num;
                         if (dismiss)
@@ -635,31 +634,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         saleTv.setText("/¥" + skuItemsBean.getStd_sale_price());
         skuTv.setText(skuItemsBean.getName());
         sku_id = skuItemsBean.getSku_id();
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-        b.tvAdd.setText("");
-        b.tvAdd.setClickable(false);
-        b.tvAddOne.setVisibility(View.VISIBLE);
-        ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 1, 1,
-            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-        scaleAnimation.setDuration(600);
-        b.tvAddOne.startAnimation(scaleAnimation);
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-        b.tvAdd.setVisibility(View.GONE);
-        b.tvAddTeam.setVisibility(View.VISIBLE);
-        b.tvAddOne.setText("单人购  ¥" + skuInfo.get(0).getSku_items().get(0).getAgent_price());
-        b.tvAddTeam.setText(XlmmConst.numberToWord(teamBuyInfo.getTeambuy_person_num()) +
-            "人团  ¥" + teamBuyInfo.getTeambuy_price());
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
     }
 
     public class ShareContentCustom implements ShareContentCustomizeCallback {

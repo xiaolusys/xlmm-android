@@ -175,6 +175,21 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
 
     @JavascriptInterface
+    public void jumpToNativeLogin(String json) {
+        Gson gson = new Gson();
+        JumpBean jumpBean = gson.fromJson(json, new TypeToken<JumpBean>() {
+        }.getType());
+        String url = jumpBean.getTarget_url();
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("login", "h5");
+        bundle.putString("actlink", url);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+        mContext.finish();
+    }
+
+    @JavascriptInterface
     public void callNativeBack() {
         mContext.finish();
     }

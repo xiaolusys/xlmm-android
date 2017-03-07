@@ -25,7 +25,7 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.databinding.FragmentBasewebviewBinding;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,12 +42,6 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
     private String cookies;
     private String domain;
     private String sessionid;
-
-//    public ValueCallback<Uri> mUploadMessage;
-//    public ValueCallback<Uri[]> mUploadMessageForAndroid5;
-//
-//    private final static int FILECHOOSER_RESULTCODE = 1;
-//    private final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
     public static BaseWebViewFragment newInstance(String title, String link) {
         BaseWebViewFragment mmFansFragment = new BaseWebViewFragment();
@@ -82,10 +76,6 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
 
     @Override
     public void initViews() {
-        SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
-        cookies = sharedPreferences.getString("cookiesString", "");
-        domain = sharedPreferences.getString("cookiesDomain", "");
-        sessionid = sharedPreferences.getString("Cookie", "");
         try {
             if (Build.VERSION.SDK_INT >= 19) {
                 b.wbView.getSettings().setLoadsImagesAutomatically(true);
@@ -126,28 +116,6 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
                         }
                     }
                 }
-//
-//                //扩展浏览器上传文件
-//                //3.0++版本
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                //3.0--版本
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-//                    openFileChooserImpl(uploadMsg);
-//                }
-//
-//                // For Android > 5.0
-//                public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg,
-//                                                 WebChromeClient.FileChooserParams fileChooserParams) {
-//                    openFileChooserImplForAndroid5(uploadMsg);
-//                    return true;
-//                }
 
                 public boolean onJsAlert(WebView view, String url, String message,
                                          JsResult result) {
@@ -240,7 +208,6 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
             e.printStackTrace();
             JUtils.Log(TAG, "set webview err");
         }
-        syncCookie(mActivity);
     }
 
     @Override
@@ -250,13 +217,18 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
 
     @Override
     public void initData() {
+        SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+        sessionid = sharedPreferences.getString("Cookie", "");
+        syncCookie(mActivity);
         load();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().post(new LoginEvent());
+        EventBus.getDefault().post(new CartEvent());
         if (b.llActwebview != null) {
             b.llActwebview.removeView(b.wbView);
         }
@@ -273,6 +245,12 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
     }
 
     public void loadUrl(String url) {
+        showIndeterminateProgressDialog(true);
+        SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
+        cookies = sharedPreferences.getString("cookiesString", "");
+        domain = sharedPreferences.getString("cookiesDomain", "");
+        sessionid = sharedPreferences.getString("Cookie", "");
+        syncCookie(mActivity);
         if (url != null && !"".equals(url)) {
             Map<String, String> extraHeaders = new HashMap<>();
             extraHeaders.put("Cookie", sessionid);
@@ -315,44 +293,4 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
             e.printStackTrace();
         }
     }
-
-//    private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
-//        mUploadMessage = uploadMsg;
-//        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-//        i.addCategory(Intent.CATEGORY_OPENABLE);
-//        i.setType("image/*");
-//        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
-//    }
-//
-//    private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
-//        mUploadMessageForAndroid5 = uploadMsg;
-//        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-//        contentSelectionIntent.setType("image/*");
-//
-//        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-//        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-//        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
-//
-//        startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
-//    }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == FILECHOOSER_RESULTCODE) {
-//            if (null == mUploadMessage) return;
-//            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-//            mUploadMessage.onReceiveValue(result);
-//            mUploadMessage = null;
-//        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
-//            if (null == mUploadMessageForAndroid5) return;
-//            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
-//            if (result != null) {
-//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
-//            } else {
-//                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
-//            }
-//            mUploadMessageForAndroid5 = null;
-//        }
-//    }
 }

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.service.api;
 
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.IdCardBean;
 
 import java.util.List;
 
@@ -97,4 +98,11 @@ public interface AddressService {
         @Field("logistic_company_code") String logistic_company_code,
         @Field("referal_trade_id") String referal_trade_id,
         @Field("identification_no") String identification_no);
+
+
+    @FormUrlEncoded
+    @POST("/rest/v2/ocr/idcard_indentify")
+    Observable<IdCardBean> idCardIndentify(
+        @Field("side") String side,
+        @Field("card_base64") String card_base64);
 }

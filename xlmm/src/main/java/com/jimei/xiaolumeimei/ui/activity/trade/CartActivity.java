@@ -14,7 +14,7 @@ import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityCartBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
@@ -116,6 +116,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
             .getCartsPayInfoList(getIds(), new ServiceResponse<CartsPayinfoBean>() {
                 @Override
                 public void onNext(CartsPayinfoBean cartsPayinfoBean) {
+                    EventBus.getDefault().post(new CartEvent());
                     if (cartsPayinfoBean != null) {
                         b.totalPrice.setText("¥" + cartsPayinfoBean.getTotalFee());
                         b.confirmLayout.setVisibility(View.VISIBLE);
@@ -216,7 +217,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reLoadData(LoginEvent event) {
+    public void reLoadData(CartEvent event) {
         initData();
     }
 }

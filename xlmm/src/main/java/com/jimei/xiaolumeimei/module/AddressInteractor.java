@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.module;
 
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.IdCardBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 
 import java.util.List;
@@ -34,5 +35,7 @@ public interface AddressInteractor {
                                 String receiver_name, String receiver_mobile,
                                 String logistic_company_code, String referal_trade_id,
                                 String identification_no, ServiceResponse<AddressResultBean> response);
+
+    Subscription idCardIndentify(String side, String card_base64, ServiceResponse<IdCardBean> response);
 }
 

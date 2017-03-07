@@ -32,13 +32,13 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     private List<AddressBean> mList;
     private Activity context;
     private String addressId;
-    private boolean idFlag;
+    private int  needLevel;
 
     public AddressSelectAdapter(Activity context, String addressId) {
         this.context = context;
         this.addressId = addressId;
         mList = new ArrayList<>();
-        idFlag = false;
+        needLevel = 1;
     }
 
     public void update(List<AddressBean> list) {
@@ -133,7 +133,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
             + addressBean.getReceiverDistrict()
             + addressBean.getReceiverAddress());
         intent.putExtra("addressId", addressBean.getId());
-        intent.putExtra("idNo", addressBean.getmIdentificationNo());
+        intent.putExtra("level",addressBean.getPersonalInfoLevel());
         context.setResult(Activity.RESULT_OK, intent);
         context.finish();
     }
@@ -144,7 +144,7 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         bundle.putString("receiver_state", addressBean.getReceiverState());
         bundle.putString("receiver_district", addressBean.getReceiverDistrict());
         bundle.putString("receiver_city", addressBean.getReceiverCity());
-        bundle.putBoolean("idFlag", idFlag);
+        bundle.putInt("needLevel", needLevel);
         bundle.putString("receiver_name", addressBean.getReceiverName());
         bundle.putString("id", addressBean.getId());
         bundle.putString("mobile", addressBean.getReceiverMobile());
@@ -166,7 +166,6 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position) {
         AddressBean addressBean = mList.get(position);
-
         if (addressBean.isDefaultX()) {
             return 0;
         } else {
@@ -174,8 +173,8 @@ public class AddressSelectAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void setIdFlag(boolean idFlag) {
-        this.idFlag = idFlag;
+    public void setNeedLevel(int needLevel) {
+        this.needLevel = needLevel;
     }
 
     static class AddressDefaultVH extends RecyclerView.ViewHolder {

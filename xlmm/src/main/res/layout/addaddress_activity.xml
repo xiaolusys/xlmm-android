@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <com.jimei.library.widget.XlmmTitleView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:xlmm_title="新增收货地址" />
+        app:xlmm_title="新增收货地址"/>
 
     <LinearLayout
         android:id="@+id/layout"
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_marginTop="16dp"
-            android:background="@color/greytow" />
+            android:background="@color/greytow"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:maxLength="12"
                 android:padding="8dp"
                 android:text="收货人"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
             <EditText
                 android:id="@+id/name"
@@ -47,11 +47,11 @@
                 android:maxLength="20"
                 android:padding="8dp"
                 android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="手机号"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
             <EditText
                 android:id="@+id/mobile"
@@ -77,17 +77,17 @@
                 android:maxLength="11"
                 android:padding="8dp"
                 android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_marginTop="16dp"
-            android:background="@color/greytow" />
+            android:background="@color/greytow"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="所在地区"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
             <TextView
                 android:id="@+id/address"
@@ -113,11 +113,11 @@
                 android:layout_toRightOf="@id/tv_1"
                 android:hint="请选择收货人地址"
                 android:padding="8dp"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="详细地址"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
             <EditText
                 android:id="@+id/clear_address"
@@ -144,11 +144,11 @@
                 android:maxLength="40"
                 android:padding="8dp"
                 android:textCursorDrawable="@drawable/color_cursor"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
 
         <LinearLayout
             android:id="@+id/id_layout"
@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="身份证号"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"/>
 
                 <EditText
                     android:id="@+id/id_num"
@@ -182,13 +182,69 @@
                     android:maxLength="18"
                     android:padding="8dp"
                     android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <include layout="@layout/common_gap" />
+        <include layout="@layout/common_gap"/>
+
+        <LinearLayout
+            android:id="@+id/id_card_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_id_before"
+                    android:layout_width="77dp"
+                    android:layout_height="48dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_id_before"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="身份证正面照"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="14dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_id_after"
+                    android:layout_width="77dp"
+                    android:layout_height="48dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_id_after"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="身份证反面照"
+                    android:textColor="@color/text_color_62"
+                    android:textSize="14dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -202,7 +258,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="是否设为常用地址"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/switch_button"
@@ -211,7 +267,7 @@
                 android:layout_alignParentRight="true"
                 android:buttonTint="@color/colorAccent"
                 android:padding="8dp"
-                android:shadowColor="@color/colorAccent" />
+                android:shadowColor="@color/colorAccent"/>
 
         </RelativeLayout>
 
@@ -224,10 +280,10 @@
                 android:layout_width="660px"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/btn_common_default"
                 android:text="保存"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
 
         </RelativeLayout>
     </LinearLayout>

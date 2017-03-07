@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.main.MainActivity"
+            android:name=".ui.activity.main.TabActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>

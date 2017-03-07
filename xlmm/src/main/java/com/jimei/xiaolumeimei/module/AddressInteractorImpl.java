@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.module;
 import com.jimei.library.rx.DefaultTransform;
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.IdCardBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.service.api.AddressService;
 
@@ -85,5 +86,12 @@ public class AddressInteractorImpl implements AddressInteractor {
                 .compose(new DefaultTransform<>())
                 .subscribe(response);
         }
+    }
+
+    @Override
+    public Subscription idCardIndentify(String side, String card_base64,ServiceResponse<IdCardBean> response) {
+        return service.idCardIndentify(side,card_base64)
+            .compose(new DefaultTransform<>())
+            .subscribe(response);
     }
 }

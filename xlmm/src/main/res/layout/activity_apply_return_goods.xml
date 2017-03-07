@@ -231,7 +231,7 @@
                             android:layout_width="120px"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
-                            android:layout_toRightOf="@+id/imgbtn_camera_pic"
+                            android:layout_toRightOf="@id/imgbtn_camera_pic"
                             android:visibility="invisible">
 
                             <include layout="@layout/proof_pic" />
