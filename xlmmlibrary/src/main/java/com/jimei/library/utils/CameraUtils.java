@@ -4,13 +4,24 @@ package com.jimei.library.utils;
  * Created by wulei on 2016/1/26.
  */
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 
+import com.tbruyelle.rxpermissions.RxPermissions;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +40,87 @@ public class CameraUtils {
     public static Intent pictureActionIntent = null;
     public static final int CAMERA_PICTURE = 1;
     public static final int GALLERY_PICTURE = 2;
+    public static final int SELECT_PICTURE = 0;
+    public static final int SELECT_CAMERA = 1;
+
+    public static Bitmap imageZoom(Bitmap bm, int size) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        //将字节换成KB
+        double mid = b.length / 1024;
+        if (mid > size) {
+            double i = mid / size;
+            bm = zoomImage(bm, bm.getWidth() / Math.sqrt(i),
+                bm.getHeight() / Math.sqrt(i));
+        }
+        return bm;
+    }
+
+    private static Bitmap zoomImage(Bitmap bgimage, double newWidth,
+                                    double newHeight) {
+        // 获取这个图片的宽和高
+        float width = bgimage.getWidth();
+        float height = bgimage.getHeight();
+        // 创建操作图片用的matrix对象
+        Matrix matrix = new Matrix();
+        // 计算宽高缩放率
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 缩放图片动作
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(bgimage, 0, 0, (int) width,
+            (int) height, matrix, true);
+    }
+
+    // 把Bitmap转换成Base64
+    public static String getBitmapStrBase64(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        return Base64.encodeToString(bytes, 0);
+    }
+
+    public static void getSystemPicture(Activity activity) {
+        RxPermissions.getInstance(activity)
+            .request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .subscribe(granted -> {
+                if (granted) {
+                    ImagePickerDialog(activity);
+                } else {
+                    JUtils.Toast("小鹿美美需要照相机和相册权限,请再次点击并打开权限许可.");
+                }
+            });
+    }
+
+    private static void ImagePickerDialog(Activity activity) {
+        CharSequence[] items = {"相册", "相机"};
+        new AlertDialog.Builder(activity)
+            .setTitle("选择图片来源")
+            .setItems(items, (dialog, which) -> {
+                if (which == SELECT_PICTURE) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
+                    activity.startActivityForResult(Intent.createChooser(intent, "选择图片"), SELECT_PICTURE);
+                } else {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    activity.startActivityForResult(intent, SELECT_CAMERA);
+                }
+            })
+            .create().show();
+    }
+
+    public static File getFileFromUri(Uri uri, ContentResolver cr) {
+        Cursor cursor = cr.query(uri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
+            null, null, null);
+        if (cursor == null) {
+            return null;
+        }
+        cursor.moveToFirst();
+        final String imageFilePath = cursor.getString(0);
+        return new File(imageFilePath);
+    }
 
     public static String Get_Random_File_Name() {
         final Calendar c = Calendar.getInstance();
@@ -125,7 +217,7 @@ public class CameraUtils {
         try {
             // Get SD Card path & your folder name
             MY_IMG_DIR = new File(Environment.getExternalStorageDirectory(),
-                    XLMM_IMG_PATH);
+                XLMM_IMG_PATH);
 
             // check if exist
             if (!MY_IMG_DIR.exists()) {

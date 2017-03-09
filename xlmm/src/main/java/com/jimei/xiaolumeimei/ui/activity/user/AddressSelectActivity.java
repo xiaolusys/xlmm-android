@@ -40,7 +40,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     LinearLayout layout;
     private AddressSelectAdapter adapter;
     private String addressId;
-    private boolean idFlag;
+    private int needLevel;
 
     @Override
     protected void setListener() {
@@ -71,7 +71,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void getBundleExtras(Bundle extras) {
         addressId = extras.getString("addressId");
-        idFlag = extras.getBoolean("idFlag", false);
+        needLevel = extras.getInt("needLevel", 1);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
         divider.setColor(getResources().getColor(R.color.bg_grey));
         addressRecyclerView.addItemDecoration(divider);
         adapter = new AddressSelectAdapter(this, addressId);
-        adapter.setIdFlag(idFlag);
+        adapter.setNeedLevel(needLevel);
         addressRecyclerView.setAdapter(adapter);
     }
 
@@ -108,7 +108,7 @@ public class AddressSelectActivity extends BaseSwipeBackCompatActivity
         switch (v.getId()) {
             case R.id.addAdress:
                 Bundle addressBundle = new Bundle();
-                addressBundle.putBoolean("idFlag", idFlag);
+                addressBundle.putInt("needLevel", needLevel);
                 readyGo(AddAddressActivity.class, addressBundle);
                 break;
         }

@@ -14,15 +14,10 @@ import com.jimei.xiaolumeimei.base.BaseMVVMActivity;
 import com.jimei.xiaolumeimei.databinding.ActivityCartBinding;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CartsPayinfoBean;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +40,6 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
 
     @Override
     protected void initViews() {
-        EventBus.getDefault().register(this);
         b.rvCart.setNestedScrollingEnabled(false);
         b.rvCart.setHasFixedSize(false);
         b.rvCart.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
@@ -87,7 +81,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.go_main:
-                readyGo(MainActivity.class);
+                readyGoThenKill(TabActivity.class);
                 break;
             case R.id.confirm:
                 if (ids.size() > 0) {
@@ -95,6 +89,7 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
                     Intent intent = new Intent(this, CartsPayInfoActivity.class);
                     intent.putExtra("ids", getIds());
                     startActivity(intent);
+                    finish();
                 } else {
                     JUtils.Toast("请至少选择一件商品哦!");
                 }
@@ -207,16 +202,5 @@ public class CartActivity extends BaseMVVMActivity<ActivityCartBinding> implemen
                     hideIndeterminateProgressDialog();
                 }
             }));
-    }
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reLoadData(LoginEvent event) {
-        initData();
     }
 }

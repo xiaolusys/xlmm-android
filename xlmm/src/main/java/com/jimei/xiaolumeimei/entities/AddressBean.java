@@ -41,6 +41,7 @@ public class AddressBean {
   @SerializedName("status") private String mStatus;
   @SerializedName("created") private String mCreated;
   @SerializedName("identification_no") private String mIdentificationNo;
+  @SerializedName("personalinfo_level") private int personalInfoLevel;
 
   public void setId(String id) {
     this.mId = id;
@@ -160,5 +161,13 @@ public class AddressBean {
 
   public void setmIdentificationNo(String mIdentificationNo) {
     this.mIdentificationNo = mIdentificationNo;
+  }
+
+  public int getPersonalInfoLevel() {
+    return personalInfoLevel;
+  }
+
+  public void setPersonalInfoLevel(int personalInfoLevel) {
+    this.personalInfoLevel = personalInfoLevel;
   }
 }

@@ -2,6 +2,7 @@ package com.jimei.xiaolumeimei.service.api;
 
 import com.jimei.xiaolumeimei.entities.AddressBean;
 import com.jimei.xiaolumeimei.entities.AddressResultBean;
+import com.jimei.xiaolumeimei.entities.IdCardBean;
 
 import java.util.List;
 
@@ -41,6 +42,22 @@ public interface AddressService {
         @Field("identification_no") String identification_no);
 
 
+    //创建新的地址
+    @FormUrlEncoded
+    @POST("/rest/v1/address/create_address")
+    Observable<AddressResultBean> create_addressWithId(
+        @Field("receiver_state") String receiver_state,
+        @Field("receiver_city") String receiver_city,
+        @Field("receiver_district") String receiver_district,
+        @Field("receiver_address") String receiver_address,
+        @Field("receiver_name") String receiver_name,
+        @Field("receiver_mobile") String receiver_mobile,
+        @Field("default") String defaultStr,
+        @Field("identification_no") String identification_no,
+        @Field("card_facepath") String card_facepath,
+        @Field("card_backpath") String card_backpath);
+
+
     //修改地址
     @FormUrlEncoded
     @POST("/rest/v1/address/{id}/update")
@@ -72,7 +89,7 @@ public interface AddressService {
     //修改地址
     @FormUrlEncoded
     @POST("/rest/v1/address/{id}/update")
-    Observable<AddressResultBean> update_address(
+    Observable<AddressResultBean> update_addressWithId(
         @Path("id") String id,
         @Field("receiver_state") String receiver_state,
         @Field("receiver_city") String receiver_city,
@@ -80,8 +97,10 @@ public interface AddressService {
         @Field("receiver_address") String receiver_address,
         @Field("receiver_name") String receiver_name,
         @Field("receiver_mobile") String receiver_mobile,
-        @Field("logistic_company_code") String logistic_company_code,
-        @Field("referal_trade_id") String referal_trade_id);
+        @Field("default") String defaultStr,
+        @Field("identification_no") String identification_no,
+        @Field("card_facepath") String card_facepath,
+        @Field("card_backpath") String card_backpath);
 
     //修改地址
     @FormUrlEncoded
@@ -95,6 +114,11 @@ public interface AddressService {
         @Field("receiver_name") String receiver_name,
         @Field("receiver_mobile") String receiver_mobile,
         @Field("logistic_company_code") String logistic_company_code,
-        @Field("referal_trade_id") String referal_trade_id,
-        @Field("identification_no") String identification_no);
+        @Field("referal_trade_id") String referal_trade_id);
+
+    @FormUrlEncoded
+    @POST("/rest/v2/ocr/idcard_indentify")
+    Observable<IdCardBean> idCardIndentify(
+        @Field("side") String side,
+        @Field("card_base64") String card_base64);
 }

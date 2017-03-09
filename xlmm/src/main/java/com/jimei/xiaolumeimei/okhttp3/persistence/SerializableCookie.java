@@ -34,7 +34,7 @@ public class SerializableCookie implements Serializable {
 
     private transient Cookie cookie;
 
-    public String encode(Cookie cookie) {
+    String encode(Cookie cookie) {
         this.cookie = cookie;
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

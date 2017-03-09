@@ -22,15 +22,11 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentTodayNewBinding;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -89,21 +85,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
             .getMainTodayList(new ServiceResponse<List<MainTodayBean>>() {
                 @Override
                 public void onNext(List<MainTodayBean> list) {
-                    data.clear();
-                    data.addAll(list);
-                    mainTabAdapter.updateWithClear(list);
-                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                    b.recyclerTab.scrollBy(-scrollCount * width, 0);
-                    scrollCount = 0;
-                    for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).getHour() <= hour) {
-                            scrollCount = i;
-                        }
-                    }
-                    mainTabAdapter.setCurrentPosition(scrollCount + 2);
-                    b.recyclerTab.scrollBy(scrollCount * width, 0);
-                    mainProductAdapter.updateWithClear(list.get(scrollCount).getItems());
-                    hideIndeterminateProgressDialog();
+                    initTodayList(list);
                 }
 
                 @Override
@@ -112,6 +94,24 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                     hideIndeterminateProgressDialog();
                 }
             }));
+    }
+
+    private void initTodayList(List<MainTodayBean> list) {
+        data.clear();
+        data.addAll(list);
+        mainTabAdapter.updateWithClear(list);
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        b.recyclerTab.scrollBy(-scrollCount * width, 0);
+        scrollCount = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getHour() <= hour) {
+                scrollCount = i;
+            }
+        }
+        mainTabAdapter.setCurrentPosition(scrollCount + 2);
+        b.recyclerTab.scrollBy(scrollCount * width, 0);
+        mainProductAdapter.updateWithClear(list.get(scrollCount).getItems());
+        hideIndeterminateProgressDialog();
     }
 
     @Override
@@ -123,7 +123,6 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     protected void initViews() {
-        EventBus.getDefault().register(this);
         width = JUtils.getScreenWidth() / 5;
         b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
         b.recyclerProduct.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
@@ -192,7 +191,14 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public void onScroll(int currentY, int maxY) {
-        ((MainActivity) mActivity).setTabLayoutMarginTop((double) currentY / b.slider.getHeight());
+        if (mActivity instanceof MainActivity) {
+            ((MainActivity) mActivity).setTabLayoutMarginTop((double) currentY / b.slider.getHeight());
+        } else if (mActivity instanceof TabActivity) {
+            double percent = (double) currentY / b.slider.getHeight();
+            Message msg = new Message();
+            msg.what = (int) (percent * 100);
+            ((TabActivity) mActivity).mHandler.sendMessage(msg);
+        }
         if (currentY > 0) {
             b.swipeLayout.setEnabled(false);
         } else {
@@ -249,16 +255,5 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
                 handler.sendMessage(msg);
             }
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void reLoadData(LoginEvent event) {
-        initData();
-    }
-
-    @Override
-    public void onDestroyView() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroyView();
     }
 }

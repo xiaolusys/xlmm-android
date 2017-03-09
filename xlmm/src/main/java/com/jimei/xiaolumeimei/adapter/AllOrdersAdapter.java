@@ -56,23 +56,25 @@ public class AllOrdersAdapter extends RecyclerView.Adapter<AllOrdersAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        final AllOrdersBean.ResultsEntity entity = mList.get(position);
         holder.linearLayout.setOnClickListener(
-                new NoDoubleClickListener() {
-                    @Override
-                    protected void onNoDoubleClick(View v) {
-                        Intent intent = new Intent(context, OrderDetailActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("orderinfo", mList.get(position).getId());
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                    }
+            new NoDoubleClickListener() {
+                @Override
+                protected void onNoDoubleClick(View v) {
+                    Intent intent = new Intent(context, OrderDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("orderinfo", entity.getId());
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
                 }
+            }
         );
-        OrderListAdapter adapter = new OrderListAdapter(context, mList.get(position).getOrders());
-        adapter.setId(mList.get(position).getId());
+        OrderListAdapter adapter = new OrderListAdapter(context, entity.getOrders());
+        adapter.setId(entity.getId());
         holder.listView.setAdapter(adapter);
-        holder.statusTv.setText(mList.get(position).getStatusDisplay());
-        String payment = new DecimalFormat("0.00").format(mList.get(position).getPayment());
+        holder.statusTv.setText(entity.getStatusDisplay());
+        holder.timeTv.setText(entity.getCreated().substring(0, 10));
+        String payment = new DecimalFormat("0.00").format(entity.getPayment());
         holder.paymentTv.setText(payment);
     }
 
@@ -88,6 +90,8 @@ public class AllOrdersAdapter extends RecyclerView.Adapter<AllOrdersAdapter.View
         TextView statusTv;
         @Bind(R.id.payment)
         TextView paymentTv;
+        @Bind(R.id.time)
+        TextView timeTv;
         @Bind(R.id.lv)
         NestedListView listView;
 

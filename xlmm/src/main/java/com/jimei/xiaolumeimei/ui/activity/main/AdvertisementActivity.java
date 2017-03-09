@@ -88,7 +88,7 @@ public class AdvertisementActivity extends BaseActivity implements View.OnClickL
 
     private void jumpAndFinish() {
         isDestroy = true;
-        startActivity(new Intent(AdvertisementActivity.this, MainActivity.class));
+        startActivity(new Intent(AdvertisementActivity.this, TabActivity.class));
         finish();
     }
 

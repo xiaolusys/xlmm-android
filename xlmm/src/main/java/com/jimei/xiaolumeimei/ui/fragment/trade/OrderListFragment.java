@@ -17,7 +17,7 @@ import com.jimei.xiaolumeimei.databinding.FragmentOrderListBinding;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.event.RefreshOrderListEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -107,9 +107,9 @@ public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBind
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_jump:
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().finish();
+                Intent intent = new Intent(getActivity(), TabActivity.class);
+                mActivity.startActivity(intent);
+                mActivity.finish();
                 break;
         }
     }

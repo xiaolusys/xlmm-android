@@ -28,6 +28,7 @@ public class CartsPayinfoBean {
   @SerializedName("total_fee") private double mTotalFee;
   @SerializedName("post_fee") private double mPostFee;
   @SerializedName("cart_list") private List<CartListEntity> mCartList;
+  @SerializedName("max_personalinfo_level")private int maxPersonalInfoLevel;
 
   public List<LogisticsCompanys> getLogisticsCompanyses() {
     return mLogisticsCompanyses;
@@ -180,6 +181,14 @@ public class CartsPayinfoBean {
 
   public void setCartList(List<CartListEntity> cartList) {
     this.mCartList = cartList;
+  }
+
+  public int getMaxPersonalInfoLevel() {
+    return maxPersonalInfoLevel;
+  }
+
+  public void setMaxPersonalInfoLevel(int maxPersonalInfoLevel) {
+    this.maxPersonalInfoLevel = maxPersonalInfoLevel;
   }
 
   public static class CartListEntity {

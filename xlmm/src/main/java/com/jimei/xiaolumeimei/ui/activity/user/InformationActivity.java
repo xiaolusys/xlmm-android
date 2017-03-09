@@ -15,7 +15,9 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.LogoutBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.InformationEvent;
+import com.jimei.xiaolumeimei.entities.event.LogoutEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -137,13 +139,14 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                 @Override
                                 public void onNext(LogoutBean responseBody) {
                                     if (responseBody.getCode() == 0) {
+                                        EventBus.getDefault().post(new LogoutEvent());
                                         JUtils.Toast("退出成功");
                                         if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
                                             MiPushClient.unsetUserAccount(getApplicationContext(),
                                                 finalAccount, null);
                                         }
                                         LoginUtils.delLoginInfo(getApplicationContext());
-                                        finish();
+                                        readyGoThenKill(TabActivity.class);
                                     }
                                 }
                             }));

@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +13,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 
 import butterknife.Bind;
 
@@ -85,9 +84,7 @@ public class SettingPasswordForgetActivity extends BaseSwipeBackCompatActivity
                 public void onNext(CodeBean bean) {
                     JUtils.Toast(bean.getMsg());
                     if (bean.getRcode() == 0) {
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        readyGoThenKill(TabActivity.class);
                     }
                 }
             }));

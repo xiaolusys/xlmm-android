@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,9 +22,10 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 
@@ -121,16 +121,13 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                         .passwordLogin(login_name_value, login_pass_value, null, new ServiceResponse<CodeBean>() {
                             @Override
                             public void onNext(CodeBean codeBean) {
-                                Log.d(TAG, "user.getCode() "
-                                    + codeBean.getRcode()
-                                    + ", user.getResult() "
-                                    + codeBean.getMsg());
                                 if (codeBean.getRcode() == 0) {
+                                    EventBus.getDefault().post(new SetMiPushEvent());
                                     hideIndeterminateProgressDialog();
                                     LoginUtils.saveLoginInfo(true, getApplicationContext(),
                                         login_name_value, login_pass_value);
-                                    JUtils.Toast("登录成功!");
                                     EventBus.getDefault().post(new LoginEvent());
+                                    JUtils.Toast("登录成功!");
                                     String login = null;
                                     if (getIntent() != null && getIntent().getExtras() != null) {
                                         login = getIntent().getExtras().getString("login");
@@ -164,10 +161,10 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                                             intent.putExtras(bundle);
                                             startActivity(intent);
                                             finish();
-                                        } else if (login.equals("car")) {
-                                            readyGoThenKill(CartActivity.class);
-                                        } else if (login.equals("my")) {
-                                            readyGoThenKill(UserActivity.class);
+                                        } else if (login.equals("car") || login.equals("my") || login.equals("boutique")) {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("flag", login);
+                                            readyGoThenKill(TabActivity.class, bundle);
                                         } else {
                                             finish();
                                         }
