@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.main.MainActivity"
+            android:name=".ui.activity.main.TabActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentActivity">
             <intent-filter>
@@ -89,6 +89,9 @@
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.main.MainActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.LoginActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jimei.xiaolumeimei.ui.activity.main.TabActivity">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <include layout="@layout/common_gap"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_main"
+                style="@style/TabRadioButtonStyle"
+                android:drawableTop="@drawable/tab_main"
+                android:text="主页"/>
+
+            <RadioButton
+                android:id="@+id/rb_category"
+                style="@style/TabRadioButtonStyle"
+                android:drawableTop="@drawable/tab_category"
+                android:text="分类"/>
+
+            <RadioButton
+                android:id="@+id/rb_boutique"
+                style="@style/TabRadioButtonStyle"
+                android:drawableTop="@drawable/tab_boutique"
+                android:text="精品汇"/>
+
+            <RadioButton
+                android:id="@+id/rb_car"
+                style="@style/TabRadioButtonStyle"
+                android:drawableTop="@drawable/tab_car"
+                android:text="购物车"/>
+
+            <RadioButton
+                android:id="@+id/rb_my"
+                style="@style/TabRadioButtonStyle"
+                android:drawableTop="@drawable/tab_my"
+                android:text="我的"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="16"/>
+
+            <TextView
+                android:id="@+id/text_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/my_num_flag"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="6"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+</LinearLayout>

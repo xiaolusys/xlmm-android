@@ -36,7 +36,6 @@ import com.jimei.xiaolumeimei.adapter.PayAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
-import com.jimei.xiaolumeimei.entities.AllOrdersBean;
 import com.jimei.xiaolumeimei.entities.LogisticCompany;
 import com.jimei.xiaolumeimei.entities.OrderDetailBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
@@ -52,7 +51,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -153,7 +151,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
     String tid;
     private Dialog dialog;
     private Dialog dialog2;
-    private boolean bonded_goods = false;
 
     @Override
     protected void setListener() {
@@ -344,23 +341,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
         }
         OrderGoodsListAdapter mGoodsAdapter = new OrderGoodsListAdapter(this, orderDetailBean, orderDetailBean.isCan_refund());
         lv_goods.setAdapter(mGoodsAdapter);
-        ArrayList<AllOrdersBean.ResultsEntity.OrdersEntity> orders = orderDetailBean.getOrders();
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).is_bonded_goods()) {
-                bonded_goods = true;
-            }
-        }
-        String no = user_adress.getIdentification_no();
-        if (no == null || no.length() < 18) {
-            if (bonded_goods) {
-                new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证号码。此信息加密保存，只用于此订单海关通关。")
-                    .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
-                    .setCancelable(false)
-                    .show();
-            }
-        }
         setListViewHeightBasedOnChildren(lv_goods);
     }
 
@@ -511,7 +491,6 @@ public class OrderDetailActivity extends BaseSwipeBackCompatActivity
                     bundle.putString("receiver_district", orderDetail.getUser_adress().getReceiver_district());
                     bundle.putString("address_id", orderDetail.getUser_adress().getId() + "");
                     bundle.putString("referal_trade_id", orderDetail.getId() + "");
-                    bundle.putBoolean("is_bonded_goods", bonded_goods);
                     bundle.putString("idNo", orderDetail.getUser_adress().getIdentification_no());
                     intent.putExtras(bundle);
                     startActivity(intent);

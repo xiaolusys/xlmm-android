@@ -109,6 +109,20 @@ public class RetrofitClient {
                         })
                         .cookieJar(new PersistentCookieJar(new SetCookieCache(),
                             new SharedPrefsCookiePersistor(XlmmApp.getmContext())));
+//                        .cookieJar(new CookieJar() {
+//                            private final HashMap<HttpUrl, List<Cookie>> cookieStore = new HashMap<>();
+//
+//                            @Override
+//                            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+//                                cookieStore.put(url, cookies);
+//                            }
+//
+//                            @Override
+//                            public List<Cookie> loadForRequest(HttpUrl url) {
+//                                List<Cookie> cookies = cookieStore.get(url);
+//                                return cookies != null ? cookies : new ArrayList<>();
+//                            }
+//                        });
                 }
             }
         }

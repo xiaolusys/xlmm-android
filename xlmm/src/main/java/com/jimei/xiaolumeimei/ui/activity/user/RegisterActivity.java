@@ -20,7 +20,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 
 import butterknife.Bind;
@@ -143,7 +143,7 @@ public class RegisterActivity extends BaseSwipeBackCompatActivity
                                 if (codeBean != null) {
                                     int result = codeBean.getRcode();
                                     if (result == 0) {
-                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                        Intent intent = new Intent(RegisterActivity.this, TabActivity.class);
                                         LoginUtils.saveLoginSuccess(true, getApplicationContext());
                                         startActivity(intent);
                                         finish();

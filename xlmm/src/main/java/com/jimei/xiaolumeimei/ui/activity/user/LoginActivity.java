@@ -22,9 +22,10 @@ import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
 import com.jimei.xiaolumeimei.entities.event.LoginEvent;
+import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
-import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.mob.tools.utils.UIHandler;
@@ -238,6 +239,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                             if (codeBean != null) {
                                 int code = codeBean.getRcode();
                                 if (0 == code) {
+                                    EventBus.getDefault().post(new SetMiPushEvent());
                                     JUtils.Toast("登录成功");
                                     addSubscription(XlmmApp.getUserInteractor(LoginActivity.this)
                                         .needSetInfo(new ServiceResponse<NeedSetInfoBean>() {
@@ -272,10 +274,10 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                                                             intent.putExtras(bundle);
                                                             startActivity(intent);
                                                             finish();
-                                                        } else if (login.equals("car")) {
-                                                            readyGoThenKill(CartActivity.class);
-                                                        } else if (login.equals("my")) {
-                                                            readyGoThenKill(UserActivity.class);
+                                                        } else if (login.equals("car") || login.equals("my") || login.equals("boutique")) {
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("flag", login);
+                                                            readyGoThenKill(TabActivity.class, bundle);
                                                         } else {
                                                             finish();
                                                         }

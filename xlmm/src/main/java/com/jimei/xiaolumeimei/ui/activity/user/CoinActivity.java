@@ -18,7 +18,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CoinHistoryListBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 
 import java.util.List;
 
@@ -107,7 +107,7 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_jump:
-                readyGo(MainActivity.class);
+                readyGo(TabActivity.class);
                 finish();
                 break;
         }

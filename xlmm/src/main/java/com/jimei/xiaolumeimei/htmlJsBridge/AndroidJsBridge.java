@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CallNativeFuncBean;
 import com.jimei.xiaolumeimei.entities.JumpBean;
 import com.jimei.xiaolumeimei.entities.PayInfoBean;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
@@ -175,8 +176,28 @@ public class AndroidJsBridge implements PlatformActionListener, Handler.Callback
     }
 
     @JavascriptInterface
-    public void callNativeBack() {
+    public void jumpToNativeLogin(String json) {
+        Gson gson = new Gson();
+        JumpBean jumpBean = gson.fromJson(json, new TypeToken<JumpBean>() {
+        }.getType());
+        String url = jumpBean.getTarget_url();
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("login", "h5");
+        bundle.putString("actlink", url);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
         mContext.finish();
+    }
+
+    @JavascriptInterface
+    public void callNativeBack() {
+        if (mContext instanceof TabActivity) {
+            JUtils.Log("callNativeBack");
+        }else {
+            mContext.finish();
+        }
+
     }
 
     @JavascriptInterface

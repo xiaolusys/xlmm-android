@@ -125,7 +125,6 @@ public class LoginUtils {
 
     public static void setPushUserAccount(Context context, String mRegId) {
         try {
-            //register xiaomi push
             String android_id = Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
             JUtils.Log("regid", android_id);

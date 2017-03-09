@@ -29,11 +29,6 @@ public class CategoryTask extends AsyncTask<String, Integer, List<CategoryBean>>
     private LinearLayout mLinearLayout;
     private BaseActivity activity;
 
-    public CategoryTask(CategoryItemAdapter adapter, LinearLayout linearLayout) {
-        this.adapter = adapter;
-        mLinearLayout = linearLayout;
-    }
-
     public CategoryTask(CategoryItemAdapter adapter, LinearLayout linearLayout, BaseActivity activity) {
         this.adapter = adapter;
         mLinearLayout = linearLayout;

@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +19,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public abstract class BaseFragment extends Fragment {
-    public Activity mActivity;
+    public BaseActivity mActivity;
     private CompositeSubscription mCompositeSubscription;
     private boolean mIsHidden = true;
     private static final String FRAGMENT_STORE = "STORE";
@@ -33,7 +32,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mActivity = (Activity) context;
+        mActivity = (BaseActivity) context;
     }
 
     @Override

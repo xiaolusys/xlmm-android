@@ -79,7 +79,7 @@ public class SplashActivity extends AppCompatActivity {
             intent.putExtra("link", mPicture);
             startActivity(intent);
         } else {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            startActivity(new Intent(SplashActivity.this, TabActivity.class));
         }
         finish();
     }

@@ -53,10 +53,8 @@ public class PersistentCookieJar implements ClearableCookieJar {
     synchronized public List<Cookie> loadForRequest(HttpUrl url) {
         List<Cookie> removedCookies = new ArrayList<>();
         List<Cookie> validCookies = new ArrayList<>();
-
         for (Iterator<Cookie> it = cache.iterator(); it.hasNext(); ) {
             Cookie currentCookie = it.next();
-
             if (isCookieExpired(currentCookie)) {
                 removedCookies.add(currentCookie);
                 it.remove();
@@ -64,9 +62,7 @@ public class PersistentCookieJar implements ClearableCookieJar {
                 validCookies.add(currentCookie);
             }
         }
-
         persistor.removeAll(removedCookies);
-
         return validCookies;
     }
 
