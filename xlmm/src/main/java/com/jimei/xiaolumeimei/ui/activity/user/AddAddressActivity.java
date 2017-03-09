@@ -10,11 +10,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,7 +57,7 @@ import butterknife.Bind;
  * Copyright 2015年 上海己美. All rights reserved.
  */
 public class AddAddressActivity extends BaseSwipeBackCompatActivity
-    implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    implements View.OnClickListener {
 
     @Bind(R.id.name)
     EditText name;
@@ -89,11 +89,16 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     private String receiver_city;
     private String receiver_district;
     private String city_string;
-    private String defaulta;
-    private int needLevel;
+    private int needLevel = 1;
     private String side;
     private String card_facepath;
     private String card_backpath;
+    private File file;
+    private String receiver_name;
+    private String receiver_mobile;
+    private String clearaddressa;
+    private String idNo;
+    private String defaultAddress;
 
     @Override
     protected void initViews() {
@@ -109,7 +114,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         save.setOnClickListener(this);
         address.setOnClickListener(this);
-        switchButton.setOnCheckedChangeListener(this);
         imageIdBefore.setOnClickListener(this);
         imageIdAfter.setOnClickListener(this);
     }
@@ -143,30 +147,34 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.save:
-                String receiver_name = name.getText().toString().trim();
-                String receiver_mobile = mobile.getText().toString().trim();
-                String clearaddressa = clearAddress.getText().toString().trim();
-                String idNo = idNum.getText().toString().trim();
-                if (IdCardChecker.isValidatedAllIdcard(idNo) || needLevel == 1) {
-                    if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
-                        addSubscription(XlmmApp.getAddressInteractor(this)
-                            .create_addressWithId(receiver_state, receiver_city, receiver_district,
-                                clearaddressa, receiver_name, receiver_mobile, defaulta, idNo,
-                                new ServiceResponse<AddressResultBean>() {
-                                    @Override
-                                    public void onNext(AddressResultBean addressResultBean) {
-                                        EventBus.getDefault().post(new AddressChangeEvent());
-                                        if (addressResultBean != null) {
-                                            JUtils.Toast(addressResultBean.getInfo());
-                                            if (addressResultBean.getCode() == 0) {
-                                                finish();
-                                            }
-                                        }
-                                    }
-                                }));
-                    }
+                receiver_name = name.getText().toString().trim();
+                receiver_mobile = mobile.getText().toString().trim();
+                clearaddressa = clearAddress.getText().toString().trim();
+                idNo = idNum.getText().toString().trim();
+                if (switchButton.isChecked()) {
+                    defaultAddress = "true";
                 } else {
+                    defaultAddress = "false";
+                }
+                if (needLevel == 3 && (card_facepath == null || card_backpath == null || "".equals(card_facepath) ||
+                    "".equals(card_backpath))) {
+                    JUtils.Toast("身份证照片未完善");
+                } else if (needLevel >= 2 && !IdCardChecker.isValidatedAllIdcard(idNo)) {
                     JUtils.Toast("请填写合法的身份证号码!");
+                } else {
+                    if (needLevel >= 2) {
+                        new AlertDialog.Builder(this)
+                            .setTitle("提示")
+                            .setMessage("请确保身份证信息和收货人信息一致，否则无法通过海关检测!")
+                            .setCancelable(false)
+                            .setPositiveButton("同意", (dialog, which) -> {
+                                dialog.dismiss();
+                                commitInfo();
+                            })
+                            .show();
+                    } else {
+                        commitInfo();
+                    }
                 }
                 break;
             case R.id.image_id_before:
@@ -179,12 +187,29 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         }
     }
 
+    private void commitInfo() {
+        addSubscription(XlmmApp.getAddressInteractor(this)
+            .create_addressWithId(receiver_state, receiver_city, receiver_district,
+                clearaddressa, receiver_name, receiver_mobile, defaultAddress, idNo,
+                card_facepath, card_backpath, new ServiceResponse<AddressResultBean>() {
+                    @Override
+                    public void onNext(AddressResultBean addressResultBean) {
+                        EventBus.getDefault().post(new AddressChangeEvent());
+                        if (addressResultBean != null) {
+                            JUtils.Toast(addressResultBean.getInfo());
+                            if (addressResultBean.getCode() == 0) {
+                                finish();
+                            }
+                        }
+                    }
+                }));
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            File file = null;
             if (requestCode == CameraUtils.SELECT_PICTURE) {
                 file = Image_Selecting_Task(data);
             } else if (requestCode == CameraUtils.SELECT_CAMERA) {
@@ -196,31 +221,21 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 } else {
                     Glide.with(this).load(file).into(imageIdAfter);
                 }
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                Bitmap compressImage = CameraUtils.compressImage(bitmap, 150);
-                bitmap.recycle();
-                String base64 = CameraUtils.getBitmapStrBase64(compressImage);
-                compressImage.recycle();
-                addSubscription(XlmmApp.getAddressInteractor(this)
-                    .idCardIndentify(side, base64, new ServiceResponse<IdCardBean>() {
-                        @Override
-                        public void onNext(IdCardBean idCardBean) {
-                            if (idCardBean.getCode() == 0) {
-                                JUtils.Toast("上传成功");
-                                if ("face".equals(side)) {
-                                    card_facepath = idCardBean.getCard_infos().getCard_imgpath();
-                                } else {
-                                    card_backpath = idCardBean.getCard_infos().getCard_imgpath();
-                                }
-                            } else {
-                                JUtils.Toast(idCardBean.getInfo());
-                            }
-                        }
-                    }));
             }
         } else {
             JUtils.Toast("请重新上传!");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (file != null) {
+            showIndeterminateProgressDialog(true);
+            setDialogContent("上传中...");
+            new compressTask().execute(file.getPath());
+        }
+
     }
 
     public File Image_Selecting_Task(Intent data) {
@@ -308,21 +323,6 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         return false;
     }
 
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.switch_button:
-                if (isChecked) {
-                    defaulta = "true";
-                } else {
-                    defaulta = "false";
-                }
-
-                break;
-        }
-    }
-
     private class InitAreaTask extends AsyncTask<Integer, Integer, Boolean> {
 
         Context mContext;
@@ -379,6 +379,58 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
                 }
             }
             return false;
+        }
+    }
+
+    private class compressTask extends AsyncTask<String, Integer, String> {
+        private Bitmap bitmap;
+        private Bitmap compressImage;
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                bitmap = BitmapFactory.decodeFile(strings[0]);
+                compressImage = CameraUtils.imageZoom(bitmap, 100);
+                file = null;
+                return CameraUtils.getBitmapStrBase64(compressImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if ("".equals(s) || s == null) {
+                hideIndeterminateProgressDialog();
+            } else {
+                addSubscription(XlmmApp.getAddressInteractor(AddAddressActivity.this)
+                    .idCardIndentify(side, s, new ServiceResponse<IdCardBean>() {
+                        @Override
+                        public void onNext(IdCardBean idCardBean) {
+                            if (idCardBean.getCode() == 0) {
+                                JUtils.Toast("上传成功");
+                                if ("face".equals(side)) {
+                                    card_facepath = idCardBean.getCard_infos().getCard_imgpath();
+                                    JUtils.Log("-----------------------", idCardBean.getCard_infos().getName());
+                                    JUtils.Log("-----------------------", idCardBean.getCard_infos().getNum());
+                                } else {
+                                    card_backpath = idCardBean.getCard_infos().getCard_imgpath();
+                                }
+                            } else {
+                                JUtils.Toast(idCardBean.getInfo());
+                            }
+                            hideIndeterminateProgressDialog();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            hideIndeterminateProgressDialog();
+                        }
+                    }));
+            }
+            bitmap.recycle();
+            compressImage.recycle();
         }
     }
 }

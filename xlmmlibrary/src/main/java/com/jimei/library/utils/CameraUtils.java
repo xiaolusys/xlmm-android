@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -20,7 +21,6 @@ import android.util.Log;
 
 import com.tbruyelle.rxpermissions.RxPermissions;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,20 +43,34 @@ public class CameraUtils {
     public static final int SELECT_PICTURE = 0;
     public static final int SELECT_CAMERA = 1;
 
-    public static Bitmap compressImage(Bitmap bm, int size) {
+    public static Bitmap imageZoom(Bitmap bm, int size) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        int options = 60;
-        while (baos.toByteArray().length / 1024 > size) { // 循环判断如果压缩后图片是否大于50kb,大于继续压缩
-            baos.reset();// 重置baos即清空baos
-            bm.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
-            options -= 10;// 每次都减少10
-            if(options<0){
-                break;
-            }
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        //将字节换成KB
+        double mid = b.length / 1024;
+        if (mid > size) {
+            double i = mid / size;
+            bm = zoomImage(bm, bm.getWidth() / Math.sqrt(i),
+                bm.getHeight() / Math.sqrt(i));
         }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
-        return BitmapFactory.decodeStream(isBm, null, null);
+        return bm;
+    }
+
+    private static Bitmap zoomImage(Bitmap bgimage, double newWidth,
+                                    double newHeight) {
+        // 获取这个图片的宽和高
+        float width = bgimage.getWidth();
+        float height = bgimage.getHeight();
+        // 创建操作图片用的matrix对象
+        Matrix matrix = new Matrix();
+        // 计算宽高缩放率
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 缩放图片动作
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(bgimage, 0, 0, (int) width,
+            (int) height, matrix, true);
     }
 
     // 把Bitmap转换成Base64
@@ -203,7 +217,7 @@ public class CameraUtils {
         try {
             // Get SD Card path & your folder name
             MY_IMG_DIR = new File(Environment.getExternalStorageDirectory(),
-                    XLMM_IMG_PATH);
+                XLMM_IMG_PATH);
 
             // check if exist
             if (!MY_IMG_DIR.exists()) {

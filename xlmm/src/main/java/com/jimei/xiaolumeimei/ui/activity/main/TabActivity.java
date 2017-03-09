@@ -23,6 +23,7 @@ import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
 import com.jimei.xiaolumeimei.entities.event.CartNumEvent;
 import com.jimei.xiaolumeimei.entities.event.LogoutEvent;
+import com.jimei.xiaolumeimei.entities.event.PersonalEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
@@ -102,6 +103,7 @@ public class TabActivity extends BaseActivity {
             .getWxCode(new ServiceResponse<>()));
         LoginUtils.setMamaInfo(this);
         downLoadAddress();
+        showCarNum();
         setTopic();
         checkVersion();
         LoginUtils.clearCacheEveryWeek(this);
@@ -133,7 +135,7 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        showCarNum();
+        EventBus.getDefault().post(new PersonalEvent());
     }
 
     @Override

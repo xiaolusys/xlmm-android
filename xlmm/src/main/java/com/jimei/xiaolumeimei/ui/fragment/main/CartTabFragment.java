@@ -257,6 +257,7 @@ public class CartTabFragment extends BaseBindingFragment<FragmentCarTabBinding> 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void initLogout(LogoutEvent event) {
+        EventBus.getDefault().post(new CartNumEvent());
         cartList.clear();
         cartHisList.clear();
         cartHisAdapter.notifyDataSetChanged();

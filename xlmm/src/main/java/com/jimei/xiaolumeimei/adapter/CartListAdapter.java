@@ -17,11 +17,14 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CartsInfoBean;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.product.ProductDetailActivity;
 import com.jimei.xiaolumeimei.widget.ICartHelper;
 import com.jimei.library.widget.NoDoubleClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -86,6 +89,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                             if (codeBeanResponse.isSuccessful()) {
                                                 helper.addHistory(cartsInfoBean);
                                                 helper.removeCartList(cartsInfoBean);
+                                                EventBus.getDefault().post(new CartEvent());
                                             } else {
                                                 JUtils.Toast(codeBeanResponse.body().getInfo());
                                             }
@@ -113,6 +117,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                 if (codeBeanResponse != null && codeBeanResponse.isSuccessful()) {
                                     CodeBean body = codeBeanResponse.body();
                                     if (body != null && body.getCode() == 0) {
+                                        EventBus.getDefault().post(new CartEvent());
                                         helper.setPriceText();
                                         cartsInfoBean.setNum(cartsInfoBean.getNum() - 1);
                                         holder.count.setText(cartsInfoBean.getNum() + "");
@@ -146,6 +151,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
                                 if (null != codeBeanResponse) {
                                     CodeBean body = codeBeanResponse.body();
                                     if (body != null && body.getCode() == 0) {
+                                        EventBus.getDefault().post(new CartEvent());
                                         helper.setPriceText();
                                         cartsInfoBean.setNum(cartsInfoBean.getNum() + 1);
                                         holder.count.setText(cartsInfoBean.getNum() + "");

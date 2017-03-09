@@ -29,8 +29,7 @@ import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
-import com.jimei.xiaolumeimei.entities.event.LoginEvent;
-import com.jimei.xiaolumeimei.entities.event.LogoutEvent;
+import com.jimei.xiaolumeimei.entities.event.PersonalEvent;
 import com.jimei.xiaolumeimei.entities.event.WebViewEvent;
 import com.jimei.xiaolumeimei.module.VipInteractor;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
@@ -278,6 +277,7 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
     public void initData() {
         count = 1;
         showIndeterminateProgressDialog(true);
+        setDialogContent("个人信息刷新中...");
         mamaFlag = false;
         if (LoginUtils.checkLoginState(mActivity)) {
             addSubscription(XlmmApp.getMainInteractor(mActivity)
@@ -494,14 +494,7 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void initLogout(LogoutEvent event) {
-        count = 1;
-        mamaFlag = false;
-        fillDataToView(null);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void initLogin(LoginEvent event) {
+    public void refreshPersonalInfo(PersonalEvent event) {
         initData();
     }
 

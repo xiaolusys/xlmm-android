@@ -22,19 +22,21 @@ public interface AddressInteractor {
                                       String receiver_district, String receiver_address,
                                       String receiver_name, String receiver_mobile,
                                       String defaulta, String identification_no,
+                                      String card_facepath, String card_backpath,
                                       ServiceResponse<AddressResultBean> response);
 
     Subscription update_addressWithId(String id, String receiver_state, String receiver_city,
                                       String receiver_district, String receiver_address,
                                       String receiver_name, String receiver_mobile,
                                       String defalut, String identification_no,
+                                      String card_facepath, String card_backpath,
                                       ServiceResponse<AddressResultBean> response);
 
     Subscription update_address(String id, String receiver_state, String receiver_city,
                                 String receiver_district, String receiver_address,
                                 String receiver_name, String receiver_mobile,
                                 String logistic_company_code, String referal_trade_id,
-                                String identification_no, ServiceResponse<AddressResultBean> response);
+                                ServiceResponse<AddressResultBean> response);
 
     Subscription idCardIndentify(String side, String card_base64, ServiceResponse<IdCardBean> response);
 }

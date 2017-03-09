@@ -90,6 +90,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.main.MainActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
             android:name=".ui.activity.user.LoginActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity

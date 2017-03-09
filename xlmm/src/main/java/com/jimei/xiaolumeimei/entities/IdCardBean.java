@@ -172,15 +172,15 @@ public class IdCardBean {
              * size : {"width":1107,"height":1195}
              */
 
-            private int angle;
+            private double angle;
             private CenterBean center;
             private SizeBean size;
 
-            public int getAngle() {
+            public double getAngle() {
                 return angle;
             }
 
-            public void setAngle(int angle) {
+            public void setAngle(double angle) {
                 this.angle = angle;
             }
 
@@ -232,22 +232,22 @@ public class IdCardBean {
                  * height : 1195
                  */
 
-                private int width;
-                private int height;
+                private double width;
+                private double height;
 
-                public int getWidth() {
+                public double getWidth() {
                     return width;
                 }
 
-                public void setWidth(int width) {
+                public void setWidth(double width) {
                     this.width = width;
                 }
 
-                public int getHeight() {
+                public double getHeight() {
                     return height;
                 }
 
-                public void setHeight(int height) {
+                public void setHeight(double height) {
                     this.height = height;
                 }
             }

@@ -255,7 +255,6 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
             Map<String, String> extraHeaders = new HashMap<>();
             extraHeaders.put("Cookie", sessionid);
             b.wbView.loadUrl(url, extraHeaders);
-            setDialogContent("页面载入中...");
         }
     }
 

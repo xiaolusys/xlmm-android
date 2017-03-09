@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.user;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,7 @@ import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
 import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 
 import butterknife.Bind;
 import rx.Subscriber;
@@ -95,8 +94,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                 }
                 break;
             case R.id.pass:
-                startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
-                finish();
+                readyGoThenKill(TabActivity.class);
                 break;
             case R.id.getCheckCode:
                 mobile = registerName.getText().toString().trim();
@@ -165,8 +163,7 @@ public class WxLoginBindPhoneActivity extends BaseSwipeBackCompatActivity
                 public void onNext(CodeBean codeBean) {
                     int code = codeBean.getRcode();
                     if (0 == code) {
-                        startActivity(new Intent(WxLoginBindPhoneActivity.this, MainActivity.class));
-                        finish();
+                        readyGoThenKill(TabActivity.class);
                     } else {
                         JUtils.Toast(codeBean.getMsg());
                     }

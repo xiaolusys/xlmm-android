@@ -13,7 +13,6 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -80,12 +79,13 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
             } else {
                 holder.time.setText(bean.getHour() + ":00");
             }
-            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-            if (bean.getHour() > hour) {
-                holder.textView.setText("预热中");
-            } else {
-                holder.textView.setText("抢购中");
-            }
+//            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+//            if (bean.getHour() > hour) {
+//                holder.textView.setText("预热中");
+//            } else {
+//                holder.textView.setText("抢购中");
+//            }
+            holder.textView.setText("热卖中");
             final int cur = position;
             holder.itemView.setOnClickListener(v -> {
                 itemClick(cur - currentPosition, position - 2);

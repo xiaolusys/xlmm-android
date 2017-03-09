@@ -56,7 +56,7 @@ import com.jimei.xiaolumeimei.entities.WxQrcode;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
+import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
@@ -480,7 +480,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 if (!LoginUtils.checkLoginState(getApplicationContext())) {
                     jumpToLogin();
                 } else {
-                    readyGoThenKill(CartActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("flag", "car");
+                    readyGoThenKill(TabActivity.class, bundle);
                 }
                 break;
             case R.id.tv_add:
