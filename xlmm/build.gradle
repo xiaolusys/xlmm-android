@@ -71,8 +71,8 @@ android {
 
         targetSdkVersion 25
 
-        versionCode 20170309
-        versionName "2.0.3"
+        versionCode 20170313
+        versionName "2.0.4"
 
         multiDexEnabled = true
 
@@ -238,15 +238,15 @@ dependencies {
     compile files('libs/MiPush_SDK_Client_2_2_21.jar')
     compile project(':xlmmlibrary')
     compile project(':UdeskSDKUI')
-    compile files('libs/MobCommons-2016.1020.1028.jar')
-    compile files('libs/MobTools-2016.1020.1028.jar')
-    compile files('libs/ShareSDK-Core-2.7.8.jar')
-    compile files('libs/ShareSDK-QQ-2.7.8.jar')
-    compile files('libs/ShareSDK-QZone-2.7.8.jar')
-    compile files('libs/ShareSDK-SinaWeibo-2.7.8.jar')
-    compile files('libs/ShareSDK-Wechat-2.7.8.jar')
-    compile files('libs/ShareSDK-Wechat-Core-2.7.8.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-2.7.8.jar')
+    compile files('libs/MobCommons-2017.0216.1054.jar')
+    compile files('libs/MobTools-2017.0216.1054.jar')
+    compile files('libs/ShareSDK-Core-2.8.1.jar')
+    compile files('libs/ShareSDK-QQ-2.8.1.jar')
+    compile files('libs/ShareSDK-QZone-2.8.1.jar')
+    compile files('libs/ShareSDK-SinaWeibo-2.8.1.jar')
+    compile files('libs/ShareSDK-Wechat-2.8.1.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.8.1.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.8.1.jar')
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     compile 'com.google.dagger:dagger:2.0.2'
     provided 'com.google.dagger:dagger-compiler:2.0.2'

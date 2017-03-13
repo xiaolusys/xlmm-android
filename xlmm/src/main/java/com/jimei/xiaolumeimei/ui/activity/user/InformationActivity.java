@@ -139,13 +139,13 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                 @Override
                                 public void onNext(LogoutBean responseBody) {
                                     if (responseBody.getCode() == 0) {
-                                        EventBus.getDefault().post(new LogoutEvent());
                                         JUtils.Toast("退出成功");
                                         if ((finalAccount != null) && ((!finalAccount.isEmpty()))) {
                                             MiPushClient.unsetUserAccount(getApplicationContext(),
                                                 finalAccount, null);
                                         }
                                         LoginUtils.delLoginInfo(getApplicationContext());
+                                        EventBus.getDefault().post(new LogoutEvent());
                                         readyGoThenKill(TabActivity.class);
                                     }
                                 }

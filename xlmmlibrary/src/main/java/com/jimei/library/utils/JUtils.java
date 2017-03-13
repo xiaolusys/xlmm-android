@@ -153,9 +153,9 @@ public class JUtils {
 
         final TypedValue tv = new TypedValue();
         if (mApplicationContent.getTheme()
-                .resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            .resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(
-                    tv.data, mApplicationContent.getResources().getDisplayMetrics());
+                tv.data, mApplicationContent.getResources().getDisplayMetrics());
         }
         return actionBarHeight;
     }
@@ -170,7 +170,7 @@ public class JUtils {
         View view = act.getCurrentFocus();
         if (view != null) {
             ((InputMethodManager) mApplicationContent.getSystemService(Context.INPUT_METHOD_SERVICE)).
-                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
@@ -250,9 +250,9 @@ public class JUtils {
         sa2 = Math.sin(a / 2.0);
         sb2 = Math.sin(b / 2.0);
         d = 2
-                * R
-                * Math.asin(Math.sqrt(sa2 * sa2 + Math.cos(weidu1)
-                * Math.cos(weidu2) * sb2 * sb2));
+            * R
+            * Math.asin(Math.sqrt(sa2 * sa2 + Math.cos(weidu1)
+            * Math.cos(weidu2) * sb2 * sb2));
         return d;
     }
 
@@ -263,7 +263,7 @@ public class JUtils {
      */
     public static boolean isNetWorkAvilable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) mApplicationContent
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
             return false;
@@ -310,7 +310,7 @@ public class JUtils {
         Matrix matrix = new Matrix();
         matrix.postScale(sx, sy);
         Bitmap resizeBmp = Bitmap.createBitmap(b, 0, 0, w,
-                h, matrix, true);
+            h, matrix, true);
         return resizeBmp;
     }
 
@@ -344,9 +344,9 @@ public class JUtils {
 
     public static Uri getUriFromRes(int id) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
-                + mApplicationContent.getResources().getResourcePackageName(id) + "/"
-                + mApplicationContent.getResources().getResourceTypeName(id) + "/"
-                + mApplicationContent.getResources().getResourceEntryName(id));
+            + mApplicationContent.getResources().getResourcePackageName(id) + "/"
+            + mApplicationContent.getResources().getResourceTypeName(id) + "/"
+            + mApplicationContent.getResources().getResourceEntryName(id));
     }
 
     public static String sendPost(String url, String param) {
@@ -364,7 +364,7 @@ public class JUtils {
             out.print(param);
             out.flush();
             in = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream()));
+                new InputStreamReader(conn.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;

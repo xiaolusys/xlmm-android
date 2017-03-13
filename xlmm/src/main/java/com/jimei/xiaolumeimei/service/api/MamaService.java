@@ -13,7 +13,7 @@ import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductNinePicBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.SaveTimeBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
@@ -95,13 +95,10 @@ public interface MamaService {
     Observable<List<NinePicBean>> getNinePic(
         @Query("sale_category") int sale_category);
 
-    @GET("/rest/v1/pmt/ninepic/get_nine_pic_by_modelid")
-    Observable<List<NinePicBean>> getNinePicByModelId(
-        @Query("model_id") int model_id);
-
-    @GET("/rest/v1/pmt/ninepic")
-    Observable<List<NinePicBean>> getNinePic(
-        @Query("ordering") String ordering);
+    @GET("/rest/v1/pmt/ninepic/page_list")
+    Observable<ProductNinePicBean> getNinePicByModelId(
+        @Query("model_id") int model_id,
+        @Query("page")int page);
 
     @GET("/rest/v2/mama/carry")
     Observable<CarryLogListBean> getMamaAllCarryLogs(
@@ -132,9 +129,4 @@ public interface MamaService {
     Observable<SaveTimeBean> saveTime(
         @Path("id") int id,
         @Field("save_times") int save_times);
-
-    @GET("/rest/v2/modelproducts/boutique")
-    Observable<ProductListBean> getBoutiqueList(
-        @Query("page") int page
-    );
 }

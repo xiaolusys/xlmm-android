@@ -6,12 +6,15 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 
+import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 
@@ -79,9 +82,17 @@ public class UpdateService extends Service {
             switch (msg.what) {
                 case DOWNLOAD_COMPLETE:
                     Intent installIntent = new Intent();
-                    installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     installIntent.setAction(android.content.Intent.ACTION_VIEW);
-                    installIntent.setDataAndType(Uri.fromFile(mUpdateFile), "application/vnd.android.package-archive");
+//                    installIntent.setDataAndType(Uri.fromFile(mUpdateFile), "application/vnd.android.package-archive");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        installIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        Uri contentUri = FileProvider.getUriForFile(UpdateService.this, BuildConfig.APPLICATION_ID + ".fileProvider", mUpdateFile);
+                        installIntent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                    } else {
+                        installIntent.setDataAndType(Uri.fromFile(mUpdateFile), "application/vnd.android.package-archive");
+                        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    }
                     mBuilder.setContentIntent(PendingIntent.getActivity(UpdateService.this, 0, installIntent,
                         PendingIntent.FLAG_ONE_SHOT));
                     mBuilder.setAutoCancel(true);

@@ -31,6 +31,8 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
         data = new ArrayList<>();
     }
 
+
+
     public void updateWithClear(List<MainTodayBean> list) {
         data.clear();
         currentPosition = 2;
@@ -40,6 +42,11 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
 
     public void update(List<MainTodayBean> list) {
         data.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        data.clear();
         notifyDataSetChanged();
     }
 

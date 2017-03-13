@@ -123,6 +123,8 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     SmoothCheckBox coinScb;
     @Bind(R.id.coin_line)
     View coinLine;
+    @Bind(R.id.level_layout)
+    LinearLayout levelLayout;
     private boolean isAlipay, isWx, isBudget, isCoin;
     private String ids;
     private String cart_ids;
@@ -222,6 +224,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         total_fee = cartsPayinfoBean.getTotalFee() + "";
                         uuid = cartsPayinfoBean.getUuid();
                         needLevel = cartsPayinfoBean.getMaxPersonalInfoLevel();
+                        if (needLevel >= 2) {
+                            levelLayout.setVisibility(View.VISIBLE);
+                        }
                         postFee.setText("¥" + post_fee);
 
                         if (null != cartsPayinfoBean.getmPayExtras()) {
@@ -329,6 +334,9 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         total_fee = cartsPayinfoBean.getTotalFee() + "";
                         uuid = cartsPayinfoBean.getUuid();
                         needLevel = cartsPayinfoBean.getMaxPersonalInfoLevel();
+                        if (needLevel >= 2) {
+                            levelLayout.setVisibility(View.VISIBLE);
+                        }
                         postFee.setText("¥" + post_fee);
 
                         if (null != cartsPayinfoBean.getmPayExtras()) {
@@ -1109,9 +1117,18 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
         if (personalInfoLevel < needLevel) {
             new AlertDialog.Builder(this)
                 .setTitle("提示")
-//                .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证信息。此信息加密保存，只用于此订单海关通关。")
-                .setMessage("地址信息未完善,请完善地址信息后支付!")
-                .setPositiveButton("确认", (dialog1, which) -> dialog1.dismiss())
+                .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证信息。此信息加密保存，只用于此订单海关通关，请点击地址进行修改。")
+                .setPositiveButton("确认", (dialog1, which) -> {
+                    dialog1.dismiss();
+                    Bundle addressBundle = new Bundle();
+                    addressBundle.putString("addressId", addressId);
+                    addressBundle.putInt("needLevel", needLevel);
+                    if (isHaveAddress) {
+                        readyGoForResult(AddressSelectActivity.class, REQUEST_CODE_ADDRESS, addressBundle);
+                    } else {
+                        readyGo(AddAddressActivity.class, addressBundle);
+                    }
+                })
                 .setCancelable(false)
                 .show();
         }

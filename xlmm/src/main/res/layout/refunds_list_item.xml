@@ -77,23 +77,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="84dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:textColor="@color/text_color_62"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_B4"
-                android:textSize="13dp" />
+                android:textSize="12dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -103,7 +102,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -112,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="13dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/refund"
@@ -120,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/text_color_62"
-                    android:textSize="13dp" />
+                    android:textSize="12dp" />
 
             </LinearLayout>
 

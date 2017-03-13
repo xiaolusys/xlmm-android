@@ -35,10 +35,9 @@
             android:id="@+id/tx_good_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:maxLines="2"
             android:textColor="@color/text_color_62"
-            android:textSize="13dp"/>
+            android:textSize="12dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,14 +50,14 @@
                 android:layout_height="wrap_content"
                 android:text="尺寸:"
                 android:textColor="@color/text_color_A0"
-                android:textSize="13dp"/>
+                android:textSize="12dp"/>
 
             <TextView
                 android:id="@+id/tx_good_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_A0"
-                android:textSize="13dp"/>
+                android:textSize="12dp"/>
 
         </LinearLayout>
 
@@ -70,7 +69,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -80,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_62"
-                android:textSize="13dp"/>
+                android:textSize="12dp"/>
 
             <TextView
                 android:id="@+id/tx_good_num"
@@ -88,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:textColor="@color/text_color_9B"
-                android:textSize="13dp"/>
+                android:textSize="12dp"/>
 
         </LinearLayout>
 

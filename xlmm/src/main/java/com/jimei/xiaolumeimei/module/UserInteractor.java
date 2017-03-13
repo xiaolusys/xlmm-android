@@ -33,7 +33,7 @@ public interface UserInteractor {
 
     Subscription customerLogout(ServiceResponse<LogoutBean> response);
 
-    Subscription getCoinHisList(String page, ServiceResponse<CoinHistoryListBean> response);
+    Subscription getCoinHisList(int page, ServiceResponse<CoinHistoryListBean> response);
 
     Observable<ArrayList<CouponEntity>> getCouponList(int status);
 
