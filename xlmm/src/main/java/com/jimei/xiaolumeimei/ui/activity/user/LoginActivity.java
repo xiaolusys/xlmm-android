@@ -39,7 +39,6 @@ import java.util.Random;
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 
 public class LoginActivity extends BaseSwipeBackCompatActivity
@@ -59,8 +58,8 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     ImageView sms;
     @Bind(R.id.login_button)
     ImageView loginBtn;
-    @Bind(R.id.iv_close)
-    ImageView closeIv;
+    @Bind(R.id.finish_layout)
+    LinearLayout finishLayout;
     @Bind(R.id.layout)
     LinearLayout layout;
     private String timestamp;
@@ -93,7 +92,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     protected void setListener() {
         loginBtn.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
-        closeIv.setOnClickListener(this);
+        finishLayout.setOnClickListener(this);
         wx.setOnClickListener(this);
         sms.setOnClickListener(this);
     }
@@ -135,11 +134,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     }
 
     @Override
-    protected void initViews() {
-        ShareSDK.initSDK(this);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_button:
@@ -171,7 +165,7 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.iv_close:
+            case R.id.finish_layout:
                 finish();
                 break;
         }
@@ -343,7 +337,6 @@ public class LoginActivity extends BaseSwipeBackCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         removeWX(wechat);
-        ShareSDK.stopSDK(this);
     }
 
     public void removeWX(Platform platform) {

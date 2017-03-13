@@ -90,8 +90,7 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
                 "; xlmm/" + BuildConfig.VERSION_NAME + ";");
             b.wbView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
             b.wbView.getSettings().setJavaScriptEnabled(true);
-            b.wbView.addJavascriptInterface(new AndroidJsBridge((BaseActivity) mActivity)
-                , "AndroidBridge");
+            b.wbView.addJavascriptInterface(new AndroidJsBridge(mActivity), "AndroidBridge");
             b.wbView.getSettings().setAllowFileAccess(true);
             b.wbView.getSettings().setAppCacheEnabled(true);
             b.wbView.getSettings().setDomStorageEnabled(true);
@@ -245,7 +244,7 @@ public class BaseWebViewFragment extends BaseBindingFragment<FragmentBasewebview
     }
 
     public void loadUrl(String url) {
-        showIndeterminateProgressDialog(true);
+        setDialogContent("页面载入中");
         SharedPreferences sharedPreferences = mActivity.getSharedPreferences("xlmmCookiesAxiba", Context.MODE_PRIVATE);
         cookies = sharedPreferences.getString("cookiesString", "");
         domain = sharedPreferences.getString("cookiesDomain", "");

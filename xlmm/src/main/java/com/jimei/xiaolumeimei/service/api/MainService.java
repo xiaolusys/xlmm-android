@@ -26,7 +26,8 @@ public interface MainService {
     Observable<UserInfoBean> getProfile();
 
     @GET("/rest/v2/carts/show_carts_num")
-    Observable<CartsNumResultBean> getCartsNum();
+    Observable<CartsNumResultBean> getCartsNum(
+        @Query("type") int type);
 
     @GET("/rest/v1/portal")
     Observable<PortalBean> getPortalBean(

@@ -173,6 +173,8 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
             b.llVipDesc.setVisibility(View.GONE);
             b.textWait.setVisibility(View.GONE);
             b.textRefund.setVisibility(View.GONE);
+            b.marqueeView.removeAllViews();
+            b.marqueeView.stopFlipping();
         }
         hideIndeterminateProgressDialog();
     }
@@ -276,7 +278,6 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
     @Override
     public void initData() {
         count = 1;
-        showIndeterminateProgressDialog(true);
         setDialogContent("个人信息刷新中...");
         mamaFlag = false;
         if (LoginUtils.checkLoginState(mActivity)) {

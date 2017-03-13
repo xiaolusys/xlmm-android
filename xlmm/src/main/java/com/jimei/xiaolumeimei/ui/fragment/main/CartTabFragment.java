@@ -129,6 +129,7 @@ public class CartTabFragment extends BaseBindingFragment<FragmentCarTabBinding> 
                     MobclickAgent.onEvent(mActivity, "BuyID");
                     Intent intent = new Intent(mActivity, CartsPayInfoActivity.class);
                     intent.putExtra("ids", getIds());
+                    intent.putExtra("couponFlag", true);
                     startActivity(intent);
                 } else {
                     JUtils.Toast("请至少选择一件商品哦!");
@@ -206,7 +207,6 @@ public class CartTabFragment extends BaseBindingFragment<FragmentCarTabBinding> 
     }
 
     public void refreshCartList() {
-        showIndeterminateProgressDialog(false);
         addSubscription(XlmmApp.getCartsInteractor(mActivity)
             .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
                 @Override

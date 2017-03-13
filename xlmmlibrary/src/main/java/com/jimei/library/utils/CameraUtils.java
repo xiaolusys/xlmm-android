@@ -44,6 +44,7 @@ public class CameraUtils {
     public static final int SELECT_CAMERA = 1;
 
     public static Bitmap imageZoom(Bitmap bm, int size) {
+//        try {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
@@ -55,6 +56,21 @@ public class CameraUtils {
                 bm.getHeight() / Math.sqrt(i));
         }
         return bm;
+//        } catch (Exception e) {
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            int options = 35;
+//            bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+//            while (baos.toByteArray().length / 1024 > size) { // 循环判断如果压缩后图片是否大于50kb,大于继续压缩
+//                baos.reset();// 重置baos即清空baos
+//                bm.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+//                options -= 5;// 每次都减少5
+//                if (options < 0) {
+//                    break;
+//                }
+//            }
+//            ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+//            return BitmapFactory.decodeStream(isBm, null, null);
+//        }
     }
 
     private static Bitmap zoomImage(Bitmap bgimage, double newWidth,

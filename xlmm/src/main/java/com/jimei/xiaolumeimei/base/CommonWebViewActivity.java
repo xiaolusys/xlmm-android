@@ -41,6 +41,7 @@ import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.util.ShareContentCustom;
 import com.jimei.xiaolumeimei.util.pay.PayUtils;
 import com.mob.tools.utils.UIHandler;
 import com.umeng.analytics.MobclickAgent;
@@ -53,17 +54,14 @@ import java.util.Map;
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * Created by itxuye(www.itxuye.com) on 2016/02/04.
  * <p>
  * Copyright 2015年 上海己美. All rights reserved.
  */
-public class                                                                                                           CommonWebViewActivity extends BaseSwipeBackCompatActivity
+public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
     implements PlatformActionListener, Handler.Callback {
 
     @Bind(R.id.layout)
@@ -127,7 +125,6 @@ public class                                                                    
     protected void initViews() {
         showIndeterminateProgressDialog(false);
         setDialogContent("页面载入中...");
-        ShareSDK.initSDK(this);
         titleView = (XlmmTitleView) findViewById(R.id.title_view);
         ll_actwebview = (LinearLayout) findViewById(R.id.ll_actwebview);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_view);
@@ -352,13 +349,11 @@ public class                                                                    
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().startSync();
         mWebView.onResume();
-        ShareSDK.initSDK(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ShareSDK.stopSDK(this);
         EventBus.getDefault().post(new CartEvent());
         if (ll_actwebview != null) {
             ll_actwebview.removeView(mWebView);
@@ -460,7 +455,7 @@ public class                                                                    
         oks.setText(desc);
         oks.setImageUrl(shareimg);
         oks.setUrl(sharelink);
-        oks.setShareContentCustomizeCallback(new ShareContentCustom(desc));
+        oks.setShareContentCustomizeCallback(new ShareContentCustom(mContext));
         oks.show(this);
     }
 
@@ -483,30 +478,9 @@ public class                                                                    
             JUtils.Toast("已复制链接");
         };
         oks.setCustomerLogo(enableLogo, "复制链接", listener);
-        oks.setShareContentCustomizeCallback(
-            new ShareContentCustom(partyShareInfo.getActiveDec() + partyShareInfo.getShareLink()));
+        oks.setShareContentCustomizeCallback(new ShareContentCustom(mContext));
         oks.setCallback(this);
         oks.show(this);
     }
 
-    class ShareContentCustom implements ShareContentCustomizeCallback {
-
-        private String text;
-
-        ShareContentCustom(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
-            Map<String, String> map = new HashMap<>();
-            map.put("id", "name");
-            map.put(platform.getId() + "", platform.getName());
-            JUtils.Log("ShareID", platform.getId() + "    " + platform.getName());
-            MobclickAgent.onEvent(mContext, "ShareID", map);
-            if (WechatMoments.NAME.equals(platform.getName())) {
-                paramsToShare.setTitle(text);
-            }
-        }
-    }
 }

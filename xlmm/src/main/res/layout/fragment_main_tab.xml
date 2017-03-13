@@ -12,41 +12,12 @@
             android:layout_height="?actionBarSize"
             android:background="@color/colorAccent">
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/search_layout"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:paddingLeft="20dp"-->
-                <!--android:paddingRight="30dp">-->
-
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:src="@drawable/icon_search_category"/>-->
-
-            <!--</RelativeLayout>-->
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:src="@drawable/icon_xlmm"/>
-
-            <TextView
-                android:id="@+id/boutique_in"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:paddingLeft="30dp"
-                android:paddingRight="20dp"
-                android:text="精品汇"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:visibility="gone"/>
 
         </RelativeLayout>
 
@@ -66,7 +37,7 @@
                 app:tabSelectedTextColor="@color/colorPrimaryDark"
                 app:tabTextColor="@color/black_overlay"/>
 
-            <include layout="@layout/common_gap"/>
+            <!--<include layout="@layout/common_gap"/>-->
 
             <com.jimei.library.widget.MainViewPager
                 android:id="@+id/view_pager"

@@ -2,8 +2,6 @@ package com.jimei.xiaolumeimei.ui.activity.product;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -62,19 +60,13 @@ import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.jimei.xiaolumeimei.util.LoginUtils;
+import com.jimei.xiaolumeimei.util.ShareUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
-import cn.sharesdk.wechat.moments.WechatMoments;
 
 
 public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetailBinding>
@@ -240,6 +232,15 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     hideIndeterminateProgressDialog();
                 }
             }));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showCartNum();
+    }
+
+    private void showCartNum() {
         addSubscription(XlmmApp.getMainInteractor(this)
             .getCartsNum(new ServiceResponse<CartsNumResultBean>() {
                 @Override
@@ -254,6 +255,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {
+        if (productDetailBean.getSource_type()>=2) {
+            b.levelLayout.setVisibility(View.VISIBLE);
+        }
         b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
         ProductDetailBean.DetailContentBean detailContent = productDetailBean.getDetail_content();
         if (detailContent.is_boutique() && LoginUtils.checkLoginState(this) && LoginUtils.getMamaInfo(this)) {
@@ -323,7 +327,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
             b.llTag.addView(tagTextView);
         }
         initAttr(productDetailBean.getComparison().getAttributes());
-
         initHeadImg(detailContent);
     }
 
@@ -426,23 +429,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     .getShareModel(model_id, new ServiceResponse<ShareModelBean>() {
                         @Override
                         public void onNext(ShareModelBean shareModel) {
-                            OnekeyShare oks = new OnekeyShare();
-                            oks.disableSSOWhenAuthorize();
-                            oks.setTitle(shareModel.getTitle());
-                            oks.setTitleUrl(shareModel.getShare_link());
-                            oks.setText(shareModel.getDesc() + shareModel.getShare_link());
-                            oks.setImageUrl(shareModel.getShare_img());
-                            oks.setUrl(shareModel.getShare_link());
-                            Bitmap enableLogo =
-                                BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ssdk_oks_logo_copy);
-                            View.OnClickListener listener = view -> {
-                                JUtils.copyToClipboard(shareModel.getShare_link() + "");
-                                JUtils.Toast("已复制链接");
-                            };
-                            oks.setCustomerLogo(enableLogo, "复制链接", listener);
-                            oks.setShareContentCustomizeCallback(new ShareContentCustom(
-                                shareModel.getDesc() + shareModel.getShare_link()));
-                            oks.show(ProductDetailActivity.this);
+                            ShareUtils.shareWithModel(shareModel, ProductDetailActivity.this);
                             hideIndeterminateProgressDialog();
                         }
 
@@ -509,6 +496,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                         .addToCart(item_id, sku_id, num, 3, new ServiceResponse<ResultEntity>() {
                             @Override
                             public void onNext(ResultEntity resultEntity) {
+                                EventBus.getDefault().post(new CartEvent());
                                 if (resultEntity.getCode() == 0) {
                                     addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
                                         .getCartsList(3, new ServiceResponse<List<CartsInfoBean>>() {
@@ -558,8 +546,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                             @Override
                             public void onNext(ResultEntity resultEntity) {
                                 if (resultEntity.getCode() == 0) {
+                                    EventBus.getDefault().post(new CartEvent());
                                     addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
-                                        .getCartsList(5, new ServiceResponse<List<CartsInfoBean>>() {
+                                        .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
                                             @Override
                                             public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                                                 if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
@@ -604,7 +593,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     private void addToCart(boolean dismiss) {
         MobclickAgent.onEvent(this, "AddCartsID");
         addSubscription(XlmmApp.getCartsInteractor(this)
-            .addToCart(item_id, sku_id, num, new ServiceResponse<ResultEntity>() {
+            .addToCart(item_id, sku_id, num, 5, new ServiceResponse<ResultEntity>() {
                 @Override
                 public void onNext(ResultEntity resultEntity) {
                     JUtils.Toast(resultEntity.getInfo());
@@ -636,27 +625,6 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         saleTv.setText("/¥" + skuItemsBean.getStd_sale_price());
         skuTv.setText(skuItemsBean.getName());
         sku_id = skuItemsBean.getSku_id();
-    }
-
-    public class ShareContentCustom implements ShareContentCustomizeCallback {
-
-        private String text;
-
-        public ShareContentCustom(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public void onShare(Platform platform, Platform.ShareParams paramsToShare) {
-            Map<String, String> map = new HashMap<>();
-            map.put("id", "name");
-            map.put(platform.getId() + "", platform.getName());
-            JUtils.Log("ShareID", platform.getId() + "    " + platform.getName());
-            MobclickAgent.onEvent(mContext, "ShareID", map);
-            if (WechatMoments.NAME.equals(platform.getName())) {
-                paramsToShare.setTitle(text);
-            }
-        }
     }
 
     @Override

@@ -68,6 +68,8 @@ public class ProductDetailBean {
 
     private String buy_coupon_url;
 
+    private int source_type;
+
     public int getId() {
         return id;
     }
@@ -130,6 +132,14 @@ public class ProductDetailBean {
 
     public void setBuy_coupon_url(String buy_coupon_url) {
         this.buy_coupon_url = buy_coupon_url;
+    }
+
+    public int getSource_type() {
+        return source_type;
+    }
+
+    public void setSource_type(int source_type) {
+        this.source_type = source_type;
     }
 
     public static class DetailContentBean {
@@ -547,7 +557,7 @@ public class ProductDetailBean {
         }
     }
 
-    public static class TeamBuyInfo{
+    public static class TeamBuyInfo {
 
         /**
          * teambuy_person_num : 3

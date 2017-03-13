@@ -49,7 +49,7 @@ public interface UserService {
     //获取用户积分记录信息
     @GET("/rest/v2/xiaolucoin/history")
     Observable<CoinHistoryListBean> getCoinHisList(
-        @Query("page") String page);
+        @Query("page") int page);
 
     //获取优惠券
     @GET("/rest/v1/usercoupons/get_user_coupons")

@@ -55,6 +55,16 @@
             android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
             android:value="GlideModule"/>
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.jimei.xiaolumeimei.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name=".ui.activity.main.SplashActivity"
             android:theme="@style/StartTheme">

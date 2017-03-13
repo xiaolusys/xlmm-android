@@ -31,7 +31,6 @@ public class MMFansWebFragment extends BaseWebViewFragment {
 
     @Override
     public void initData() {
-        hideIndeterminateProgressDialog();
         if (link != null && !link.equals("")) {
             loadUrl(link);
         }

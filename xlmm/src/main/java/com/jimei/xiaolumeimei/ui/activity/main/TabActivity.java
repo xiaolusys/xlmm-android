@@ -19,9 +19,12 @@ import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
 import com.jimei.xiaolumeimei.entities.CartsNumResultBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.UserTopic;
 import com.jimei.xiaolumeimei.entities.VersionBean;
+import com.jimei.xiaolumeimei.entities.event.BoutiqueEvent;
 import com.jimei.xiaolumeimei.entities.event.CartNumEvent;
+import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.entities.event.LogoutEvent;
 import com.jimei.xiaolumeimei.entities.event.PersonalEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
@@ -49,7 +52,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import cn.sharesdk.framework.ShareSDK;
 import okhttp3.Call;
+import retrofit2.adapter.rxjava.HttpException;
 
 
 public class TabActivity extends BaseActivity {
@@ -62,6 +67,8 @@ public class TabActivity extends BaseActivity {
     private boolean updateFlag = true;
     private UpdateBroadReceiver mUpdateBroadReceiver;
     public Handler mHandler;
+    private BoutiqueTabFragment boutiqueTabFragment;
+    private FragmentTabUtils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +91,19 @@ public class TabActivity extends BaseActivity {
         if (intent.getExtras() != null) {
             String flag = intent.getExtras().getString("flag");
             if (flag != null && !"".equals(flag)) {
-                if (flag.equals("car")) {
-                    radioGroup.check(R.id.rb_car);
-                } else if (flag.equals("boutique")) {
-                    radioGroup.check(R.id.rb_boutique);
-                } else if (flag.equals("my")) {
-                    radioGroup.check(R.id.rb_my);
-                } else {
-                    radioGroup.check(R.id.rb_main);
+                switch (flag) {
+                    case "car":
+                        radioGroup.check(R.id.rb_car);
+                        break;
+                    case "boutique":
+                        radioGroup.check(R.id.rb_main);
+                        break;
+                    case "my":
+                        radioGroup.check(R.id.rb_my);
+                        break;
+                    default:
+                        radioGroup.check(R.id.rb_main);
+                        break;
                 }
             }
         }
@@ -99,11 +111,12 @@ public class TabActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        EventBus.getDefault().post(new SetMiPushEvent());
+        initLogin(new LoginEvent());
         addSubscription(XlmmApp.getVipInteractor(this)
             .getWxCode(new ServiceResponse<>()));
         LoginUtils.setMamaInfo(this);
         downLoadAddress();
-        showCarNum();
         setTopic();
         checkVersion();
         LoginUtils.clearCacheEveryWeek(this);
@@ -135,6 +148,7 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showCarNum();
         EventBus.getDefault().post(new PersonalEvent());
     }
 
@@ -147,20 +161,22 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ShareSDK.stopSDK();
         EventBus.getDefault().unregister(this);
     }
 
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
+        setSwipeBackEnable(false);
         List<BaseFragment> fragments = new ArrayList<>();
         fragments.add(MainTabFragment.newInstance());
         fragments.add(CategoryTabFragment.newInstance());
-        fragments.add(BoutiqueTabFragment.newInstance());
+        boutiqueTabFragment = BoutiqueTabFragment.newInstance();
+        fragments.add(boutiqueTabFragment);
         fragments.add(CartTabFragment.newInstance());
         fragments.add(UserTabFragment.newInstance());
-        new FragmentTabUtils(getSupportFragmentManager(), radioGroup, fragments, R.id.container, TabActivity.this);
-        setSwipeBackEnable(false);
+        utils = new FragmentTabUtils(getSupportFragmentManager(), radioGroup, fragments, R.id.container, TabActivity.this);
     }
 
     @Override
@@ -177,6 +193,11 @@ public class TabActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (radioGroup.getCheckedRadioButtonId() == R.id.rb_boutique &&
+                boutiqueTabFragment.getWebView().canGoBack()) {
+                boutiqueTabFragment.getWebView().goBack();
+                return true;
+            }
             long secondTime = System.currentTimeMillis();
             if (secondTime - firstTime > 1000) {
                 firstTime = secondTime;
@@ -196,6 +217,44 @@ public class TabActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void initLogOutInfo(LogoutEvent event) {
         radioGroup.check(R.id.rb_main);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void initLogin(LoginEvent event) {
+        showIndeterminateProgressDialog(false);
+        initBoutique(new BoutiqueEvent());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void initBoutique(BoutiqueEvent event) {
+        addSubscription(XlmmApp.getMainInteractor(this)
+            .getProfile(new ServiceResponse<UserInfoBean>() {
+                @Override
+                public void onNext(UserInfoBean userInfoBean) {
+                    if ((userInfoBean.getXiaolumm() != null) && (userInfoBean.getXiaolumm().getId() != 0)) {
+                        utils.setVip(true);
+                    } else {
+                        utils.setVip(false);
+                    }
+                    hideIndeterminateProgressDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    if (e instanceof HttpException) {
+                        if (((HttpException) e).code() == 403) {
+                            if (LoginUtils.checkLoginState(TabActivity.this)) {
+                                JUtils.Toast("登录已过期，请重新登录!");
+                                LoginUtils.delLoginInfo(TabActivity.this);
+                            }
+                        }
+                    }
+                    if (LoginUtils.checkLoginState(TabActivity.this)) {
+                        JUtils.Toast("获取妈妈信息失败,请下拉刷新主页重试!");
+                    }
+                    hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

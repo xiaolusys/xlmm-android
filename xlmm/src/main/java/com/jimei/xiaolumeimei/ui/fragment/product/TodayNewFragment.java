@@ -22,11 +22,14 @@ import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentTodayNewBinding;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
+import com.jimei.xiaolumeimei.entities.event.BoutiqueEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,7 +71,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public View getLoadingView() {
-        return b.layout;
+        return b.scrollLayout;
     }
 
     @Override
@@ -117,7 +120,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
     @Override
     public void setListener() {
         b.swipeLayout.setOnRefreshListener(this);
-        b.layout.setOnScrollListener(this);
+        b.scrollLayout.setOnScrollListener(this);
         b.recyclerTab.setOnScrollCallback(this);
     }
 
@@ -141,7 +144,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
             }
         };
         b.recyclerTab.setAdapter(mainTabAdapter);
-        b.layout.getHelper().setCurrentScrollableContainer(this);
+        b.scrollLayout.getHelper().setCurrentScrollableContainer(this);
     }
 
     @Override
@@ -186,6 +189,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
     @Override
     public void onRefresh() {
         b.swipeLayout.setRefreshing(false);
+        EventBus.getDefault().post(new BoutiqueEvent());
         initData();
     }
 
