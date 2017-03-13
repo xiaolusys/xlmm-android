@@ -33,7 +33,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 
 public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
@@ -96,7 +95,6 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initViews() {
-        ShareSDK.initSDK(this);
         forGetTextView.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 

@@ -13,7 +13,7 @@ import com.jimei.xiaolumeimei.entities.MamaSelfListBean;
 import com.jimei.xiaolumeimei.entities.MamaUrl;
 import com.jimei.xiaolumeimei.entities.NinePicBean;
 import com.jimei.xiaolumeimei.entities.OderCarryBean;
-import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.ProductNinePicBean;
 import com.jimei.xiaolumeimei.entities.RecentCarryBean;
 import com.jimei.xiaolumeimei.entities.SaveTimeBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
@@ -51,9 +51,7 @@ public interface VipInteractor {
 
     Subscription getNinePic(int sale_category, ServiceResponse<List<NinePicBean>> response);
 
-    Subscription getNinePicByModelId(int model_id, ServiceResponse<List<NinePicBean>> response);
-
-    Subscription getNinePicByOrdering(ServiceResponse<List<NinePicBean>> response);
+    Subscription getNinePicByModelId(int model_id, int page, ServiceResponse<ProductNinePicBean> response);
 
     Subscription getMamaAllCarryLogs(int page, ServiceResponse<CarryLogListBean> response);
 
@@ -68,7 +66,4 @@ public interface VipInteractor {
     Subscription getWxCode(ServiceResponse<WxQrcode> response);
 
     Subscription saveTime(int id, int save_times, ServiceResponse<SaveTimeBean> response);
-
-    Subscription getBoutiqueList(int page, ServiceResponse<ProductListBean> response);
-
 }

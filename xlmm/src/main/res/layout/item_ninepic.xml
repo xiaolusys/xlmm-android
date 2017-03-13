@@ -75,14 +75,36 @@
             android:textSize="13dp"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/save"
-        android:layout_width="180dp"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
-        android:background="@drawable/shape_chooselist"
-        android:text="立即分享"
-        android:textColor="@color/colorPrimary"
-        android:textSize="15dp"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_chooselist"
+            android:text="立即分享"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/copy"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_chooselist"
+            android:text="复制文案"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
 </LinearLayout>

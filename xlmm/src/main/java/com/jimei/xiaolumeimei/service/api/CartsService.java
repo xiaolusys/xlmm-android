@@ -33,7 +33,8 @@ public interface CartsService {
 
     //获取历史购物车信息
     @GET("/rest/v2/carts/show_carts_history")
-    Observable<List<CartsInfoBean>> getCartsHisList();
+    Observable<List<CartsInfoBean>> getCartsHisList(
+        @Query("type") int type);
 
     //获取购物信息列表
     @GET("/rest/v1/carts/carts_payinfo")
@@ -63,8 +64,9 @@ public interface CartsService {
 
     //重新购买商品
     @FormUrlEncoded
-    @POST("/rest/v1/carts")
+    @POST("/rest/v2/carts")
     Observable<CartsHisBean> rebuy(
+        @Field("type") int type,
         @Field("item_id") String item_id,
         @Field("sku_id") String sku_id,
         @Field("cart_id") String cart_id);

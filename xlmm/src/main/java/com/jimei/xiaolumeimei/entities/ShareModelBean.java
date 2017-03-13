@@ -27,6 +27,11 @@ public class ShareModelBean {
     private String created;
     private boolean status;
     private String share_link;
+    /**
+     * profit : {"max":13.9,"min":3.9}
+     */
+
+    private ProfitBean profit;
 
     public String getUrl() {
         return url;
@@ -98,5 +103,39 @@ public class ShareModelBean {
 
     public void setShare_link(String share_link) {
         this.share_link = share_link;
+    }
+
+    public ProfitBean getProfit() {
+        return profit;
+    }
+
+    public void setProfit(ProfitBean profit) {
+        this.profit = profit;
+    }
+
+    public static class ProfitBean {
+        /**
+         * max : 13.9
+         * min : 3.9
+         */
+
+        private double max;
+        private double min;
+
+        public double getMax() {
+            return max;
+        }
+
+        public void setMax(double max) {
+            this.max = max;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public void setMin(double min) {
+            this.min = min;
+        }
     }
 }

@@ -25,6 +25,8 @@ import com.zhy.autolayout.config.AutoLayoutConifg;
 
 import java.util.List;
 
+import cn.sharesdk.framework.ShareSDK;
+
 /**
  * Created by ye.xu on 15/12/29.
  * <p>
@@ -55,6 +57,7 @@ public class XlmmApp extends MultiDexApplication {
         mContext = getApplicationContext();
         Stetho.initializeWithDefaults(this);
         JUtils.initialize(this);
+        ShareSDK.initSDK(this);
         JUtils.setDebug(true, "xlmm");
         AutoLayoutConifg.getInstance().useDeviceSize();
         //初始化push推送服务
@@ -68,6 +71,7 @@ public class XlmmApp extends MultiDexApplication {
         }
         setDraggerConfig();
     }
+
 
     @Override
     protected void attachBaseContext(Context base) {

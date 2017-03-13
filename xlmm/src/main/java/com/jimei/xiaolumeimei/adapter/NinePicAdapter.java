@@ -108,11 +108,10 @@ public class NinePicAdapter extends BaseAdapter {
                 }
             }
             if (picArray.size() > 0) {
-                if (codeLink != null & !"".equals(codeLink)) {
+                if (codeLink != null & !"".equals(codeLink) && ninePicBean.isShow_qrcode()) {
                     if (ninePicBean.getPicArry().size() == 9) {
                         picArray.set(4, "code" + codeLink);
                     } else if (ninePicBean.getPicArry().size() < 9) {
-//                    picArray.add(picArray.size(), "code" + codeLink);
                         picArray.add(picArray.size() / 2, "code" + codeLink);
                     }
                 }
@@ -150,6 +149,10 @@ public class NinePicAdapter extends BaseAdapter {
                     }
                 }, Throwable::printStackTrace);
 
+        });
+        holder.copy.setOnClickListener(v -> {
+            JUtils.copyToClipboard(description);
+            JUtils.Toast("文案复制成功啦~可以发送给您的好友哦!");
         });
         return convertView;
     }
@@ -248,7 +251,6 @@ public class NinePicAdapter extends BaseAdapter {
 
     private void shareToWx(String desc) {
         hideLoading();
-        JUtils.Toast("文字已经复制到粘贴板!");
         ArrayList<Uri> imageUris = new ArrayList<>();
         Collections.sort(mFiles);
         for (int i1 = 0; i1 < mFiles.size(); i1++) {
@@ -282,7 +284,7 @@ public class NinePicAdapter extends BaseAdapter {
     class ViewHolder {
         MultiImageView multiImageView;
         TextView timeTv, contentTv, titleTv, likeTv, shareTv;
-        Button save;
+        Button save, copy;
 
         public ViewHolder(View itemView) {
             timeTv = (TextView) itemView.findViewById(R.id.time_tv);
@@ -291,6 +293,7 @@ public class NinePicAdapter extends BaseAdapter {
             likeTv = (TextView) itemView.findViewById(R.id.like_tv);
             shareTv = (TextView) itemView.findViewById(R.id.share_tv);
             save = (Button) itemView.findViewById(R.id.save);
+            copy = (Button) itemView.findViewById(R.id.copy);
             ViewStub linkOrImgViewStub = (ViewStub) itemView.findViewById(R.id.view_stub);
             linkOrImgViewStub.setLayoutResource(R.layout.viewstub_imgbody);
             linkOrImgViewStub.inflate();

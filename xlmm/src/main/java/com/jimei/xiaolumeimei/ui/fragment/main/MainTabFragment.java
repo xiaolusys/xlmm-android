@@ -41,8 +41,8 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     @Override
     public void initData() {
         List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(TodayNewFragment.newInstance("精品推荐"));
         fragments.add(ActivityFragment.newInstance("精品活动"));
+        fragments.add(TodayNewFragment.newInstance("精品推荐"));
         addSubscription(XlmmApp.getMainInteractor(mActivity)
             .getPortalBean("activitys,posters", new ServiceResponse<PortalBean>() {
                 @Override
@@ -84,20 +84,6 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     protected int getContentViewId() {
         return R.layout.fragment_main_tab;
     }
-//
-//    @Override
-//    public void setListener() {
-//        b.searchLayout.setOnClickListener(this);
-//    }
-//
-//    @Override
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.search_layout:
-//                startActivity(new Intent(mActivity, CategoryListActivity.class));
-//                break;
-//        }
-//    }
 
     public void setTabLayoutMarginTop(double percent) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

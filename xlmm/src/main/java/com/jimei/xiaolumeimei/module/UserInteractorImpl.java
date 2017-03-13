@@ -61,7 +61,7 @@ public class UserInteractorImpl implements UserInteractor {
     }
 
     @Override
-    public Subscription getCoinHisList(String page, ServiceResponse<CoinHistoryListBean> response) {
+    public Subscription getCoinHisList(int page, ServiceResponse<CoinHistoryListBean> response) {
         return service.getCoinHisList(page)
             .compose(new DefaultTransform<>())
             .subscribe(response);

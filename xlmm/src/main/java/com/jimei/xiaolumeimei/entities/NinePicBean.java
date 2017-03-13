@@ -32,6 +32,7 @@ public class NinePicBean {
   @SerializedName("description") private String mDescription;
   @SerializedName("title_content") private String title_content;
   @SerializedName("pic_arry") private List<String> mPicArry;
+  @SerializedName("show_qrcode")private boolean show_qrcode;
 
   public int getId() {
     return mId;
@@ -111,5 +112,13 @@ public class NinePicBean {
 
   public void setTitle_content(String title_content) {
     this.title_content = title_content;
+  }
+
+  public boolean isShow_qrcode() {
+    return show_qrcode;
+  }
+
+  public void setShow_qrcode(boolean show_qrcode) {
+    this.show_qrcode = show_qrcode;
   }
 }

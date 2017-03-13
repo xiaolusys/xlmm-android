@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,7 +14,6 @@ import android.widget.ViewFlipper;
 import com.jimei.library.R;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 public class MarqueeView extends ViewFlipper {
@@ -118,21 +116,16 @@ public class MarqueeView extends ViewFlipper {
     public boolean start() {
         if (notices == null || notices.size() == 0) return false;
         removeAllViews();
-
         for (int i = 0; i < notices.size(); i++) {
             final TextView textView = createTextView(notices.get(i), i);
             final int finalI = i;
-            textView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(finalI, textView);
-                    }
+            textView.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(finalI, textView);
                 }
             });
             addView(textView);
         }
-
         if (notices.size() > 1) {
             startFlipping();
         }

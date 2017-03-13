@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -26,6 +27,7 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
     private boolean boutiqueLoad = false;
     private boolean myLoad = false;
     private int currentId;
+    private boolean isVip;
 
     public FragmentTabUtils(FragmentManager manager, RadioGroup rgs, List<BaseFragment> fragments,
                             int containerId, Context context) {
@@ -43,7 +45,11 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if ((checkedId == R.id.rb_car || checkedId == R.id.rb_boutique || checkedId == R.id.rb_my)
             && !LoginUtils.checkLoginState(context)) {
-            group.check(currentId);
+            if (currentId == R.id.rb_main || currentId == R.id.rb_category) {
+                group.check(currentId);
+            } else {
+                group.check(R.id.rb_main);
+            }
             Intent intent = new Intent(context, LoginActivity.class);
             Bundle bundle = new Bundle();
             switch (checkedId) {
@@ -62,6 +68,14 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
             }
             intent.putExtras(bundle);
             context.startActivity(intent);
+        } else if (!isVip && checkedId == R.id.rb_boutique) {
+            group.check(currentId);
+            new AlertDialog.Builder(context)
+                .setTitle("提示")
+                .setMessage("您暂时不是小鹿妈妈,请关注\"小鹿美美\"公众号,获取更多信息哦!")
+                .setCancelable(false)
+                .setPositiveButton("确定", (dialog, which) -> dialog.dismiss())
+                .show();
         } else {
             for (int i = 0; i < group.getChildCount(); i++) {
                 BaseFragment fragment = fragments.get(i);
@@ -108,7 +122,9 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
             fragment.setUserVisibleHint(true);
         }
         getFragmentTransaction().show(fragment).commitAllowingStateLoss();
-        if (checkedId == R.id.rb_main || checkedId == R.id.rb_boutique) {
+        if (checkedId == R.id.rb_main || checkedId == R.id.rb_category) {
+            currentId = checkedId;
+        } else if (LoginUtils.checkLoginState(context) && (checkedId == R.id.rb_car || checkedId == R.id.rb_my)) {
             currentId = checkedId;
         }
     }
@@ -117,4 +133,7 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
         return manager.beginTransaction();
     }
 
+    public void setVip(boolean vip) {
+        isVip = vip;
+    }
 }

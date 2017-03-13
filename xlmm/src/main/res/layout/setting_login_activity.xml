@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/layout"
@@ -26,22 +26,29 @@
                     android:id="@+id/img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/login_bg_img" />
+                    android:src="@drawable/login_bg_img"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:src="@drawable/login_bg_text" />
+                    android:src="@drawable/login_bg_text"/>
             </LinearLayout>
 
-
-            <ImageView
-                android:id="@+id/iv_close"
+            <LinearLayout
+                android:id="@+id/finish_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="30px"
-                android:src="@drawable/ic_close" />
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_close"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -62,7 +69,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="60px"
                     android:scaleType="fitXY"
-                    android:src="@drawable/login_wx_btn" />
+                    android:src="@drawable/login_wx_btn"/>
 
 
                 <LinearLayout
@@ -80,19 +87,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="fitXY"
-                        android:src="@drawable/login_phone_btn" />
+                        android:src="@drawable/login_phone_btn"/>
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                     <ImageView
                         android:id="@+id/sms_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="fitXY"
-                        android:src="@drawable/login_sms_btn" />
+                        android:src="@drawable/login_sms_btn"/>
 
                 </LinearLayout>
 
@@ -102,7 +109,7 @@
                     android:layout_height="1dp"
                     android:layout_below="@id/login_layout"
                     android:layout_marginTop="60px"
-                    android:background="#33DADADA" />
+                    android:background="#33DADADA"/>
 
                 <Button
                     android:id="@+id/register_button"
@@ -112,14 +119,14 @@
                     android:background="@null"
                     android:text="注册新用户"
                     android:textColor="@color/text_color_9B"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"/>
 
                 <View
                     android:id="@+id/view_2"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/register_button"
-                    android:background="#33DADADA" />
+                    android:background="#33DADADA"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -129,7 +136,7 @@
                     android:gravity="center"
                     android:text="注:微信首次登录,自动创建账户"
                     android:textColor="@color/text_color_9B"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"/>
             </RelativeLayout>
 
         </LinearLayout>

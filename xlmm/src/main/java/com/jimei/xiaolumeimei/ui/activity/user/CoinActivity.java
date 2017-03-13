@@ -37,8 +37,9 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     ScrollableLayout scrollableLayout;
     TextView tx_point;
     private CoinHisListAdapter mPointAdapter;
-    boolean flag;
-    int page = 2;
+    private boolean flag;
+    private int page = 1;
+    private String next;
 
     @Override
     protected void setListener() {
@@ -70,29 +71,32 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        showIndeterminateProgressDialog(false);
         addSubscription(XlmmApp.getMainInteractor(this)
             .getProfile(new ServiceResponse<UserInfoBean>() {
                 @Override
                 public void onNext(UserInfoBean userInfoBean) {
                     tx_point.setText("" + userInfoBean.getXiaoluCoin());
                 }
-
-                @Override
-                public void onError(Throwable e) {
-                    hideIndeterminateProgressDialog();
-                }
             }));
+        loadCoinList();
+    }
+
+    private void loadCoinList() {
+        showIndeterminateProgressDialog(false);
         addSubscription(XlmmApp.getUserInteractor(this)
-            .getCoinHisList("1", new ServiceResponse<CoinHistoryListBean>() {
+            .getCoinHisList(page, new ServiceResponse<CoinHistoryListBean>() {
                 @Override
                 public void onNext(CoinHistoryListBean historyListBean) {
                     List<CoinHistoryListBean.ResultsBean> result = historyListBean.getResults();
-                    if (0 == result.size()) {
+                    if (0 == result.size() && page == 1) {
                         rlayout_order_empty.setVisibility(View.VISIBLE);
-                    } else {
-                        mPointAdapter.update(result);
                     }
+                    next = historyListBean.getNext();
+                    if (next == null || "".equals(next)) {
+                        JUtils.Toast("全部加载完成!");
+                    }
+                    mPointAdapter.update(result);
+                    page++;
                     hideIndeterminateProgressDialog();
                 }
 
@@ -121,18 +125,9 @@ public class CoinActivity extends BaseSwipeBackCompatActivity
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE && flag) {
-            addSubscription(XlmmApp.getUserInteractor(this)
-                .getCoinHisList(page + "", new ServiceResponse<CoinHistoryListBean>() {
-                    @Override
-                    public void onNext(CoinHistoryListBean historyListBean) {
-                        List<CoinHistoryListBean.ResultsBean> results = historyListBean.getResults();
-                        page++;
-                        mPointAdapter.update(results);
-                        if ("".equals(historyListBean.getNext()) || historyListBean.getNext() == null) {
-                            JUtils.Toast("没有更多的数据了");
-                        }
-                    }
-                }));
+            if (next != null && !"".equals(next)) {
+                loadCoinList();
+            }
             flag = false;
         }
     }

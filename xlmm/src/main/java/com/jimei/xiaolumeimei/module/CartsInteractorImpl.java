@@ -30,7 +30,7 @@ public class CartsInteractorImpl implements CartsInteractor {
 
     @Override
     public Subscription getCartsList(ServiceResponse<List<CartsInfoBean>> response) {
-        return service.getCartsList()
+        return service.getCartsList(5)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }
@@ -44,7 +44,7 @@ public class CartsInteractorImpl implements CartsInteractor {
 
     @Override
     public Subscription getCartsHisList(ServiceResponse<List<CartsInfoBean>> response) {
-        return service.getCartsHisList()
+        return service.getCartsHisList(5)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }
@@ -86,7 +86,7 @@ public class CartsInteractorImpl implements CartsInteractor {
 
     @Override
     public Subscription rebuy(String item_id, String sku_id, String cart_id, ServiceResponse<CartsHisBean> response) {
-        return service.rebuy(item_id, sku_id, cart_id)
+        return service.rebuy(5, item_id, sku_id, cart_id)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }
