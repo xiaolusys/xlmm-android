@@ -52,43 +52,47 @@ public class CategoryTabFragment extends BaseBindingFragment<FragmentCategoryTab
         hideIndeterminateProgressDialog();
         mActivity.showIndeterminateProgressDialog(false);
         if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-            addSubscription(XlmmApp.getMainInteractor(mActivity)
-                .getCategoryDown(new ServiceResponse<CategoryDownBean>() {
-                    @Override
-                    public void onNext(CategoryDownBean categoryDownBean) {
-                        if (categoryDownBean != null) {
-                            String downloadUrl = categoryDownBean.getDownload_url();
-                            String sha1 = categoryDownBean.getSha1();
-                            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
-                                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
-                            }
-                            OkHttpUtils.get().url(downloadUrl).build()
-                                .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
-                                    @Override
-                                    public void onError(Call call, Exception e, int id) {
-                                        mActivity.hideIndeterminateProgressDialog();
-                                    }
-
-                                    @Override
-                                    public void onResponse(File response, int id) {
-                                        FileUtils.saveCategoryFile(mActivity, sha1);
-                                        new CategoryListTask(mCategoryNameListAdapter).execute();
-                                        new CategoryTask(adapter, b.emptyLayout, mActivity).execute("");
-                                    }
-                                });
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        mActivity.hideIndeterminateProgressDialog();
-                    }
-                }));
+            downloadJson("");
         } else {
-            new CategoryListTask(mCategoryNameListAdapter).execute();
+            new CategoryListTask(mCategoryNameListAdapter, "").execute();
             new CategoryTask(adapter, b.emptyLayout, mActivity).execute("");
         }
+    }
+
+    private void downloadJson(String cid) {
+        addSubscription(XlmmApp.getMainInteractor(mActivity)
+            .getCategoryDown(new ServiceResponse<CategoryDownBean>() {
+                @Override
+                public void onNext(CategoryDownBean categoryDownBean) {
+                    if (categoryDownBean != null) {
+                        String downloadUrl = categoryDownBean.getDownload_url();
+                        String sha1 = categoryDownBean.getSha1();
+                        if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
+                            FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
+                        }
+                        OkHttpUtils.get().url(downloadUrl).build()
+                            .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    mActivity.hideIndeterminateProgressDialog();
+                                }
+
+                                @Override
+                                public void onResponse(File response, int id) {
+                                    FileUtils.saveCategoryFile(mActivity, sha1);
+                                    new CategoryListTask(mCategoryNameListAdapter, cid).execute();
+                                    new CategoryTask(adapter, b.emptyLayout, mActivity).execute(cid);
+                                }
+                            });
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    mActivity.hideIndeterminateProgressDialog();
+                }
+            }));
     }
 
     @Override
@@ -125,7 +129,12 @@ public class CategoryTabFragment extends BaseBindingFragment<FragmentCategoryTab
         b.emptyLayout.setVisibility(View.GONE);
         String cid = ((CategoryBean) mCategoryNameListAdapter.getItem(position)).getCid();
         mCategoryNameListAdapter.setCid(cid);
-        new CategoryTask(adapter, b.emptyLayout, mActivity).execute(cid);
+        if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
+            downloadJson(cid);
+        } else {
+            mCategoryNameListAdapter.setCid(cid);
+            new CategoryTask(adapter, b.emptyLayout, mActivity).execute(cid);
+        }
     }
 
     @Override

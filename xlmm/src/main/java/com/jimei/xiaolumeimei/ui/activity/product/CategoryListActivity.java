@@ -95,7 +95,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                                     @Override
                                     public void onResponse(File response, int id) {
                                         FileUtils.saveCategoryFile(getApplicationContext(), sha1);
-                                        new CategoryListTask(mCategoryNameListAdapter).execute();
+                                        new CategoryListTask(mCategoryNameListAdapter,"").execute();
                                         new CategoryTask(adapter, emptyLayout,CategoryListActivity.this).execute("");
                                     }
                                 });
@@ -109,7 +109,7 @@ public class CategoryListActivity extends BaseSwipeBackCompatActivity implements
                     }
                 }));
         } else {
-            new CategoryListTask(mCategoryNameListAdapter).execute();
+            new CategoryListTask(mCategoryNameListAdapter,"").execute();
             new CategoryTask(adapter, emptyLayout,this).execute("");
         }
     }
