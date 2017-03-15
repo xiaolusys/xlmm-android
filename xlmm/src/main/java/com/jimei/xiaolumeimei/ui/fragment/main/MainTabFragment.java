@@ -27,7 +27,7 @@ import java.util.List;
  * Created by wisdom on 17/3/6.
  */
 
-public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>{
+public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding> {
 
     public static MainTabFragment newInstance() {
         return new MainTabFragment();
@@ -42,7 +42,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     public void initData() {
         List<BaseFragment> fragments = new ArrayList<>();
         fragments.add(ActivityFragment.newInstance("精品活动"));
-        fragments.add(TodayNewFragment.newInstance("精品推荐"));
+        fragments.add(TodayNewFragment.newInstance("每日焦点"));
         addSubscription(XlmmApp.getMainInteractor(mActivity)
             .getPortalBean("activitys,posters", new ServiceResponse<PortalBean>() {
                 @Override
