@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="240px"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="15px">
+              android:layout_width="match_parent"
+              android:layout_height="240px"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:padding="15px">
 
     <RelativeLayout
         android:id="@+id/rl"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"/>
 
     </RelativeLayout>
 
@@ -36,19 +36,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text_color_4A"
-            android:textSize="12dp" />
+            android:textSize="12dp"/>
 
         <TextView
             android:id="@+id/sku_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text_color_9B"
-            android:textSize="12dp" />
+            android:textSize="12dp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -60,25 +60,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
-                android:textSize="16dp" />
+                android:textSize="16dp"/>
 
             <TextView
                 android:id="@+id/price2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color_9B"
-                android:textSize="12dp" />
+                android:textSize="12dp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/rebuy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/rebuy_btn" />
+                android:src="@drawable/rebuy_btn"/>
 
         </LinearLayout>
 

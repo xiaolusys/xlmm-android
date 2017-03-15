@@ -74,7 +74,7 @@ public class CategoryNameListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tv.setText(data.get(position).getName());
-        if (cid != null) {
+        if (cid != null && !"".equals(cid)) {
             if (cid.equals(data.get(position).getCid())) {
                 holder.tv.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                 holder.selectedView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));

@@ -23,9 +23,11 @@ import java.util.List;
 public class CategoryListTask extends AsyncTask<String, Integer, List<CategoryBean>> {
 
     private CategoryNameListAdapter adapter;
+    private String cid;
 
-    public CategoryListTask(CategoryNameListAdapter adapter) {
+    public CategoryListTask(CategoryNameListAdapter adapter, String cid) {
         this.adapter = adapter;
+        this.cid = cid;
     }
 
     @Override
@@ -69,5 +71,6 @@ public class CategoryListTask extends AsyncTask<String, Integer, List<CategoryBe
         } else {
             adapter.clear();
         }
+        adapter.setCid(cid);
     }
 }

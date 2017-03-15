@@ -24,7 +24,7 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class LogisticsActivity extends BaseSwipeBackCompatActivity {
+public class LogisticsActivity extends BaseSwipeBackCompatActivity implements View.OnClickListener {
     @Bind(R.id.tv_company)
     TextView companyTv;
     @Bind(R.id.tv_order)
@@ -41,9 +41,17 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
     ListView mListView;
     @Bind(R.id.layout)
     ScrollView layout;
+    @Bind(R.id.order_layout)
+    LinearLayout orderLayout;
     private int id;
+    private String orderPacketId;
     OrderDetailBean.PackageOrdersBean packageOrdersBean;
     private List<AllOrdersBean.ResultsEntity.OrdersEntity> data;
+
+    @Override
+    protected void setListener() {
+        orderLayout.setOnClickListener(this);
+    }
 
     @Override
     protected void initData() {
@@ -56,6 +64,7 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
             if (packetid != null && company_code != null &&
                 !"".equals(packetid) && !"".equals(company_code)) {
                 orderTv.setText(packetid);
+                orderPacketId = packetid;
                 addSubscription(XlmmApp.getTradeInteractor(this)
                     .getLogisticsByPacketId(packetid, company_code, new ServiceResponse<LogisticsBean>() {
                         @Override
@@ -214,4 +223,15 @@ public class LogisticsActivity extends BaseSwipeBackCompatActivity {
         return R.layout.activity_logistics;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.order_layout:
+                if (orderPacketId != null && !orderPacketId.equals("")) {
+                    JUtils.copyToClipboard(orderPacketId);
+                    JUtils.Toast("单号已复制到粘贴板，可以到相应快递官网核对物流信息。");
+                }
+                break;
+        }
+    }
 }
