@@ -960,5 +960,9 @@ public final class FileUtils {
         editor.apply();
     }
 
-
+    public static boolean isCategorySame(Context context, String sha) {
+        sharedPreferences = context.getSharedPreferences("category", Context.MODE_PRIVATE);
+        String sha1 = sharedPreferences.getString("sha", "");
+        return !TextUtils.isEmpty(sha1) && (sha1.equals(sha));
+    }
 }

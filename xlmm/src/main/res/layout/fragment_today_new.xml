@@ -38,8 +38,10 @@
                     android:background="@color/white"/>
 
                 <View
+                    android:id="@+id/bottom_view"
                     android:layout_width="80dp"
                     android:layout_height="2dp"
+                    android:visibility="invisible"
                     android:background="@color/colorAccent"/>
 
                 <include layout="@layout/common_gap"/>

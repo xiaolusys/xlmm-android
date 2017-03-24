@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -16,6 +15,7 @@ import android.support.v4.content.FileProvider;
 
 import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.receiver.UpdateBroadReceiver;
 
 import java.io.File;
@@ -32,6 +32,7 @@ import java.text.DecimalFormat;
 public class UpdateService extends Service {
 
     public static final String EXTRAS_DOWNLOAD_URL = "extras_download_url";
+    public static final String VERSION_CODE = "version_code";
     private static final int DOWNLOAD_COMPLETE = 0;
     private static final int DOWNLOAD_FAIL = 1;
     private static final int FLAG_UPDATE = 0;
@@ -40,9 +41,9 @@ public class UpdateService extends Service {
     private static final int STEP_LENGTH = 3;
 
     private File mUpdateFile;
-    private File mUpdateDir;
 
     private String mDownloadUrl;
+    private int versionCode;
 
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
@@ -51,10 +52,9 @@ public class UpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            mUpdateDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            mUpdateFile = new File(mUpdateDir, getResources().getString(R.string.app_name) + ".apk");
-        }
+        mDownloadUrl = intent.getStringExtra(EXTRAS_DOWNLOAD_URL);
+        versionCode = intent.getIntExtra(VERSION_CODE, -1);
+        mUpdateFile = new File(XlmmConst.XLMM_DIR + "小鹿美美" + versionCode + ".apk");
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
@@ -64,7 +64,6 @@ public class UpdateService extends Service {
         mBuilder.setOngoing(true);
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.notify(FLAG_UPDATE, mBuilder.build());
-        mDownloadUrl = intent.getStringExtra(EXTRAS_DOWNLOAD_URL);
         new Thread(new DownloadRunnable()).start();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -104,6 +103,7 @@ public class UpdateService extends Service {
                 case DOWNLOAD_FAIL:
                     Intent intentClick = new Intent();
                     intentClick.putExtra(EXTRAS_DOWNLOAD_URL, mDownloadUrl);
+                    intentClick.putExtra(VERSION_CODE, versionCode);
                     intentClick.setAction(UpdateBroadReceiver.ACTION_RETRY_DOWNLOAD);
                     mBuilder.setOngoing(false);
                     mBuilder.setContentText("下载失败，请点击重试");
@@ -126,9 +126,6 @@ public class UpdateService extends Service {
         @Override
         public void run() {
             try {
-                if (!mUpdateDir.exists()) {
-                    mUpdateDir.mkdirs();
-                }
                 if (!mUpdateFile.exists()) {
                     mUpdateFile.createNewFile();
                 }

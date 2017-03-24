@@ -36,7 +36,7 @@ public interface ProductService {
 
     @GET("/rest/v2/modelproducts")
     Observable<ProductListBean> getCategoryProductList(
-        @Query("cid") int cid,
+        @Query("cid") String cid,
         @Query("page") int page);
 
     @GET("/rest/v2/modelproducts/search_by_name")

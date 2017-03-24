@@ -5,6 +5,7 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/product_layout"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:gravity="center_vertical"
@@ -125,7 +126,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="分享商品"
+                android:text="单品分享"
+                android:textSize="14dp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/bg_grey"/>
+
+        <LinearLayout
+            android:id="@+id/share_all_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_all"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="页面分享"
                 android:textSize="14dp"/>
         </LinearLayout>
 

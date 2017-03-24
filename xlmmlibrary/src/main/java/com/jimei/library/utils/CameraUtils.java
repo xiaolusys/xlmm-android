@@ -110,7 +110,8 @@ public class CameraUtils {
     }
 
     private static void ImagePickerDialog(Activity activity) {
-        CharSequence[] items = {"相册", "相机"};
+//        CharSequence[] items = {"相册", "相机"};
+        CharSequence[] items = {"相册"};
         new AlertDialog.Builder(activity)
             .setTitle("选择图片来源")
             .setItems(items, (dialog, which) -> {

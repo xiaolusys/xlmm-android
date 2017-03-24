@@ -12,7 +12,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
+import com.jimei.xiaolumeimei.ui.activity.product.CategoryProductActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -62,10 +62,19 @@ public class CategoryItemAdapter extends XRecyclerView.Adapter<CategoryItemAdapt
         CategoryBean bean = mData.get(position);
         holder.name.setText(bean.getName());
         holder.name.setOnClickListener(view -> {
-            Intent intent = new Intent(mContext, ProductListActivity.class);
+            Intent intent = new Intent(mContext, CategoryProductActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("type", bean.getCid());
-            bundle.putString("title", bean.getName());
+            ArrayList<String> nameList = new ArrayList<>();
+            ArrayList<String> cidList = new ArrayList<>();
+            nameList.add(bean.getName());
+            cidList.add(bean.getCid());
+            for (int i = 0; i < bean.getChilds().size(); i++) {
+                nameList.add(bean.getChilds().get(i).getName());
+                cidList.add(bean.getChilds().get(i).getCid());
+            }
+            bundle.putStringArrayList("name", nameList);
+            bundle.putStringArrayList("cid", cidList);
+            bundle.putInt("position", 0);
             intent.putExtras(bundle);
             mContext.startActivity(intent);
         });
@@ -74,7 +83,7 @@ public class CategoryItemAdapter extends XRecyclerView.Adapter<CategoryItemAdapt
         holder.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         holder.xrv.setPullRefreshEnabled(false);
         holder.xrv.setLoadingMoreEnabled(false);
-        CategoryAdapter adapter = new CategoryAdapter(mContext);
+        CategoryAdapter adapter = new CategoryAdapter(mContext, bean.getName());
         adapter.updateWithClear(bean.getChilds());
         holder.xrv.setAdapter(adapter);
     }

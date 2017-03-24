@@ -51,12 +51,7 @@ public class CategoryTabFragment extends BaseBindingFragment<FragmentCategoryTab
     public void initData() {
         hideIndeterminateProgressDialog();
         mActivity.showIndeterminateProgressDialog(false);
-        if (!FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
-            downloadJson("");
-        } else {
-            new CategoryListTask(mCategoryNameListAdapter, "").execute();
-            new CategoryTask(adapter, b.emptyLayout, mActivity).execute("");
-        }
+        downloadJson("");
     }
 
     private void downloadJson(String cid) {
@@ -67,23 +62,29 @@ public class CategoryTabFragment extends BaseBindingFragment<FragmentCategoryTab
                     if (categoryDownBean != null) {
                         String downloadUrl = categoryDownBean.getDownload_url();
                         String sha1 = categoryDownBean.getSha1();
-                        if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
-                            FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
-                        }
-                        OkHttpUtils.get().url(downloadUrl).build()
-                            .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                    mActivity.hideIndeterminateProgressDialog();
-                                }
+                        if (!FileUtils.isCategorySame(mActivity, sha1) ||
+                            !FileUtils.isFileExist(XlmmConst.CATEGORY_JSON)) {
+                            if (FileUtils.isFolderExist(XlmmConst.CATEGORY_JSON)) {
+                                FileUtils.deleteFile(XlmmConst.CATEGORY_JSON);
+                            }
+                            OkHttpUtils.get().url(downloadUrl).build()
+                                .execute(new FileCallBack(XlmmConst.XLMM_DIR, "category.json") {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
+                                        mActivity.hideIndeterminateProgressDialog();
+                                    }
 
-                                @Override
-                                public void onResponse(File response, int id) {
-                                    FileUtils.saveCategoryFile(mActivity, sha1);
-                                    new CategoryListTask(mCategoryNameListAdapter, cid).execute();
-                                    new CategoryTask(adapter, b.emptyLayout, mActivity).execute(cid);
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(File response, int id) {
+                                        FileUtils.saveCategoryFile(mActivity, sha1);
+                                        new CategoryListTask(mCategoryNameListAdapter, cid).execute();
+                                        new CategoryTask(adapter, b.emptyLayout, mActivity).execute(cid);
+                                    }
+                                });
+                        } else {
+                            new CategoryListTask(mCategoryNameListAdapter, "").execute();
+                            new CategoryTask(adapter, b.emptyLayout, mActivity).execute("");
+                        }
                     }
                 }
 
@@ -112,7 +113,6 @@ public class CategoryTabFragment extends BaseBindingFragment<FragmentCategoryTab
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setPullRefreshEnabled(false);
         b.xrv.setLoadingMoreEnabled(false);
-
 
         adapter = new CategoryItemAdapter(mActivity);
         b.xrv.setAdapter(adapter);

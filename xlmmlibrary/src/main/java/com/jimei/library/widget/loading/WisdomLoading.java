@@ -32,7 +32,6 @@ public class WisdomLoading extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.layout_wisdom);
         contentView = getLayoutInflater().inflate(R.layout.layout_wisdom, null);
         setContentView(contentView);
         WindowManager.LayoutParams lp = getWindow().getAttributes();

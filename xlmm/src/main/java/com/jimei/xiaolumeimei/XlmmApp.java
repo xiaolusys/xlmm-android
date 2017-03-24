@@ -12,7 +12,6 @@ import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.module.ActivityInteractor;
 import com.jimei.xiaolumeimei.module.AddressInteractor;
 import com.jimei.xiaolumeimei.module.CartsInteractor;
-import com.jimei.xiaolumeimei.module.InteractorModule;
 import com.jimei.xiaolumeimei.module.MainInteractor;
 import com.jimei.xiaolumeimei.module.ProductInteractor;
 import com.jimei.xiaolumeimei.module.TradeInteractor;
@@ -34,7 +33,6 @@ import cn.sharesdk.framework.ShareSDK;
  */
 public class XlmmApp extends MultiDexApplication {
     private AppComponent component;
-
     private static Context mContext;
     private static XiaoMiMessageReceiver.XiaoMiPushHandler handler = null;
 
@@ -58,18 +56,17 @@ public class XlmmApp extends MultiDexApplication {
         Stetho.initializeWithDefaults(this);
         JUtils.initialize(this);
         ShareSDK.initSDK(this);
-        JUtils.setDebug(true, "xlmm");
+        JUtils.setDebug(BuildConfig.DEBUG, "xiaolumeimei");
         AutoLayoutConifg.getInstance().useDeviceSize();
         //初始化push推送服务
         if (shouldInit()) {
-            JUtils.Log("XlmmApp", "reg xiaomi push");
             MiPushClient.registerPush(getApplicationContext(), XlmmConst.XIAOMI_APP_ID,
                 XlmmConst.XIAOMI_APP_KEY);
         }
         if (handler == null) {
             handler = new XiaoMiMessageReceiver.XiaoMiPushHandler(getApplicationContext());
         }
-        setDraggerConfig();
+        component = DaggerAppComponent.builder().appModule(new AppModule()).build();
     }
 
 
@@ -137,17 +134,11 @@ public class XlmmApp extends MultiDexApplication {
         }
     }
 
-
     private AppComponent component() {
         return component;
     }
 
     private static XlmmApp get(Context context) {
         return (XlmmApp) context.getApplicationContext();
-    }
-
-    private void setDraggerConfig() {
-        component = DaggerAppComponent.builder().interactorModule(new InteractorModule()).build();
-        component.inject(this);
     }
 }

@@ -29,7 +29,7 @@ import com.jimei.library.widget.NestedListView;
 import com.jimei.library.widget.SmoothCheckBox;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
-import com.jimei.xiaolumeimei.adapter.CartsPayInfoAdapter;
+import com.jimei.xiaolumeimei.adapter.CartPayInfoAdapter;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.AddressBean;
@@ -71,7 +71,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     private static final String WX = "wx";
     private static final String BUDGET = "budget";
     public static final String COIN = "budget";
-    CartsPayInfoAdapter mAdapter;
+    CartPayInfoAdapter mAdapter;
     @Bind(R.id.name)
     TextView name;
     @Bind(R.id.phone)
@@ -96,7 +96,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     RelativeLayout coupon_layout;
     @Bind(R.id.tv_coupon)
     TextView tv_coupon;
-    List<CartsPayinfoBean.CartListEntity> list;
     @Bind(R.id.scb)
     SmoothCheckBox scb;
     @Bind(R.id.tv_app_discount)
@@ -163,6 +162,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     private String addressId;
     private boolean mFlag = false;
     private boolean couponFlag = false;
+    private boolean payFlag = false;
     private int personalInfoLevel;
     private int needLevel;
 
@@ -191,7 +191,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
     @Override
     protected void initData() {
-        list = new ArrayList<>();
+        showIndeterminateProgressDialog(false);
         downLoadCartsInfoWithout();
     }
 
@@ -400,8 +400,10 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                             }
                         }
                         calcAllPrice();
+                        hideIndeterminateProgressDialog();
                     } else {
                         JUtils.Toast("商品已过期,请重新选购");
+                        hideIndeterminateProgressDialog();
                         readyGoThenKill(TabActivity.class);
                     }
                 }
@@ -476,7 +478,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
     @Override
     protected void initViews() {
-        mAdapter = new CartsPayInfoAdapter(this, list);
+        mAdapter = new CartPayInfoAdapter(this);
         payInfoListView.setAdapter(mAdapter);
         dialog = new AlertDialog.Builder(this)
             .setTitle("购买条款")
@@ -712,7 +714,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
             if (isCoupon) {
                 if (!isAlipay && !isWx && !isBudget && !isCoin) {
                     if (paymentInfo == 0) {
-                        setConfirmClickAble();
                         pay_extras = "pid:"
                             + 2
                             + ":couponid:"
@@ -731,7 +732,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     }
                 } else if (isBudget && !isAlipay && !isWx && !isCoin) {
                     if (paymentInfo == 0) {
-                        setConfirmClickAble();
                         pay_extras = "pid:"
                             + 2
                             + ":couponid:"
@@ -753,7 +753,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                     }
                 } else if (!isBudget && !isAlipay && !isWx) {
                     if (paymentInfo == 0) {
-                        setConfirmClickAble();
                         pay_extras = "pid:"
                             + 2
                             + ":couponid:"
@@ -786,7 +785,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         channel = COIN;
                     }
                     if (paymentInfo == 0) {
-                        setConfirmClickAble();
                         payV2(channel, (paymentInfo + real_use_yue + real_use_coin) + "", pay_extras, (jieshengjine) + "");
                     } else {
                         if (isAlipay) {
@@ -814,7 +812,6 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         new MyDialog(this).show();
                     } else {
                         if (paymentInfo == 0) {
-                            setConfirmClickAble();
                             channel = BUDGET;
                             pay_extras = APP_PAY + appcut + ";" + BUDGET_PAY + yue + ";";
                             payV2(channel, (paymentInfo + real_use_yue) + "", pay_extras,
@@ -836,7 +833,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
                         new MyDialog(this).show();
                     } else {
                         if (paymentInfo == 0) {
-                            setConfirmClickAble();
+
                             channel = COIN;
                             pay_extras = APP_PAY + appcut + ";" + COIN_PAY + real_use_coin + ";";
                             payV2(channel, (paymentInfo + real_use_coin) + "", pay_extras,
@@ -861,47 +858,52 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
     private void payV2(String pay_method, String paymentprice_v2, String pay_extrasaa,
                        String discount_fee_price) {
-        showIndeterminateProgressDialog(false);
-        addSubscription(XlmmApp.getTradeInteractor(this)
-            .shoppingCartCreateV2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
-                discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag,
-                new ServiceResponse<PayInfoBean>() {
+        if (!payFlag) {
+            showIndeterminateProgressDialog(false);
+            setConfirmClickAble();
+            payFlag = true;
+            addSubscription(XlmmApp.getTradeInteractor(this)
+                .shoppingCartCreateV2(ids, addr_id, pay_method, paymentprice_v2, post_fee,
+                    discount_fee_price, total_fee, uuid, pay_extrasaa, code, mFlag,
+                    new ServiceResponse<PayInfoBean>() {
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        hideIndeterminateProgressDialog();
-                    }
-
-                    @Override
-                    public void onNext(PayInfoBean payInfoBean) {
-                        EventBus.getDefault().post(new CartEvent());
-                        if (null != payInfoBean && payInfoBean.getTrade() != null) {
-                            order_id = payInfoBean.getTrade().getId();
-                            order_no = payInfoBean.getTrade().getTid();
-                            Gson gson = new Gson();
-                            if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel()
-                                .equals("budget"))) {
-                                if (payInfoBean.getCode() > 0) {
-                                    JUtils.Toast(payInfoBean.getInfo());
-                                } else {
-                                    PayUtils.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
-                                }
-                            } else {
-                                if (payInfoBean.getCode() == 0) {
-                                    JUtils.Toast("支付成功");
-                                    hideIndeterminateProgressDialog();
-                                    successJump();
-                                } else {
-                                    JUtils.Toast(payInfoBean.getInfo());
-                                }
-                            }
-                        } else if (null != payInfoBean) {
-                            JUtils.Toast(payInfoBean.getInfo());
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            hideIndeterminateProgressDialog();
                         }
-                        hideIndeterminateProgressDialog();
-                    }
-                }));
+
+                        @Override
+                        public void onNext(PayInfoBean payInfoBean) {
+                            EventBus.getDefault().post(new CartEvent());
+                            if (null != payInfoBean && payInfoBean.getTrade() != null) {
+                                order_id = payInfoBean.getTrade().getId();
+                                order_no = payInfoBean.getTrade().getTid();
+                                Gson gson = new Gson();
+                                if ((payInfoBean.getChannel() != null) && (!payInfoBean.getChannel()
+                                    .equals("budget"))) {
+                                    if (payInfoBean.getCode() > 0) {
+                                        JUtils.Toast(payInfoBean.getInfo());
+                                    } else {
+                                        PayUtils.createPayment(CartsPayInfoActivity.this, gson.toJson(payInfoBean.getCharge()));
+                                    }
+                                } else {
+                                    if (payInfoBean.getCode() == 0) {
+                                        JUtils.Toast("支付成功");
+                                        hideIndeterminateProgressDialog();
+                                        successJump();
+                                    } else {
+                                        JUtils.Toast(payInfoBean.getInfo());
+                                    }
+                                }
+                            } else if (null != payInfoBean) {
+                                JUtils.Toast(payInfoBean.getInfo());
+                            }
+                            hideIndeterminateProgressDialog();
+                        }
+                    }));
+
+        }
     }
 
     @Override

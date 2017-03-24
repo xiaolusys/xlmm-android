@@ -6,6 +6,7 @@ import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickCarryBean;
+import com.jimei.xiaolumeimei.entities.MMCarryBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
@@ -127,8 +128,8 @@ public class VipInteractorImpl implements VipInteractor {
     }
 
     @Override
-    public Subscription getNinePicByModelId(int model_id,int page, ServiceResponse<ProductNinePicBean> response) {
-        return service.getNinePicByModelId(model_id,page)
+    public Subscription getNinePicByModelId(int model_id, int page, ServiceResponse<ProductNinePicBean> response) {
+        return service.getNinePicByModelId(model_id, page)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }
@@ -178,6 +179,13 @@ public class VipInteractorImpl implements VipInteractor {
     @Override
     public Subscription saveTime(int id, int save_times, ServiceResponse<SaveTimeBean> response) {
         return service.saveTime(id, save_times)
+            .compose(new DefaultTransform<>())
+            .subscribe(response);
+    }
+
+    @Override
+    public Subscription getCarryBean(int page,ServiceResponse<MMCarryBean> response) {
+        return service.getCarryBean(page)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }

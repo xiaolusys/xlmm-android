@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -43,6 +44,23 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+            case R.id.rb_main:
+                MobclickAgent.onEvent(context, "rb_main");
+                break;
+            case R.id.rb_boutique:
+                MobclickAgent.onEvent(context, "rb_boutique");
+                break;
+            case R.id.rb_category:
+                MobclickAgent.onEvent(context, "rb_category");
+                break;
+            case R.id.rb_car:
+                MobclickAgent.onEvent(context, "rb_car");
+                break;
+            case R.id.rb_my:
+                MobclickAgent.onEvent(context, "rb_my");
+                break;
+        }
         if ((checkedId == R.id.rb_car || checkedId == R.id.rb_boutique || checkedId == R.id.rb_my)
             && !LoginUtils.checkLoginState(context)) {
             if (currentId == R.id.rb_main || currentId == R.id.rb_category) {
@@ -88,7 +106,7 @@ public class FragmentTabUtils implements RadioGroup.OnCheckedChangeListener {
         }
     }
 
-    private void addAndShow(int checkedId, BaseFragment fragment) {
+    private synchronized void addAndShow(int checkedId, BaseFragment fragment) {
         if (!fragment.isAdded()) {
             switch (checkedId) {
                 case R.id.rb_car:

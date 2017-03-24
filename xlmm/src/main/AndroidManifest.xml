@@ -58,11 +58,11 @@
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.jimei.xiaolumeimei.fileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
 
         <activity
@@ -99,9 +99,6 @@
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.main.MainActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.user.LoginActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
@@ -310,6 +307,9 @@
             android:name=".ui.activity.xiaolumama.MMCarryLogActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
+            android:name=".ui.activity.xiaolumama.MMCarryActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
             android:name=".ui.activity.xiaolumama.MMShareCodeWebViewActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -449,6 +449,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.product.CategoryProductActivity"
+            android:theme="@style/AppTheme.TransparentActivity"/>
+        <activity
             android:name=".ui.activity.xiaolumama.OrderLogisticActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
@@ -467,9 +470,6 @@
         </activity>
         <activity
             android:name=".ui.activity.trade.CommonScanActivity"
-            android:theme="@style/AppTheme.TransparentActivity"/>
-        <activity
-            android:name=".ui.activity.product.CategoryListActivity"
             android:theme="@style/AppTheme.TransparentActivity"/>
         <activity
             android:name=".ui.activity.main.AdvertisementActivity"

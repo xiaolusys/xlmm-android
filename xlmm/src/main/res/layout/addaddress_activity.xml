@@ -110,10 +110,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
-                android:layout_toRightOf="@id/tv_1"
                 android:hint="请选择收货人地址"
+                android:visibility="visible"
                 android:padding="8dp"
                 android:textSize="14dp"/>
+
+            <LinearLayout
+                android:id="@+id/address_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/et_address_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="输入省份"
+                    android:maxLength="12"
+                    android:padding="8dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="14dp"/>
+
+                <EditText
+                    android:id="@+id/et_address_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="输入市"
+                    android:maxLength="12"
+                    android:padding="8dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="14dp"/>
+
+                <EditText
+                    android:id="@+id/et_address_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="输入区县"
+                    android:maxLength="12"
+                    android:padding="8dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textSize="14dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

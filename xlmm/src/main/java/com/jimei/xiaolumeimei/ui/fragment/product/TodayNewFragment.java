@@ -24,7 +24,6 @@ import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.PortalBean;
 import com.jimei.xiaolumeimei.entities.event.BoutiqueEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.MainActivity;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.JumpUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -103,6 +102,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
         data.clear();
         data.addAll(list);
         mainTabAdapter.updateWithClear(list);
+        b.bottomView.setVisibility(View.VISIBLE);
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         b.recyclerTab.scrollBy(-scrollCount * width, 0);
         scrollCount = 0;
@@ -195,9 +195,7 @@ public class TodayNewFragment extends BaseBindingFragment<FragmentTodayNewBindin
 
     @Override
     public void onScroll(int currentY, int maxY) {
-        if (mActivity instanceof MainActivity) {
-            ((MainActivity) mActivity).setTabLayoutMarginTop((double) currentY / b.slider.getHeight());
-        } else if (mActivity instanceof TabActivity) {
+        if (mActivity instanceof TabActivity) {
             double percent = (double) currentY / b.slider.getHeight();
             Message msg = new Message();
             msg.what = (int) (percent * 100);

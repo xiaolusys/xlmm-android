@@ -10,6 +10,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
 public class ColorFilterImageView extends ImageView implements OnTouchListener {
+    private int imagePosition;
     public ColorFilterImageView(Context context) {
         this(context, null, 0);
     }
@@ -41,5 +42,13 @@ public class ColorFilterImageView extends ImageView implements OnTouchListener {
                 break;
         }
         return false;
+    }
+
+    public int getImagePosition() {
+        return imagePosition;
+    }
+
+    public void setImagePosition(int imagePosition) {
+        this.imagePosition = imagePosition;
     }
 }

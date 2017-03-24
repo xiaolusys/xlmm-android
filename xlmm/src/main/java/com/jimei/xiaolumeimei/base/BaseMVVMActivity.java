@@ -10,8 +10,13 @@ import com.jimei.xiaolumeimei.R;
 /**
  * Created by itxuye on 2016/7/26.
  */
-public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseActivity{
+public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseActivity {
     protected T b;
+
+    @Override
+    public void initContentView() {
+        b = DataBindingUtil.setContentView(this, getContentViewLayoutID());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +30,4 @@ public abstract class BaseMVVMActivity<T extends ViewDataBinding> extends BaseAc
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
-
-    @Override
-    public void initContentView() {
-        b = DataBindingUtil.setContentView(this, getContentViewLayoutID());
-    }
 }
