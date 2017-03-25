@@ -441,7 +441,6 @@ public class CommonWebViewActivity extends BaseSwipeBackCompatActivity
                 public void onNext(ActivityBean activityBean) {
                     if (null != activityBean) {
                         partyShareInfo = activityBean;
-                        partyShareInfo.setQrcodeLink(activityBean.getQrcodeLink());
                     }
                 }
             }));

@@ -20,8 +20,6 @@ public interface ProductInteractor {
 
     Subscription getCategoryProductList(String cid, int page, String order_by, ServiceResponse<ProductListBean> response);
 
-    Subscription getCategoryProductList(int cid, int page, ServiceResponse<ProductListBean> response);
-
     Subscription searchProduct(String name, int page, ServiceResponse<ProductListBean> response);
 
     Subscription getSearchHistory(ServiceResponse<SearchHistoryBean> response);

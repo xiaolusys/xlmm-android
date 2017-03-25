@@ -11,12 +11,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jimei.library.utils.FileUtils;
+import com.jimei.library.widget.NoDoubleClickListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
-import com.jimei.xiaolumeimei.ui.activity.product.ProductListActivity;
-import com.jimei.library.widget.NoDoubleClickListener;
+import com.jimei.xiaolumeimei.ui.activity.product.CategoryProductActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -36,9 +36,11 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
 
     private BaseActivity mActivity;
     private List<CategoryBean> mData;
+    private String name;
 
-    public CategoryAdapter(BaseActivity context) {
+    public CategoryAdapter(BaseActivity context, String name) {
         this.mActivity = context;
+        this.name = name;
         mData = new ArrayList<>();
     }
 
@@ -66,16 +68,16 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CategoryBean childsBean = mData.get(position);
-        Glide.with(mActivity).load(R.drawable.place_holder).crossFade().into(holder.img);
-        holder.name.setText(childsBean.getName());
-        String picAddress = XlmmConst.XLMM_DIR + "category/" + childsBean.getCid() + ".png";
+        CategoryBean bean = mData.get(position);
+        Glide.with(mActivity).load(R.drawable.place_holder).into(holder.img);
+        holder.name.setText(bean.getName());
+        String picAddress = XlmmConst.XLMM_DIR + "category/" + bean.getCid() + ".png";
         if (FileUtils.isFileExist(picAddress)) {
             Glide.with(mActivity).load(new File(picAddress)).crossFade().into(holder.img);
         } else {
-            if (childsBean.getCat_pic() != null && !"".equals(childsBean.getCat_pic())) {
-                OkHttpUtils.get().url(childsBean.getCat_pic()).build()
-                    .execute(new FileCallBack(XlmmConst.XLMM_DIR + "category/", childsBean.getCid() + ".png") {
+            if (bean.getCat_pic() != null && !"".equals(bean.getCat_pic())) {
+                OkHttpUtils.get().url(bean.getCat_pic()).build()
+                    .execute(new FileCallBack(XlmmConst.XLMM_DIR + "category/", bean.getCid() + ".png") {
                         @Override
                         public void onError(Call call, Exception e, int id) {
 
@@ -83,7 +85,9 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
 
                         @Override
                         public void onResponse(File response, int id) {
-                            Glide.with(mActivity).load(new File(picAddress)).crossFade().into(holder.img);
+                            if (!mActivity.isFinishing()) {
+                                Glide.with(mActivity).load(new File(picAddress)).crossFade().into(holder.img);
+                            }
                         }
                     });
             }
@@ -91,10 +95,19 @@ public class CategoryAdapter extends XRecyclerView.Adapter<CategoryAdapter.ViewH
         holder.item.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
-                Intent intent = new Intent(mActivity, ProductListActivity.class);
+                Intent intent = new Intent(mActivity, CategoryProductActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("type", childsBean.getCid());
-                bundle.putString("title", childsBean.getName());
+                ArrayList<String> nameList = new ArrayList<>();
+                ArrayList<String> cidList = new ArrayList<>();
+                nameList.add(name);
+                cidList.add(bean.getParent_cid());
+                for (int i = 0; i < mData.size(); i++) {
+                    nameList.add(mData.get(i).getName());
+                    cidList.add(mData.get(i).getCid());
+                }
+                bundle.putStringArrayList("name", nameList);
+                bundle.putStringArrayList("cid", cidList);
+                bundle.putInt("position", position + 1);
                 intent.putExtras(bundle);
                 mActivity.startActivity(intent);
             }

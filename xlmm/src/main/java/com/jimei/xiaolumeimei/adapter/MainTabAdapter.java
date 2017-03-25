@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,13 +70,13 @@ public abstract class MainTabAdapter extends RecyclerView.Adapter<MainTabAdapter
         if (currentPosition == position) {
             holder.time.setTextColor(context.getResources().getColor(R.color.colorAccent));
             holder.textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
-            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+//            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         } else {
             holder.time.setTextColor(context.getResources().getColor(R.color.text_color_62));
             holder.textView.setTextColor(context.getResources().getColor(R.color.text_color_62));
-            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+//            holder.time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+//            holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         }
         if (position >= 2 && position < (data.size() + 2)) {
             MainTodayBean bean = data.get(position - 2);

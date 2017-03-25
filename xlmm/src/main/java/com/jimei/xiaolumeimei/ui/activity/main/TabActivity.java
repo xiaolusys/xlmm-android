@@ -2,9 +2,11 @@ package com.jimei.xiaolumeimei.ui.activity.main;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.support.v4.content.FileProvider;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.FileUtils;
 import com.jimei.library.utils.JUtils;
+import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
@@ -52,19 +55,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 import okhttp3.Call;
 import retrofit2.adapter.rxjava.HttpException;
-
 
 public class TabActivity extends BaseActivity {
     @Bind(R.id.radio_group)
     RadioGroup radioGroup;
     @Bind(R.id.text_car)
     TextView textView;
-    private int num = 1;
     private long firstTime = 0;
-    private boolean updateFlag = true;
     private UpdateBroadReceiver mUpdateBroadReceiver;
     public Handler mHandler;
     private BoutiqueTabFragment boutiqueTabFragment;
@@ -79,6 +80,7 @@ public class TabActivity extends BaseActivity {
     @Override
     public void initContentView() {
         setContentView(getContentViewLayoutID());
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -112,12 +114,14 @@ public class TabActivity extends BaseActivity {
     @Override
     protected void initData() {
         EventBus.getDefault().post(new SetMiPushEvent());
-        initLogin(new LoginEvent());
-        addSubscription(XlmmApp.getVipInteractor(this)
-            .getWxCode(new ServiceResponse<>()));
-        LoginUtils.setMamaInfo(this);
         downLoadAddress();
-        setTopic();
+        if (LoginUtils.checkLoginState(this)) {
+            addSubscription(XlmmApp.getVipInteractor(this)
+                .getWxCode(new ServiceResponse<>()));
+            initLogin(new LoginEvent());
+            LoginUtils.setMamaInfo(this);
+            setTopic();
+        }
         checkVersion();
         LoginUtils.clearCacheEveryWeek(this);
     }
@@ -153,15 +157,10 @@ public class TabActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        updateFlag = false;
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK();
+        ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
     }
 
@@ -263,18 +262,20 @@ public class TabActivity extends BaseActivity {
     }
 
     private void setTopic() {
-        addSubscription(XlmmApp.getMainInteractor(this)
-            .getTopic(new ServiceResponse<UserTopic>() {
-                @Override
-                public void onNext(UserTopic userTopic) {
-                    List<String> topics = userTopic.getTopics();
-                    if (topics != null) {
-                        for (int i = 0; i < topics.size(); i++) {
-                            MiPushClient.subscribe(TabActivity.this, topics.get(i), null);
+        if (LoginUtils.checkLoginState(this)) {
+            addSubscription(XlmmApp.getMainInteractor(this)
+                .getTopic(new ServiceResponse<UserTopic>() {
+                    @Override
+                    public void onNext(UserTopic userTopic) {
+                        List<String> topics = userTopic.getTopics();
+                        if (topics != null) {
+                            for (int i = 0; i < topics.size(); i++) {
+                                MiPushClient.subscribe(TabActivity.this, topics.get(i), null);
+                            }
                         }
                     }
-                }
-            }));
+                }));
+        }
     }
 
     private void checkVersion() {
@@ -283,32 +284,45 @@ public class TabActivity extends BaseActivity {
                 @Override
                 public void onNext(VersionBean versionBean) {
                     if (versionBean != null) {
-                        new Thread(() -> {
-                            SystemClock.sleep(2500);
-                            runOnUiThread(() -> checkVersion(versionBean));
-                        }).start();
+                        checkVersion(versionBean);
                     }
                 }
             }));
     }
 
     private void checkVersion(VersionBean versionBean) {
-        if (updateFlag) {
-            VersionManager versionManager = VersionManager.newInstance(versionBean.getVersion_code(),
-                ("最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo()), false);
-            if (versionBean.isAuto_update()) {
-                versionManager.setPositiveListener(v -> {
+        VersionManager versionManager = VersionManager.newInstance(versionBean.getVersion_code(),
+            ("最新版本:" + versionBean.getVersion() + "\n\n更新内容:\n" + versionBean.getMemo()), false);
+        if (versionBean.isAuto_update()) {
+            versionManager.setPositiveListener(v -> {
+                File updateFile = new File(XlmmConst.XLMM_DIR + "小鹿美美" + versionBean.getVersion_code() + ".apk");
+                if (updateFile.exists()) {
+                    Intent installIntent = new Intent();
+                    installIntent.setAction(android.content.Intent.ACTION_VIEW);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        installIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        Uri contentUri = FileProvider.getUriForFile(TabActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", updateFile);
+                        installIntent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                    } else {
+                        installIntent.setDataAndType(Uri.fromFile(updateFile), "application/vnd.android.package-archive");
+                        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    }
+                    startActivity(installIntent);
+                } else {
                     Intent intent = new Intent(TabActivity.this, UpdateService.class);
                     intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, versionBean.getDownload_link());
+                    intent.putExtra(UpdateService.VERSION_CODE, versionBean.getVersion_code());
                     startService(intent);
-                    versionManager.getDialog().dismiss();
                     JUtils.Toast("应用正在后台下载!");
-                });
-                if (num == 1 && updateFlag) {
-                    num = 2;
-                    versionManager.checkVersion(TabActivity.this);
                 }
-            }
+            });
+            versionManager.setNegativeListener(v -> {
+                versionManager.getDialog().dismiss();
+                finish();
+            });
+            versionManager.setIgnoreStr("退出应用");
+            versionManager.checkVersion(TabActivity.this, versionBean.getVersion_code());
+            versionBean.getVersion_code();
         }
     }
 

@@ -5,6 +5,7 @@ import com.jimei.xiaolumeimei.entities.CarryLogListBean;
 import com.jimei.xiaolumeimei.entities.CategoryBean;
 import com.jimei.xiaolumeimei.entities.ChooseListBean;
 import com.jimei.xiaolumeimei.entities.ClickCarryBean;
+import com.jimei.xiaolumeimei.entities.MMCarryBean;
 import com.jimei.xiaolumeimei.entities.MMShoppingBean;
 import com.jimei.xiaolumeimei.entities.MMVisitorsBean;
 import com.jimei.xiaolumeimei.entities.MamaFansBean;
@@ -129,4 +130,8 @@ public interface MamaService {
     Observable<SaveTimeBean> saveTime(
         @Path("id") int id,
         @Field("save_times") int save_times);
+
+    @GET("/rest/v2/mmcarry")
+    Observable<MMCarryBean> getCarryBean(
+        @Query("page") int page);
 }

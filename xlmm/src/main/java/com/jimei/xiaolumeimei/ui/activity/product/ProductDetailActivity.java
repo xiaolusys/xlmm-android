@@ -268,13 +268,19 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         List<ProductDetailBean.SkuInfoBean> skuInfo = productDetailBean.getSku_info();
         if ("will".equals(detailContent.getSale_state())) {
             b.tvAdd.setClickable(false);
+            b.tvBuy.setClickable(false);
             b.tvAdd.setText("即将开售");
+            b.tvBuy.setText("即将开售");
         } else if ("off".equals(detailContent.getSale_state())) {
             b.tvAdd.setClickable(false);
+            b.tvBuy.setClickable(false);
             b.tvAdd.setText("已下架");
+            b.tvBuy.setText("已下架");
         } else if ("on".equals(detailContent.getSale_state()) && detailContent.isIs_sale_out()) {
             b.tvAdd.setClickable(false);
+            b.tvBuy.setClickable(false);
             b.tvAdd.setText("已抢光");
+            b.tvBuy.setText("已抢光");
         } else if (teamBuyInfo != null && teamBuyInfo.isTeambuy()) {
             item_id = skuInfo.get(0).getProduct_id();
             sku_id = skuInfo.get(0).getSku_items().get(0).getSku_id();

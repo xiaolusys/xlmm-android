@@ -151,7 +151,9 @@ public class CommonUtils {
         } catch (Exception e) {
             return false;
         } finally {
-            connt.disconnect();
+            if (connt != null) {
+                connt.disconnect();
+            }
         }
         return false;
     }
@@ -175,7 +177,7 @@ public class CommonUtils {
      */
     public static int getToolbarHeight(Context context) {
         final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
-                new int[]{android.R.attr.actionBarSize});
+            new int[]{android.R.attr.actionBarSize});
         int toolbarHeight = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
 

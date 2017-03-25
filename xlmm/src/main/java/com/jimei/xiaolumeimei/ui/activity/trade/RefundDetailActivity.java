@@ -335,8 +335,8 @@ public class RefundDetailActivity extends BaseSwipeBackCompatActivity
                 Log.d(TAG, "write logistics");
                 Intent intent = new Intent(this, WriteLogisticsInfoActivty.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("goods_id", refundDetail.getOrder_id());
                 if (refundDetail != null) {
+                    bundle.putInt("goods_id", refundDetail.getOrder_id());
                     if ((refundDetail.getReturn_address() != null)
                         && (!refundDetail.getReturn_address().isEmpty())) {
                         bundle.putString("address", refundDetail.getReturn_address());

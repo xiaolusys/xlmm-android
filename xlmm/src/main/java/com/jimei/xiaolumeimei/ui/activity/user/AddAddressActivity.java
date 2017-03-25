@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -83,6 +82,15 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     ImageView imageIdBefore;
     @Bind(R.id.image_id_after)
     ImageView imageIdAfter;
+    @Bind(R.id.address_layout)
+    LinearLayout addressLayout;
+    @Bind(R.id.et_address_1)
+    EditText etAddress1;
+    @Bind(R.id.et_address_2)
+    EditText etAddress2;
+    @Bind(R.id.et_address_3)
+    EditText etAddress3;
+
 
     private ArrayList<Province> provinces = new ArrayList<>();
     private String receiver_state;
@@ -188,6 +196,14 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
     }
 
     private void commitInfo() {
+        if (addressLayout.getVisibility() == View.VISIBLE) {
+            receiver_state = etAddress1.getText().toString().trim();
+            receiver_city = etAddress2.getText().toString().trim();
+            receiver_district = etAddress3.getText().toString().trim();
+            if (receiver_state == null || "".equals(receiver_state)) {
+                receiver_state = receiver_city;
+            }
+        }
         addSubscription(XlmmApp.getAddressInteractor(this)
             .create_addressWithId(receiver_state, receiver_city, receiver_district,
                 clearaddressa, receiver_name, receiver_mobile, defaultAddress, idNo,
@@ -346,7 +362,9 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
             if (provinces.size() > 0) {
                 showAddressDialog();
             } else {
-                Toast.makeText(mContext, "数据初始化失败", Toast.LENGTH_SHORT).show();
+                JUtils.Toast("数据初始化失败，请手动填写省市区");
+                address.setVisibility(View.GONE);
+                addressLayout.setVisibility(View.VISIBLE);
             }
         }
 
@@ -390,7 +408,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         protected String doInBackground(String... strings) {
             try {
                 bitmap = BitmapFactory.decodeFile(strings[0]);
-                compressImage = CameraUtils.imageZoom(bitmap, 100);
+                compressImage = CameraUtils.imageZoom(bitmap, 50);
                 file = null;
                 return CameraUtils.getBitmapStrBase64(compressImage);
             } catch (Exception e) {

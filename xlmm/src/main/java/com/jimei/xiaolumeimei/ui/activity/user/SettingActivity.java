@@ -98,11 +98,12 @@ public class SettingActivity extends BaseMVVMActivity<ActivitySettingBinding>
                     versionManager.setPositiveListener(v -> {
                         Intent intent = new Intent(SettingActivity.this, UpdateService.class);
                         intent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, versionBean.getDownload_link());
+                        intent.putExtra(UpdateService.VERSION_CODE, versionBean.getVersion_code());
                         SettingActivity.this.startService(intent);
                         versionManager.getDialog().dismiss();
                         JUtils.Toast("应用正在后台下载!");
                     });
-                    versionManager.checkVersion(SettingActivity.this);
+                    versionManager.checkVersion(SettingActivity.this, versionBean.getVersion_code());
                 }
             }));
     }

@@ -13,16 +13,12 @@ import android.view.View;
 import com.jimei.library.utils.JUtils;
 import com.jimei.library.utils.StatusBarUtil;
 import com.jimei.library.widget.loading.VaryViewHelperController;
-import com.jimei.library.widget.swipeback.SwipeBackActivityBase;
-import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
-import com.jimei.library.widget.swipeback.SwipeBackLayout;
-import com.jimei.library.widget.swipeback.Utils;
-import com.jimei.xiaolumeimei.R;
 import com.jimei.library.widget.loading.WisdomLoading;
+import com.jimei.library.widget.swipeback.SwipeBackActivityHelper;
+import com.jimei.xiaolumeimei.R;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.autolayout.AutoLayoutActivity;
 
-import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -30,8 +26,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by wisdom on 16/10/14.
  */
 
-public abstract class BaseActivity extends AutoLayoutActivity
-        implements SwipeBackActivityBase {
+public abstract class BaseActivity extends AutoLayoutActivity {
     /**
      * Log tag
      */
@@ -65,7 +60,6 @@ public abstract class BaseActivity extends AutoLayoutActivity
         }
         mContext = this;
         TAG_LOG = this.getClass().getSimpleName();
-        BaseAppManager.getInstance().addActivity(this);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -119,20 +113,8 @@ public abstract class BaseActivity extends AutoLayoutActivity
         return v;
     }
 
-    @Override
-    public SwipeBackLayout getSwipeBackLayout() {
-        return mHelper.getSwipeBackLayout();
-    }
-
-    @Override
     public void setSwipeBackEnable(boolean enable) {
-        getSwipeBackLayout().setEnableGesture(enable);
-    }
-
-    @Override
-    public void scrollToFinishActivity() {
-        Utils.convertActivityToTranslucent(this);
-        getSwipeBackLayout().scrollToFinishActivity();
+        mHelper.getSwipeBackLayout().setEnableGesture(enable);
     }
 
     @Override
@@ -162,20 +144,7 @@ public abstract class BaseActivity extends AutoLayoutActivity
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        ButterKnife.bind(this);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAccent), 0);
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        BaseAppManager.getInstance().removeActivity(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     /**
@@ -261,8 +230,8 @@ public abstract class BaseActivity extends AutoLayoutActivity
     public void showIndeterminateProgressDialog(boolean cancelable) {
         if (wisdomLoading == null) {
             wisdomLoading = WisdomLoading.createDialog(this)
-                    .setCanCancel(cancelable)
-                    .start();
+                .setCanCancel(cancelable)
+                .start();
         }
     }
 
@@ -323,16 +292,16 @@ public abstract class BaseActivity extends AutoLayoutActivity
             str = "支付失败，支付软件未安装完整！";
         }
         new AlertDialog.Builder(this)
-                .setMessage(str)
-                .setTitle("提示")
-                .setPositiveButton("OK", (dialog1, which) -> {
-                    dialog1.dismiss();
-                    if (isfinish) {
-                        finish();
-                    }
-                })
-                .create()
-                .show();
+            .setMessage(str)
+            .setTitle("提示")
+            .setPositiveButton("OK", (dialog1, which) -> {
+                dialog1.dismiss();
+                if (isfinish) {
+                    finish();
+                }
+            })
+            .create()
+            .show();
     }
 
     public void showNetworkError() {

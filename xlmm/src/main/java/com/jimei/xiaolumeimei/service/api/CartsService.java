@@ -22,9 +22,6 @@ import rx.Observable;
  */
 
 public interface CartsService {
-    //获取购物车信息
-    @GET("/rest/v2/carts")
-    Observable<List<CartsInfoBean>> getCartsList();
 
     //获取购物车信息
     @GET("/rest/v2/carts")

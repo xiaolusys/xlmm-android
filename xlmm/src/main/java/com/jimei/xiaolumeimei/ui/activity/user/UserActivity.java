@@ -34,7 +34,7 @@ import com.jimei.xiaolumeimei.module.VipInteractor;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllOrdersActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.AllRefundsActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMCarryLogActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMCarryActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
@@ -280,12 +280,12 @@ public class UserActivity extends BaseMVVMActivity<ActivityUserBinding> implemen
                 case R.id.fund_layout:
                     bundle.putString("carrylogMoney", carryLogMoney);
                     bundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                    readyGo(MMCarryLogActivity.class, bundle);
+                    readyGo(MMCarryActivity.class, bundle);
                     break;
                 case R.id.ll_income:
                     bundle.putString("carrylogMoney", carryLogMoney);
                     bundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                    readyGo(MMCarryLogActivity.class, bundle);
+                    readyGo(MMCarryActivity.class, bundle);
                     break;
                 case R.id.ll_visit:
                     readyGo(MamaVisitorActivity.class);

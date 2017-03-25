@@ -43,21 +43,14 @@ public class MainTodayBean {
          * start_time : 2017-02-14T06:00:00
          */
 
-        private String model_id;
+        private int model_id;
+        private int activity_id;
         private String name;
         private int hour;
         private ProfitBean profit;
         private double price;
         private String pic;
         private String start_time;
-
-        public String getModel_id() {
-            return model_id;
-        }
-
-        public void setModel_id(String model_id) {
-            this.model_id = model_id;
-        }
 
         public String getName() {
             return name;
@@ -105,6 +98,22 @@ public class MainTodayBean {
 
         public void setStart_time(String start_time) {
             this.start_time = start_time;
+        }
+
+        public int getModel_id() {
+            return model_id;
+        }
+
+        public void setModel_id(int model_id) {
+            this.model_id = model_id;
+        }
+
+        public int getActivity_id() {
+            return activity_id;
+        }
+
+        public void setActivity_id(int activity_id) {
+            this.activity_id = activity_id;
         }
 
         public static class ProfitBean {

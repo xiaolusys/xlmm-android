@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -88,6 +87,15 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
     ImageView imageIdBefore;
     @Bind(R.id.image_id_after)
     ImageView imageIdAfter;
+    @Bind(R.id.address_layout)
+    LinearLayout addressLayout;
+    @Bind(R.id.et_address_1)
+    EditText etAddress1;
+    @Bind(R.id.et_address_2)
+    EditText etAddress2;
+    @Bind(R.id.et_address_3)
+    EditText etAddress3;
+
     private String id;
     private ArrayList<Province> provinces = new ArrayList<>();
 
@@ -227,6 +235,14 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
     }
 
     private void commitInfo() {
+        if (addressLayout.getVisibility() == View.VISIBLE) {
+            receiver_state = etAddress1.getText().toString().trim();
+            receiver_city = etAddress2.getText().toString().trim();
+            receiver_district = etAddress3.getText().toString().trim();
+            if (receiver_state == null || "".equals(receiver_state)) {
+                receiver_state = receiver_city;
+            }
+        }
         addSubscription(XlmmApp.getAddressInteractor(this)
             .update_addressWithId(id, receiver_state, receiver_city, receiver_district,
                 clearaddressa, receiver_name, receiver_mobile, defaultAddress, idNo, card_facepath
@@ -319,8 +335,11 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         if (cursor == null) return null;
         cursor.moveToFirst();
         final String imageFilePath = cursor.getString(0);
+        CameraUtils.Default_DIR = new File(imageFilePath);
+        CameraUtils.Create_MY_IMAGES_DIR();
+        CameraUtils.copyFile(CameraUtils.Default_DIR, CameraUtils.MY_IMG_DIR);
         cursor.close();
-        return new File(imageFilePath);
+        return CameraUtils.Paste_Target_Location;
     }
 
     @Override
@@ -402,7 +421,9 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
             if (provinces.size() > 0) {
                 showAddressDialog();
             } else {
-                Toast.makeText(mContext, "数据初始化失败", Toast.LENGTH_SHORT).show();
+                JUtils.Toast("数据初始化失败，请手动填写省市区");
+                address.setVisibility(View.GONE);
+                addressLayout.setVisibility(View.VISIBLE);
             }
         }
 
@@ -464,7 +485,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         protected String doInBackground(String... strings) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeFile(strings[0]);
-                Bitmap compressImage = CameraUtils.imageZoom(bitmap, 100);
+                Bitmap compressImage = CameraUtils.imageZoom(bitmap, 50);
                 file = null;
                 return CameraUtils.getBitmapStrBase64(compressImage);
             } catch (Exception e) {

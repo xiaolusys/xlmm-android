@@ -67,7 +67,7 @@ public class PortalBean {
     public static class CategorysBean {
         private String cat_link;
         private String cat_img;
-        private int id;
+        private String id;
         private String name;
 
         public String getCat_link() {
@@ -86,11 +86,11 @@ public class PortalBean {
             this.cat_img = cat_img;
         }
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 

@@ -10,7 +10,7 @@ import rx.Subscription;
  * Created by wisdom on 17/2/24.
  */
 
-public interface ActivityInteractor {
+public interface ActivityInteractor{
 
     Subscription get_party_share_content(String id, ServiceResponse<ActivityBean> response);
 

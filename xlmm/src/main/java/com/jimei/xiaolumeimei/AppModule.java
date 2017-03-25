@@ -1,5 +1,21 @@
-package com.jimei.xiaolumeimei.module;
+package com.jimei.xiaolumeimei;
 
+import com.jimei.xiaolumeimei.module.ActivityInteractor;
+import com.jimei.xiaolumeimei.module.ActivityInteractorImpl;
+import com.jimei.xiaolumeimei.module.AddressInteractor;
+import com.jimei.xiaolumeimei.module.AddressInteractorImpl;
+import com.jimei.xiaolumeimei.module.CartsInteractor;
+import com.jimei.xiaolumeimei.module.CartsInteractorImpl;
+import com.jimei.xiaolumeimei.module.MainInteractor;
+import com.jimei.xiaolumeimei.module.MainInteractorImpl;
+import com.jimei.xiaolumeimei.module.ProductInteractor;
+import com.jimei.xiaolumeimei.module.ProductInteractorImpl;
+import com.jimei.xiaolumeimei.module.TradeInteractor;
+import com.jimei.xiaolumeimei.module.TradeInteractorImpl;
+import com.jimei.xiaolumeimei.module.UserInteractor;
+import com.jimei.xiaolumeimei.module.UserInteractorImpl;
+import com.jimei.xiaolumeimei.module.VipInteractor;
+import com.jimei.xiaolumeimei.module.VipInteractorImpl;
 import com.jimei.xiaolumeimei.service.RetrofitClient;
 import com.jimei.xiaolumeimei.service.api.ActivityService;
 import com.jimei.xiaolumeimei.service.api.AddressService;
@@ -21,7 +37,7 @@ import retrofit2.Retrofit;
  */
 
 @Module
-public class InteractorModule {
+public class AppModule {
 
     @Provides
     public Retrofit provideRestAdapter() {

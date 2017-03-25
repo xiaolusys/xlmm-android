@@ -71,8 +71,8 @@ android {
 
         targetSdkVersion 25
 
-        versionCode 20170313
-        versionName "2.0.4"
+        versionCode 20170327
+        versionName "2.0.5"
 
         multiDexEnabled = true
 
@@ -216,10 +216,10 @@ android {
             manifestPlaceholders = [CHANNEL_NAME: "vivo",
                                     UMENG_APPKEY: "569f78a667e58ee15300094b"]
         }
-        samsung {
-            manifestPlaceholders = [CHANNEL_NAME: "samsung",
-                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-        }
+//        samsung {
+//            manifestPlaceholders = [CHANNEL_NAME: "samsung",
+//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+//        }
 
     }
 

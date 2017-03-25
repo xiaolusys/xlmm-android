@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,6 +56,14 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
     EditText idNum;
     @Bind(R.id.layout)
     LinearLayout layout;
+    @Bind(R.id.address_layout)
+    LinearLayout addressLayout;
+    @Bind(R.id.et_address_1)
+    EditText etAddress1;
+    @Bind(R.id.et_address_2)
+    EditText etAddress2;
+    @Bind(R.id.et_address_3)
+    EditText etAddress3;
     private String id;
 
     private ArrayList<Province> provinces = new ArrayList<>();
@@ -146,6 +153,14 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
                 idNo = idNum.getText().toString().trim();
+                if (addressLayout.getVisibility() == View.VISIBLE) {
+                    receiver_state = etAddress1.getText().toString().trim();
+                    receiver_city = etAddress2.getText().toString().trim();
+                    receiver_district = etAddress3.getText().toString().trim();
+                    if (receiver_state == null || "".equals(receiver_state)) {
+                        receiver_state = receiver_city;
+                    }
+                }
                 if (checkInput(receiver_name, receiver_mobile, city_string, clearaddressa)) {
                     addSubscription(XlmmApp.getAddressInteractor(this)
                         .update_address(id, receiver_state, receiver_city, receiver_district,
@@ -222,7 +237,9 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
             if (provinces.size() > 0) {
                 showAddressDialog();
             } else {
-                Toast.makeText(mContext, "数据初始化失败", Toast.LENGTH_SHORT).show();
+                JUtils.Toast("数据初始化失败，请手动填写省市区");
+                address.setVisibility(View.GONE);
+                addressLayout.setVisibility(View.VISIBLE);
             }
         }
 
