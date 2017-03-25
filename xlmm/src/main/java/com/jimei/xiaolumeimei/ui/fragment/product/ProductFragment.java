@@ -69,8 +69,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
     protected void initViews() {
         sortBy = "";
         EventBus.getDefault().register(this);
-        GridLayoutManager manager = new GridLayoutManager(mActivity, 2);
-        b.xrv.setLayoutManager(manager);
+        b.xrv.setLayoutManager(new GridLayoutManager(mActivity, 2));
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
@@ -112,6 +111,8 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
             sortBy = "";
         }
         if (getUserVisibleHint()) {
+            page = 1;
+            b.xrv.setLoadingMoreEnabled(true);
             refreshData(true);
         }
     }

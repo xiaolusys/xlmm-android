@@ -71,7 +71,7 @@ android {
 
         targetSdkVersion 25
 
-        versionCode 20170324
+        versionCode 20170327
         versionName "2.0.5"
 
         multiDexEnabled = true
@@ -180,42 +180,42 @@ android {
 //        }
 //
 //
-//        xiaomi {
-//            manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//
-//        huawei {
-//            manifestPlaceholders = [CHANNEL_NAME: "huawei",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//
-//        qihu360 {
-//            manifestPlaceholders = [CHANNEL_NAME: "qihu360",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//
-//        tencent {
-//            manifestPlaceholders = [CHANNEL_NAME: "tencent",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//        assistant91 {
-//            manifestPlaceholders = [CHANNEL_NAME: "assistant91",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//        lenovo {
-//            manifestPlaceholders = [CHANNEL_NAME: "lenovo",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//        baidu {
-//            manifestPlaceholders = [CHANNEL_NAME: "baidu",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
-//
-//        vivo {
-//            manifestPlaceholders = [CHANNEL_NAME: "vivo",
-//                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
-//        }
+        xiaomi {
+            manifestPlaceholders = [CHANNEL_NAME: "xiaomi",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+
+        huawei {
+            manifestPlaceholders = [CHANNEL_NAME: "huawei",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+
+        qihu360 {
+            manifestPlaceholders = [CHANNEL_NAME: "qihu360",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+
+        tencent {
+            manifestPlaceholders = [CHANNEL_NAME: "tencent",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+        assistant91 {
+            manifestPlaceholders = [CHANNEL_NAME: "assistant91",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+        lenovo {
+            manifestPlaceholders = [CHANNEL_NAME: "lenovo",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+        baidu {
+            manifestPlaceholders = [CHANNEL_NAME: "baidu",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
+
+        vivo {
+            manifestPlaceholders = [CHANNEL_NAME: "vivo",
+                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]
+        }
 //        samsung {
 //            manifestPlaceholders = [CHANNEL_NAME: "samsung",
 //                                    UMENG_APPKEY: "569f78a667e58ee15300094b"]

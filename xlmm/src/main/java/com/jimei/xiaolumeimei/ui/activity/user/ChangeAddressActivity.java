@@ -485,7 +485,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
         protected String doInBackground(String... strings) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeFile(strings[0]);
-                Bitmap compressImage = CameraUtils.imageZoom(bitmap, 200);
+                Bitmap compressImage = CameraUtils.imageZoom(bitmap, 50);
                 file = null;
                 return CameraUtils.getBitmapStrBase64(compressImage);
             } catch (Exception e) {

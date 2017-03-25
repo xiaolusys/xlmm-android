@@ -58,8 +58,8 @@ public class CameraUtils {
         return bm;
 //        } catch (Exception e) {
 //            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            int options = 35;
-//            bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+//            int options = 50;
+//            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 //            while (baos.toByteArray().length / 1024 > size) { // 循环判断如果压缩后图片是否大于50kb,大于继续压缩
 //                baos.reset();// 重置baos即清空baos
 //                bm.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
@@ -88,6 +88,7 @@ public class CameraUtils {
         return Bitmap.createBitmap(bgimage, 0, 0, (int) width,
             (int) height, matrix, true);
     }
+
 
     // 把Bitmap转换成Base64
     public static String getBitmapStrBase64(Bitmap bitmap) {

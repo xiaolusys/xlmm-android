@@ -126,8 +126,8 @@ public final class FileUtils {
                 newFile = new File(file.getParentFile(), newFileName);
             } else {
                 String temp = newFileName
-                        + file.getName().substring(
-                        file.getName().lastIndexOf('.'));
+                    + file.getName().substring(
+                    file.getName().lastIndexOf('.'));
                 newFile = new File(file.getParentFile(), temp);
             }
             if (file.renameTo(newFile)) {
@@ -159,7 +159,9 @@ public final class FileUtils {
             e.printStackTrace();
         } finally {
             try {
-                fis.close();
+                if (fis != null) {
+                    fis.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -191,12 +193,12 @@ public final class FileUtils {
      * @throws Exception
      */
     public static String getMimeType(File file, Activity activity)
-            throws Exception {
+        throws Exception {
 
         String name = file.getName()
-                .substring(file.getName().lastIndexOf('.') + 1).toLowerCase();
+            .substring(file.getName().lastIndexOf('.') + 1).toLowerCase();
         int id = activity.getResources().getIdentifier(
-                activity.getPackageName() + ":string/" + name, null, null);
+            activity.getPackageName() + ":string/" + name, null, null);
 
         // 特殊处理
         if ("class".equals(name)) {
@@ -248,10 +250,10 @@ public final class FileUtils {
                     if (file.getAbsolutePath().toLowerCase().matches(MP3_REG)) {
                         map.put("iconType", 3);
                     } else if (file.getAbsolutePath().toLowerCase()
-                            .matches(MTV_REG)) {
+                        .matches(MTV_REG)) {
                         map.put("iconType", 4);
                     } else if (file.getAbsolutePath().toLowerCase()
-                            .matches(JPG_REG)) {
+                        .matches(JPG_REG)) {
                         map.put("iconType", 5);
                     } else {
                         map.put("iconType", 6);
@@ -275,7 +277,7 @@ public final class FileUtils {
         List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
         // 如果是SD卡路径,不添加父路径
         if (!folder.getAbsolutePath().equals(
-                Environment.getExternalStorageDirectory().getAbsolutePath())) {
+            Environment.getExternalStorageDirectory().getAbsolutePath())) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("file", folder.getParentFile());
             map.put("iconType", ICON_TYPE_ROOT);
@@ -299,10 +301,10 @@ public final class FileUtils {
                     if (p.getAbsolutePath().toLowerCase().matches(MP3_REG)) {
                         map.put("iconType", ICON_TYPE_MP3);
                     } else if (p.getAbsolutePath().toLowerCase()
-                            .matches(MTV_REG)) {
+                        .matches(MTV_REG)) {
                         map.put("iconType", ICON_TYPE_MTV);
                     } else if (p.getAbsolutePath().toLowerCase()
-                            .matches(JPG_REG)) {
+                        .matches(JPG_REG)) {
                         map.put("iconType", ICON_TYPE_JPG);
                     } else {
                         map.put("iconType", ICON_TYPE_FILE);
@@ -328,8 +330,8 @@ public final class FileUtils {
                 public boolean accept(File pathname) {
 
                     return pathname.getAbsolutePath().toLowerCase()
-                            .matches(reg)
-                            || pathname.isDirectory();
+                        .matches(reg)
+                        || pathname.isDirectory();
                 }
             };
         } else {
@@ -338,8 +340,8 @@ public final class FileUtils {
                 public boolean accept(File pathname) {
 
                     return pathname.getAbsolutePath().toLowerCase()
-                            .matches(reg)
-                            && pathname.isFile();
+                        .matches(reg)
+                        && pathname.isFile();
                 }
             };
         }
@@ -366,7 +368,7 @@ public final class FileUtils {
         BufferedReader reader = null;
         try {
             InputStreamReader is = new InputStreamReader(new FileInputStream(
-                    file), charsetName);
+                file), charsetName);
             reader = new BufferedReader(is);
             String line;
             while ((line = reader.readLine()) != null) {
@@ -515,7 +517,7 @@ public final class FileUtils {
     public static boolean writeFile(String filePath, InputStream stream,
                                     boolean append) {
         return writeFile(filePath != null ? new File(filePath) : null, stream,
-                append);
+            append);
     }
 
     /**
@@ -630,7 +632,7 @@ public final class FileUtils {
         BufferedReader reader = null;
         try {
             InputStreamReader is = new InputStreamReader(new FileInputStream(
-                    file), charsetName);
+                file), charsetName);
             reader = new BufferedReader(is);
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -682,13 +684,13 @@ public final class FileUtils {
         int filePosi = filePath.lastIndexOf(File.separator);
         if (filePosi == -1) {
             return (extenPosi == -1 ? filePath : filePath.substring(0,
-                    extenPosi));
+                extenPosi));
         }
         if (extenPosi == -1) {
             return filePath.substring(filePosi + 1);
         }
         return (filePosi < extenPosi ? filePath.substring(filePosi + 1,
-                extenPosi) : filePath.substring(filePosi + 1));
+            extenPosi) : filePath.substring(filePosi + 1));
     }
 
     /**
@@ -796,7 +798,7 @@ public final class FileUtils {
 
         File folder = new File(folderName);
         return (folder.exists() && folder.isDirectory()) || folder
-                .mkdirs();
+            .mkdirs();
     }
 
     /**
@@ -910,21 +912,21 @@ public final class FileUtils {
             String[] proj = {MediaStore.Images.Media.DATA};
             @SuppressWarnings("deprecation")
             Cursor actualimagecursor = activity.managedQuery(uri, proj, null, null,
-                    null);
+                null);
             int actual_image_column_index = actualimagecursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             actualimagecursor.moveToFirst();
             String img_path = actualimagecursor
-                    .getString(actual_image_column_index);
+                .getString(actual_image_column_index);
             return new File(img_path);
         } else {
             // 在API11以上：要转为使用CursorLoader,并使用loadInBackground来返回
             String[] projection = {MediaStore.Images.Media.DATA};
             CursorLoader loader = new CursorLoader(activity, uri, projection, null,
-                    null, null);
+                null, null);
             Cursor cursor = loader.loadInBackground();
             int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return new File(cursor.getString(column_index));
         }

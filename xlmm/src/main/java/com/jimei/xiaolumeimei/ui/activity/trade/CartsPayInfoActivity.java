@@ -533,7 +533,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void xlmmPay() {
-        if (isHaveAddress) {
+        if (isHaveAddress || needLevel == 0) {
             if (!isCoupon && !isBudget && !isWx && !isAlipay && !isCoin) {
                 return;
             }
@@ -706,7 +706,7 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
     }
 
     private void xlmmPayWithDialog() {
-        if (isHaveAddress) {
+        if (isHaveAddress|| needLevel == 0) {
             if (!isCoupon && !isBudget && !isWx && !isAlipay && !isCoin) {
                 new MyDialog(this).show();
                 return;
@@ -1117,9 +1117,15 @@ public class CartsPayInfoActivity extends BaseSwipeBackCompatActivity implements
 
     private void checkIdNo() {
         if (personalInfoLevel < needLevel) {
+            String contentStr;
+            if (needLevel >= 2) {
+                contentStr = "订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证信息。此信息加密保存，只用于此订单海关通关，请点击地址进行修改。";
+            } else {
+                contentStr = "地址信息未完善，请填写完整。";
+            }
             new AlertDialog.Builder(this)
                 .setTitle("提示")
-                .setMessage("订单中包含进口保税区发货商品，根据海关监管要求，需要提供收货人身份证信息。此信息加密保存，只用于此订单海关通关，请点击地址进行修改。")
+                .setMessage(contentStr)
                 .setPositiveButton("确认", (dialog1, which) -> {
                     dialog1.dismiss();
                     Bundle addressBundle = new Bundle();

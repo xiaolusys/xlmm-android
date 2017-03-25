@@ -251,6 +251,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
             setDialogContent("上传中...");
             new compressTask().execute(file.getPath());
         }
+
     }
 
     public File Image_Selecting_Task(Intent data) {
@@ -407,7 +408,7 @@ public class AddAddressActivity extends BaseSwipeBackCompatActivity
         protected String doInBackground(String... strings) {
             try {
                 bitmap = BitmapFactory.decodeFile(strings[0]);
-                compressImage = CameraUtils.imageZoom(bitmap, 200);
+                compressImage = CameraUtils.imageZoom(bitmap, 50);
                 file = null;
                 return CameraUtils.getBitmapStrBase64(compressImage);
             } catch (Exception e) {
