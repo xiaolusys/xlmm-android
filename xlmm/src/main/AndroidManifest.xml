@@ -98,6 +98,16 @@
                     android:path="/v1/products/promote_previous"
                     android:scheme="com.jimei.xlmm"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data
+                    android:host="app"
+                    android:path="/v1/home"
+                    android:scheme="com.jimei.xlmm"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.user.LoginActivity"

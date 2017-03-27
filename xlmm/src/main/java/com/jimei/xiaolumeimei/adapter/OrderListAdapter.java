@@ -65,7 +65,8 @@ public class OrderListAdapter extends BaseAdapter {
             context.startActivity(intent);
         });
         OrdersEntity entity = mList.get(position);
-        ViewUtils.loadImgToImgView(context, holder.img, entity.getPic_path());
+//        ViewUtils.loadImgToImgView(context, holder.img, entity.getPic_path());
+        ViewUtils.loadImgToImgViewWithPlaceholder(context,holder.img,entity.getPic_path());
         holder.name.setText(entity.getTitle());
         holder.price.setText("¥" + new DecimalFormat("0.00").format(entity.getTotal_fee()/entity.getNum()));
         holder.num.setText("x" + entity.getNum());

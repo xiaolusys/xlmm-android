@@ -17,11 +17,10 @@ import rx.Subscription;
  */
 
 public interface CartsInteractor {
-    Subscription getCartsList(ServiceResponse<List<CartsInfoBean>> response);
 
     Subscription getCartsList(int type, ServiceResponse<List<CartsInfoBean>> response);
 
-    Subscription getCartsHisList(ServiceResponse<List<CartsInfoBean>> response);
+    Subscription getCartsHisList(int type,ServiceResponse<List<CartsInfoBean>> response);
 
     Subscription getCartsPayInfoList(String cart_ids, ServiceResponse<CartsPayinfoBean> response);
 
@@ -33,9 +32,7 @@ public interface CartsInteractor {
 
     Subscription deleteCarts(String id, ServiceResponse<Response<CodeBean>> response);
 
-    Subscription rebuy(String item_id, String sku_id, String cart_id, ServiceResponse<CartsHisBean> response);
-
-    Subscription addToCart(int item_id, int sku_id, int num, ServiceResponse<ResultEntity> response);
+    Subscription rebuy(int type,String item_id, String sku_id, String cart_id, ServiceResponse<CartsHisBean> response);
 
     Subscription addToCart(int item_id, int sku_id, int num, int type, ServiceResponse<ResultEntity> response);
 }

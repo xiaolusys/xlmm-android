@@ -21,7 +21,7 @@ import rx.Subscription;
 public interface MainInteractor {
     Subscription getProfile(ServiceResponse<UserInfoBean> serviceResponse);
 
-    Subscription getCartsNum(ServiceResponse<CartsNumResultBean> serviceResponse);
+    Subscription getCartsNum(int type,ServiceResponse<CartsNumResultBean> serviceResponse);
 
     Subscription getPortalBean(String exclude_fields, ServiceResponse<PortalBean> serviceResponse);
 
