@@ -28,12 +28,6 @@ public class CartsInteractorImpl implements CartsInteractor {
         this.service = service;
     }
 
-    @Override
-    public Subscription getCartsList(ServiceResponse<List<CartsInfoBean>> response) {
-        return service.getCartsList(5)
-            .compose(new DefaultTransform<>())
-            .subscribe(response);
-    }
 
     @Override
     public Subscription getCartsList(int type, ServiceResponse<List<CartsInfoBean>> response) {
@@ -43,8 +37,8 @@ public class CartsInteractorImpl implements CartsInteractor {
     }
 
     @Override
-    public Subscription getCartsHisList(ServiceResponse<List<CartsInfoBean>> response) {
-        return service.getCartsHisList(5)
+    public Subscription getCartsHisList(int type,ServiceResponse<List<CartsInfoBean>> response) {
+        return service.getCartsHisList(type)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }
@@ -85,15 +79,8 @@ public class CartsInteractorImpl implements CartsInteractor {
     }
 
     @Override
-    public Subscription rebuy(String item_id, String sku_id, String cart_id, ServiceResponse<CartsHisBean> response) {
-        return service.rebuy(5, item_id, sku_id, cart_id)
-            .compose(new DefaultTransform<>())
-            .subscribe(response);
-    }
-
-    @Override
-    public Subscription addToCart(int item_id, int sku_id, int num, ServiceResponse<ResultEntity> response) {
-        return service.addToCart(item_id, sku_id, num)
+    public Subscription rebuy(int type,String item_id, String sku_id, String cart_id, ServiceResponse<CartsHisBean> response) {
+        return service.rebuy(type, item_id, sku_id, cart_id)
             .compose(new DefaultTransform<>())
             .subscribe(response);
     }

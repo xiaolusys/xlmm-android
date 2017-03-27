@@ -129,7 +129,7 @@ public class TabActivity extends BaseActivity {
     public void showCarNum() {
         if (LoginUtils.checkLoginState(this)) {
             addSubscription(XlmmApp.getMainInteractor(this)
-                .getCartsNum(new ServiceResponse<CartsNumResultBean>() {
+                .getCartsNum(5,new ServiceResponse<CartsNumResultBean>() {
                     @Override
                     public void onNext(CartsNumResultBean cartsNumResultBean) {
                         if (cartsNumResultBean != null) {

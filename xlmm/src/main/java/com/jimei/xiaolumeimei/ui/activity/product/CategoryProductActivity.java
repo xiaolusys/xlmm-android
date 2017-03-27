@@ -58,7 +58,7 @@ public class CategoryProductActivity extends BaseMVVMActivity<ActivityCategoryPr
         List<BaseFragment> fragments = new ArrayList<>();
         if (nameList.size() == cidList.size()) {
             for (int i = 0; i < nameList.size(); i++) {
-                fragments.add(ProductFragment.newInstance(cidList.get(i), nameList.get(i)));
+                fragments.add(ProductFragment.newInstance(cidList.get(i), nameList.get(i),false));
             }
         }
         BaseTabAdapter mAdapter = new BaseTabAdapter(getSupportFragmentManager(), fragments);

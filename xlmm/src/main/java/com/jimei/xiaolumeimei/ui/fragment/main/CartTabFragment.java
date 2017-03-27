@@ -70,7 +70,7 @@ public class CartTabFragment extends BaseBindingFragment<FragmentCarTabBinding> 
 
     private void refreshHisCartList() {
         addSubscription(XlmmApp.getCartsInteractor(mActivity)
-            .getCartsHisList(new ServiceResponse<List<CartsInfoBean>>() {
+            .getCartsHisList(5, new ServiceResponse<List<CartsInfoBean>>() {
                 @Override
                 public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                     cartHisList.clear();
@@ -178,7 +178,7 @@ public class CartTabFragment extends BaseBindingFragment<FragmentCarTabBinding> 
 
     private void refreshIds() {
         addSubscription(XlmmApp.getCartsInteractor(mActivity)
-            .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
+            .getCartsList(5, new ServiceResponse<List<CartsInfoBean>>() {
                 @Override
                 public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                     if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
@@ -208,7 +208,7 @@ public class CartTabFragment extends BaseBindingFragment<FragmentCarTabBinding> 
 
     public void refreshCartList() {
         addSubscription(XlmmApp.getCartsInteractor(mActivity)
-            .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
+            .getCartsList(5, new ServiceResponse<List<CartsInfoBean>>() {
                 @Override
                 public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                     cartList.clear();

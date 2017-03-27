@@ -58,7 +58,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                     if (categorys != null && categorys.size() > 0) {
                         for (int i = 0; i < categorys.size(); i++) {
                             PortalBean.CategorysBean bean = categorys.get(i);
-                            fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
+                            fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName(),true));
                         }
                         BaseTabAdapter mAdapter = new BaseTabAdapter(getChildFragmentManager(), fragments);
                         b.viewPager.setAdapter(mAdapter);

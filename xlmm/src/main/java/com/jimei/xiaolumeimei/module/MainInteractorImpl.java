@@ -38,8 +38,8 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     @Override
-    public Subscription getCartsNum(ServiceResponse<CartsNumResultBean> serviceResponse) {
-        return service.getCartsNum(5)
+    public Subscription getCartsNum(int type,ServiceResponse<CartsNumResultBean> serviceResponse) {
+        return service.getCartsNum(type)
             .compose(new DefaultTransform<>())
             .subscribe(serviceResponse);
     }

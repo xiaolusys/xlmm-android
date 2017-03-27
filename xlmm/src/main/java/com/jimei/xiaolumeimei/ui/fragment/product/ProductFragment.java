@@ -35,12 +35,13 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
     private ProductListAdapter mProductListAdapter;
     private String next;
     private String sortBy;
+    private boolean mainFlag;
 
-
-    public static ProductFragment newInstance(String cid, String title) {
+    public static ProductFragment newInstance(String cid, String title, boolean mainFlag) {
         Bundle args = new Bundle();
         args.putString("cid", cid);
         args.putString("title", title);
+        args.putBoolean("mainFlag", mainFlag);
         ProductFragment fragment = new ProductFragment();
         fragment.setArguments(args);
         return fragment;
@@ -51,6 +52,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cid = getArguments().getString("cid");
+            mainFlag = getArguments().getBoolean("mainFlag");
         }
     }
 
@@ -105,15 +107,17 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshSort(SortEvent event) {
-        if (event.isSortByPrice()) {
-            sortBy = "price";
-        } else {
-            sortBy = "";
-        }
-        if (getUserVisibleHint()) {
-            page = 1;
-            b.xrv.setLoadingMoreEnabled(true);
-            refreshData(true);
+        if (!mainFlag){
+            if (event.isSortByPrice()) {
+                sortBy = "price";
+            } else {
+                sortBy = "";
+            }
+            if (getUserVisibleHint()) {
+                page = 1;
+                b.xrv.setLoadingMoreEnabled(true);
+                refreshData(true);
+            }
         }
     }
 
