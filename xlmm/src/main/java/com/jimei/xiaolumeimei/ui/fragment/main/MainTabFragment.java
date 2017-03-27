@@ -3,6 +3,7 @@ package com.jimei.xiaolumeimei.ui.fragment.main;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.ui.fragment.product.ActivityFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.ProductFragment;
 import com.jimei.xiaolumeimei.ui.fragment.product.TodayNewFragment;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.List;
  * Created by wisdom on 17/3/6.
  */
 
-public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding> {
+public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding> implements ViewPager.OnPageChangeListener {
 
     public static MainTabFragment newInstance() {
         return new MainTabFragment();
@@ -36,6 +38,11 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
     @Override
     public View getLoadingView() {
         return b.layout;
+    }
+
+    @Override
+    public void setListener() {
+        b.viewPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -51,7 +58,7 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
                     if (categorys != null && categorys.size() > 0) {
                         for (int i = 0; i < categorys.size(); i++) {
                             PortalBean.CategorysBean bean = categorys.get(i);
-                            fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName()));
+                            fragments.add(ProductFragment.newInstance(bean.getId(), bean.getName(),true));
                         }
                         BaseTabAdapter mAdapter = new BaseTabAdapter(getChildFragmentManager(), fragments);
                         b.viewPager.setAdapter(mAdapter);
@@ -98,5 +105,31 @@ public class MainTabFragment extends BaseBindingFragment<FragmentMainTabBinding>
             params.setMargins(0, 0, 0, 0);
         }
         b.tabLayout.setLayoutParams(params);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position) {
+            case 0:
+                MobclickAgent.onEvent(mActivity, "tab_activity");
+                break;
+            case 1:
+                MobclickAgent.onEvent(mActivity, "tab_today");
+                break;
+            default:
+                MobclickAgent.onEvent(mActivity, "tab_category_list");
+                break;
+        }
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

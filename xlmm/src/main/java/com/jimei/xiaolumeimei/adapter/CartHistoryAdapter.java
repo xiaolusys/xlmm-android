@@ -35,13 +35,14 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
     private List<CartsInfoBean> mList;
     private BaseActivity mActivity;
     private ICartHelper helper;
+    private int type;
 
     public CartHistoryAdapter(BaseActivity mActivity, List<CartsInfoBean> mList, ICartHelper helper) {
         this.mList = mList;
         this.mActivity = mActivity;
         this.helper = helper;
+        type = 5;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -74,7 +75,7 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
                     MobclickAgent.onEvent(mActivity, "ReAddCartsID");
                     helper.showIndeterminateProgressDialog(false);
                     helper.addSubscription(XlmmApp.getCartsInteractor(mActivity)
-                        .rebuy(cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
+                        .rebuy(type, cartsInfoBean.getItem_id(), cartsInfoBean.getSku_id(),
                             cartsInfoBean.getId() + "", new ServiceResponse<CartsHisBean>() {
                                 @Override
                                 public void onNext(CartsHisBean cartsHisBean) {
@@ -104,6 +105,10 @@ public class CartHistoryAdapter extends RecyclerView.Adapter<CartHistoryAdapter.
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

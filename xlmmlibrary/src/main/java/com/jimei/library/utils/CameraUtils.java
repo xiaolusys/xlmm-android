@@ -58,8 +58,8 @@ public class CameraUtils {
         return bm;
 //        } catch (Exception e) {
 //            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            int options = 35;
-//            bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+//            int options = 50;
+//            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 //            while (baos.toByteArray().length / 1024 > size) { // 循环判断如果压缩后图片是否大于50kb,大于继续压缩
 //                baos.reset();// 重置baos即清空baos
 //                bm.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
@@ -89,6 +89,7 @@ public class CameraUtils {
             (int) height, matrix, true);
     }
 
+
     // 把Bitmap转换成Base64
     public static String getBitmapStrBase64(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -110,7 +111,8 @@ public class CameraUtils {
     }
 
     private static void ImagePickerDialog(Activity activity) {
-        CharSequence[] items = {"相册", "相机"};
+//        CharSequence[] items = {"相册", "相机"};
+        CharSequence[] items = {"相册"};
         new AlertDialog.Builder(activity)
             .setTitle("选择图片来源")
             .setItems(items, (dialog, which) -> {

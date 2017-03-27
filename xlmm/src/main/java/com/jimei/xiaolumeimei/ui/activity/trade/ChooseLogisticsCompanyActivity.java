@@ -24,7 +24,7 @@ import java.util.List;
 import butterknife.Bind;
 
 public class ChooseLogisticsCompanyActivity extends BaseSwipeBackCompatActivity {
-    final List<LogisticsCompanyInfo> company_list = new ArrayList<LogisticsCompanyInfo>();
+    final List<LogisticsCompanyInfo> company_list = new ArrayList<>();
     @Bind(R.id.lv_logistics_company)
     ListView lv_logistics_company;
     @Bind(R.id.sideBar)

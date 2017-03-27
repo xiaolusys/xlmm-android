@@ -7,7 +7,8 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class MultiImageView extends LinearLayout {
         @Override
         public void onClick(View view) {
             if (mOnItemClickListener != null) {
-                mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
+                mOnItemClickListener.onItemClick(view, ((ColorFilterImageView) view).getImagePosition());
             }
         }
     };
@@ -189,7 +190,7 @@ public class MultiImageView extends LinearLayout {
         } else {
             url = imagesList.get(position) + "?imageMogr2/format/jpg/size-limit/30k/thumbnail/289/quality/70";
         }
-        ImageView imageView = new ColorFilterImageView(getContext());
+        ColorFilterImageView imageView = new ColorFilterImageView(getContext());
         if (isMultiImage) {
             imageView.setScaleType(ScaleType.CENTER_CROP);
             imageView.setLayoutParams(
@@ -200,10 +201,10 @@ public class MultiImageView extends LinearLayout {
             imageView.setMaxHeight(pxOneMaxWandH);
             imageView.setLayoutParams(onePicPara);
         }
-        imageView.setTag(position);
+        imageView.setImagePosition(position);
         imageView.setId(url.hashCode());
         imageView.setOnClickListener(mImageViewOnClickListener);
-        Picasso.with(context).load(url).into(imageView);
+        Glide.with(context).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.RESULT).into(imageView);
         return imageView;
     }
 

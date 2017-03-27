@@ -102,7 +102,9 @@ public class WriteLogisticsInfoActivty extends BaseSwipeBackCompatActivity
 
     @Override
     protected void initData() {
-        if (address.contains("，")) {
+        if (address == null || "".equals(address)) {
+            JUtils.Toast("未查询到退货地址，请联系小鹿客服查询");
+        } else if (address.contains("，")) {
             String[] split = address.split("，");
             for (String s : split) {
                 if (s.contains("市")) {

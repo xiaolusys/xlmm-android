@@ -124,45 +124,47 @@ public class LoginUtils {
     }
 
     public static void setPushUserAccount(Context context, String mRegId) {
-        try {
-            String android_id = Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-            JUtils.Log("regid", android_id);
-            XlmmApp.getUserInteractor(context)
-                .getUserAccount("android", mRegId,
-                    Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
-                        Settings.Secure.ANDROID_ID), new ServiceResponse<UserAccountBean>() {
-                        @Override
-                        public void onNext(UserAccountBean user) {
-                            saveMipushOk(context, true);
-                            JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
-                            if ((getUserAccount(context) != null)
-                                && ((!getUserAccount(context).isEmpty()))
-                                && (!getUserAccount(context).equals(user.getUserAccount()))) {
+        if (checkLoginState(context)) {
+            try {
+                String android_id = Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+                JUtils.Log("regid", android_id);
+                XlmmApp.getUserInteractor(context)
+                    .getUserAccount("android", mRegId,
+                        Settings.Secure.getString(XlmmApp.getmContext().getContentResolver(),
+                            Settings.Secure.ANDROID_ID), new ServiceResponse<UserAccountBean>() {
+                            @Override
+                            public void onNext(UserAccountBean user) {
+                                saveMipushOk(context, true);
+                                JUtils.Log(TAG, "UserAccountBean:, " + user.toString());
+                                if ((getUserAccount(context) != null)
+                                    && ((!getUserAccount(context).isEmpty()))
+                                    && (!getUserAccount(context).equals(user.getUserAccount()))) {
 
-                                MiPushClient.unsetUserAccount(context.getApplicationContext(),
-                                    getUserAccount(context), null);
-                                JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
+                                    MiPushClient.unsetUserAccount(context.getApplicationContext(),
+                                        getUserAccount(context), null);
+                                    JUtils.Log(TAG, "unset useraccount: " + getUserAccount(context));
+                                }
+                                MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(),
+                                    null);
                             }
-                            MiPushClient.setUserAccount(context.getApplicationContext(), user.getUserAccount(),
-                                null);
-                        }
 
-                        @Override
-                        public void onCompleted() {
-                            super.onCompleted();
-                        }
+                            @Override
+                            public void onCompleted() {
+                                super.onCompleted();
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            Log.e(TAG, "error: getUserAccount" + e.getLocalizedMessage());
-                            super.onError(e);
-                            deleteIsMipushOk(context);
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                Log.e(TAG, "error: getUserAccount" + e.getLocalizedMessage());
+                                super.onError(e);
+                                deleteIsMipushOk(context);
+                            }
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

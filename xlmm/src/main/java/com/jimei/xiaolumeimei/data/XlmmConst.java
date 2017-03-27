@@ -54,12 +54,12 @@ public class XlmmConst {
     public static final String WX_APP_ID = "wx25fcb32689872499";
 
     public static final String XLMM_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()
-            + "/xlmm/";
+        + "/xlmm/";
 
     public static final String CATEGORY_JSON = XLMM_DIR + "category.json";
 
     private static final String[] NUMBER = {"零", "一", "二", "三", "四", "五"
-            , "六", "七", "八", "九", "十"};
+        , "六", "七", "八", "九", "十"};
 
     public static String numberToWord(int num) {
         if (num >= 0 && num <= 10) {

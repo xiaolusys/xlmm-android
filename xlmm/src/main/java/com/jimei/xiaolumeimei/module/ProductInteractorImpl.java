@@ -40,16 +40,15 @@ public class ProductInteractorImpl implements ProductInteractor {
 
     @Override
     public Subscription getCategoryProductList(String cid, int page, String order_by, ServiceResponse<ProductListBean> response) {
-        return service.getCategoryProductList(cid, page, order_by)
-            .compose(new DefaultTransform<>())
-            .subscribe(response);
-    }
-
-    @Override
-    public Subscription getCategoryProductList(int cid, int page, ServiceResponse<ProductListBean> response) {
-        return service.getCategoryProductList(cid, page)
-            .compose(new DefaultTransform<>())
-            .subscribe(response);
+        if (order_by != null && !"".equals(order_by)) {
+            return service.getCategoryProductList(cid, page, order_by)
+                .compose(new DefaultTransform<>())
+                .subscribe(response);
+        } else {
+            return service.getCategoryProductList(cid, page)
+                .compose(new DefaultTransform<>())
+                .subscribe(response);
+        }
     }
 
     @Override

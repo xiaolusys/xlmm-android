@@ -55,6 +55,7 @@ import com.jimei.xiaolumeimei.entities.event.CartEvent;
 import com.jimei.xiaolumeimei.htmlJsBridge.AndroidJsBridge;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
+import com.jimei.xiaolumeimei.ui.activity.trade.CartActivity;
 import com.jimei.xiaolumeimei.ui.activity.trade.CartsPayInfoActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
@@ -224,6 +225,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     productDetail = productDetailBean;
                     fillDataToView(productDetailBean);
                     hideIndeterminateProgressDialog();
+                    showCartNum();
                 }
 
                 @Override
@@ -237,12 +239,18 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     @Override
     protected void onResume() {
         super.onResume();
-        showCartNum();
+        if (productDetail != null) {
+            showCartNum();
+        }
     }
 
     private void showCartNum() {
+        int type = 5;
+        if (!productDetail.getDetail_content().is_boutique()) {
+            type = 0;
+        }
         addSubscription(XlmmApp.getMainInteractor(this)
-            .getCartsNum(new ServiceResponse<CartsNumResultBean>() {
+            .getCartsNum(type, new ServiceResponse<CartsNumResultBean>() {
                 @Override
                 public void onNext(CartsNumResultBean cartsNumResultBean) {
                     cart_num = cartsNumResultBean.getResult();
@@ -255,7 +263,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
     }
 
     private void fillDataToView(ProductDetailBean productDetailBean) {
-        if (productDetailBean.getSource_type()>=2) {
+        if (productDetailBean.getSource_type() >= 2) {
             b.levelLayout.setVisibility(View.VISIBLE);
         }
         b.webView.loadUrl(XlmmApi.getAppUrl() + "/mall/product/details/app/" + model_id);
@@ -268,13 +276,19 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         List<ProductDetailBean.SkuInfoBean> skuInfo = productDetailBean.getSku_info();
         if ("will".equals(detailContent.getSale_state())) {
             b.tvAdd.setClickable(false);
+            b.tvBuy.setClickable(false);
             b.tvAdd.setText("即将开售");
+            b.tvBuy.setText("即将开售");
         } else if ("off".equals(detailContent.getSale_state())) {
             b.tvAdd.setClickable(false);
+            b.tvBuy.setClickable(false);
             b.tvAdd.setText("已下架");
+            b.tvBuy.setText("已下架");
         } else if ("on".equals(detailContent.getSale_state()) && detailContent.isIs_sale_out()) {
             b.tvAdd.setClickable(false);
+            b.tvBuy.setClickable(false);
             b.tvAdd.setText("已抢光");
+            b.tvBuy.setText("已抢光");
         } else if (teamBuyInfo != null && teamBuyInfo.isTeambuy()) {
             item_id = skuInfo.get(0).getProduct_id();
             sku_id = skuInfo.get(0).getSku_items().get(0).getSku_id();
@@ -328,6 +342,9 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         }
         initAttr(productDetailBean.getComparison().getAttributes());
         initHeadImg(detailContent);
+        if (detailContent.is_onsale()) {
+            b.tvAdd.setVisibility(View.GONE);
+        }
     }
 
     private void setSkuId(List<ProductDetailBean.SkuInfoBean> sku_info) {
@@ -468,8 +485,13 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                     jumpToLogin();
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putString("flag", "car");
-                    readyGoThenKill(TabActivity.class, bundle);
+                    if (productDetail == null || productDetail.getDetail_content().is_boutique()) {
+                        bundle.putString("flag", "car");
+                        readyGoThenKill(TabActivity.class, bundle);
+                    } else {
+                        bundle.putBoolean("isNormal", true);
+                        readyGoThenKill(CartActivity.class, bundle);
+                    }
                 }
                 break;
             case R.id.tv_add:
@@ -526,7 +548,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 if (!LoginUtils.checkLoginState(getApplicationContext())) {
                     jumpToLogin();
                 } else {
-                    addToCart(false);
+                    addToCart(false, 0);
                 }
                 break;
             case R.id.plus:
@@ -540,15 +562,20 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                 }
                 break;
             case R.id.commit:
+                int productType = 5;
+                if (!productDetail.getDetail_content().is_boutique()) {
+                    productType = 0;
+                }
+                final int type = productType;
                 if (isBoutique) {
                     addSubscription(XlmmApp.getCartsInteractor(this)
-                        .addToCart(item_id, sku_id, num, 5, new ServiceResponse<ResultEntity>() {
+                        .addToCart(item_id, sku_id, num, type, new ServiceResponse<ResultEntity>() {
                             @Override
                             public void onNext(ResultEntity resultEntity) {
                                 if (resultEntity.getCode() == 0) {
                                     EventBus.getDefault().post(new CartEvent());
                                     addSubscription(XlmmApp.getCartsInteractor(ProductDetailActivity.this)
-                                        .getCartsList(new ServiceResponse<List<CartsInfoBean>>() {
+                                        .getCartsList(type, new ServiceResponse<List<CartsInfoBean>>() {
                                             @Override
                                             public void onNext(List<CartsInfoBean> cartsInfoBeen) {
                                                 if (cartsInfoBeen != null && cartsInfoBeen.size() > 0) {
@@ -571,7 +598,7 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
                             }
                         }));
                 } else {
-                    addToCart(true);
+                    addToCart(true, type);
                 }
                 break;
             default:
@@ -590,10 +617,10 @@ public class ProductDetailActivity extends BaseMVVMActivity<ActivityProductDetai
         finish();
     }
 
-    private void addToCart(boolean dismiss) {
+    private void addToCart(boolean dismiss, int type) {
         MobclickAgent.onEvent(this, "AddCartsID");
         addSubscription(XlmmApp.getCartsInteractor(this)
-            .addToCart(item_id, sku_id, num, 5, new ServiceResponse<ResultEntity>() {
+            .addToCart(item_id, sku_id, num, type, new ServiceResponse<ResultEntity>() {
                 @Override
                 public void onNext(ResultEntity resultEntity) {
                     JUtils.Toast(resultEntity.getInfo());

@@ -29,7 +29,6 @@ public class ImagePagerActivity extends BaseSwipeBackCompatActivity {
     ViewPager viewPager;
     @Bind(R.id.guideGroup)
     LinearLayout guideGroup;
-    //public static ImageSize imageSize;
     private List<View> guideViewList = new ArrayList<>();
 
     public static void startImagePagerActivity(Context context, List<String> imgUrls, int position) {

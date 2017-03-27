@@ -16,8 +16,10 @@ public class UpdateBroadReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String downloadUrl = intent.getStringExtra(UpdateService.EXTRAS_DOWNLOAD_URL);
+        int versionCode = intent.getIntExtra(UpdateService.VERSION_CODE, -1);
         Intent updateIntent = new Intent(context, UpdateService.class);
         updateIntent.putExtra(UpdateService.EXTRAS_DOWNLOAD_URL, downloadUrl);
+        updateIntent.putExtra(UpdateService.VERSION_CODE, versionCode);
         context.startService(updateIntent);
     }
 }

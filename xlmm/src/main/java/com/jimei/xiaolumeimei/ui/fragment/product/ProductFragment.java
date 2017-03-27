@@ -14,7 +14,12 @@ import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentProductBinding;
 import com.jimei.xiaolumeimei.entities.ProductListBean;
+import com.jimei.xiaolumeimei.entities.event.SortEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -24,17 +29,19 @@ import java.util.List;
 
 public class ProductFragment extends BaseBindingFragment<FragmentProductBinding> {
 
-    private int type;
+    private String cid;
     private int page;
 
     private ProductListAdapter mProductListAdapter;
     private String next;
+    private String sortBy;
+    private boolean mainFlag;
 
-
-    public static ProductFragment newInstance(int type, String title) {
+    public static ProductFragment newInstance(String cid, String title, boolean mainFlag) {
         Bundle args = new Bundle();
-        args.putInt("type", type);
+        args.putString("cid", cid);
         args.putString("title", title);
+        args.putBoolean("mainFlag", mainFlag);
         ProductFragment fragment = new ProductFragment();
         fragment.setArguments(args);
         return fragment;
@@ -44,7 +51,8 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            type = getArguments().getInt("type");
+            cid = getArguments().getString("cid");
+            mainFlag = getArguments().getBoolean("mainFlag");
         }
     }
 
@@ -61,8 +69,9 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
 
     @Override
     protected void initViews() {
-        GridLayoutManager manager = new GridLayoutManager(mActivity, 2);
-        b.xrv.setLayoutManager(manager);
+        sortBy = "";
+        EventBus.getDefault().register(this);
+        b.xrv.setLayoutManager(new GridLayoutManager(mActivity, 2));
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
@@ -73,6 +82,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
             @Override
             public void onRefresh() {
                 page = 1;
+                b.xrv.setLoadingMoreEnabled(true);
                 refreshData(true);
             }
 
@@ -83,9 +93,32 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
                 } else {
                     JUtils.Toast("已经到底啦!");
                     b.xrv.loadMoreComplete();
+                    b.xrv.setLoadingMoreEnabled(false);
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshSort(SortEvent event) {
+        if (!mainFlag){
+            if (event.isSortByPrice()) {
+                sortBy = "price";
+            } else {
+                sortBy = "";
+            }
+            if (getUserVisibleHint()) {
+                page = 1;
+                b.xrv.setLoadingMoreEnabled(true);
+                refreshData(true);
+            }
+        }
     }
 
     public void refreshData(boolean clear) {
@@ -96,7 +129,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
             page = 1;
         }
         addSubscription(XlmmApp.getProductInteractor(mActivity)
-            .getCategoryProductList(type, page, new ServiceResponse<ProductListBean>() {
+            .getCategoryProductList(cid, page, sortBy, new ServiceResponse<ProductListBean>() {
                 @Override
                 public void onNext(ProductListBean bean) {
                     List<ProductListBean.ResultsBean> results = bean.getResults();

@@ -4,17 +4,17 @@ package com.jimei.xiaolumeimei.adapter;
  * Created by wulei on 2016/1/24.
  */
 
-import com.jimei.xiaolumeimei.R;
-import com.jimei.xiaolumeimei.entities.LogisticsCompanyInfo;
-
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.LogisticsCompanyInfo;
+
+import java.util.List;
 
 public class LogisticCompanyAdapter extends BaseAdapter {
 
@@ -32,7 +32,7 @@ public class LogisticCompanyAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return null;
+        return list.get(position);
     }
 
     public long getItemId(int position) {

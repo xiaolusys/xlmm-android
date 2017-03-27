@@ -9,6 +9,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,7 +41,7 @@ import com.jimei.xiaolumeimei.ui.activity.user.CoinActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.InformationActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
 import com.jimei.xiaolumeimei.ui.activity.user.WalletActivity;
-import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMCarryLogActivity;
+import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMCarryActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMFansActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMNinePicActivity;
 import com.jimei.xiaolumeimei.ui.activity.xiaolumama.MMShareCodeWebViewActivity;
@@ -71,7 +72,8 @@ import rx.Observable;
  * Created by wisdom on 17/3/6.
  */
 
-public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding> implements View.OnClickListener {
+public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding> implements
+    View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private boolean mamaFlag;
     private String shareLink;
     private String shopLink;
@@ -194,7 +196,7 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
                         initFortune((MamaFortune) o);
                     } else if (o instanceof RecentCarryBean) {
                         if (((RecentCarryBean) o).getResults().size() > 0) {
-                            initTodatText(((RecentCarryBean) o).getResults());
+                            initTodayText(((RecentCarryBean) o).getResults());
                         }
                     } else if (o instanceof MamaSelfListBean) {
                         initTask((MamaSelfListBean) o);
@@ -210,7 +212,7 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
         fansUrl = resultsBean.getExtra().getFans_explain();
     }
 
-    public void initTodatText(List<RecentCarryBean.ResultsEntity> his_refund) {
+    public void initTodayText(List<RecentCarryBean.ResultsEntity> his_refund) {
         b.chartVisit.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getVisitorNum()));
         b.chartOrder.setText(Integer.toString(his_refund.get(his_refund.size() - 1).getOrderNum()));
         b.chartFund.setText(Double.toString(
@@ -313,11 +315,9 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
 
     @Override
     protected void initViews() {
+        b.swipeLayout.setColorSchemeResources(R.color.colorAccent);
         EventBus.getDefault().register(this);
     }
-
-    @Subscribe()
-
 
     @Override
     public void onDestroyView() {
@@ -332,6 +332,7 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
 
     @Override
     public void setListener() {
+        b.swipeLayout.setOnRefreshListener(this);
         b.rlHead.setOnClickListener(this);
         b.imgUser.setOnClickListener(this);
         b.tvNickname.setOnClickListener(this);
@@ -470,12 +471,12 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
                 case R.id.fund_layout:
                     bundle.putString("carrylogMoney", carryLogMoney);
                     bundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                    readyGo(MMCarryLogActivity.class, bundle);
+                    readyGo(MMCarryActivity.class, bundle);
                     break;
                 case R.id.ll_income:
                     bundle.putString("carrylogMoney", carryLogMoney);
                     bundle.putString("hisConfirmedCashOut", hisConfirmedCashOut);
-                    readyGo(MMCarryLogActivity.class, bundle);
+                    readyGo(MMCarryActivity.class, bundle);
                     break;
                 case R.id.ll_visit:
                     readyGo(MamaVisitorActivity.class);
@@ -507,5 +508,14 @@ public class UserTabFragment extends BaseBindingFragment<FragmentUserTabBinding>
 
     private void readyGo(Class clazz) {
         startActivity(new Intent(mActivity, clazz));
+    }
+
+    @Override
+    public void onRefresh() {
+        if (b.swipeLayout.isRefreshing()) {
+            b.swipeLayout.setRefreshing(false);
+        }
+        showIndeterminateProgressDialog(true);
+        initData();
     }
 }

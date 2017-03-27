@@ -16,6 +16,7 @@ import com.jimei.library.widget.NoDoubleClickListener;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.MainTodayBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 import com.jimei.xiaolumeimei.entities.WxQrcode;
@@ -77,10 +78,10 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
             max = "0";
         }
         holder.profit.setText("利润: ¥" + min + " ~ ¥" + max);
-        holder.itemView.setOnClickListener(view -> {
+        holder.productLayout.setOnClickListener(view -> {
             MobclickAgent.onEvent(context, "click_product");
             try {
-                int modelId = Integer.parseInt(bean.getModel_id().trim());
+                int modelId = bean.getModel_id();
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("model_id", modelId);
@@ -104,7 +105,7 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
                                 Intent intent = new Intent(context, MMNinePicActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("codeLink", wxQrcode.getQrcode_link());
-                                bundle.putInt("model_id", Integer.parseInt(bean.getModel_id().trim()));
+                                bundle.putInt("model_id", bean.getModel_id());
                                 intent.putExtras(bundle);
                                 context.startActivity(intent);
                             }
@@ -117,11 +118,31 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
             protected void onNoDoubleClick(View v) {
                 context.showIndeterminateProgressDialog(false);
                 XlmmApp.getProductInteractor(context)
-                    .getShareModel(Integer.parseInt(bean.getModel_id().trim()), new ServiceResponse<ShareModelBean>() {
+                    .getShareModel(bean.getModel_id(), new ServiceResponse<ShareModelBean>() {
                         @Override
                         public void onNext(ShareModelBean shareModel) {
                             context.hideIndeterminateProgressDialog();
                             ShareUtils.shareWithModel(shareModel, context);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            context.hideIndeterminateProgressDialog();
+                            JUtils.Toast("分享失败,请点击重试!");
+                        }
+                    });
+            }
+        });
+        holder.shareAllLayout.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                context.showIndeterminateProgressDialog(false);
+                XlmmApp.getActivityInteractor(context)
+                    .get_party_share_content(bean.getActivity_id() + "", new ServiceResponse<ActivityBean>() {
+                        @Override
+                        public void onNext(ActivityBean activityBean) {
+                            context.hideIndeterminateProgressDialog();
+                            ShareUtils.shareActivity(activityBean, context);
                         }
 
                         @Override
@@ -144,16 +165,18 @@ public class MainProductAdapter extends RecyclerView.Adapter<MainProductAdapter.
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name, price, profit;
-        LinearLayout textLayout, shareLayout;
+        LinearLayout textLayout, shareLayout, productLayout, shareAllLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            productLayout = (LinearLayout) itemView.findViewById(R.id.product_layout);
             image = (ImageView) itemView.findViewById(R.id.img);
             name = (TextView) itemView.findViewById(R.id.name);
             price = (TextView) itemView.findViewById(R.id.price);
             profit = (TextView) itemView.findViewById(R.id.profit);
             textLayout = (LinearLayout) itemView.findViewById(R.id.text_layout);
             shareLayout = (LinearLayout) itemView.findViewById(R.id.share_layout);
+            shareAllLayout = (LinearLayout) itemView.findViewById(R.id.share_all_layout);
         }
     }
 

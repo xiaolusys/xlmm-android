@@ -340,9 +340,15 @@ public final class ViewUtils {
         }
     }
 
-    public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img,
-                                                       String picPath) {
-        if (null == picPath) return;
+    public static void loadImgToImgViewWithPlaceholder(Context context, ImageView img, String picPath) {
+        if (null == picPath || "".equals(picPath)) {
+            Glide.with(context)
+                .load(R.drawable.place_holder)
+                .thumbnail(0.1f)
+                .centerCrop()
+                .into(img);
+            return;
+        }
         if (picPath.contains("wx.qlogo.cn") || picPath.contains("7xogkj.com1.z0.glb.clouddn.com")
             || picPath.contains("mmbiz.qlogo.cn")) {
             Glide.with(context)

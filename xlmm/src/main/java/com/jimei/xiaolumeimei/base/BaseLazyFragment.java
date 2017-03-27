@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.loading.VaryViewHelperController;
 import com.jimei.library.widget.scrolllayout.ScrollableHelper;
 
@@ -18,7 +17,6 @@ public abstract class BaseLazyFragment extends BaseFragment implements Scrollabl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        JUtils.Log("Today", "onCreateView");
         View view;
         if (getContentViewId() != 0) {
             view = inflater.inflate(getContentViewId(), container, false);

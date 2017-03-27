@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.data.XlmmConst;
 
 import java.io.File;
 
@@ -23,10 +23,12 @@ import java.io.File;
 public abstract class VersionManager {
 
     private OnClickListener mPositiveListener;
+    private OnClickListener mNegativeListener;
     private Dialog dialog;
+    private String ignoreStr;
 
     public static VersionManager newInstance(int versionCode, String content, boolean msgflag) {
-        VersionManager manager = new VersionManager() {
+        return new VersionManager() {
 
             @Override
             public int getServerVersion() {
@@ -43,7 +45,6 @@ public abstract class VersionManager {
                 return msgflag;
             }
         };
-        return manager;
     }
 
     public abstract int getServerVersion();
@@ -52,7 +53,7 @@ public abstract class VersionManager {
 
     public abstract boolean showMsg();
 
-    public void checkVersion(final Context context) {
+    public void checkVersion(Context context, int versionCode) {
         int localVersion = JUtils.getAppVersionCode();
         if (getServerVersion() > localVersion) {
             if (!isWifi(context)) {
@@ -64,24 +65,27 @@ public abstract class VersionManager {
 
             dialog = new Dialog(context, R.style.CustomDialog);
             dialog.setContentView(view);
-            dialog.setCancelable(true);
-
+//            dialog.setCancelable(true);
+            dialog.setCancelable(false);
             Button ignoreBtn = (Button) view.findViewById(R.id.ignore);
             Button okBtn = (Button) view.findViewById(R.id.ok);
             TextView contentTv = (TextView) view.findViewById(R.id.content);
-
+            if (ignoreStr != null && !"".equals(ignoreStr)) {
+                ignoreBtn.setText(ignoreStr);
+            }
             okBtn.setOnClickListener(mPositiveListener);
             contentTv.setText(getUpdateContent());
-            ignoreBtn.setOnClickListener(v -> dialog.dismiss());
+            if (mNegativeListener != null) {
+                ignoreBtn.setOnClickListener(mNegativeListener);
+            } else {
+                ignoreBtn.setOnClickListener(v -> dialog.dismiss());
+            }
             dialog.show();
         } else {
             if (showMsg()) {
                 JUtils.Toast("当前已是最新版本!");
             }
-            File updateFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                    + File.separator
-                    + context.getResources().getString(R.string.app_name)
-                    + ".apk");
+            File updateFile = new File(XlmmConst.XLMM_DIR + "小鹿美美" + versionCode + ".apk");
             if (updateFile.exists()) {
                 updateFile.delete();
             }
@@ -92,6 +96,10 @@ public abstract class VersionManager {
         mPositiveListener = positiveListener;
     }
 
+    public void setNegativeListener(OnClickListener negativeListener) {
+        mNegativeListener = negativeListener;
+    }
+
     private boolean isWifi(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = manager.getActiveNetworkInfo();
@@ -100,5 +108,9 @@ public abstract class VersionManager {
 
     public Dialog getDialog() {
         return dialog;
+    }
+
+    public void setIgnoreStr(String ignoreStr) {
+        this.ignoreStr = ignoreStr;
     }
 }

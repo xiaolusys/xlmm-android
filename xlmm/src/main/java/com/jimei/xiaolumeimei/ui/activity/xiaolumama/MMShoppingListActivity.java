@@ -107,11 +107,6 @@ public class MMShoppingListActivity extends BaseSwipeBackCompatActivity implemen
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public View getScrollableView() {
         return shoppinglistXry;
     }

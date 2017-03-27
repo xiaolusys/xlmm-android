@@ -59,7 +59,7 @@ public class OrderDetailBean implements Serializable {
     private String pay_time;
     private Object consign_time;
     private String out_sid;
-    private int  order_type;
+    private int order_type;
     private boolean can_refund;
     private boolean can_change_address;
     /**
@@ -339,17 +339,15 @@ public class OrderDetailBean implements Serializable {
     }
 
     public static class LogisticsCompanyBean {
-        private int id;
+
+        /**
+         * id : 5000000110731
+         * code : auexpress
+         * name : 澳邮中国
+         */
+
         private String code;
         private String name;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
 
         public String getCode() {
             return code;
@@ -594,7 +592,7 @@ public class OrderDetailBean implements Serializable {
         }
 
 
-        public static class ChannelsBean implements Serializable, Parcelable{
+        public static class ChannelsBean implements Serializable, Parcelable {
             private String msg;
             private boolean payable;
             private String id;

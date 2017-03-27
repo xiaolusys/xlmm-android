@@ -3,6 +3,8 @@ package com.jimei.xiaolumeimei.util;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.jimei.library.utils.JUtils;
 import com.jimei.xiaolumeimei.R;
+import com.jimei.xiaolumeimei.entities.ActivityBean;
 import com.jimei.xiaolumeimei.entities.ShareModelBean;
 
 import java.text.DecimalFormat;
@@ -32,7 +35,6 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  */
 
 public class ShareUtils {
-
 
     public static void shareWithModel(ShareModelBean shareModel, Activity activity) {
         View view = activity.getLayoutInflater().inflate(R.layout.share_product_layout, null);
@@ -94,12 +96,31 @@ public class ShareUtils {
         oks.setPlatform(platform);
         oks.disableSSOWhenAuthorize();
         oks.setTitle(shareModel.getTitle());
-        oks.setTitleUrl(shareModel.getUrl());
+        oks.setTitleUrl(shareModel.getShare_link());
         oks.setText(shareModel.getDesc());
         oks.setImageUrl(shareModel.getShare_img());
-        oks.setUrl(shareModel.getUrl());
+        oks.setUrl(shareModel.getShare_link());
         oks.setSite("小鹿美美");
         oks.setSiteUrl("http://m.xiaolumeimei.com/mall/");
         oks.show(context);
+    }
+
+    public static void shareActivity(ActivityBean partyShareInfo, Activity activity){
+        OnekeyShare oks = new OnekeyShare();
+        oks.disableSSOWhenAuthorize();
+        oks.setTitle(partyShareInfo.getTitle());
+        oks.setTitleUrl(partyShareInfo.getShareLink());
+        oks.setText(partyShareInfo.getActiveDec());
+        oks.setImageUrl(partyShareInfo.getShareIcon());
+        oks.setUrl(partyShareInfo.getShareLink());
+        Bitmap enableLogo =
+            BitmapFactory.decodeResource(activity.getResources(), R.drawable.ssdk_oks_logo_copy);
+        View.OnClickListener listener = v -> {
+            JUtils.copyToClipboard(partyShareInfo.getShareLink() + "");
+            JUtils.Toast("已复制链接");
+        };
+        oks.setCustomerLogo(enableLogo, "复制链接", listener);
+        oks.setShareContentCustomizeCallback(new ShareContentCustom(activity));
+        oks.show(activity);
     }
 }

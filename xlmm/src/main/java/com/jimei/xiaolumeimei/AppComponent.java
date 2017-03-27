@@ -7,7 +7,6 @@ package com.jimei.xiaolumeimei;
 import com.jimei.xiaolumeimei.module.ActivityInteractor;
 import com.jimei.xiaolumeimei.module.AddressInteractor;
 import com.jimei.xiaolumeimei.module.CartsInteractor;
-import com.jimei.xiaolumeimei.module.InteractorModule;
 import com.jimei.xiaolumeimei.module.MainInteractor;
 import com.jimei.xiaolumeimei.module.ProductInteractor;
 import com.jimei.xiaolumeimei.module.TradeInteractor;
@@ -19,13 +18,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(
-    modules = {
-        InteractorModule.class,
-    }
-)
+@Component(modules = AppModule.class)
 public interface AppComponent {
-    void inject(XlmmApp app);
+//    void inject(XlmmApp app);
 
     ActivityInteractor getActivityInteractor();
 
