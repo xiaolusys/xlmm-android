@@ -60,6 +60,7 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         }
         mContext = this;
         TAG_LOG = this.getClass().getSimpleName();
+        BaseAppManager.getInstance().addActivity(this);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -317,6 +318,12 @@ public abstract class BaseActivity extends AutoLayoutActivity {
         } else {
             initData();
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        BaseAppManager.getInstance().removeActivity(this);
     }
 
     public void refreshView() {

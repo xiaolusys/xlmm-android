@@ -17,7 +17,6 @@ import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.InformationEvent;
 import com.jimei.xiaolumeimei.entities.event.LogoutEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
-import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -146,7 +145,7 @@ public class InformationActivity extends BaseSwipeBackCompatActivity
                                         }
                                         LoginUtils.delLoginInfo(getApplicationContext());
                                         EventBus.getDefault().post(new LogoutEvent());
-                                        readyGoThenKill(TabActivity.class);
+                                        readyGoThenKill(LoginActivity.class);
                                     }
                                 }
                             }));

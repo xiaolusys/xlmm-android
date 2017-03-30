@@ -117,8 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -127,8 +127,8 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="温馨提示：保税区和直邮发货根据海关要求需要提供身份证信息，为了避免清关失败，提供的身份证必须和收货人一致。"
-                        android:textColor="@color/text_color_88"
+                        android:text="温馨提示：保税区和直邮发货根据海关要求需要提供身份证信息，收件人和身份证需要保持一致，为了避免清关失败，提供的身份证必须和收货人一致。"
+                        android:textColor="@color/coupon_red"
                         android:textSize="12dp"/>
 
                     <View

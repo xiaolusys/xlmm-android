@@ -152,7 +152,7 @@ public class WaitSendAddressActivity extends BaseSwipeBackCompatActivity impleme
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                idNo = idNum.getText().toString().trim();
+                idNo = idNum.getText().toString().trim().toUpperCase();
                 if (addressLayout.getVisibility() == View.VISIBLE) {
                     receiver_state = etAddress1.getText().toString().trim();
                     receiver_city = etAddress2.getText().toString().trim();

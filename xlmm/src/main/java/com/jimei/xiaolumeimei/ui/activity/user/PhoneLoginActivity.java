@@ -21,6 +21,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
@@ -120,53 +121,116 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                             @Override
                             public void onNext(CodeBean codeBean) {
                                 if (codeBean.getRcode() == 0) {
-                                    EventBus.getDefault().post(new SetMiPushEvent());
-                                    hideIndeterminateProgressDialog();
-                                    LoginUtils.saveLoginInfo(true, getApplicationContext(),
-                                        login_name_value, login_pass_value);
-                                    EventBus.getDefault().post(new LoginEvent());
-                                    JUtils.Toast("登录成功!");
-                                    String login = null;
-                                    if (getIntent() != null && getIntent().getExtras() != null) {
-                                        login = getIntent().getExtras().getString("login");
-                                        actlink = getIntent().getExtras().getString("actlink");
-                                        title = getIntent().getExtras().getString("title");
-                                        id = getIntent().getExtras().getInt("id");
-                                    }
+                                    addSubscription(XlmmApp.getMainInteractor(PhoneLoginActivity.this)
+                                        .getProfile(new ServiceResponse<UserInfoBean>() {
+                                            @Override
+                                            public void onNext(UserInfoBean userInfoBean) {
+                                                hideIndeterminateProgressDialog();
+                                                if (userInfoBean != null && userInfoBean.getXiaolumm() != null &&
+                                                    userInfoBean.getXiaolumm().getId() != 0) {
+                                                    EventBus.getDefault().post(new SetMiPushEvent());
+                                                    hideIndeterminateProgressDialog();
+                                                    LoginUtils.saveLoginInfo(true, getApplicationContext(),
+                                                        login_name_value, login_pass_value);
+                                                    EventBus.getDefault().post(new LoginEvent());
+                                                    JUtils.Toast("登录成功!");
+                                                    String login = null;
+                                                    if (getIntent() != null && getIntent().getExtras() != null) {
+                                                        login = getIntent().getExtras().getString("login");
+                                                        actlink = getIntent().getExtras().getString("actlink");
+                                                        title = getIntent().getExtras().getString("title");
+                                                        id = getIntent().getExtras().getInt("id");
+                                                    }
 
-                                    if (login != null) {
-                                        if (login.equals("push_jump")) {
-                                            JumpUtils.push_jump_proc(PhoneLoginActivity.this, actlink);
-                                            finish();
-                                        } else if (login.equals("productdetail")) {
-                                            Intent intent = new Intent(mContext, ProductDetailActivity.class);
-                                            Bundle bundle = new Bundle();
-                                            bundle.putInt("model_id", id);
-                                            intent.putExtras(bundle);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("h5")) {
-                                            Intent intent = new Intent(mContext, CommonWebViewActivity.class);
-                                            SharedPreferences sharedPreferences =
-                                                getSharedPreferences("xlmmCookiesAxiba",
-                                                    Context.MODE_PRIVATE);
-                                            String cookies = sharedPreferences.getString("cookiesString", "");
-                                            String domain = sharedPreferences.getString("cookiesDomain", "");
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("cookies", cookies);
-                                            bundle.putString("domain", domain);
-                                            bundle.putString("actlink", actlink);
-                                            intent.putExtras(bundle);
-                                            startActivity(intent);
-                                            finish();
-                                        } else if (login.equals("car") || login.equals("my") || login.equals("boutique")) {
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("flag", login);
-                                            readyGoThenKill(TabActivity.class, bundle);
-                                        } else {
-                                            finish();
-                                        }
-                                    }
+                                                    if (login != null) {
+                                                        if (login.equals("push_jump")) {
+                                                            JumpUtils.push_jump_proc(PhoneLoginActivity.this, actlink);
+                                                            finish();
+                                                        } else if (login.equals("productdetail")) {
+                                                            Intent intent = new Intent(mContext, ProductDetailActivity.class);
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putInt("model_id", id);
+                                                            intent.putExtras(bundle);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else if (login.equals("h5")) {
+                                                            Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+                                                            SharedPreferences sharedPreferences =
+                                                                getSharedPreferences("xlmmCookiesAxiba",
+                                                                    Context.MODE_PRIVATE);
+                                                            String cookies = sharedPreferences.getString("cookiesString", "");
+                                                            String domain = sharedPreferences.getString("cookiesDomain", "");
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("cookies", cookies);
+                                                            bundle.putString("domain", domain);
+                                                            bundle.putString("actlink", actlink);
+                                                            intent.putExtras(bundle);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else if (login.equals("car") || login.equals("my") || login.equals("boutique")) {
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("flag", login);
+                                                            readyGoThenKill(TabActivity.class, bundle);
+                                                        } else {
+                                                            finish();
+                                                        }
+                                                    } else {
+                                                        readyGoThenKill(TabActivity.class);
+                                                    }
+                                                } else {
+                                                    JUtils.Toast("你不是小鹿妈妈，暂无权限登录哦!");
+                                                }
+                                            }
+                                        }));
+//                                    EventBus.getDefault().post(new SetMiPushEvent());
+//                                    hideIndeterminateProgressDialog();
+//                                    LoginUtils.saveLoginInfo(true, getApplicationContext(),
+//                                        login_name_value, login_pass_value);
+//                                    EventBus.getDefault().post(new LoginEvent());
+//                                    JUtils.Toast("登录成功!");
+//                                    String login = null;
+//                                    if (getIntent() != null && getIntent().getExtras() != null) {
+//                                        login = getIntent().getExtras().getString("login");
+//                                        actlink = getIntent().getExtras().getString("actlink");
+//                                        title = getIntent().getExtras().getString("title");
+//                                        id = getIntent().getExtras().getInt("id");
+//                                    }
+//
+//                                    if (login != null) {
+//                                        if (login.equals("push_jump")) {
+//                                            JumpUtils.push_jump_proc(PhoneLoginActivity.this, actlink);
+//                                            finish();
+//                                        } else if (login.equals("productdetail")) {
+//                                            Intent intent = new Intent(mContext, ProductDetailActivity.class);
+//                                            Bundle bundle = new Bundle();
+//                                            bundle.putInt("model_id", id);
+//                                            intent.putExtras(bundle);
+//                                            startActivity(intent);
+//                                            finish();
+//                                        } else if (login.equals("h5")) {
+//                                            Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+//                                            SharedPreferences sharedPreferences =
+//                                                getSharedPreferences("xlmmCookiesAxiba",
+//                                                    Context.MODE_PRIVATE);
+//                                            String cookies = sharedPreferences.getString("cookiesString", "");
+//                                            String domain = sharedPreferences.getString("cookiesDomain", "");
+//                                            Bundle bundle = new Bundle();
+//                                            bundle.putString("cookies", cookies);
+//                                            bundle.putString("domain", domain);
+//                                            bundle.putString("actlink", actlink);
+//                                            intent.putExtras(bundle);
+//                                            startActivity(intent);
+//                                            finish();
+//                                        } else if (login.equals("car") || login.equals("my") || login.equals("boutique")) {
+//                                            Bundle bundle = new Bundle();
+//                                            bundle.putString("flag", login);
+//                                            readyGoThenKill(TabActivity.class, bundle);
+//                                        } else {
+//                                            finish();
+//                                        }
+//                                    } else {
+//                                        readyGoThenKill(TabActivity.class);
+//                                    }
                                 } else {
                                     hideIndeterminateProgressDialog();
                                     LoginUtils.saveLoginInfo(false, getApplicationContext(), "", "");
@@ -175,8 +239,9 @@ public class PhoneLoginActivity extends BaseSwipeBackCompatActivity
                             }
 
                             @Override
-                            public void onCompleted() {
-
+                            public void onError(Throwable e) {
+                                JUtils.Toast("登录失败");
+                                hideIndeterminateProgressDialog();
                             }
                         }));
                 }

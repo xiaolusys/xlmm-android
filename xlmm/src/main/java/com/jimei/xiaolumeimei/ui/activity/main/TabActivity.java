@@ -18,6 +18,7 @@ import com.jimei.xiaolumeimei.BuildConfig;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.base.BaseAppManager;
 import com.jimei.xiaolumeimei.base.BaseFragment;
 import com.jimei.xiaolumeimei.data.XlmmConst;
 import com.jimei.xiaolumeimei.entities.AddressDownloadResultBean;
@@ -129,7 +130,7 @@ public class TabActivity extends BaseActivity {
     public void showCarNum() {
         if (LoginUtils.checkLoginState(this)) {
             addSubscription(XlmmApp.getMainInteractor(this)
-                .getCartsNum(5,new ServiceResponse<CartsNumResultBean>() {
+                .getCartsNum(5, new ServiceResponse<CartsNumResultBean>() {
                     @Override
                     public void onNext(CartsNumResultBean cartsNumResultBean) {
                         if (cartsNumResultBean != null) {
@@ -201,6 +202,9 @@ public class TabActivity extends BaseActivity {
             if (secondTime - firstTime > 1000) {
                 firstTime = secondTime;
                 JUtils.Toast("再按一次退出程序!");
+                return true;
+            } else {
+                BaseAppManager.getInstance().clear();
                 return true;
             }
         }

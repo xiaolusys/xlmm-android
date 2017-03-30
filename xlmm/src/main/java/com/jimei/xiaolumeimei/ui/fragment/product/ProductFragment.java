@@ -1,7 +1,6 @@
 package com.jimei.xiaolumeimei.ui.fragment.product;
 
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -10,6 +9,7 @@ import com.jimei.library.utils.JUtils;
 import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
+import com.jimei.xiaolumeimei.adapter.CustomGridLayoutManager;
 import com.jimei.xiaolumeimei.adapter.ProductListAdapter;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentProductBinding;
@@ -64,6 +64,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
     @Override
     public void initData() {
         page = 1;
+        showIndeterminateProgressDialog(false);
         refreshData(true);
     }
 
@@ -71,7 +72,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
     protected void initViews() {
         sortBy = "";
         EventBus.getDefault().register(this);
-        b.xrv.setLayoutManager(new GridLayoutManager(mActivity, 2));
+        b.xrv.setLayoutManager(new CustomGridLayoutManager(mActivity, 2));
         b.xrv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         b.xrv.addItemDecoration(new SpaceItemDecoration(10));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
@@ -83,6 +84,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
             public void onRefresh() {
                 page = 1;
                 b.xrv.setLoadingMoreEnabled(true);
+                showIndeterminateProgressDialog(false);
                 refreshData(true);
             }
 
@@ -107,7 +109,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshSort(SortEvent event) {
-        if (!mainFlag){
+        if (!mainFlag) {
             if (event.isSortByPrice()) {
                 sortBy = "price";
             } else {
@@ -116,6 +118,7 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
             if (getUserVisibleHint()) {
                 page = 1;
                 b.xrv.setLoadingMoreEnabled(true);
+                showIndeterminateProgressDialog(false);
                 refreshData(true);
             }
         }
@@ -123,18 +126,17 @@ public class ProductFragment extends BaseBindingFragment<FragmentProductBinding>
 
     public void refreshData(boolean clear) {
         b.emptyLayout.setVisibility(View.GONE);
-        if (clear) {
-            showIndeterminateProgressDialog(false);
-            mProductListAdapter.clear();
-            page = 1;
-        }
         addSubscription(XlmmApp.getProductInteractor(mActivity)
             .getCategoryProductList(cid, page, sortBy, new ServiceResponse<ProductListBean>() {
                 @Override
                 public void onNext(ProductListBean bean) {
                     List<ProductListBean.ResultsBean> results = bean.getResults();
                     if (results != null && results.size() > 0) {
-                        mProductListAdapter.update(results);
+                        if (clear) {
+                            mProductListAdapter.updateWithClear(results);
+                        } else {
+                            mProductListAdapter.update(results);
+                        }
                     } else {
                         b.emptyLayout.setVisibility(View.VISIBLE);
                     }

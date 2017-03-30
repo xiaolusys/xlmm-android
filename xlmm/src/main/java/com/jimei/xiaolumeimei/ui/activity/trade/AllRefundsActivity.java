@@ -1,6 +1,5 @@
 package com.jimei.xiaolumeimei.ui.activity.trade;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -13,6 +12,7 @@ import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.AllRefundsAdapter;
+import com.jimei.xiaolumeimei.adapter.CustomLinearLayoutManager;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.AllRefundsBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
@@ -63,7 +63,7 @@ public class AllRefundsActivity extends BaseSwipeBackCompatActivity
     @Override
     protected void initViews() {
         adapter = new AllRefundsAdapter(this);
-        xrv.setLayoutManager(new LinearLayoutManager(this));
+        xrv.setLayoutManager(new CustomLinearLayoutManager(this));
         xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         xrv.setRefreshProgressStyle(ProgressStyle.BallPulse);
         xrv.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 12));
