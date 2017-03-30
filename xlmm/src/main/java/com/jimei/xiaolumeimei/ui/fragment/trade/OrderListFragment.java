@@ -2,7 +2,6 @@ package com.jimei.xiaolumeimei.ui.fragment.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -12,6 +11,7 @@ import com.jimei.library.widget.SpaceItemDecoration;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.adapter.AllOrdersAdapter;
+import com.jimei.xiaolumeimei.adapter.CustomLinearLayoutManager;
 import com.jimei.xiaolumeimei.base.BaseBindingFragment;
 import com.jimei.xiaolumeimei.databinding.FragmentOrderListBinding;
 import com.jimei.xiaolumeimei.entities.AllOrdersBean;
@@ -77,7 +77,7 @@ public class OrderListFragment extends BaseBindingFragment<FragmentOrderListBind
     @Override
     protected void initViews() {
         EventBus.getDefault().register(this);
-        b.xrv.setLayoutManager(new LinearLayoutManager(mActivity));
+        b.xrv.setLayoutManager(new CustomLinearLayoutManager(mActivity));
         b.xrv.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
         b.xrv.setRefreshProgressStyle(ProgressStyle.BallPulse);
         b.xrv.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 12));

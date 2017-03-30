@@ -23,7 +23,7 @@ import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.base.CommonWebViewActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
-import com.jimei.xiaolumeimei.entities.NeedSetInfoBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.entities.event.LoginEvent;
 import com.jimei.xiaolumeimei.entities.event.SetMiPushEvent;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
@@ -141,16 +141,74 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                             @Override
                             public void onNext(CodeBean codeBean) {
                                 int code = codeBean.getRcode();
-                                JUtils.Toast(codeBean.getMsg());
                                 if (code == 0) {
                                     EventBus.getDefault().post(new SetMiPushEvent());
-                                    addSubscription(XlmmApp.getUserInteractor(SmsLoginActivity.this)
-                                        .needSetInfo(new ServiceResponse<NeedSetInfoBean>() {
+//                                    addSubscription(XlmmApp.getUserInteractor(SmsLoginActivity.this)
+//                                        .needSetInfo(new ServiceResponse<NeedSetInfoBean>() {
+//                                            @Override
+//                                            public void onNext(NeedSetInfoBean needSetInfoBean) {
+//                                                super.onNext(needSetInfoBean);
+//                                                int codeInfo = needSetInfoBean.getCode();
+//                                                if (0 == codeInfo) {
+//                                                    LoginUtils.saveLoginSuccess(true, getApplicationContext());
+//                                                    EventBus.getDefault().post(new LoginEvent());
+//                                                    String login = null;
+//                                                    if (null != getIntent()
+//                                                        && getIntent().getExtras() != null) {
+//                                                        login = getIntent().getExtras().getString("login");
+//                                                        actlink = getIntent().getExtras().getString("actlink");
+//                                                        title = getIntent().getExtras().getString("title");
+//                                                        id = getIntent().getExtras().getInt("id");
+//                                                    }
+//
+//                                                    if (null != login) {
+//                                                        if (login.equals("push_jump")) {
+//                                                            JumpUtils.push_jump_proc(SmsLoginActivity.this, actlink);
+//                                                            finish();
+//                                                        } else if (login.equals("productdetail")) {
+//                                                            Intent intent = new Intent(mContext, ProductDetailActivity.class);
+//                                                            Bundle bundle = new Bundle();
+//                                                            bundle.putInt("model_id", id);
+//                                                            intent.putExtras(bundle);
+//                                                            startActivity(intent);
+//                                                            finish();
+//                                                        } else if (login.equals("h5")) {
+//                                                            Intent intent = new Intent(mContext, CommonWebViewActivity.class);
+//                                                            SharedPreferences sharedPreferences =
+//                                                                getSharedPreferences("xlmmCookiesAxiba",
+//                                                                    Context.MODE_PRIVATE);
+//                                                            String cookies = sharedPreferences.getString("cookiesString", "");
+//                                                            String domain = sharedPreferences.getString("cookiesDomain", "");
+//                                                            Bundle bundle = new Bundle();
+//                                                            bundle.putString("cookies", cookies);
+//                                                            bundle.putString("domain", domain);
+//                                                            bundle.putString("actlink", actlink);
+//                                                            intent.putExtras(bundle);
+//                                                            startActivity(intent);
+//                                                            finish();
+//                                                        } else if (login.equals("car") || login.equals("my") || login.equals("boutique")) {
+//                                                            Bundle bundle = new Bundle();
+//                                                            bundle.putString("flag", login);
+//                                                            readyGoThenKill(TabActivity.class, bundle);
+//                                                        } else {
+//                                                            finish();
+//                                                        }
+//                                                    } else {
+//                                                        readyGoThenKill(TabActivity.class);
+//                                                    }
+//                                                } else {
+//                                                    JUtils.Toast(needSetInfoBean.getInfo());
+//                                                }
+//                                            }
+//                                        }));
+                                    addSubscription(XlmmApp.getMainInteractor(SmsLoginActivity.this)
+                                        .getProfile(new ServiceResponse<UserInfoBean>() {
                                             @Override
-                                            public void onNext(NeedSetInfoBean needSetInfoBean) {
-                                                super.onNext(needSetInfoBean);
-                                                int codeInfo = needSetInfoBean.getCode();
-                                                if (0 == codeInfo) {
+                                            public void onNext(UserInfoBean userInfoBean) {
+                                                hideIndeterminateProgressDialog();
+                                                if (userInfoBean != null && userInfoBean.getXiaolumm() != null &&
+                                                    userInfoBean.getXiaolumm().getId() != 0) {
+                                                    JUtils.Toast("登录成功");
                                                     LoginUtils.saveLoginSuccess(true, getApplicationContext());
                                                     EventBus.getDefault().post(new LoginEvent());
                                                     String login = null;
@@ -161,8 +219,7 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                                         title = getIntent().getExtras().getString("title");
                                                         id = getIntent().getExtras().getInt("id");
                                                     }
-
-                                                    if (null != login) {
+                                                    if (login != null) {
                                                         if (login.equals("push_jump")) {
                                                             JumpUtils.push_jump_proc(SmsLoginActivity.this, actlink);
                                                             finish();
@@ -194,9 +251,11 @@ public class SmsLoginActivity extends BaseSwipeBackCompatActivity
                                                         } else {
                                                             finish();
                                                         }
+                                                    } else {
+                                                        readyGoThenKill(TabActivity.class);
                                                     }
                                                 } else {
-                                                    JUtils.Toast(needSetInfoBean.getInfo());
+                                                    JUtils.Toast("你不是小鹿妈妈，暂无权限登录哦!");
                                                 }
                                             }
                                         }));

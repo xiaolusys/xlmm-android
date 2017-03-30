@@ -12,6 +12,7 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.base.BaseSwipeBackCompatActivity;
 import com.jimei.xiaolumeimei.entities.CodeBean;
+import com.jimei.xiaolumeimei.entities.UserInfoBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
 import com.jimei.xiaolumeimei.ui.activity.main.TabActivity;
 import com.jimei.xiaolumeimei.util.LoginUtils;
@@ -89,10 +90,21 @@ public class EditPasswordForgetActivity extends BaseSwipeBackCompatActivity
                                 @Override
                                 public void onNext(CodeBean codeBean1) {
                                     if (codeBean1.getRcode() == 0) {
-                                        LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
-                                            password1);
-                                        JUtils.Toast("密码重置成功,登录成功");
-                                        readyGoThenKill(TabActivity.class);
+                                        addSubscription(XlmmApp.getMainInteractor(EditPasswordForgetActivity.this)
+                                            .getProfile(new ServiceResponse<UserInfoBean>() {
+                                                @Override
+                                                public void onNext(UserInfoBean userInfoBean) {
+                                                    if (userInfoBean != null && userInfoBean.getXiaolumm() != null &&
+                                                        userInfoBean.getXiaolumm().getId() != 0) {
+                                                        LoginUtils.saveLoginInfo(true, getApplicationContext(), username,
+                                                            password1);
+                                                        JUtils.Toast("密码重置成功,登录成功");
+                                                        readyGoThenKill(TabActivity.class);
+                                                    } else {
+                                                        JUtils.Toast("你不是小鹿妈妈，暂无权限登录哦!");
+                                                    }
+                                                }
+                                            }));
                                     } else {
                                         JUtils.Toast(codeBean1.getMsg());
                                     }

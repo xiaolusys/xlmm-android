@@ -70,9 +70,9 @@ public class RetrofitClient {
                     Cache cache = new Cache(new File(XlmmApp.getmContext().getCacheDir(), "OkHttpCache"),
                         1024 * 1024 * 100);
                     builder = new OkHttpClient.Builder()
-                        .readTimeout(15, TimeUnit.SECONDS)
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(20, TimeUnit.SECONDS)
+                        .connectTimeout(20, TimeUnit.SECONDS)
+                        .writeTimeout(20, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .cache(cache)
                         .addInterceptor(chain -> {
