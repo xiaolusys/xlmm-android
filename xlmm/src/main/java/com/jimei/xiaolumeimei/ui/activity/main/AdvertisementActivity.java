@@ -11,6 +11,8 @@ import com.jimei.library.rx.RxCountDown;
 import com.jimei.library.utils.ViewUtils;
 import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.base.BaseActivity;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.util.LoginUtils;
 
 public class AdvertisementActivity extends BaseActivity implements View.OnClickListener {
 
@@ -55,18 +57,18 @@ public class AdvertisementActivity extends BaseActivity implements View.OnClickL
 
     private void readyToJump() {
         RxCountDown.countdown(3).subscribe(
-                integer -> {
-                    if (!isDestroy) {
-                        text.setText("跳过  " + integer);
-                        if (integer == 0) {
-                            jumpAndFinish();
-                        }
-                    }
-                }, e -> {
-                    if (!isDestroy) {
+            integer -> {
+                if (!isDestroy) {
+                    text.setText("跳过  " + integer);
+                    if (integer == 0) {
                         jumpAndFinish();
                     }
-                });
+                }
+            }, e -> {
+                if (!isDestroy) {
+                    jumpAndFinish();
+                }
+            });
     }
 
     @Override
@@ -88,7 +90,11 @@ public class AdvertisementActivity extends BaseActivity implements View.OnClickL
 
     private void jumpAndFinish() {
         isDestroy = true;
-        startActivity(new Intent(AdvertisementActivity.this, TabActivity.class));
+        if (LoginUtils.checkLoginState(this)) {
+            startActivity(new Intent(AdvertisementActivity.this, TabActivity.class));
+        } else {
+            startActivity(new Intent(AdvertisementActivity.this, LoginActivity.class));
+        }
         finish();
     }
 

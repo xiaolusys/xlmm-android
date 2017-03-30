@@ -17,6 +17,8 @@ import com.jimei.xiaolumeimei.R;
 import com.jimei.xiaolumeimei.XlmmApp;
 import com.jimei.xiaolumeimei.entities.StartBean;
 import com.jimei.xiaolumeimei.service.ServiceResponse;
+import com.jimei.xiaolumeimei.ui.activity.user.LoginActivity;
+import com.jimei.xiaolumeimei.util.LoginUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import rx.Subscription;
@@ -74,12 +76,17 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void jumpToAds() {
+//        mPicture="http://c.hiphotos.baidu.com/image/pic/item/d62a6059252dd42a6a943c180b3b5bb5c8eab8e7.jpg";
         if (NetUtil.isNetworkAvailable(this) && mPicture != null && !mPicture.equals("")) {
             Intent intent = new Intent(SplashActivity.this, AdvertisementActivity.class);
             intent.putExtra("link", mPicture);
             startActivity(intent);
         } else {
-            startActivity(new Intent(SplashActivity.this, TabActivity.class));
+            if (LoginUtils.checkLoginState(this)) {
+                startActivity(new Intent(SplashActivity.this, TabActivity.class));
+            } else {
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            }
         }
         finish();
     }

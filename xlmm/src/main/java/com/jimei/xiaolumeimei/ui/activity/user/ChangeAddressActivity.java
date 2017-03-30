@@ -196,7 +196,7 @@ public class ChangeAddressActivity extends BaseSwipeBackCompatActivity
                 receiver_name = name.getText().toString().trim();
                 receiver_mobile = mobile.getText().toString().trim();
                 clearaddressa = clearAddress.getText().toString().trim();
-                idNo = idNum.getText().toString().trim();
+                idNo = idNum.getText().toString().trim().toUpperCase();
                 if (switchButton.isChecked()) {
                     defaultAddress = "true";
                 } else {
